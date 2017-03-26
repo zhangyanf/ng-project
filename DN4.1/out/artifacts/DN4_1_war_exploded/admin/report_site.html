@@ -1,0 +1,598 @@
+<style type="text/css">
+    #siteInfo_table > tr > td {
+        word-break: break-all;
+    }
+</style>
+<script type="text/javascript">
+    $("#tableHead_selectAll").on("click", function () {
+        var selected_usersId = $("tbody tr td input[type='checkbox']:checked");
+        var allUsers_nowPage = $("tbody tr");
+        if (allUsers_nowPage.length > 1) {
+            if (selected_usersId.length < (allUsers_nowPage.length - 1)) {
+                $("tbody tr td input").prop("checked", true);
+                $("#tableHead_checkbok").prop("checked", true);
+            } else {
+                $("tbody tr td input").prop("checked", false);
+                $("#tableHead_checkbok").prop("checked", false);
+            }
+        } else {
+            $("#tableHead_checkbok").prop("checked", false);
+        }
+    });
+    // 添加enter按键事件
+    $("#site_name").keydown(function(e) {//当按下按键时
+        if (event.keyCode === 10 || event.keyCode === 13) {
+            event.preventDefault();
+            searchSite();
+        }
+    });
+
+    /**
+     * 切换地图和列表页面
+     */
+    function changeLayer(obj){
+        $("#pcontent").load("admin/home.html",function () {
+            set_$tcontentHeight();
+        });
+    }
+</script>
+<section class="content-header">
+    <h1 lang="text:site">
+        现场
+        <small>Version 2.0</small>
+    </h1>
+    <div class="leaflet-control-container">
+        <div class="leaflet-top leaflet-right">
+            <div class="leaflet-control-zoom leaflet-bar leaflet-control" aria-haspopup="true">
+                <a id="layer_map" href="javascript:void(0)" class="iconfont icon-map" onclick="changeLayer(this)" title=" " lang="title:map_view"> </a>
+            </div>
+        </div>
+    </div>
+
+    <!--<ol class="breadcrumb">-->
+      <!--<li><a href="#" lang="text:home"></a></li>-->
+      <!--<li class="active" lang="text:site"></li>-->
+    <!--</ol>-->
+</section>
+<section class="content" id="tcontent">
+    <!--现场图表-->
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="box">
+                <!--加载数据等待-->
+                <div id="online_overlay" class="overlay" style="display: none;">
+                    <i class="fa icon-refresh icon-spin"></i>
+                </div>
+                <!--<div class="box-header with-border">-->
+                    <!--<span><h3 class="box-title" lang="text:site_online_state"></h3></span>-->
+                    <!--<div class="box-tools pull-right">-->
+                        <!--<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">-->
+                            <!--<i class="icon-minus fa-minus"></i></button>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="box-body" id="online_state" style="height:190px">-->
+                    <!--<div class="row">-->
+                        <!--<div class="col-md-12">-->
+
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="box-footer ">
+                    <div class="row">
+                        <div class="col-xs-6 text-center border-right">
+                            <div class="description-block">
+                                <h5 id="sparkline-online" class="description-header"></h5>
+                            </div>
+                            <div class="knob-label" lang="text:online"></div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-xs-6 text-center">
+                            <div class="description-block">
+                                <h5 id="sparkline-offline" class="description-header"></h5>
+                            </div>
+                            <div class="knob-label" lang="text:offline"></div>
+                        </div>
+                        <!-- ./col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box">
+                <!--加载数据等待-->
+                <div id="bussiness_overlay" class="overlay" style="display: none;">
+                    <i class="fa icon-refresh icon-spin"></i>
+                </div>
+                <!--<div class="box-header with-border">-->
+                    <!--<span><h3 class="box-title" lang="text:site_business_state"></h3></span>-->
+                    <!--<div class="box-tools pull-right">-->
+                        <!--<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">-->
+                            <!--<i class="icon-minus fa-minus"></i></button>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="box-body" id="bussiness_state" style="height:190px">-->
+                    <!--<div class="row">-->
+                        <!--<div class="col-md-12">-->
+
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="box-footer ">
+                    <div class="row">
+                        <div class="col-xs-3 text-center border-right">
+                            <div class="description-block">
+                                <h5 id="sparkline-construction" class="description-header"></h5>
+                            </div>
+                            <div class="knob-label" lang="text:construction"></div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-xs-3 text-center border-right">
+                            <div class="description-block">
+                                <h5 id="sparkline-commissioning" class="description-header"></h5>
+                            </div>
+                            <div class="knob-label" lang="text:commissioning"></div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-xs-3 text-center border-right">
+                            <div class="description-block">
+                                <h5 id="sparkline-fault" class="description-header"></h5>
+                            </div>
+                            <div class="knob-label" lang="text:fault"></div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-xs-3 text-center">
+                            <div class="description-block">
+                                <h5 id="sparkline-overhaul" class="description-header"></h5>
+                            </div>
+                            <div class="knob-label" lang="text:overhaul"></div>
+                        </div>
+                        <!-- ./col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--现场列表-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <!--加载数据等待-->
+                <div id="site_list_overlay" class="overlay" style="display: none;">
+                    <i class="fa icon-refresh icon-spin"></i>
+                </div>
+                <div class="box-header with-border">
+                    <span><h3 class="box-title" lang="text:site_info">&nbsp;</h3></span>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="icon-minus fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-sm-12" style="padding-bottom: 10px;">
+                            <!--查询条件-->
+                            <form class="form-inline">
+                                <div class="form-group" id="online_group">
+                                    <button type="button" class="btn btn-primary btn-sm" value="-1" lang="text:all_site">全部现场</button>
+                                    <button type="button" class="btn btn-default btn-sm" value="1" lang="text:online_site">在线现场</button>
+                                    <button type="button" class="btn btn-default btn-sm" value="0" lang="text:offline_site">离线现场</button>
+                                </div>
+                                <script type="text/javascript">
+                                     $.each($("#online_group > button"),function (i,btn) {
+                                         $(btn).on("click",function () {
+                                             $("#online_group > .btn-primary").removeClass("btn-primary").addClass("btn-default");
+                                             $(this).removeClass("btn-default").addClass("btn-primary");
+                                             searchSite();
+                                         });
+                                     });
+                                </script>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="site_name"
+                                           lang="placeholder:enter_the_site_name" style="height:30px;">
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" onclick="searchSite()" class="btn btn-default btn-sm"
+                                            data-toggle="tooltip" title="查找" lang="title:query">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div>
+                        <table class="table table-bordered table-hover table-striped" id="tableFirst">
+                            <thead>
+                            <tr>
+                                <!-- <th style="width: 30px;" id="tableHead_selectAll">
+                                    <input type="checkbox" id="tableHead_checkbok" data-toggle='tooltip' data-placement="bottom" lang="title:check_all">
+                                </th> -->
+                                <th style="width: 46px;text-align: center;" lang="text:state">状态</th>
+                                <th lang="text:site_name" style="width: 15%;">现场名称</th>
+                                <th lang="text:address2">安装地址</th>
+                                <th lang="text:business_state" style="width: 15%;">业务状态</th>
+                                <th lang="text:contact_name" style="width: 15%;">联系人姓名</th>
+                                <th lang="text:contact_phone" style="width: 15%;">联系人电话</th>
+                                <th lang="text:email" style="width: 15%;">邮箱</th>
+                            </tr>
+                            </thead>
+                            <tbody id="siteInfo_table">
+                            <!--动态载入数据-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!--box-body-->
+                <div id="page-footer">
+
+                    <!--分页工具-->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    /**
+     * 查询现场方法
+     * @param {type} limit
+     * @returns {undefined}
+     */
+    function searchSite() {
+        research_site(0, $("#pageNumberSelect").val());
+    }
+    /**
+     *
+     * @param {type} cursor
+     * @param {type} limit
+     * @returns {undefined}
+     */
+    function research_site(cursor, limit) {
+
+        $("#site_list_overlay").show();
+        var params = {cursor: cursor, limit: limit, verbose: 100};
+        var name = $.trim($("#site_name").val());
+        if (name !== "") {
+            name = name.match(pattern);
+            params.name = name;
+        }
+        var online=$("#online_group > .btn-primary").first().val();
+        if(online != -1){
+            params.online=online;
+        }
+        params.online=online;
+
+        $("#site_name").val(name);
+        loadAllSite(params, function (data) {
+            if (data.total != undefined) {
+                $("#siteInfo_table").empty();
+                $("#tableHead_checkbok").prop("checked", false);
+                if (data.total > 0) {
+                    load_siteInfo(data.result);
+                    //加载分页数据
+                    renderPagination(data, research_site);
+                } else {
+                    clearPagination();
+                    $("#siteInfo_table").empty();
+                    $("#siteInfo_table").append('<tr><td colspan="9"  align="center" lang="text:no_data"></td></tr>');
+                    locale.render({element: "#init_body"});
+                }
+            }
+
+            $("#site_list_overlay").hide();
+        }, this);
+    }
+
+
+    //填充数据
+    function load_siteInfo(result) {
+        $("#siteInfo_table").empty();
+        var str;
+        var contactname;
+        var contactphone;
+        var contactemail;
+        for (var i = 0; i < result.length; i++) {
+            contactname = "";
+            contactphone = "";
+            contactemail = "";
+            if (result[i].contact) {
+                contactname = typeof(result[i].contact.name) == "undefined" ? "" : result[i].contact.name;
+                contactphone = typeof(result[i].contact.phone) == "undefined" ? "" : result[i].contact.phone;
+                contactemail = typeof(result[i].contact.email) == "undefined" ? "" : result[i].contact.email;
+            }
+            var link = "<a href='javascript:void(0)' onclick='detail_popUp(\"" + result[i]._id + "\")'>"+((typeof(result[i].name) == "undefined") ? "" : result[i].name) +"</a>";
+            str = "<tr "+(result[i].online == '1' ? "class='text-green'":"")+">" +
+                    "<td style='text-align: center;'>" + (result[i].online == '1' ? "<i class='iconfont icon-guanji text-green'></i>" : "<i class='iconfont icon-guanji1 contacts-list-date'></i>") + "</td>" +
+                    "<td>" + link + "</td>" +
+                    "<td>" + ((typeof(result[i].address) == "undefined") ? "" : result[i].address) + "</td>" +
+                    "<td>" + fuc_businessState(result[i].businessState) + "</td>" +
+                    "<td>" + contactname + "</td>" +
+                    "<td>" + contactphone + "</td>" +
+                    "<td>" + contactemail + "</td>" +
+                    "</tr>";
+            $("#siteInfo_table").append(str);
+        }
+        $("tbody > tr > td > input").on("click", function () {
+            var selected_usersId = $("tbody tr td input[type='checkbox']:checked");
+            var allUsers_nowPage = $("tbody tr");
+            if (selected_usersId.length < allUsers_nowPage.length) {
+                $("#tableHead_checkbok").prop("checked", false);
+            }
+            if (selected_usersId.length == allUsers_nowPage.length) {
+                $("#tableHead_checkbok").prop("checked", true);
+            }
+        });
+        locale.render({element: "#init_body"});
+    }
+
+
+    //每页显示条数切换
+    function changePageNumber(limit) {
+        research_site(0, limit);
+    }
+    //跳转到指定页  回调函数
+    function jumpTopage(cursor) {
+        research_site(cursor, $("#pageNumberSelect").val());
+    }
+
+    //数据转换
+    function fuc_businessState(businessState) {
+        switch (businessState) {
+            case 0:
+                return locale.get("construction");
+                break;
+            case 1:
+                return locale.get("commissionin");
+                break;
+            case 2:
+                return locale.get("fault");
+                break;
+            case 3:
+                return locale.get("overhauling");
+                break;
+            default:
+                break;
+        }
+        locale.render({element: "#init_body"});
+    }
+
+    var chartIds = [];
+    var autoInt;
+    //绘制统计图加载数据
+    //绘制图表
+    function drawChart(id, option) {
+        $("#" + id).empty();
+        require(
+                [
+                    'echarts',
+                    //'echarts/theme/infographic',
+                    'echarts/chart/line', // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
+                    'echarts/chart/bar',
+                    'echarts/chart/pie'
+                ],
+                function (ec, theme) {
+                    //--- 折柱 ---
+                    var myChart = ec.init(document.getElementById(id), theme);
+                    //图表显示提示信息
+                    myChart.showLoading({
+                        text: locale.get("the_chart_data_are_trying_to_load"),
+                        x: "center",
+                        y: "center",
+                        textStyle: {
+                            color: "white",
+                            fontSize: 14
+                        },
+                        effect: "spin"
+                    });
+
+                    myChart.setOption(option);
+                    myChart.hideLoading();
+                    chartIds[id] = myChart;
+                }
+        );
+    }
+    //获取现场在线状态数据
+    function loadOnlineDatas(callback) {
+        $("#online_overlay").show();
+        //获取现场在线状态数据
+
+        var param = {
+                limit: 1,
+                online: 1
+            };
+        loadAllSite(param, function (data) {
+            var online = data.total;
+            param.online = 0;
+            loadAllSite(param, function (data) {
+                var offline = data.total;
+                var result = {
+                    online: online,
+                    offline: offline
+                };
+                callback(result);
+                $("#online_overlay").hide();
+            });
+        });
+//        getOverview(null, true, function (data) {
+//            callback(data);
+//            $("#online_overlay").hide();
+//        });
+    }
+    //获取在线状态回调函数
+    //绘制在线状态统计图
+    function loadOnlineCallback(data) {
+        var pieOptionstr = JSON.stringify(pieOption);
+        var option = $.parseJSON(pieOptionstr);
+        option.series[0].name = locale.get("online_state");
+         var seriesData = [];
+        var legendData = [];
+        var color=['#64B44C','#DDDDDC'];
+        var i=0;
+        for(var d in data){
+            legendData.push(locale.get(d));
+            seriesData.push({
+                  name:locale.get(d),
+                   value:data[d],
+                   itemStyle:{
+                       normal:{color:color[i]}
+                   }
+               });
+            $("#sparkline-"+d).text(data[d]);
+            i=i+1;
+        }
+        option.series[0].data = seriesData;
+        option.legend.data = legendData;
+        // drawChart("online_state", option);
+    }
+
+    //获取现场业务状态数据
+    function loadBussnessDatas(parameters, callback) {
+        $("#bussiness_overlay").show();
+        loadAllSite(parameters, function (data) {
+            var construction = data.total;
+            parameters.business_state = 1;
+
+            loadAllSite(parameters, function (data) {
+                var commissioning = data.total;
+                parameters.business_state = 2;
+                loadAllSite(parameters, function (data) {
+                    var fault = data.total;
+                    parameters.business_state = 3;
+                    loadAllSite(parameters, function (data) {
+                        var overhaul = data.total;
+                        var result = {
+                            construction: construction,
+                            commissioning: commissioning,
+                            fault: fault,
+                            overhaul: overhaul
+                        }
+                        callback(result);
+                        $("#bussiness_overlay").hide();
+                    }, this);
+                }, this);
+            }, this);
+        }, this);
+    }
+    //获取业务状态回调函数
+    //绘制业务状态统计图
+    function loadBussnessCallback(data) {
+        var pieOptionstr = JSON.stringify(pieOption);
+        var bussOption = $.parseJSON(pieOptionstr);
+        bussOption.series[0].name = locale.get("business_state");
+//        option.legend.data = [
+//            locale.get("construction"),
+//            locale.get("commissioning"),
+//            locale.get("fault"),
+//            locale.get("overhaul")
+//        ];
+        var seriesData = [];
+        var legendData = [];
+        var color=["#6EBAE8","#64B44C","#D14936","#EA7525"];
+        var i=0;
+        for(var d in data){
+            legendData.push(locale.get(d));
+            seriesData.push({
+                name:locale.get(d),
+                value:data[d],
+                itemStyle:{
+                    normal:{color:color[i]}
+                }
+            });
+            $("#sparkline-"+d).text(data[d]);
+            i=i+1;
+        }
+        bussOption.series[0].data = seriesData;
+        bussOption.legend.data = legendData;
+//        option.series[0].data = (function () {
+//            var d = [
+//                {name: locale.get("construction"), value: data.construction},
+//                {name: locale.get("commissioning"), value: data.commissioning},
+//                {name: locale.get("fault"), value: data.fault},
+//                {name: locale.get("overhaul"), value: data.overhaul}
+//            ];
+//            return d;
+//        })();
+
+        // drawChart("bussiness_state", bussOption);
+
+    }
+
+    //定时刷新加载图表
+    function chartReload() {
+        loadOnlineDatas(function (data) {
+            var seriadata = (function () {
+                var d = [];
+                var online = {
+                    name: locale.get("online")
+                };
+                var offline = {
+                    name: locale.get("offline")
+                };
+                if (data) {
+                    online.value = data.online;
+                    offline.value = data.offline;
+                }
+                d.push(online);
+                d.push(offline);
+                return d;
+            })();
+            updateChart("online_state", seriadata);
+        });
+        var parameters = {
+            limit: 1,
+            business_state: 0
+        };
+        loadBussnessDatas(parameters, function (data) {
+            var seriadata = (function () {
+                var d = [
+                    {name: locale.get("construction"), value: data.construction},
+                    {name: locale.get("commissioning"), value: data.commissioning},
+                    {name: locale.get("fault"), value: data.fault},
+                    {name: locale.get("overhaul"), value: data.overhaul}
+                ];
+                return d;
+            })();
+            updateChart("bussiness_state", seriadata);
+        });
+    }
+
+    //动态加载echart图表数据
+    function updateChart(id, data) {
+        var option = chartIds[id].getOption();
+        //动态设置图表数据
+        option.series[0].data = data;
+        chartIds[id].setOption(option);
+    }
+    //启动定时器
+    function intervalRefresh() {
+        //定时刷新通道数据 绘制图表
+        autoInt = setInterval("chartReload()", 60000);
+    }
+    //清楚定时器
+    function intervalClear() {
+        clearInterval(autoInt);
+    }
+
+
+    $(document).ready(function () {
+        //页面功能权限过滤
+        permissionFilter_pageFunc();
+        //初始化
+        require(['siteService', 'echarts'], function (siteService) {
+            $("#page-footer").load("admin/pagination.html", function () {
+                research_site(0, $("#pageNumberSelect").val());
+            });
+            var parameters = {
+                limit: 1,
+                business_state: 0
+            }
+            loadOnlineDatas(loadOnlineCallback);
+            loadBussnessDatas(parameters, loadBussnessCallback)
+        });
+        locale.render({element: "#init_body"});
+    });
+
+</script>

@@ -1,0 +1,289 @@
+<!-- Content Header (Page header) -->
+<script type="text/javascript"> 
+   
+  var timeOption = {
+    title : {
+      text: '分时产量',
+//      subtext: '纯属虚构'
+      x:'center'
+    },
+    tooltip : {
+      trigger: 'axis'
+    },
+    grid:{
+      x:"40px",
+      y:"40px",
+      x2:"40px",
+      y2:"40px"
+    },
+    calculable : true,
+    xAxis : [
+      {
+        type : 'category',
+        data : ['8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00']
+      }
+    ],
+    yAxis : [
+      {
+        type : 'value'
+      }
+    ],
+    series : [
+      {
+        name:'产量',
+        type:'bar',
+        data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+        itemStyle: {
+          normal: {
+              color: function(params){
+                var colorList = [
+                  "#b9b9b9", "#848484"
+                ];
+                if(params.dataIndex%2 ==0){
+                  return colorList[0];
+                }
+                else{
+                  return colorList[1];
+                }
+              }
+          }
+        }
+      }
+    ]
+  };
+  var statOption = {
+    title : {
+      text: '产量统计',
+//      subtext: '纯属虚构'
+      x:'center'
+    },
+    tooltip : {
+      trigger: 'axis'
+    },
+    grid:{
+      x:"40px",
+      y:"40px",
+      x2:"40px",
+      y2:"40px"
+    },
+    toolbox: {
+      show : false,
+      feature : {
+        dataView : {show: true, readOnly: false},
+        magicType : {show: true, type: ['line', 'bar']},
+        restore : {show: true},
+        saveAsImage : {show: true}
+      }
+    },
+    calculable : true,
+    xAxis : [
+      {
+        type : 'category',
+        data : ['8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00']
+      }
+    ],
+    yAxis : [
+      {
+        type : 'value'
+      }
+    ],
+    series : [
+      {
+        name:'产量',
+        type:'bar',
+        data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+        itemStyle: {
+          normal: {
+            color: function(params){
+              var colorList = [
+                "#b9b9b9", "#848484"
+              ];
+              if(params.dataIndex%2 ==0){
+                return colorList[0];
+              }
+              else{
+                return colorList[1];
+              }
+            }
+          }
+        }
+      }
+    ]
+  };
+  var productOption = {
+    title : {
+      text: '生产时间',
+//      subtext: '纯属虚构'
+      x:'center'
+    },
+    tooltip : {
+      trigger: 'axis'
+    },
+    grid:{
+      x:"40px",
+      y:"40px",
+      x2:"40px",
+      y2:"40px"
+    },
+    calculable : true,
+    xAxis : [
+      {
+        type : 'category',
+        data : ['8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00']
+      }
+    ],
+    yAxis : [
+      {
+        type : 'value'
+      }
+    ],
+    series : [
+      {
+        name:'降水量',
+        type:'bar',
+        data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+        itemStyle: {
+          normal: {
+            color: function(params){
+              var colorList = [
+                "#b9b9b9", "#848484"
+              ];
+              if(params.dataIndex%2 ==0){
+                return colorList[0];
+              }
+              else{
+                return colorList[1];
+              }
+            }
+          }
+        }
+      }
+    ]
+  };
+  var faultOption = {
+    title : {
+      text: '故障时间',
+//      subtext: '纯属虚构'
+      x:'center'
+    },
+    tooltip : {
+      trigger: 'axis'
+    },
+    grid:{
+      x:"40px",
+      y:"40px",
+      x2:"40px",
+      y2:"40px"
+    },
+    calculable : true,
+    xAxis : [
+      {
+        type : 'category',
+        data : ['8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00']
+      }
+    ],
+    yAxis : [
+      {
+        type : 'value'
+      }
+    ],
+    series : [
+      {
+        name:'降水量',
+        type:'bar',
+        data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+        itemStyle: {
+          normal: {
+            color: function(params){
+              var colorList = [
+                "#b9b9b9", "#848484"
+              ];
+              if(params.dataIndex%2 ==0){
+                return colorList[0];
+              }
+              else{
+                return colorList[1];
+              }
+            }
+          }
+        }
+      }
+    ]
+  };
+  require(
+          [
+            'echarts',
+            'echarts/chart/line', // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
+            'echarts/chart/bar',
+            'echarts/chart/pie',
+          ],
+          function (ec) {
+            var timeChart = ec.init(document.getElementById("time-sharing"));
+            timeChart.setOption(timeOption);
+            var statChart = ec.init(document.getElementById("output-statistics"));
+            statChart.setOption(statOption);
+            var productChart = ec.init(document.getElementById("production-time"));
+            productChart.setOption(productOption);
+            var faultChart = ec.init(document.getElementById("fault"));
+            faultChart.setOption(faultOption);
+
+          }
+  );
+      
+</script>
+<section class="content-header">
+  <h1>
+    整体监控
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active">Dashboard</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <!-- Info boxes -->
+  <div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+      <div class="box-body">
+        <div class="col-md-3 col-sm-4 col-xs-6 Time-sharing">
+          <div id="time-sharing" class="col-md-12 col-xs-12" style="height:200px;width:98%;padding:1px"  align="left">
+
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-4 col-xs-6 Output-statistics">
+          <div id="output-statistics" class="col-md-12 col-xs-12" style="height:200px;width:98%;padding:1px"  align="left">
+
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-4 col-xs-6 Production-time">
+          <div id="production-time" class="col-md-12 col-xs-12" style="height:200px;width:98%;padding:1px"  align="left">
+
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-4 col-xs-6 fault">
+          <div id="fault" class="col-md-12 col-xs-12" style="color:#b9b9b9;height:200px;width:98%;padding:1px" align="left">
+
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+  <div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                  <div class="col-md-12 col-xs-12">
+                    <img src="/images/product_line.png" alt="" style="width:70%">
+                  </div>
+                </div>
+              </div>
+        </div> 
+    </div>
+  </div>
+
+</section>

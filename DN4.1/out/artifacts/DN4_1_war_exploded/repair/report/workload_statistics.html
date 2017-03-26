@@ -1,0 +1,531 @@
+<!--样式-->
+<style>
+    .tab_position {
+        position: relative;
+    }
+
+    .tab_btn_close {
+        position: absolute;
+        top: -5px;
+        right: -2px;
+    }
+
+    .tab_btn_close_color {
+        color: rgba(0, 0, 0, 0.3)
+    }
+
+    .tab_btn_close_color:hover {
+        color: red;
+    }
+</style>
+
+<section class="content-header">
+    <h1 lang="text:repair_report_workload">
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#" lang="text:report"></a></li>
+        <li class="active" lang="text:repair_report_workload"></li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-solid">
+                <!--加载数据等待-->
+                <div class="overlay" style="display: none;">
+                    <i class="fa icon-refresh icon-spin"></i>
+                </div>
+                <div style="display: none;" class="box-header with-border">
+                    <span><h3 class="box-title" lang="text:all_department_repair_statistics"></h3></span>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="icon-minus fa-minus"></i></button>
+                    </div>
+                </div>
+                <!--查询条件-->
+                <div class="box-body">
+                    <div class="col-md-12 row" style="padding-bottom: 10px;">
+                        <form class="form-inline">
+                            <!--左侧-->
+                            <div class="form-group has-feedback">
+                                <input type="text" class="form-control form-control-left input-sm"
+                                       id="workloadDate" readonly="readonly">
+                                <span class="glyphicon glyphicon-calendar form-control-feedback"
+                                      style="left: 0;"></span>
+                            </div>
+                            <div class="form-group just-btn">
+                                <button type="button" class="btn btn-default btn-sm"
+                                        onclick="getWorkloadDatas()" data-toggle="tooltip"
+                                        title="查询" lang="title:query"><span
+                                        class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </div>
+                            <!--<div class="form-group" style="padding: 5px 0px;">-->
+                            <!--<span>-->
+                            <!--<label>现场</label>-->
+                            <!--<input type="text" class="form-control input-sm">-->
+                            <!--</span>-->
+                            <!--</div>-->
+                            <!--右侧-->
+                            <!--<div class="form-group box-tools pull-right">-->
+                                <!--<div class="btn-group">-->
+                                    <!--<button type="button" class="btn btn-default btn-sm" title='导出'-->
+                                            <!--data-toggle='tooltip' data-placement="bottom"-->
+                                            <!--lang="title:export" onclick="" data-permissionFilter="[29]">-->
+                                        <!--<i class="icon-upload-alt"></i>-->
+                                    <!--</button>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        </form>
+                    </div>
+
+                    <!--标签页 Nav tabs  工作量统计-->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a role="tab" data-toggle="tab" href="#tab_status" lang="text:work_order_statistics"></a>
+                        </li>
+                        <li role="presentation" class="tab_position">
+                            <a role="tab" data-toggle="tab" href="#tab_num" lang="text:work_number_statistics"></a>
+                        </li>
+                        <li role="presentation" class="tab_position">
+                            <a role="tab" data-toggle="tab" href="#tab_time" lang="text:work_time"></a>
+                        </li>
+                    </ul>
+                    <div class="tab-content"
+                         style="padding: 5px 15px 0px 15px;border: 1px solid #dddddd;border-top: none;">
+                        <div role="tabpanel" class="tab-pane active row" id="tab_status">
+                            <div class="col-md-12">
+                                <div id="status_report">
+                                    <div class="box-body">
+                                        <div class="chart" style="height:300px;width:100%;" id="status_chart">
+                                        </div>
+                                    </div><!-- /.box-body -->
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane row" id="tab_num">
+                            <div class="col-md-12">
+                                <div id="num_report">
+                                        <div class="box-body">
+                                            <div class="chart" style="height:300px;width:100%;" id="num_chart">
+                                            </div>
+                                        </div><!-- /.box-body -->
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane row" id="tab_time">
+                            <div class="col-md-12">
+                                <div id="time_report">
+                                        <div class="box-body">
+                                            <div class="chart" style="height:300px;width:100%;" id="time_chart">
+                                            </div>
+                                        </div><!-- /.box-body -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    </br>
+                    <!--标签页 Nav tabs  工作效率统计-->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a role="tab" data-toggle="tab" href="#tab_status" lang="text:work_efficiency_statistics"></a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" style="padding: 15px 15px 0px 15px;border: 1px solid #dddddd;border-top: none;">
+                        <div role="tabpanel" class="tab-pane active row" >
+                            <div id="ordersResponse_report" class="col-md-6">
+                                <div class="box box-default">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title" lang="text:accept_order_response_time"></h3>
+                                        <div class="box-tools pull-right">
+                                            <button class="btn btn-box-tool" data-widget="collapse">
+                                                <i class="glyphicon glyphicon-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="chart-responsive" style="height:480px;width:100%;"
+                                                     id="ordersResponse_chart">
+
+                                                </div><!-- ./chart-responsive -->
+                                            </div><!-- /.col -->
+                                        </div><!-- /.row -->
+                                    </div><!-- /.box-body -->
+                                </div><!-- /.box -->
+                            </div>
+                            <div id="repairResponse_report" class="col-md-6">
+                                <div class="box box-default">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title" lang="text:maintenance_response_time"></h3>
+                                        <div class="box-tools pull-right">
+                                            <button class="btn btn-box-tool" data-widget="collapse">
+                                                <i class="glyphicon glyphicon-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="chart-responsive" style="height:480px;width:100%;"
+                                                     id="repairResponse_chart">
+                                                </div><!-- ./chart-responsive -->
+                                            </div><!-- /.col -->
+                                        </div><!-- /.row -->
+                                    </div><!-- /.box-body -->
+                                </div><!-- /.box -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<script>
+    /**
+     * 搜索，调用api 查询工单列表，并填充数据
+     */
+    function getWorkloadDatas() {
+        var workloadDate = ($("#workloadDate").val()).split("-");
+        var start = new Date(workloadDate[0] + " 00:00:00").getTime();
+        var end = new Date(workloadDate[1] + " 23:59:59").getTime();
+
+        //工作量
+        var params = {};
+        params.start = start;
+        params.end = end;
+        getWorkorderData(params, true, function (data) {
+            var names = [];
+            var times = [];
+            var totals = [];
+            var closeds = [];
+            var notcloseds = [];
+//            var alarms = [];
+//            var repairs = [];
+//            var unkowns = [];
+//            var preventives = [];
+//            var temporarys = [];
+            for (var i = 0; i < data.length; i++) {
+                var name = (data[i].name == "" ? locale.get("unkown") : data[i].name);
+                var time = data[i].total_duration;
+                var works = data[i].works;
+
+                totals.push(works.total);
+                closeds.push(works.closed);
+                notcloseds.push(works.total - works.closed)
+//                alarms.push(works.alarm);
+//                repairs.push(works.repair);
+//                unkowns.push(works.unkown);
+//                preventives.push(works.preventive);
+//                temporarys.push(works.temporary);
+
+                names.push(name);
+                times.push(time)
+            }
+            //工单状态统计
+            status_chart.setOption({
+                legend: {
+//                    data: [locale.get("total"), locale.get("closed"), locale.get("alarm"), locale.get("repair"),
+//                            locale.get("unkown"), locale.get("preventive"), locale.get("temporary")]
+                    data: [locale.get("closed"), locale.get("notclosed")]
+                },
+                xAxis: [
+                    {type: 'category', data: names}
+                ],
+//                series: [
+//                    {name: locale.get("total"), type: 'bar', data: totals},
+//                    {name: locale.get("closed"), type: 'bar', data: closeds},
+//                    {name: locale.get("alarm"), type: 'bar', data: alarms},
+//                    {name: locale.get("repair"), type: 'bar', data: repairs},
+//                    {name: locale.get("unkown"), type: 'bar', data: unkowns},
+//                    {name: locale.get("preventive"), type: 'bar', data: preventives},
+//                    {name: locale.get("temporary"), type: 'bar', data: temporarys}
+//                ]
+                series: [
+                    {name: locale.get("closed"), type: 'bar', data: closeds},
+                    {name: locale.get("notclosed"), type: 'bar', data: notcloseds}
+                ],
+                noDataLoadingOption: {
+                    text: locale.get("no_data"),
+                    effect: 'bubble',
+                    effectOption: {
+                        effect: {
+                            n: 0
+                        }
+                    }
+                }
+            });
+            //工单总数统计
+            num_chart.setOption({
+                legend: {data: [locale.get("count")]},
+                xAxis: [
+                    {type: 'category', data: names}
+                ],
+                series: [
+                    {name: locale.get("count"), type: 'bar', data: totals}
+                ],
+                noDataLoadingOption: {
+                    text: locale.get("no_data"),
+                    effect: 'bubble',
+                    effectOption: {
+                        effect: {
+                            n: 0
+                        }
+                    }
+                }
+            });
+            //工作时长
+            time_chart.setOption({
+                legend: {data: [locale.get("count")]},
+                xAxis: [
+                    {type: 'category', data: names}
+                ],
+                series: [
+                    {
+                        name: locale.get("count"), type: 'bar', data: times
+                    }
+                ],
+                noDataLoadingOption: {
+                    text: locale.get("no_data"),
+                    effect: 'bubble',
+                    effectOption: {
+                        effect: {
+                            n: 0
+                        }
+                    }
+                }
+            });
+        }, this);
+
+        //接单响应时间
+        var params1 = {};
+        params1.start = start;
+        params1.end = end;
+        params1.mode = 1;
+        getDistributionData(params1, true, function (data) {
+            var orders = [];
+            for (var item in data) {
+                var name = locale.get(data[item].name);
+                var count = data[item].count;
+                orders.push({name: name, value: count});
+            }
+            ordersResponse_option.series[0].data = orders;
+            ordersResponse_option.series[0].name = locale.get("accept_order_response_time");
+            ordersResponse_chart.setOption(ordersResponse_option);
+//            ordersResponse_chart.setOption({
+//
+//                series: [{
+//                    name: locale.get("accept_order_response_time"),
+//                    data: orders
+//                }]
+//            });
+        }, this);
+
+        //工作响应时间
+        var params2 = {};
+        params2.start = start;
+        params2.end = end;
+        params2.mode = 2;
+        getDistributionData(params2, true, function (data) {
+            var orders = [];
+            for (var item in data) {
+                var name = locale.get(data[item].name);
+                var count = data[item].count;
+                orders.push({name: name, value: count});
+            }
+            repairResponse_option.series[0].data = orders;
+            repairResponse_option.series[0].name = locale.get("maintenance_response_time");
+//                    {
+//
+//                series: [{
+//                    name: locale.get("maintenance_response_time"),
+//                    data: orders
+//                }]
+//            }
+            repairResponse_chart.setOption(repairResponse_option);
+        }, this);
+
+    }
+    ;
+    var status_chart;
+    var num_chart;
+    var time_chart;
+    var ordersResponse_chart;
+    var repairResponse_chart;
+    var ordersResponse_option = {
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        calculable: true,
+        series: [
+            {
+                name: locale.get("repair_state_monitor"),
+                type: 'pie',
+                radius: ['40%', '60%'],
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            formatter: "{b}\n{c}"+locale.get("ge")
+                        },
+                        labelLine: {
+                            show: true
+                        }
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            position: 'center',
+                            textStyle: {
+                                fontSize: '18',
+                                //fontWeight : 'bold',
+                                fontColor: 'white'
+                            }
+                        }
+                    }
+                },
+                data: [
+                    {value: 0, name: locale.get("zone0")},
+                    {value: 0, name: locale.get("zone1")},
+                    {value: 0, name: locale.get("zone2")},
+                    {value: 0, name: locale.get("zone3")},
+                    {value: 0, name: locale.get("zone4")},
+                    {value: 0, name: locale.get("unkown")}]
+            }
+        ]
+    };
+    var repairResponse_option = {
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        calculable: true,
+        series: [
+            {
+                name:  locale.get("repair_state_monitor"),
+                type: 'pie',
+                radius: ['40%', '60%'],
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            formatter: "{b}\n{c}"+locale.get("ge")
+                        },
+                        labelLine: {
+                            show: true
+                        }
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            position: 'center',
+                            textStyle: {
+                                fontSize: '18',
+                                //fontWeight : 'bold',
+                                fontColor: 'white'
+                            }
+                        }
+                    }
+                },
+                data: [
+                    {value: 0, name: locale.get("zone0")},
+                    {value: 0, name: locale.get("zone1")},
+                    {value: 0, name: locale.get("zone2")},
+                    {value: 0, name: locale.get("zone3")},
+                    {value: 0, name: locale.get("zone4")},
+                    {value: 0, name: locale.get("unkown")}]
+            }
+        ]
+    };
+    function drawWorkloadChart() {
+        var barOptionstr = JSON.stringify(barOption);
+        var status_option = $.parseJSON(barOptionstr);
+        var num_option = $.parseJSON(barOptionstr);
+        var time_option = $.parseJSON(barOptionstr);
+
+        require(
+                [
+                    'echarts',
+                    'echarts/chart/line', // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
+                    'echarts/chart/bar',
+                    'echarts/chart/pie'
+                ],
+                function (ec) {
+                    //echars 对tab分页的柱形图无法获取到width:100%的数值,只会转化为100px,这里统一取主级的div宽度并缩进4%,赋给图表,如有更好的办法望交流改进
+                    $("#status_chart").css('width', $("#status_report").width() * 0.96);
+                    $("#num_chart").css('width', $("#status_report").width() * 0.96);
+                    $("#time_chart").css('width', $("#status_report").width() * 0.96);
+
+                    //工单状态统计
+                    status_chart = ec.init(document.getElementById("status_chart"));
+                    status_chart.setOption(status_option);
+                    //工单总数统计
+                    num_chart = ec.init(document.getElementById("num_chart"));
+                    num_chart.setOption(num_option);
+                    //工作时长
+                    time_chart = ec.init(document.getElementById("time_chart"));
+                    time_chart.setOption(time_option);
+                    //设备科接单响应时长统计
+                    ordersResponse_chart = ec.init(document.getElementById("ordersResponse_chart"));
+                    ordersResponse_chart.setOption(ordersResponse_option);
+                    //设备科维修响应时长统计
+                    repairResponse_chart = ec.init(document.getElementById("repairResponse_chart"));
+                    repairResponse_chart.setOption(repairResponse_option);
+
+                    getWorkloadDatas();
+                }
+        );
+        locale.render({element: "#init_body"});
+    }
+    ;
+    $(document).ready(function () {
+        //日历插件显示日期初始化
+        $('#workloadDate').daterangepicker(
+                {
+                    startDate: moment().subtract(6, 'days'),
+                    endDate: moment(),
+                    maxDate: moment(),
+                    showDropdowns: false,
+                    showWeekNumbers: false,
+                    separator: '-',
+                    locale: {
+                        format: 'YYYY/MM/DD',
+                        separator: '-',
+                        applyLabel: locale.get("apply"),
+                        cancelLabel: locale.get("cancel")
+                    }
+                },
+                function (start, end) {
+                    $('#workloadDate').val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
+                }
+        );
+        require(['reportStatisticsService'], function () {
+            drawWorkloadChart();
+            locale.render({element: "#init_body"});
+        });
+
+    });
+</script>

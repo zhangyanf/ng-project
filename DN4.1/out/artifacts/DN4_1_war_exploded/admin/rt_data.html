@@ -1,0 +1,198 @@
+<div class="row">
+    <div id="infom" class="col-xs-12" data-permissionFilter="[11]">
+
+    </div>
+</div>
+<script type="text/javascript">
+    //页面功能权限过滤
+    function initRtData(_id, loc) {
+        require(['dataService'], function (dataService) {
+            loadRtData(_id, loc);
+            locale.render({element: "#init_body"});
+        });
+    };
+    function loadRtData(siteId, loc) {
+        var params = {
+            limit: 0,
+            verbose: 100
+        }
+        getSiteVars_list(siteId, params, false, function (data) {
+            var machines = [];
+            if (data.result && data.result.length > 0) {
+                $("#infom").empty();
+                var m = data.result;
+                var data = {};
+                for (var i = 0; i < m.length; i++) {
+                    var sub = m[i];
+                    if(loc=='home'){
+                        if(sub.level>0){
+                            if (data.hasOwnProperty(sub.group)) {
+                                data[sub.group].push(sub);
+                            } else {
+                                var res = [];
+                                res.push(sub);
+                                data[sub.group] = res;
+                            }
+                        }
+                    }else{
+                        if (data.hasOwnProperty(sub.group)) {
+                            data[sub.group].push(sub);
+                        } else {
+                            var res = [];
+                            res.push(sub);
+                            data[sub.group] = res;
+                        }
+                    }
+
+                }
+                $.each(data, function (name, value) {
+                    var obj = {};
+                    obj.name = name;
+                    obj.vars = value;
+                    machines.push(obj);
+                });
+                //根据loc参数判断绘制的列数
+//                if (loc && loc == 'home') {
+//                    drawMachineDiv(machines, "infom");
+//                } else {
+                    var arr1 = [];
+                    var arr2 = [];
+                    $("#infom").removeClass("col-xs-12");
+                    if (machines.length / 2 < 1) {
+                        var info1 = '<div class="col-md-6" id="part1"></div>';
+                        $("#infom").append(info1);
+                        drawMachineDiv(machines, "part1");
+                    } else {
+                        arr1 = machines.slice(0, (machines.length) / 2);
+                        arr2 = machines.slice((machines.length) / 2);
+                        //定义两个div
+                        var info1 = '<div class="col-md-6" id="part1"></div>' +
+                                '<div class="col-md-6" id="part2"></div>';
+                        $("#infom").append(info1);
+                        drawMachineDiv(arr1, "part1");
+                        drawMachineDiv(arr2, "part2");
+                    }
+//                }
+                var vars = [];
+                $.each(machines, function (n, machine) {
+                    var varinfo = {
+                        var_name: machine.varName,
+                    };
+                    vars.push(varinfo);
+                    if (vars.length <= 0) {
+                        $("#rt_m_" + machine.name).empty().append('<tr><td colspan="3"  align="center" lang="text:no_data"></td></tr>');
+                        locale.render({element: "#init_body"});
+                    } else {
+                        machines[n] = machine;
+                        //绘制变量table
+                        renderDataTable(machine, loc);
+                    }
+                });
+                //获取实时数据
+                if (machines.length > 0) {
+                    getRtData(siteId, machines);
+                    if (loc) {
+                        rtTimer = setInterval(function () {
+                            getRtData(siteId, machines)
+                        }, 10000);
+                    } else {
+                        if (typeof rtTimer != "undefined" && rtTimer) {
+                            clearInterval(rtTimer);
+                        }
+                    }
+                }
+            } else {
+                //没有数据时提示无数据
+                $("#infom").empty();
+                var $no_data = "<div class='callout callout-info'>" +
+                        "<h4 style='font-weight: normal;' lang='text:rt_data_nodata'> </h4>" +
+                        "</div>";
+                $("#infom").append($no_data);
+                locale.render({element: "#init_body"});
+            }
+        });
+    }
+    //绘制控制器div
+    function drawMachineDiv(varinfos, id) {
+        $.each(varinfos, function (n, varinfo) {
+            var varinfo_name = changeBlankToLine(varinfo.name);
+            var data = '<div class="col-md-12" style="padding:0px" id="real_time' + varinfo_name + '">' +
+                    '<div class="box">' +
+                    '<div class="overlay" style="display: none;" name="rt_load_' + varinfo_name + '" id="rt_load_' + varinfo_name + '">' +
+                    '    <i class="fa icon-refresh icon-spin"></i>' +
+                    '</div>' +
+                    '<div class="box-header with-border">' +
+                    '<div class="box-title"><h3 class="box-title">'+ varinfo_name + '</h3></div>' +
+                    '<div class="box-tools pull-right">' +
+                    '<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="box-body">' +
+                    '<table class="table table-bordered table-hover table-striped">' +
+                    '<thead>' +
+                    '<tr>' +
+                    '<th style="width:33%">' + locale.get("variable_name") + '</th>' +
+                    '<th style="width:33%">' + locale.get("variable_value") + '</th>' +
+                    '<th style="width:34%">' + locale.get("updateTime") + '</th>' +
+                    '</tr>' +
+                    '</thead>' +
+                    '<tbody id="rt_m_' + varinfo_name + '">' +
+                    '</tbody>' +
+                    '</table>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+            $("#" + id).append(data);
+        });
+    }
+    //初始化变量列表
+    function renderDataTable(machine, loc) {
+        var varinfo_name = changeBlankToLine(machine.name);
+        $("#rt_load_" + varinfo_name).show();
+        $.each(machine.vars, function (n, varInfo) {
+            var varinfo_rt = changeBlankToLine(varInfo.id);
+            var moreData =
+                    '<tr id=' + varInfo.id + '>' +
+                    '<td>' + varInfo.desc + '</td>' +
+                    '<td ><span id="rt_' + varinfo_rt + '"></span>&nbsp;<span>'+(varInfo.unit=="C"?"℃": varInfo.unit)+'</span></td>' +
+                    '<td id="rt-' + varinfo_rt + '"></td>' +
+                    '</tr>';
+            $("#rt_m_" + varinfo_name).append(moreData);
+            $("#rt_load_" + varinfo_name).hide();
+        });
+    }
+    //调用api 获取实时数据
+    function getRtData(siteId, machines) {
+        var varMap = [];
+        $.each(machines, function (n, machine) {
+            if (machine.vars && machine.vars.length > 0) {
+                var varId = [];
+                $.each(machine.vars, function (n, varInfo) {
+                    varId.push(varInfo.id);
+                });
+                var params = {
+                    varIds: varId
+                }
+                //获取实时数据
+                rt_data(siteId, params, function (data) {
+                    if (data.result.vars && data.result.vars.length > 0) {
+                        $.each(data.result.vars, function (n, v) {
+                            var varinfo_rt = changeBlankToLine(v.id);
+                            if (v.value != undefined && v.value || v.value==0) {
+                                $("#rt_" + varinfo_rt).html(v.value);
+                            } else {
+                                $("#rt_" + varinfo_rt).html("");
+                            }
+                            if (v.timestamp != undefined && v.timestamp) {
+                                var ts = schneider.util.dateFormat(v.timestamp, "yyyy-MM-dd hh:mm:ss");
+                                $("#rt-" + varinfo_rt).html(ts);
+                            } else {
+                                $("#rt-" + varinfo_rt).html("");
+                            }
+                        });
+                    }
+                }, this);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,702 @@
+<!-- Main content -->
+<section class="content-header">
+    <h1 lang="text:failure_and_safety_alarm">
+        故障及安全告警
+        <small>Version 2.0</small>
+    </h1>
+
+    <ol class="breadcrumb">
+        <li><a href="javascript:void(0)" onclick="click2url(1)"><i class="icon-home"></i> Home</a></li>
+    </ol>
+</section>
+<section class="content" id="tcontent">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <div style="display: inline-block;padding:  0px 10px;">
+                        <label for="level" class="control-label" lang="text:level"></label>
+                        <select id="level" multiple="multiple">
+                            <option value="5" selected="selected" lang="text:serious_warning">严重警告</option>
+                            <option value="4" selected="selected" lang="text:important_warning">重要警告</option>
+                            <option value="3" selected="selected" lang="text:minor_warning">次要警告</option>
+                            <option value="2" selected="selected" lang="text:warning">警告</option>
+                            <option value="1" selected="selected" lang="text:remind">提醒</option>
+                        </select>
+                    </div>
+                    <div style="display: inline-block; padding: 0 10px;">
+                        <span>
+                            <label lang="text:creation_time"></label>
+                            <input type="text" style="background-color: #eee;border:1px solid #ddd;height:35px;border-radius: 5px;padding-left: 10px;width:130px" id="startDate" data-provide="date-picker"  readonly="readonly"
+                           onFocus="WdatePicker({dateFmt: 'yyyy-MM-dd '});">
+                            <label style="margin-left: 10px;" lang="text:to"></label>
+                            <input type="text"  style="background-color: #eee;border:1px solid #ddd;height:35px;border-radius: 5px;padding-left: 10px; width:130px" id="endDate" data-provide="date-picker"  readonly="readonly"  onFocus="WdatePicker({dateFmt: 'yyyy-MM-dd '});">
+                        </span>
+                    </div>
+                    <div style="display: inline-block">
+                        <label lang="text:site"></label>
+                        <input type="text" style="padding:6px 12px;height:34px" lang="placeholder:enter_the_site_name" placeholder="请输入现场名称">
+                    </div>
+                    <button type="button" onclick="checkBtn()" lang='title:check' data-toggle="tooltip" title="查询" style="background-color: #ddd;border: none;width: 50px;height:34px;text-align: center;margin: 0px 10px; outline:none;color: white;">
+                        <span class="glyphicon glyphicon-search" style="font-size: 130%;"></span>
+                    </button>
+                    <button type="button" id="btn_export" data-toggle="tooltip" title="导出"
+                             lang="title:export" style="background-color: #ddd;border: none;width: 50px;height:34px;text-align: center;margin: 0px 10px; outline:none;color: white;">
+                        <span class="glyphicon glyphicon-export" style="font-size: 130%;"></span>
+                    </button>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div id="topo_chart8" class="col-md-12 col-xs-12" style="overflow-x:hidden;height:500px;width:100%;">
+                        <table class="table table-bordered " id="tableFirst" style="width:100%;">
+                            <thead>
+                            <tr>
+                                <th lang="text:level"></th>
+                                <th lang="text:warning_time"></th>
+                                <th lang="text:description"></th>
+                                <th lang="text:site_name"></th>
+                                <th lang="text:warning_source"></th>
+                                <th lang="text:state"></th>
+                                <th lang="text:operation">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="warning-tbody">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <!--分页工具-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div style="text-align: center;">
+                                <nav>
+                                   <span style="position: relative;top:-32px;" data-toggle='tooltip' data-placement='left' lang='title:how_many_article_displayed_per_page' title='每页显示多少条'>
+                                      <select style="height:33px; line-height:30px;"
+                                              id="pageNumberSelect" >
+                                          <option value="30" selected="selected">30</option>
+                                          <option value="50">50</option>
+                                          <option value="100">100</option>
+                                      </select>
+                                    </span>
+                                    <ul class="pagination" id="page_tool">
+
+                                        <!--分页-->
+
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="myModalLabel" lang="text:alarm_details">
+          <img src="./images/alarm_1.png"/>
+					告警详情
+				</h4>
+			</div>
+			<div class="modal-body">
+        <div class="btn-group" style="padding-left:315px;">
+				  <button class="btn btn-default" style="margin: 0px 20px 20px 20px;" id="confirm_1" data-toggle="modal" data-target="#confirm">
+            <span class="glyphicon glyphicon-ok" lang="text:affirm">确认</span>
+          </button>
+          <button class="btn  btn-default"style="margin:0px 20px 20px 20px;" id="remove_1" data-toggle="modal" data-target="#remove" >
+            <span class="glyphicon glyphicon-remove" lang="text:_clear">清除</span>
+          </button>
+        </div>
+          <form class="form-horizontal">
+              <div class="form-group">
+                <label  lang="text:alarm_time" class="col-sm-2 control-label" >告警时间</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control"  id="time" readonly="readonly">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" lang="text:site_name" >现场名称</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="siteName" readonly="readonly">
+                </div>
+              </div>
+              <div class="form-group">
+                <label   class="col-sm-2 control-label" lang="text:alarm_origin" >告警来源</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="origin" readonly="readonly">
+                </div>
+              </div>
+              <div class="form-group" style="display:none" id="qrzh">
+                <label   class="col-sm-2 control-label" lang="text:confirm_account">确认账户</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="sure_name" readonly="readonly">
+                </div>
+              </div>
+              <div class="form-group" style="display:none" id="qrsj">
+                <label   class="col-sm-2 control-label" lang="text:confirm_time">确认时间</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="sure_time" readonly="readonly">
+                </div>
+              </div>
+              <div class="form-group" style="display:none" id="qczh">
+                <label   class="col-sm-2 control-label" lang="text:clear_account">清除账户</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="clear_name" readonly="readonly">
+                </div>
+              </div>
+              <div class="form-group" style="display:none" id="qcsj">
+                <label   class="col-sm-2 control-label" lang="text:clear_time">清除时间</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="clear_time" readonly="readonly">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" lang="text:level">级别</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="levels" readonly="readonly">
+                </div>
+              </div>
+              <div class="form-group">
+                <label  class="col-sm-2 control-label" lang="text:state" >状态</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control"  id="states" readonly="readonly">
+                </div>
+              </div>
+              <div class="form-group">
+                <label  class="col-sm-2 control-label" lang="text:description" >描述</label>
+                <div class="col-sm-10">
+                  <textarea rows="3" cols="20" id="dec" style="width:470px;"></textarea>
+                </div>
+              </div>
+          </form>
+			</div>
+      <input type="hidden" value="" id="tempMid" />
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal" lang="text:close">关闭
+				</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+
+<div class="modal fade" id="remove" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" lang="text:tips">
+					提示
+				</h4>
+			</div>
+			<div class="modal-body" lang="text:31012">
+        清除告警？
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="yes1();" lang="text:yes">是
+				</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" lang="text:no">否
+				</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+
+<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" lang="text:tips">
+          提示
+				</h4>
+			</div>
+			<div class="modal-body" lang="text:31011">
+        确认告警？
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="yes2();" lang="text:yes">是
+				</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" lang="text:no">否
+				</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+<script type="text/javascript">
+    //级别多选下拉
+    $('#level').multiselect();
+    require(['safeService'], function(safeService) {
+        init(0);
+    });
+
+    //加载分页工具
+    //pageTotal  总页数
+    //pageNow  当前页
+    //limit  每页多少条
+    //total  总共多少条
+    //cursor_r  当前页从第几条开始
+      function pageTool_load(pageTotal, pageNow, limit, total, cursor_r) {
+          $("#page_tool").empty();
+          var pg1;
+          var pg2 = "";
+          var pg3;
+          var page;
+
+          if (pageNow == 1) {
+              pg1 = "<li class='disabled'><span aria-hidden='true' data-pageoption='前一页'><i class='glyphicon glyphicon-backward' data-toggle='tooltip' title='上一页' lang='title:previous_page'></i></span></li>";
+          } else {
+              pg1 = "<li><span aria-hidden='true' data-pageoption='前一页'><i class='glyphicon glyphicon-backward' data-toggle='tooltip' title='上一页' lang='title:previous_page'></i></span></li>";
+          }
+          if (pageNow == pageTotal) {
+              pg3 = "<li class='disabled'><span aria-hidden='true' data-pageoption='后一页'><i class='glyphicon glyphicon-forward' data-toggle='tooltip' title='下一页' lang='title:next_page'></i></span></li>";
+          } else {
+              pg3 = "<li><span aria-hidden='true' data-pageoption='后一页'><i class='glyphicon glyphicon-forward' data-toggle='tooltip' title='下一页' lang='title:next_page'></i></span></li>";
+          }
+
+          if (pageTotal > 7) {
+              if (pageNow > 4) {
+                  pg2 = pg2 + "<li><span>" + "1" + "</span></li>";
+                  pg2 = pg2 + "<li><span>" + "2" + "</span></li>";
+                  pg2 = pg2 + "<li  class='disabled'><span>......</span></li>";
+                  if (pageTotal == 8) {
+                      for (var i3 = 4; i3 <= 8; i3++) {
+                          if (i3 == pageNow) {
+                              pg2 = pg2 + "<li  class='active'><span>" + i3 + "</span></li>";
+                          } else {
+                              pg2 = pg2 + "<li><span>" + i3 + "</span></li>";
+                          }
+                      }
+                  } else {
+                      if ((pageTotal - pageNow) >= 4) {
+                          pg2 = pg2 + "<li><span>" + (pageNow - 1) + "</span></li>";
+                          pg2 = pg2 + "<li class='active'><span>" + pageNow + "</span></li>";
+                          pg2 = pg2 + "<li><span>" + (pageNow + 1) + "</span></li>";
+                          pg2 = pg2 + "<li  class='disabled'><span>......</span></li>";
+                          pg2 = pg2 + "<li><span>" + (pageTotal - 1) + "</span></li>";
+                          pg2 = pg2 + "<li><span>" + pageTotal + "</span></li>";
+                      } else {
+                          for (var i4 = pageTotal - 4; i4 <= pageTotal; i4++) {
+                              if (i4 == pageNow) {
+                                  pg2 = pg2 + "<li  class='active'><span>" + i4 + "</span></li>";
+                              } else {
+                                  pg2 = pg2 + "<li><span>" + i4 + "</span></li>";
+                              }
+                          }
+                      }
+                  }
+              } else {
+                  for (var i2 = 1; i2 <= 5; i2++) {
+                      if (i2 == pageNow) {
+                          pg2 = pg2 + "<li  class='active'><span>" + i2 + "</span></li>";
+                      } else {
+                          pg2 = pg2 + "<li><span>" + i2 + "</span></li>";
+                      }
+                  }
+                  pg2 = pg2 + "<li  class='disabled'><span>......</span></li>";
+                  pg2 = pg2 + "<li><span>" + (pageTotal - 1) + "</span></li>";
+                  pg2 = pg2 + "<li><span>" + pageTotal + "</span></li>";
+              }
+          } else {
+              for (var i = 1; i <= pageTotal; i++) {
+                  if (i == pageNow) {
+                      pg2 = pg2 + "<li  class='active'><span>" + i + "</span></li>";
+                  } else {
+                      pg2 = pg2 + "<li><span>" + i + "</span></li>";
+                  }
+              }
+          }
+          page = pg1 + pg2 + pg3;
+          $("#page_tool").append(page);
+          $("#page_tool").find("li").css("cursor", "pointer");
+
+
+          $("#page_tool").find("li").not(".disabled").bind("click",function () {
+              var index;
+              if ($(this).is(".active")) {
+                  console.log("当前页:" + $(this).find("span").text());
+              } else {
+                  if ($(this).find("span").attr("data-pageoption") == "前一页") {
+                      index = cursor_r - limit;
+                  } else if ($(this).find("span").attr("data-pageoption") == "后一页") {
+                      index = cursor_r + limit;
+                  } else {
+                      var selectpage = parseInt($(this).find("span").text());
+                      selectpage < pageNow ? (index = cursor_r - (pageNow - selectpage) * limit) : (index = cursor_r + (selectpage - pageNow) * limit);
+                  }
+
+              }
+
+              init(index);
+          });
+
+          $("#pageNumberSelect").bind('change',function(){
+                   init(0);
+          });
+          locale.render({element: "#init_body"});
+      }
+        //日历插件中显示当天日期
+        function end(){
+        var mydate = new Date();
+        var str = "" + mydate.getFullYear() + "-";
+        str += (mydate.getMonth()+1) + "-";
+        str += mydate.getDate();
+        return str;
+        }
+        $("#endDate").val(end());
+        //日历插件中显示前一周的日期
+         function start(){
+            var now = new Date();
+            var date = new Date(now.getTime() - 7 * 24 * 3600 * 1000);
+            var str = date.getFullYear() + "-";
+            str += (date.getMonth() + 1)+"-";
+            str += date.getDate();
+            return str;
+        }
+
+        $("#startDate").val(start());
+
+        //把时间戳转化成“2012-12-12 12:12:12” 格式的日期
+        Date.prototype.Format = function (fmt) {
+                var o = {
+                    "M+": this.getMonth() + 1, //月份
+                    "d+": this.getDate(), //日
+                    "H+": this.getHours(), //小时
+                    "m+": this.getMinutes(), //分
+                    "s+": this.getSeconds(), //秒
+                    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                    "S": this.getMilliseconds() //毫秒
+                };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+        }
+
+        function init(skip) {
+        var startTime=$("#startDate").val();
+        var start_time = new Date(startTime).getTime()/1000;
+        var endTime=$("#endDate").val();
+        var end_time = new Date(endTime).getTime()/1000;
+        var level=$("#level").val();
+        var levels = level.join(",");
+        var cursor = skip;
+        var m = $("#pageNumberSelect").find("option:selected").val();
+        var limit = m;
+        var params = {
+            start_time:start_time,
+            end_time:end_time,
+            levels:levels,
+            // states:states,
+            cursor:cursor,
+            limit:limit,
+            verbose: "100"
+        };
+        loadSafeAlarm(params,function(data){
+         if(data.result == undefined || data.result.length == 0){
+             var $tr = '<tr><td colspan="7"  align="center" lang="text:no_data">无数据</td></tr>';
+             $("#warning-tbody").empty();
+             $("#warning-tbody").append($tr);
+
+         }else{
+             var len = data.result.length;
+             var clogs = data.result;
+             $("#warning-tbody").empty();
+             for (var i = 0; i < len; i++) {
+               var levels = null;
+               if(clogs[i].level == 5){
+                 levels=locale.get({lang:"serious_warning"});
+               }else if(clogs[i].level == 4){
+                 levels=locale.get("important_warning");
+               }else if(clogs[i].level == 3){
+                  levels=locale.get("minor_warning");
+               }else if(clogs[i].level == 2){
+                   levels=locale.get("warning");
+               }else if(clogs[i].level == 1){
+                   levels=locale.get("remind");
+               }
+                var states=null;
+               if (clogs[i].state == 1) {
+                   states=locale.get("unconfirmed");
+               }else if(clogs[i].state == 0){
+                   states=locale.get("confirmed");
+               } else if(clogs[i].state == -1){
+                   states=locale.get("cleared");
+               }
+               function getLocalTime(nS) {
+                 return new Date(parseInt(nS) * 1000).Format("yyyy-MM-dd HH:mm:ss").substring(0,16);
+               }
+               var time= getLocalTime(clogs[i].createTime);
+               var $tr = '<tr id='+clogs[i]._id+' >'
+                     + '<td>' + '<img src="./images/alarm.png"/>'+levels + '</td>'
+                     + '<td>' + time + '</td>'
+                     + '<td>' + clogs[i].desc  + '</td>'
+                     + '<td>' + clogs[i].siteName  + '</td>'
+                     + '<td>' + clogs[i].sourceName + '</td>'
+                     + '<td>' + states + '</td>'
+                     +"<td>" +"<span data-toggle='tooltip' title='处理告警' lang='title:alarm_processing' onclick='moreInfo(\""+clogs[i]._id+"\");' style='padding: 3px 6px;'>" +
+                                                     "<span data-toggle='modal' data-target='#myModal' class='glyphicon glyphicon-th-list' aria-hidden='true' style='color:#1d75b3;cursor: pointer;'></span>&nbsp;</span>" +
+                     "</td>";
+               $tr +=  '</tr>';
+               $("#warning-tbody").append($tr);
+             }
+         }
+
+         var cursor_r = data.cursor;
+         var limit_r = data.limit;
+         var total_r = data.total;
+         var pageNow = Math.ceil((cursor_r + limit_r) / limit_r);
+         var pageTotal = Math.ceil(total_r / limit_r);
+         pageTool_load(pageTotal, pageNow, limit_r, total_r, cursor_r);
+        },this);
+
+        }
+        //查询按钮
+        function checkBtn(){
+            var startTime=$("#startDate").val();
+            var start_time = new Date(startTime).getTime()/1000;
+            var endTime=$("#endDate").val();
+            var end_time = new Date(endTime).getTime()/1000;
+            var level=$("#level").val();
+            if(level==null || level==""){
+              dialog.render({ lang: 2130003 });
+              dialog.render({ lang: "click_to_close", buttons: [{lang: "yes", click: function() { dialog.close(); }}, {lang: "no", click: function() { dialog.close(); }}], close: function() { dialog.close(); } });
+              return;
+            }
+            var levels = level.join(",");
+            var m = $("#pageNumberSelect").find("option:selected").val();
+            console.log(m);
+
+            var limit = m;
+            var params = {
+                start_time:start_time,
+                end_time:end_time,
+                levels:levels,
+                cursor:cursor,
+                limit:limit,
+                verbose: "100"
+            };
+
+           loadSafeAlarm(params,function(data){
+            if(data.result == undefined || data.result.length == 0){
+                var $tr = '<tr><td colspan="7"  align="center" lang="text:no_data" lang="text:no_data">无数据</td></tr>';
+                $("#warning-tbody").empty();
+                $("#warning-tbody").append($tr);
+
+            }else{
+                var len = data.result.length;
+                var clogs = data.result;
+                $("#warning-tbody").empty();
+                for (var i = 0; i < len; i++) {
+                  var levels = null;
+                  if(clogs[i].level == 5){
+                    levels=locale.get({lang:"serious_warning"});
+                  }else if(clogs[i].level == 4){
+                    levels=locale.get("important_warning");
+                  }else if(clogs[i].level == 3){
+                     levels=locale.get("minor_warning");
+                  }else if(clogs[i].level == 2){
+                      levels=locale.get("warning");
+                  }else if(clogs[i].level == 1){
+                      levels=locale.get("remind");
+                  }
+                   var states=null;
+                  if (clogs[i].state == 1) {
+                      states=locale.get("unconfirmed");
+                  }else if(clogs[i].state == 0){
+                      states=locale.get("confirmed");
+                  } else if(clogs[i].state == -1){
+                      states=locale.get("cleared");
+                  }
+                  function getLocalTime(nS) {
+                    return new Date(parseInt(nS) * 1000).Format("yyyy-MM-dd HH:mm:ss").substring(0,16);
+                  }
+                  var time= getLocalTime(clogs[i].createTime);
+                  var $tr = '<tr id='+clogs[i]._id+'>'
+                        + '<td>' + '<img src="./images/alarm.png"/>'+levels + '</td>'
+                        + '<td>' + time + '</td>'
+                        + '<td>' + clogs[i].desc  + '</td>'
+                        + '<td>' + clogs[i].siteName  + '</td>'
+                        + '<td>' + clogs[i].sourceName + '</td>'
+                        + '<td>' + states + '</td>'
+                        +"<td>" +"<span data-toggle='tooltip' title='处理告警' lang='title:alarm_processing' onclick='moreInfo(\""+clogs[i]._id+"\");' style='padding: 3px 6px;'>" +
+                                                        "<span data-toggle='modal' data-target='#myModal' class='glyphicon glyphicon-th-list' aria-hidden='true' style='color:#1d75b3;cursor: pointer;'></span>&nbsp;</span>" +
+                        "</td>";
+                  $tr +=  '</tr>';
+                  $("#warning-tbody").append($tr);
+                }
+            }
+            var cursor_r = data.cursor;
+            var limit_r = data.limit;
+            var total_r = data.total;
+            var pageNow = Math.ceil((cursor_r + limit_r) / limit_r);
+            var pageTotal = Math.ceil(total_r / limit_r);
+            pageTool_load(pageTotal, pageNow, limit_r, total_r, cursor_r);
+        },this);
+  }
+  //操作按钮
+        function moreInfo(mId){
+            var params={
+                verbose:100
+            };
+            $("#tempMid").val(mId);
+            loadAllAlarmInfo(mId,params,function(data){
+                    var more=data.result;
+                    var len = data.result.length;
+                    function getLocalTime(nS) {
+                    return new Date(parseInt(nS) * 1000).Format("yyyy-MM-dd HH:mm:ss").substring(0,16);
+                    }
+                    var time= $("#time").val(getLocalTime(more.createTime));
+                    var siteName=$("#siteName").val(more.siteName);
+                    var s=$("#origin").val(more.sourceName);
+                var levels=null;
+                if(more.level==5){
+                  levels=locale.get("serious_warning");
+                }else if(more.level==4){
+                  levels=locale.get("important_warning");
+                }else if(more.level==3){
+                  levels=locale.get("minor_warning");
+                }else if(more.level==2){
+                  levels=locale.get("warning");
+                }else if(more.level==1){
+                  levels=locale.get("remind");
+                }
+                    var m = $("#levels").val(levels);
+
+                    var states = null;
+                    if (more.state == 1) {
+                        states = locale.get("unconfirmed");
+                        $("#confirm_1").attr('disabled',false);
+                        $("#remove_1").attr('disabled',false);
+                    } else if (more.state == 0) {
+                        states = locale.get("confirmed");
+                        $("#confirm_1").attr('disabled',true);
+                        $("#remove_1").attr('disabled',false);
+                    } else if (more.state == -1) {
+                        states = locale.get("cleared");
+                        $("#remove_1").attr('disabled',true);
+                        $("#confirm_1").attr('disabled',true);
+
+                    }
+                    if(more.confirmTime || more.confirmUserName){
+                      var div3=$("#qrsj");
+                      div3.css("display","block");
+                      var div4=$("#qrzh");
+                      div4.css("display","block");
+                    }else{
+                      var div3=$("#qrsj");
+                      div3.css("display","none");
+                      var div4=$("#qrzh");
+                      div4.css("display","none");
+                    }
+                    if(more.clearTime || more.clearUserName){
+                      var div3=$("#qcsj");
+                      div3.css("display","block");
+                      var div4=$("#qczh");
+                      div4.css("display","block");
+                    }else{
+                      var div1=$("#qczh");
+                      div1.css("display","none");
+                      var div2=$("#qcsj");
+                      div2.css("display","none");
+                    }
+                    var n = $("#states").val(states);
+                    var d = $("#dec").val(more.desc);
+
+            },this)
+        }
+
+        // 导出按钮
+          function exportData(){
+              var access_token = accessToken;
+              var param={verbose:1,access_token:access_token};
+              var start_time=(new Date($("#startDate").val())).getTime()/1000;
+              var levels=$("#level").val();
+              var states=$("#state").val();
+              var site_name=$("#site").val();
+              var end_time=(new Date($("#endDate").val())).getTime()/1000;
+              var levint = [];
+              for(var i=0;i<levels.length;i++){
+                levint.push(parseInt(levels[i]));
+              }
+              var steint = [];
+              for(var i=0;i<states.length;i++){
+                steint.push(parseInt(states[i]));
+              }
+              var params={
+                     levels:levint,
+                     status:steint,
+                     site_name:site_name,
+                     start_time:start_time,
+                     end_time:end_time
+              };
+              var urlexport = "/api/alarmExport/export?params="+JSON.stringify(params)+"&access_token=" + access_token;
+              getAPI2_users_this(param,function(data){
+                  if (data.result) {
+                      window.open(urlexport);
+                  }
+              },this);
+          }
+          //提示模态框中的是按钮（点击清除按钮）
+          function yes1(){
+                  var params={
+                      verbose:100
+                  }
+                  var mId = $("#tempMid").val();
+                  loadWarningInfo_2(mId,params,function(data){
+                    var confirm=data.result;
+                    var col=data.result.length;
+                      $("#clear_name").val(confirm.clearUserName);
+                      function getLocalTime(nS) {
+                      return new Date(parseInt(nS) * 1000).Format("yyyy-MM-dd HH:mm:ss").substring(0,16);
+                      }
+                      var div1=$("#qczh");
+                      div1.css("display","block");
+                      var div2=$("#qcsj");
+                      div2.css("display","block");
+                      $("#states").val(locale.get("cleared"));
+                      $("#"+mId).find("td").eq(5).html(locale.get("cleared"));
+                      $("#clear_time").val(getLocalTime(confirm.clearTime));
+                      $("#confirm_1").attr('disabled',true);
+                      $("#remove_1").attr('disabled',true);
+                },this);
+              }
+              //提示模态框中的是按钮（点击确认按钮）
+              function yes2(){
+                      var params={
+                          verbose:100
+                      }
+                      var mId = $("#tempMid").val();
+                      loadWarningInfo_1(mId,params,function(data){
+                        var confirm=data.result;
+                        console.log(confirm.confirmUserName);
+                          var div3=$("#qrsj");
+                          div3.css("display","block");
+                          var div4=$("#qrzh");
+                          div4.css("display","block");
+                          $("#states").val(locale.get("confirmed"));
+                          $("#"+mId).find("td").eq(5).html(locale.get("confirmed"));
+                          $("#sure_name").val(confirm.confirmUserName);
+                          function getLocalTime(nS) {
+                            return new Date(parseInt(nS) * 1000).Format("yyyy-MM-dd HH:mm:ss").substring(0,16);
+                          }
+                          $("#sure_time").val(getLocalTime(confirm.confirmTime));
+                          $("#confirm_1").attr('disabled',true);
+                    },this);
+              }
+
+</script>

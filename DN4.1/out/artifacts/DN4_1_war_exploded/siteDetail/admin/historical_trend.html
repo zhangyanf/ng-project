@@ -1,0 +1,132 @@
+<section class="content-header">
+    <h1 class="box-title" lang="text:historical_trend"></h1>
+    <ol class="breadcrumb">
+      <li><a href="#" lang="text:operation_monitoring"></a></li>
+      <li class="active" lang="text:historical_trend"></li>
+    </ol>
+</section>
+<section id="content-header2">
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-inline" style="margin:15px 0px 15px 15px;">
+
+                     <!--<label lang="text:date"></label>-->
+                    <div class="form-group has-feedback">
+                                    <input type="text" style="padding-left: 30px;" class="form-control  input-sm" id="searchDate" readonly="readonly">
+                                    <span class="glyphicon glyphicon-calendar form-control-feedback" style="left: 0;"></span>
+                                </div>
+                    <!--<span class="form-group has-feedback">-->
+                         <!--<input type="text" class="form-control input-sm" id="searchDate"  readonly="readonly" style="padding-right: 10px;min-width: 168px;">-->
+                         <!--<span class="icon-caret-down form-control-feedback"></span>-->
+                    <!--</span> -->
+                <button type="button"  data-permissionFilter="[49]"  id="search" class="btn btn-default btn-sm"
+                        data-toggle="tooltip" title="查找" lang="title:query">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </form>
+
+        </div>
+    </div>
+</section>
+<section class="content" id="tcontent">
+
+</section>
+<script>
+
+            //页面功能权限过滤
+            $(document).ready(function() {
+                permissionFilter_pageFunc();
+                var datarangObj = {
+                    startDate:moment(),
+                    endDate: moment(),
+                    maxDate : moment(),
+                    showDropdowns : false,
+                    showWeekNumbers : false,
+                    separator : '-',
+                    dateLimit:{
+                        days: 31
+                    },
+                    locale : {
+                        format: 'YYYY/MM/DD',
+                        separator: '-',
+                        customRangeLabel: locale.get("customRange"),
+                        applyLabel : locale.get("apply"),
+                        cancelLabel : locale.get("cancel")
+                    }
+                };
+                if( locale.current() == 1) {
+                    datarangObj.ranges = {
+                        'Today': [moment(), moment()],
+                         'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                         'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                         'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                         'This Month': [moment().startOf('month'), moment().endOf('month')],
+                         'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    }
+                } else {
+                    datarangObj.ranges = {
+                        '今天': [moment(), moment()],
+                        '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        '前7天': [moment().subtract(6, 'days'), moment()],
+                        '前30天': [moment().subtract(29, 'days'), moment()],
+                        '本月': [moment().startOf('month'), moment().endOf('month')],
+                        '上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    }
+                }
+                $('#searchDate').daterangepicker(
+                        datarangObj,
+                            function (start, end) {
+                                $('#searchDate').val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
+                            }
+                );
+
+                var dateArray=($("#searchDate").val()).split("-");
+                var start_time =dateArray[0].replace(/\//g, "-");
+                var end_time = dateArray[1].replace(/\//g, "-");
+
+                var _id = sessionStorage.getItem("_id");
+                if (start_time) {
+                    start_time = parseInt((new Date(start_time + " 00:00:00")).getTime() / 1000);
+                } else {
+                    start_time = null;
+                }
+                if (end_time) {
+//                    end_time = parseInt((new Date(end_time + " 23:59:59")).getTime() / 1000);
+                    end_time=parseInt((new Date()).getTime()/1000);
+                } else {
+                    end_time = null;
+                }
+
+                $("#tcontent").load("../admin/history_data.html", function() {
+
+                    initHistory(start_time, end_time, _id, 'trend');
+                    $("#search").bind("click", function() {
+                        var dateArray=($("#searchDate").val()).split("-");
+                        var startTime = dateArray[0].replace(/\//g, "-");
+                        var endTime = dateArray[1].replace(/\//g, "-");
+                        if (startTime) {
+                            startTime = parseInt((new Date(startTime + " 00:00:00")).getTime() / 1000);
+                        } else {
+                            startTime = null;
+                        }
+                        if (endTime) {
+                            var now_ti=new Date();
+                            now_ti.setHours(0,0,0,0);
+                            var now_ts=parseInt(now_ti.getTime());
+                            var end_ts=parseInt((new Date(endTime + " 00:00:00")).getTime());
+                            if(now_ts > end_ts){
+                                endTime = parseInt((new Date(endTime + " 23:59:59")).getTime() / 1000);
+                            }else{
+                                endTime=parseInt((new Date()).getTime()/1000);
+                            }
+                        } else {
+                            endTime = null;
+                        }
+                        loadHistoryData(startTime, endTime, _id, 'trend');
+                    });
+                });
+                locale.render({element: "#init_body"});
+
+            });
+
+</script>

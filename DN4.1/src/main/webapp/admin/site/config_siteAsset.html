@@ -1,0 +1,1021 @@
+<div class="container-fluid">
+    <div class="row" id="add_device_bt_div">
+        <div class="col-lg-3">
+            <br/>
+        </div>
+    </div><br/>
+    <div class="row">
+        <div class="col-lg-3" id="device_div">
+            <!--设备列表-->
+            <div class="panel panel-default" style="max-height: 382px;overflow: auto">
+                <div class="panel-heading"><span lang="text:site_devices"></span><button type="button" class="btn btn-primary btn-xs pull-right" id="add_device_bt" lang="title:add_device" title=""><span class="glyphicon glyphicon-plus"></span></button></div>
+                <ul class="list-group" id="devices_list">
+                    <li class="list-group-item" lang="text:no_data"></li>
+                </ul>
+            </div>
+        </div>
+        <!--设备列表-->
+        <div class="col-lg-9">
+            <div class="row">
+                <!--设备表单-->
+                <div class="col-lg-12 hidden" id="deviceinfo_div">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><span lang="text:equipment_information"></span>
+                        </div>
+                        <div class="panel-body">
+                            <form role="form" id="device_form">
+                                <input type="reset" id="device_form_reset" class="hidden" />
+                                <input type="hidden" id="flag_edit" value="" />
+                                <div >
+                                    <!--Type: Ethernet Contoller-->
+                                    <div id="header_box">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label><span lang="text:asset_number"></span ><span class="text-red">*</span></label>
+                                                    <input type="text"  class="form-control input-sm validate[required,maxSize[30]]" id="asset_no" lang="placeholder:asset_no">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label><span lang="text:name1" ></span ><span class="text-red">*</span></label>
+                                                    <input type="text" class="form-control input-sm validate[required,maxSize[30]]" id="device_name" lang="placeholder:name1">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label><span lang="text:type"></span ><span class="text-red">*</span></label>
+                                                    <input type="text" name="device_type_type" id="device_type_type" class="form-control input-sm validate[required,maxSize[30]]" lang="placeholder:type">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label><span lang="text:classification"></span ><span class="text-red">*</span></label>
+                                                    <select id="device_type" class="form-control">
+                                                        <option class="no_delete" value="Ethernet">Ethernet</option>
+                                                        <option class="no_delete" value="RS485">RS485</option>
+                                                        <option class="no_delete" value="RS232">RS232</option>
+                                                        <option value="generic Ethernet">generic Ethernet</option>
+                                                        <option value="generic serial port">generic serial port</option>
+                                                        <option value="other">other</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class=" device_basic_content" id="device_type_ethernet">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label><span lang="text:ip_address" ></span ><span class="text-red">*</span></label>
+                                                    <input type="text" class="form-control input-sm validate[required,maxSize[30]]" id="ethernet_ip_address" lang="placeholder:IP_ex">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Type: Port Contoller-->
+                                    <div class=" device_basic_content" id="device_type_port">
+                                        <div class="row">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label><span lang="text:device_dev" ></span ><span class="text-red">*</span></label>
+                                                    <input type="text" class="form-control input-sm validate[required,maxSize[30]]" id="port_dev" lang="placeholder:IP_ex">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label><span lang="text:baud_rate"></span ><span class="text-red">*</span></label>
+                                                    <select id="device_baud_rate" class="form-control">
+                                                        <option value="110">110</option>
+                                                        <option value="300">300</option>
+                                                        <option value="600">600</option>
+                                                        <option value="1200">1200</option>
+                                                        <option value="2400">2400</option>
+                                                        <option value="4800">4800</option>
+                                                        <option value="9600">9600</option>
+                                                        <option value="19200">19200</option>
+                                                        <option value="38400">38000</option>
+                                                        <option value="57600">57600</option>
+                                                        <option value="115200">115200</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label><span lang="text:data_bit" ></span ><span class="text-red">*</span></label>
+                                                    <select id="device_data_bit" class="form-control">
+                                                        <option value="6">6</option>
+                                                        <option value="7">7</option>
+                                                        <option value="8">8</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label><span lang="text:stop_bit"></span ><span class="text-red">*</span></label>
+                                                    <select id="device_stop_bit" class="form-control">
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label><span lang="text:parity_check"></span ><span class="text-red">*</span></label>
+                                                    <select id="device_parity_check" class="form-control">
+                                                        <option value="N">NONE</option>
+                                                        <option value="O">ODD</option>
+                                                        <option value="E">EVEN</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Type: other Contoller-->
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label lang="text:more_device_info"></label><span id="more_device" style="cursor: pointer;" class="glyphicon glyphicon-triangle-bottom dropdown-option"></span>
+                                            </div>
+                                            <div class="col-sm-6"></div>
+                                        </div>
+                                    </div>
+                                    <div id="more_div_device" class="hidden">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label><span lang="text:serial_number"></span ></label>
+                                                    <input type="text" class="form-control input-sm validate[custom[onlyLetterNumber],maxSize[30]]" id="serial" lang="placeholder:serial_number" placeholder="">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label lang="text:production_time"></label>
+                                                    <input type="text" class="form-control datePlugin input-sm" id="create_ts" lang="placeholder:production_time" placeholder="" readonly="readonly">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label lang="text:device_part_model"></label>
+                                                    <input type="text" class="form-control input-sm validate[custom[onlyLetterNumber],maxSize[30]]" id="model" lang="placeholder:device_part_model" placeholder="">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label lang="text:procurement_costs"></label>
+                                                    <input type="text" class="form-control input-sm validate[custom[number],min[0]" id="prix" lang="placeholder:procurement_costs" placeholder="">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label lang="text:supplier"></label>
+                                                    <input type="text" class="form-control input-sm validate[custom[giveName],maxSize[30]]" id="vendor_name" lang="placeholder:supplier" placeholder="">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label lang="text:use_site"></label>
+                                                    <input type="text" class="form-control input-sm validate[custom[giveName],maxSize[30]]" id="location" lang="placeholder:use_site" placeholder="">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label lang="text:purchasing_time"></label>
+                                                    <input type="text" class="form-control datePlugin input-sm" id="purchase_ts" lang="placeholder:purchasing_time" placeholder="" readonly="readonly">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label lang="text:change_time"></label>
+                                                    <input type="text" class="form-control datePlugin2 input-sm" id="replace_ts" lang="placeholder:change_time" placeholder="" readonly="readonly">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label lang="text:discard_time"></label>
+                                                    <input type="text" class="form-control datePlugin2 input-sm" id="refor_ts" lang="placeholder:discard_time" placeholder="" readonly="readonly">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label lang="text:depreciation_fixed_number_of_year+(+year+)"></label>
+                                                    <input type="text" class="form-control input-sm validate[custom[integer],min[0]" id="depreciation_year" lang="placeholder:depreciation_fixed_number_of_year" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <button id="device_cancel" class="btn btn-default btn-sm btn-block" lang="text:cancel"></button>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <button type="button" id="submit_device" class="btn btn-primary btn-sm btn-block" lang="text:submit"></button>&nbsp;
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--设备表单-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--设备配置js代码区!-->
+<script>
+    // this is about asset
+    //日期控件
+
+    var pickerOption = {
+        language: locale.current() == 1 ? 'en' : 'zh-CN',
+        autoclose: true, //选中之后自动隐藏日期选择框
+        todayHighlight: false,
+        format: 'yyyy-mm-dd',
+        startView: 0, //起始选择范围，0为日，1为月，2为年
+        minViewMode: 0 //最小选择范围
+    }
+    var picker2Option = {
+        language: locale.current() == 1 ? 'en' : 'zh-CN',
+        autoclose: true, //选中之后自动隐藏日期选择框
+        todayHighlight: false,
+        format: 'yyyy-mm-dd',
+        endDate: new Date(),
+        startView: 0, //起始选择范围，0为日，1为月，2为年
+        minViewMode: 0 //最小选择范围
+    }
+
+    //全局变量(缓存设备) this is device data == > data.result
+    var devices = [];
+    var edit_device_id = "";
+    var old_asset_no = "";
+    var add_device_data = "";
+    var site_id_device = "";
+    var old_serial = "";
+    var delete_device_partIds=[];
+
+    //验证配置和校验规则
+    validator.render("#device_form", {
+        promptPosition: "inline",
+        scroll: false
+    });
+    (function($) {
+        $.validationEngineLanguage = {
+            "giveName": {
+                "regex": /^[a-zA-Z0-9_\-\u4e00-\u9fa5]+$/i,
+                "alertText": "* Invalid name"
+            }
+        }
+    })(jQuery);
+
+    //校验资产编号的唯一性 （先检查设备列表，再检查数据库数据）
+    function isExistAssetNo(){
+        var asset_no = $.trim($("#asset_no").val());
+        var flag = false; // false 设备不存在 ture 设备存在
+        if(asset_no != "" && old_asset_no != asset_no){
+            if(devices.length>0) {
+                for(var i = 0; i < devices.length; i++) {
+                    if(asset_no==devices[i].asset_no) {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+            if(!flag) {
+                var params = {
+                    asset_no: asset_no,
+                    verbose:1
+                };
+                loadAllDevice( params, function( data) {
+                    if(data.result) {
+                        if(data.result.total>0) {
+                            for(var i = 0 ; i < data.result.length;i++) {
+                                if(asset_no==data.result[i].asset_no) {
+                                    flag = true;
+                                    break;
+                                }
+                            }
+
+                        }
+                    }
+                },this);
+            }
+        }
+        return flag;
+    }
+
+    //验证设备序列号是否存在
+    $("#asset_no").on( "blur" , function() {
+        var flag = isExistAssetNo();
+        if(flag) {
+            var message = locale.get("asset_number_already_exists");
+            $(".formErrorContent").remove();
+            $("#asset_no").parent().append('<div class="device_nameformError parentFormdevice_form formError inline" style="opacity: 0.87; position: relative; top: 0px; left: 0px; margin-top: 0px;">' +
+                '<div class="formErrorContent">* ' + message + '</div> </div>');
+        }
+
+    });
+    // 校验串口参数
+    function portFocus() {
+        $(".formErrorContent").remove();
+    }
+    // port
+    function portParam() {
+        if ($("#flag_part_edit").val() == "") {
+            var message;
+            var param = $.trim($("#connParam").val());
+            if (param != '' || param.length > 0) {
+                var flag = false;
+                var reg = new RegExp(/^(100|300|600|1200|2400|4800|9600|19200|38400|57600|115200)-(6|7|8)-(N|O|E)-(1|2)$/i);
+                flag = reg.test(param);
+                if (!flag) {
+                    message = locale.get("port_checkout");
+                    $("#connParam").parent().append('<div class="device_nameformError parentFormdevice_form formError inline" style="opacity: 0.87; position: relative; top: 0px; left: 0px; margin-top: 0px;">' +
+                        '<div class="formErrorContent">* ' + message + '</div> </div>');
+                    return false;
+                }
+            } else {
+                message = locale.get("required");
+                $("#connParam").parent().append('<div class="device_nameformError parentFormdevice_form formError inline" style="opacity: 0.87; position: relative; top: 0px; left: 0px; margin-top: 0px;">' +
+                    '<div class="formErrorContent">* ' + message + '</div> </div>');
+                return false;
+            }
+            return true;
+            locale.render({
+                element: "#init_body"
+            });
+        }
+    }
+
+    $("#more_device").click(function() {
+        $("#serial").removeAttr( "readonly");
+        if ($("#more_div_device").prop("class") == "hidden") {
+            $("#more_div_device").removeClass("hidden").addClass("show");
+
+
+            $("#create_ts").datepicker(picker2Option);
+            $("#purchase_ts").datepicker(picker2Option);
+            $("#replace_ts").datepicker(pickerOption);
+            $("#refor_ts").datepicker(pickerOption);
+
+
+        } else {
+            $("#more_div_device").removeClass("show").addClass("hidden");
+        }
+        if ($("#more_device").prop("class") == "glyphicon glyphicon-triangle-bottom dropdown-option") {
+            $("#more_device").removeClass("glyphicon glyphicon-triangle-bottom dropdown-option").addClass("glyphicon glyphicon-triangle-top");
+        } else {
+            $("#more_device").removeClass("glyphicon glyphicon-triangle-top").addClass("glyphicon glyphicon-triangle-bottom dropdown-option");
+        }
+    });
+    $("#device_cancel").click(function(event) {
+        // $("#add_device_bt").click();
+        $("#partinfo_div").removeClass( "show").addClass( "hide");
+        if($("#devices_list > .list-group-item-success").length > 0){
+            checkDevice((($.trim($("#devices_list > .list-group-item-success > span:eq(1)").attr("onclick"))).match(/\'(.*)\'/))[1]);
+        }else{
+            checkDevice((($.trim($("#devices_list > li:first > span:eq(1)").attr("onclick"))).match(/\'(.*)\'/))[1]);
+        }
+        event.preventDefault();
+    });
+
+
+    //获取现场下的设备
+    function getDevices(site_id) {
+        // get the devices of a site by site'id
+        var devices_prama = {
+            "site_id": site_id,
+            "verbose": 100,
+            "limit": 0
+        };
+        site_id_device = site_id;
+        getDevicesOfSite( devices_prama, true, function(data) {
+            if ( data.total > 0) {
+                dFlag = "YES";
+                // devices''s data
+                devices = data.result;
+                //回填设备列表
+                fillDeviceList();
+            }
+        }, this);
+    }
+
+    //回填设备列表
+    function fillDeviceList() {
+        $("#devices_list").empty();
+        $("#devices_list2").empty();
+        // this devices is the devices's data
+        for ( var i = 0; i < devices.length; i++) {
+            // four types of device
+            var device_data = devices[i];
+            if( devices[i].device_parameter != undefined) {
+                //get the device_parameter
+                var device_parameter = device_data.device_parameter/*.replace( /\s/g, "_")*/;
+                // Ethernet Controller
+                if( device_parameter.type == "Ethernet" || device_parameter.type == "RS485" || device_parameter.type == "RS232") {
+                    // edit_device_id = device_data._id;
+                    $("#devices_list").append('<li id="' + device_data.asset_no+ '" class="list-group-item">' +
+                        '<span style="display:inline-block;width:76%;">' + device_data.device_name + '</span>' +
+                        '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkDevice(\'' + device_data.asset_no + '\')"></span>' +
+                        '<span onclick="delDevice(this,\'' + device_data.asset_no + '\')" style="margin-top:1px;" class="glyphicon glyphicon-remove pull-right " lang="title:delete" title="删除"></span>' +
+                        '</li>');
+                    // Port Controller
+                    // Generic Ethernet
+                } else if( device_parameter.type == "generic Ethernet" || device_parameter.type == "generic serial port") {
+                    // edit_device_id = device_data._id;
+                    $("#devices_list").append('<li id="' + device_data.asset_no + '" class="list-group-item">' +
+                        '<span style="display:inline-block;width:76%;">' + device_data.device_name + '</span>' +
+                        '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkDevice(\'' + device_data.asset_no + '\')" title="编辑"></span>' +
+                        '<span onclick="delDevice(this,\'' + device_data.asset_no + '\')" style="margin-top:1px;" class="glyphicon glyphicon-remove pull-right " lang="title:delete" title="删除"></span>' +
+                        '</li>');
+                    // Generic Serial Port
+                }
+                // other devices
+            } else {
+                // edit_device_id = device_data._id;
+                $("#devices_list").append('<li id="' + device_data.asset_no + '" class="list-group-item">' +
+                    '<span style="display:inline-block;width:76%;">' + device_data.device_name + '</span>' +
+                    '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkDevice(\'' + device_data.asset_no + '\')" title="编辑"></span>' +
+                    '<span onclick="delDevice(this,\'' + device_data.asset_no + '\')" style="margin-top:1px;" class="glyphicon glyphicon-remove pull-right " lang="title:delete" title="删除"></span>' +
+                    '</li>');
+            }
+            if (i == 0) { //显示第一条设备信息
+                $("#" + devices[0].asset_no + " span:eq(1)").click();
+                edit_device_id = devices[0]._id;
+                old_asset_no = devices[0].asset_no;
+                $("#" + devices[0].asset_no).addClass("list-group-item-success");
+            }
+        }
+
+    }
+
+    //上一步
+    $("#AddPreStep2").click(function(event) {
+        $("#three_div").removeClass("finished").addClass("todo");
+        $("#three_div").find("label span:eq(1)").removeClass("label");
+        $("#three").empty().append("3");
+        $("#two_div").removeClass("current").addClass("finished");
+        $("#two_div").find("label span:eq(1)").addClass("label");
+        $("#two").empty().append("2");
+        $(".addDeviceContentBox").hide();
+        $(".addGatewayContentBox").show();
+    });
+
+    // 下一步
+    $("#saveAssetNextStep").click(function(event) {
+
+        $("#three_div").removeClass("finished").addClass("current");
+        $("#three").empty().append('<span class="glyphicon glyphicon-ok"></span> ');
+        $("#four_div").removeClass("todo").addClass("finished");
+        $("#four_div").find("label span:eq(1)").addClass("label");
+       $(".addDeviceContentBox").hide();
+       $(".addPartContentBox").show();
+        fillDeviceList2(); //回填设备列表
+
+    });
+
+    $("#device_type").bind( "change", function() {
+        var current_type = $(this).val();
+        $(".device_basic_content").hide();
+        $("#device_form input").removeAttr( "readonly");
+        $("#device_form select").removeAttr( "disabled");
+        if( current_type == "generic Ethernet") {
+            $("#device_type_ethernet").show();
+        } else if( current_type == "generic serial port") {
+            $("#device_type_port").show();
+        } else {
+            $(".device_basic_content").hide();
+        }
+    });
+
+    // 添加设备按钮
+    // judge type of device
+    $("#add_device_bt").click(function() {
+        old_asset_no = "";
+        $("#device_form input").removeAttr( "readonly");
+        $("#device_form select").removeAttr( "disabled");
+        $(".device_basic_content").hide();
+        $("#device_type .no_delete").hide();
+        // judge type and loading diff
+        $("#deviceinfo_div").removeClass("hidden").addClass("show");
+        $(".formErrorContent").remove();
+        $("#parts_div").removeClass("hidden").addClass("show");
+        $("#device_parts_tbody").empty().append('<tr><td colspan="6"  align="center" lang="text:no_data"></td></tr>');
+        $("#partinfo_div").addClass("hidden");
+        $("#flag_edit").val("");
+        $("#part_form_reset").click();
+        $("#device_form_reset").click();
+        $("#device_serial").val("");
+        $("#asset_no").prop("readonly", "");
+        $("#devices_list").find("li").removeClass("list-group-item-success");
+        edit_device_id = "";
+        if ($("#more_div_device").prop("class") == "show") {
+            $("#more_div_device").removeClass("show").addClass("hidden");
+        }
+        if ($("#more_device").prop("class") == "glyphicon glyphicon-triangle-top") {
+            $("#more_device").removeClass("glyphicon glyphicon-triangle-top").addClass("glyphicon glyphicon-triangle-bottom dropdown-option");
+        }
+        $("#device_type").val( "other");
+        locale.render({
+            element: "#init_body"
+        });
+    });
+
+
+    //提交设备信息
+    $("#submit_device").bind( "click", function() {
+        if( $('#device_form').validationEngine('validate')) {
+            // judge type of device
+            //采集数据
+            var new_asset_no = "";
+            var serial = $("#serial").val(); //序列号
+            // judge : asset_no
+            var asset_no = $("#asset_no").val(); //资产编号
+            var flag = isExistAssetNo();
+            if(flag) {
+                var message = locale.get("asset_number_already_exists");
+                $(".formErrorContent").remove();
+                $("#asset_no").parent().append('<div class="device_nameformError parentFormdevice_form formError inline" style="opacity: 0.87; position: relative; top: 0px; left: 0px; margin-top: 0px;">' +
+                    '<div class="formErrorContent">* ' + message + '</div> </div>');
+                return;
+            }
+
+            var device_name = $("#device_name").val(); //设备名称
+            var create_ts = $("#create_ts").val(); //生产时间
+            var device_type_type = $("#device_type_type").val();
+            if (create_ts != "") {
+                create_ts = dateConvertUnixtime(create_ts); //new Date(create_ts).getTime(); //dateConvertUnixtime(create_ts);//生产时间
+            }
+
+            var model = $("#model").val(); //型号
+            var prix = $("#prix").val(); //采购成本
+            var vendor_id; //供应商id
+            var vendor_name = $("#vendor_name").val(); //供应商
+            var location = $("#location").val(); //使用地点
+            var purchase_ts = $("#purchase_ts").val(); //采购时间
+            if (purchase_ts != "") {
+
+                purchase_ts = dateConvertUnixtime(purchase_ts); //new Date(purchase_ts).getTime();//dateConvertUnixtime(purchase_ts);//采购时间
+
+            }
+            var replace_ts = $("#replace_ts").val(); //更换时间
+            if (replace_ts != "") {
+                replace_ts = dateConvertUnixtime(replace_ts); //new Date(replace_ts).getTime();//dateConvertUnixtime(replace_ts);//更换时间
+            }
+            var refor_ts = $("#refor_ts").val(); //报废时间
+            if (refor_ts != "") {
+                refor_ts = dateConvertUnixtime(refor_ts); //new Date(refor_ts).getTime();//dateConvertUnixtime(refor_ts);//报废时间
+            }
+            var depreciation_year = $("#depreciation_year").val(); //折旧时间
+            var site_id; //现场id
+            // judge type
+            // find current device data edit_device_id
+            if(old_asset_no!="") {
+                for( var k = 0; k < devices.length; k++) {
+                    if( devices[k].asset_no == old_asset_no) {
+                        devices[k].site_id = site_id_device;
+                        devices[k].asset_no = asset_no;
+                        devices[k].serial = serial;
+                        devices[k].device_name = device_name;
+                        devices[k].create_ts = create_ts;
+                        devices[k].model = model;
+                        devices[k].prix = prix;
+                        devices[k].vendor_name = vendor_name;
+                        devices[k].location = location;
+                        devices[k].purchase_ts = purchase_ts;
+                        devices[k].replace_ts = replace_ts;
+                        devices[k].refor_ts = refor_ts;
+                        devices[k].depreciation_year = depreciation_year;
+                        devices[k].device_type = device_type_type;
+                        var current_type = $("#device_type").val();
+                        // undo restart
+                        if( current_type == "Ethernet" || current_type == "generic Ethernet") {
+                            if( edit_device_id !="" || edit_device_id !="undefined") {
+                                if(devices[k].device_parameter){
+                                    if(devices[k].device_parameter.property){
+                                        devices[k].device_parameter.property.ip = $("#ethernet_ip_address").val();
+                                    }else{
+                                        devices[k].device_parameter.property={ip : $("#ethernet_ip_address").val()};
+                                    }
+                                }else{
+                                    devices[k].device_parameter={
+                                        property:{ip : $("#ethernet_ip_address").val()}
+                                    }
+                                }
+                            } else {
+                                devices[k].device_parameter = {};
+                                devices[k].device_parameter.property={ip : $("#ethernet_ip_address").val()};
+                            }
+                            devices[k].device_parameter.type = $("#device_type").val();
+                        } else if ( current_type == "RS485" || current_type == "RS232" || current_type == "generic serial port") {
+                            if(devices[k].device_parameter){
+                                if(devices[k].device_parameter.property){
+                                    devices[k].device_parameter.property.dev = $("#port_dev").val();
+                                    devices[k].device_parameter.property.speed = $("#device_baud_rate").val();
+                                    devices[k].device_parameter.property.databit = $("#device_data_bit").val();
+                                    devices[k].device_parameter.property.stopbit = $("#device_stop_bit").val();
+                                    devices[k].device_parameter.property.parity = $("#device_parity_check").val();
+                                }else{
+                                    devices[k].device_parameter.property={
+                                        dev : $("#port_dev").val(),
+                                        speed : $("#device_baud_rate").val(),
+                                        databit : $("#device_data_bit").val(),
+                                        stopbit : $("#device_stop_bit").val(),
+                                        parity : $("#device_parity_check").val()
+                                    }
+                                }
+                            }else{
+                                devices[k].device_parameter={
+                                    property:{
+                                        dev : $("#port_dev").val(),
+                                        speed : $("#device_baud_rate").val(),
+                                        databit : $("#device_data_bit").val(),
+                                        stopbit : $("#device_stop_bit").val(),
+                                        parity : $("#device_parity_check").val()
+                                    }
+                                }
+                            }
+                            devices[k].device_parameter.type = $("#device_type").val();
+                        }
+                        new_asset_no = asset_no;
+                        break;
+                    }
+                }
+            } else {
+                var device = {
+                    "site_id": site_id_device,
+                    'asset_no': asset_no,
+                    'serial': serial,
+                    'device_name': device_name,
+                    'create_ts': create_ts,
+                    'model': model,
+                    'prix': prix,
+                    'vendor_name': vendor_name,
+                    'location': location,
+                    'purchase_ts': purchase_ts,
+                    'replace_ts': replace_ts,
+                    'refor_ts': refor_ts,
+                    'depreciation_year': depreciation_year,
+                    "device_type": device_type_type
+                };
+                var current_type_ = $("#device_type").val();
+                if(current_type_ == "Ethernet" || current_type_ == "generic Ethernet"){
+                    device.device_parameter={
+                        property:{ip : $("#ethernet_ip_address").val()},
+                        type : $("#device_type").val()
+                    }
+                }else if(current_type_ == "RS485" || current_type_ == "RS232" || current_type_ == "generic serial port"){
+                    device.device_parameter={
+                        property:{
+                            dev : $("#port_dev").val(),
+                            speed : $("#device_baud_rate").val(),
+                            databit : $("#device_data_bit").val(),
+                            stopbit : $("#device_stop_bit").val(),
+                            parity : $("#device_parity_check").val()
+                        },
+                        type : $("#device_type").val()
+                    }
+                }
+                add_device_data = device;
+            }
+
+            if( new_asset_no != "") { //编辑
+                for (var i = 0; i < devices.length; i++) {
+                    if ( devices[i].asset_no == new_asset_no) {
+                        if ( devices[i].parts.length == 0) {
+                            devices[i].parts = []; //存放元器件的
+                        } else {
+                            devices[i].parts = devices[i].parts;
+                        }
+                        if( devices[i].device_parameter && devices[i].device_parameter != undefined) {
+                            // var device_parameter = devices[i].device_parameter;
+                            if( devices[i].device_parameter.property && devices[i].device_parameter.property != undefined) {
+                                var device_parameter_type = devices[i].device_parameter.type;
+                                if( device_parameter_type == "Ethernet" || device_parameter_type == "RS232" || device_parameter_type == "RS485" ) {
+                                    $("#" + old_asset_no).empty().attr("id", old_asset_no).css("word-break", "break-all");
+                                    $("#" + old_asset_no ).append('<span style="display:inline-block;width:76%;">' + device_name + '</span>' +
+                                        '<span class="glyphicon glyphicon-edit link-black"  onclick="checkDevice(\'' + devices[i].asset_no + '\')" lang="title:edit" style="cursor:pointer;" title="编辑"></span>');
+                                } else {
+                                    $("#" + old_asset_no).empty().attr("id", old_asset_no).css("word-break", "break-all");
+                                    $("#" + old_asset_no ).append('<span style="display:inline-block;width:76%;">' + device_name + '</span>' +
+                                        '<span class="glyphicon glyphicon-edit link-black"  onclick="checkDevice(\'' + devices[i].asset_no + '\')" lang="title:edit" style="cursor:pointer;" title="编辑"></span>' +
+                                        '<span onclick="delDevice(this,\'' + asset_no + '\')" style="cursor:pointer; margin-top:1px;" class="glyphicon glyphicon-remove pull-right link-black" lang="title:delete" title="删除"></span>');
+                                    $("#asset_no").prop("readonly", "");
+                                }
+                            }
+                        } else {
+                            $("#" + old_asset_no).empty().attr("id", old_asset_no).css("word-break", "break-all");
+                            $("#" + old_asset_no ).append('<span style="display:inline-block;width:76%;">' + device_name + '</span>' +
+                                '<span class="glyphicon glyphicon-edit link-black"  onclick="checkDevice(\'' + devices[i].asset_no + '\')" lang="title:edit" style="cursor:pointer;" title="编辑"></span>' +
+                                '<span onclick="delDevice(this,\'' + asset_no + '\')" style="cursor:pointer; margin-top:1px;" class="glyphicon glyphicon-remove pull-right link-black" lang="title:delete" title="删除"></span>');
+                            $("#asset_no").prop("readonly", "");
+                        }
+                        break;
+                    }
+                }
+            } else {
+                //添加 click the button of submiy that it is while be submit again
+                add_device_data.parts = []; //存放元器件的
+                if ($("#devices_list").find("li:eq(0)").text() == locale.get("no_data")) { //设备列表中没有数据
+                    //3.设备配置-现场列表
+                    $("#devices_list").find("li:eq(0)").remove();
+                }
+                var perHtml = $("#devices_list").html();
+                $("#devices_list").empty();
+                $("#devices_list").append('<li style="word-break: break-all;" id="' + asset_no + '" class="list-group-item list-group-item-success">' +
+                    '<span style="display:inline-block;width:76%;" >' + device_name + '</span>' +
+                    '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkDevice(\'' + asset_no + '\')" style="cursor:pointer" title="编辑"></span>' +
+                    '<span onclick="delDevice(this,\'' + asset_no + '\')" class="glyphicon glyphicon-remove pull-right link-black" style="cursor:pointer; margin-top:1px;" lang="title:delete" title="删除"></span></li>');
+                $("#devices_list").append(perHtml);
+                $("#device_serial").val(asset_no);
+                devices.push( add_device_data);
+            }
+            if( devices) {
+                dialog.render({
+                    lang: "submit_success"
+                });
+                $("#add_device_bt").click();
+            } else {
+                dialog.render({
+                    lang: "submit_failed"
+                });
+            }
+            $(".formErrorContent").remove();
+            $("#flag_edit").val("");
+            locale.render({
+                element: "#init_body"
+            });
+        }
+    });
+
+    //查看设备信息
+    function checkDevice( asset_no) {
+        // find current device
+        old_asset_no = asset_no;
+        for( var i = 0; i < devices.length; i++) {
+            if( asset_no == devices[i].asset_no) {
+                var current_device = devices[i];
+                edit_device_id = devices[i]._id;
+                old_asset_no = devices[i].asset_no;
+                break;
+            }
+        }
+        $(".formErrorContent").remove();
+        $(".device_basic_content").hide();
+        $("#device_type .no_delete").show();
+        $("#device_type").show();
+        var asset_no = current_device.asset_no;
+        var device_name = current_device.device_name;
+        $("#asset_no").val( asset_no);
+        $("#device_name").val( device_name);
+        if( current_device.device_type == "" || current_device.device_type == undefined) {
+            $("#device_type_type").val("");
+        } else {
+            $("#device_type_type").val( current_device.device_type);
+        }
+        if(current_device.device_parameter&&!current_device.device_type) {
+            $("#device_type_type").val(locale.get("controller"));
+        }
+        //judge type of device
+        if( current_device.device_parameter && current_device.device_parameter != undefined) {
+            var device_parameter = current_device.device_parameter;
+            var device_parameer_description = device_parameter.description;
+            var device_parameter_id = device_parameter.id;
+            if( device_parameter.property && device_parameter.property != undefined) {
+                var device_parameter_property = device_parameter.property;
+                var device_parameter_protocol = device_parameter.protocol;
+                if( device_parameter.type && device_parameter.type != undefined) {
+                    // type 4
+                    var device_parameter_type = device_parameter.type;
+                    if( device_parameter_type == "Ethernet" || device_parameter_type == "RS232" || device_parameter_type == "RS485") {
+                        //
+                    }
+                    $("#device_type").val( device_parameter_type);
+                    if( device_parameter.type == "Ethernet" || device_parameter.type == "generic Ethernet") {
+                        var property_ip = device_parameter_property.ip;
+                        var property_port = device_parameter_property.port;
+                        var property_status = device_parameter_property.status;
+                        $("#device_type_ethernet").show();
+                        if( device_parameter.type == "Ethernet") {
+                            $("#header_box input").attr( "readonly", true);
+                            $("#header_box select").attr( "disabled", true);
+                            $("#device_type_ethernet input").attr( "readonly", true);
+                        } else {
+                            $("#header_box input").attr( "readonly", false);
+                            $("#header_box select").attr( "disabled", false);
+                            $("#device_type .no_delete").hide();
+                            $("#device_type_ethernet input").attr( "readonly", false);
+                        }
+                        $("#ethernet_ip_address").val( property_ip);
+                    } else if( device_parameter.type == "RS485" || device_parameter.type == "RS232" || device_parameter.type == "generic serial port") {
+                        var property_databit = device_parameter_property.databit;
+                        var property_dev =  device_parameter_property.dev;
+                        var property_parity = device_parameter_property.parity;
+                        var property_speed = device_parameter_property.speed;
+                        var property_stopbit = device_parameter_property.stopbit;
+                        var property_xonxoff = device_parameter_property.xonxoff;
+                        if( device_parameter.type == "RS485" || device_parameter.type == "RS232") {
+                            $("#header_box input").attr( "readonly", true);
+                            $("#header_box select").attr( "disabled", true);
+                            $("#device_type_port input").attr( "readonly", true);
+                            $("#device_type_port select").attr( "disabled", true);
+                        } else {
+                            $("#header_box input").attr( "readonly", false);
+                            $("#header_box select").attr( "disabled", false);
+                            $("#device_type .no_delete").hide();
+                            $("#device_type_port input").attr( "readonly", false);
+                            $("#device_type_port select").attr( "disabled", false);
+                        }
+                        $("#device_type_port").show();
+                        $("#port_dev").val( property_dev);
+                        $("#device_baud_rate").val( property_speed);
+                        $("#device_data_bit").val( property_databit);
+                        $("#device_stop_bit").val( property_stopbit);
+                        $("#device_parity_check").val( property_parity);
+                    }
+                }
+            }
+        } else {
+            // other
+            $("#device_type").val( "other");
+            $("#header_box input").attr( "readonly", false);
+            $("#header_box select").attr( "disabled", false);
+            $("#device_type .no_delete").hide();
+        }
+        //填充更多信息内容
+        if(current_device.serial){
+            $("#serial").val(current_device.serial);
+        }else{
+            $("#serial").val("");
+        }
+        if(current_device.model){
+           $("#model").val(current_device.model);
+        }else{
+            $("#model").val("");
+        }
+        if(current_device.prix){
+           $("#prix").val(current_device.prix);
+        }else{
+            $("#prix").val("");
+        }
+        if(current_device.vendor_name){
+            $("#vendor_name").val(current_device.vendor_name);
+        }else{
+            $("#vendor_name").val("");
+        }
+        if(current_device.location){
+            $("#location").val(current_device.location);
+        }else{
+            $("#location").val("");
+        }
+        if(current_device.depreciation_year){
+            $("#depreciation_year").val(current_device.depreciation_year);
+        }else{
+            $("#depreciation_year").val("");
+        }
+        $("#create_ts").datepicker(picker2Option);
+        $("#purchase_ts").datepicker(picker2Option);
+        $("#replace_ts").datepicker(pickerOption);
+        $("#refor_ts").datepicker(pickerOption);
+        if(current_device.create_ts){
+            $("#create_ts").datepicker('update', schneider.util.dateFormat(( new Date(parseInt(current_device.create_ts))).getTime(), "yyyy-MM-dd"));
+        }else{
+            $("#create_ts").datepicker('update',"");
+        }
+        if(current_device.purchase_ts){
+            $("#purchase_ts").datepicker('update', schneider.util.dateFormat(( new Date(parseInt(current_device.purchase_ts))).getTime(), "yyyy-MM-dd"));
+        }else{
+            $("#purchase_ts").datepicker('update',"");
+        }
+        if(current_device.replace_ts){
+            $("#replace_ts").datepicker('update', schneider.util.dateFormat(( new Date(parseInt(current_device.replace_ts))).getTime(), "yyyy-MM-dd"));
+        }else{
+            $("#replace_ts").datepicker('update',"");
+        }
+        if(current_device.refor_ts){
+            $("#refor_ts").datepicker('update', schneider.util.dateFormat(( new Date(parseInt(current_device.refor_ts))).getTime(), "yyyy-MM-dd"));
+        }else{
+            $("#refor_ts").datepicker('update',"");
+        }
+
+
+        $("#devices_list").find("li").removeClass("list-group-item-success");
+        $("#" + asset_no).addClass("list-group-item-success");
+        $("#deviceinfo_div").removeClass("hidden").addClass("show");
+        $("#partinfo_div").addClass("hidden");
+        $("#parts_div").removeClass("hidden").addClass("show");
+        $("#device_serial").val(asset_no);
+        $("#flag_edit").val("edit");
+        if ($("#more_div_device").prop("class") == "show") {
+            $("#more_div_device").removeClass("show").addClass("hidden");
+        }
+        if ($("#more_device").prop("class") == "glyphicon glyphicon-triangle-top") {
+            $("#more_device").removeClass("glyphicon glyphicon-triangle-top").addClass("glyphicon glyphicon-triangle-bottom dropdown-option");
+        }
+        locale.render({element: "body"});
+    }
+
+    //删除设备
+    function delDevice(del, asset_no) {
+        dialog.render({
+            lang: "confirm_to_delete_device",
+            buttons: [{
+                lang: "yes",
+                click: function() {
+                    Array.prototype.remove = function(dx) {
+                        if (isNaN(dx) || dx > this.length) {
+                            return false;
+                        }
+                        for (var i = 0, n = 0; i < this.length; i++) {
+                            if (this[i] != this[dx]) {
+                                this[n++] = this[i]
+                            }
+                        }
+                        this.length -= 1
+                    }
+                    var flag = false;
+                    if ($("#devices_list li").length == 1) {
+                        flag = true;
+                    }
+                    $(del).parent().remove();
+                    for (var i = 0; i < devices.length; i++) {
+                        if (devices[i].asset_no == asset_no) {
+                            if (typeof(devices[i]._id) != "undefined") {
+                                deleteDevice(devices[i]._id, function(data) {
+                                    if (data.result) {
+                                        devices.remove(i);
+                                    }
+                                }, this);
+                            } else {
+                                devices.remove(i);
+                            }
+                            break;
+                        }
+                    }
+                    if ($(del).parent().prop("id") == $("#device_serial").val()) {
+                        $("#device_serial").val("");
+                        $("#asset_no").prop("readonly", "");
+                        $("#device_parts_tbody").empty().append('<tr><td colspan="6"  align="center" lang="text:no_data"></td></tr>');
+                        $("#part_form_reset").click();
+                        $("#device_form_reset").click();
+                    }
+                    if (flag) {
+                        $("#devices_list").empty().append('<li class="list-group-item" lang="text:no_data"></li>');
+                    }
+                    $("#add_device_bt").click();
+                    locale.render({
+                        element: "#init_body"
+                    });
+                    dialog.close();
+                }
+            }, {
+                lang: "no",
+                click: function() {
+                    dialog.close();
+                }
+            }],
+
+            close: function() {
+                dialog.close();
+            }
+        });
+
+        locale.render({
+            element: "#init_body"
+        });
+    }
+
+    //1.yyyy-mm-dd日期转时间戳
+    function dateConvertUnixtime(datetime) {
+        datetime = datetime.replace(/\-/g, '/');
+        return new Date(datetime).getTime();
+    }
+    //2.时间戳转换成yyyy-mm-dd日期
+    function unixtimeConvertDate(timestamp) {
+        var date = new Date(timestamp);
+        var month = (parseInt(date.getMonth() + 1) < 10) ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1);
+        var day = (parseInt(date.getDate()) < 10) ? ("0" + date.getDate()) : date.getDate();
+        var formatDate = date.getFullYear() + '-' + month + '-' + day;
+        return formatDate;
+    }
+</script>

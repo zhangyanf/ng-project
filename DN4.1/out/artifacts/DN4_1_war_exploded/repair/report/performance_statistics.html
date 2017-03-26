@@ -1,0 +1,136 @@
+<section class="content-header">
+    <h1 lang="text:repair_report_performance">
+
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#" lang="text:report"></a></li>
+        <li class="active" lang="text:repair_report_performance"></li>
+    </ol>
+</section>
+<section class="content" id="tcontent">
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs" role="tablist" id="myNavTabs">
+            <li id="tab1" role="presentation" data-permissionFilter="[]">
+                <a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:repair_statistics" value="1"></a>
+            </li>
+            <li id="tab2" role="presentation" data-permissionFilter="[]">
+                <a href="javascript:void(0)" role="tab" lang="text:repair_situation" data-toggle="tab" value="2"></a>
+            </li>
+            <li id="tab3" style="display: none;" role="presentation" data-permissionFilter="[]">
+                <a href="javascript:void(0)" role="tab" lang="text:device_performance" data-toggle="tab" value="3"></a>
+            </li>
+
+        </ul>
+        <div id="performance_content" class="tab-content" style="padding-bottom: 0px;">
+
+        </div>
+    </div>
+</section>
+<script>
+    //初始化
+    function changeTab(index,_id){
+        clearAndDestory();
+        switch (index){
+            case "tab1":
+                $("#performance_content").load("repair/report/performance_mantaince.html",function () {
+                    initDate();
+                    initMantanice();
+                });
+                break;
+            case "tab2":
+                $("#performance_content").load("repair/report/performance_repair_situation.html",function () {
+                    initDate();
+                    initReport();
+                });
+                break;
+            default:
+                $("#performance_content").load("repair/report/performance_mantaince.html",function () {
+                    initDate();
+                    initMantanice();
+                });
+                break;
+        }
+    }
+
+    function initDate() {
+        /**
+         * 时间
+         */
+        //日历插件显示日期初始化
+        $('#statisticsDate').daterangepicker(
+                {
+                    startDate: moment().subtract(6, 'days'),
+                    endDate: moment(),
+                    maxDate: moment(),
+                    showDropdowns: false,
+                    showWeekNumbers: false,
+                    separator: '-',
+                    locale: {
+                        format: 'YYYY/MM/DD',
+                        separator: '-',
+                        applyLabel: locale.get("apply"),
+                        cancelLabel: locale.get("cancel")
+                    }
+                },
+                function (start, end) {
+                    $('#statisticsDate').val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
+                }
+        );
+        $('#repairDate').daterangepicker(
+                {
+                    startDate: moment().subtract(6, 'days'),
+                    endDate: moment(),
+                    maxDate: moment(),
+                    showDropdowns: false,
+                    showWeekNumbers: false,
+                    separator: '-',
+                    locale: {
+                        format: 'YYYY/MM/DD',
+                        separator: '-',
+                        applyLabel: locale.get("apply"),
+                        cancelLabel: locale.get("cancel")
+                    }
+                },
+                function (start, end) {
+                    $('#repairDate').val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
+                }
+        );
+        $('#performanceDate').daterangepicker(
+                {
+                    startDate: moment().subtract(6, 'days'),
+                    endDate: moment(),
+                    maxDate: moment(),
+                    showDropdowns: false,
+                    showWeekNumbers: false,
+                    separator: '-',
+                    locale: {
+                        format: 'YYYY/MM/DD',
+                        separator: '-',
+                        applyLabel: locale.get("apply"),
+                        cancelLabel: locale.get("cancel")
+                    }
+                },
+                function (start, end) {
+                    $('#repairDate').val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
+                }
+        );
+    }
+    $(function () {
+        locale.render({element: "#init_body"});
+
+        //页面功能权限过滤
+        permissionFilter_pageFunc();
+        if($("#myNavTabs li:first").attr("id")!="undefined"){
+            $("#myNavTabs li:first").addClass("active")
+            changeTab($("#myNavTabs li:first").attr("id"));
+        }
+        $("#myNavTabs li").each(function(){
+            $(this).bind("click",function () {
+                var $obj = $(this);
+//                $("#myNavTabs li:first").addClass("active")
+                changeTab($obj.attr("id"))
+            })
+        });
+    });
+
+</script>

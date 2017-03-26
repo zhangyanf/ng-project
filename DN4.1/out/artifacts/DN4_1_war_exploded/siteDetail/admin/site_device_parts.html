@@ -1,0 +1,340 @@
+
+<section class="content-header">
+    <h1 lang="text:part_information"></h1>
+    <ol class="breadcrumb">
+        <li><a href="#" lang="text:device_manage"></a></li>
+        <li id="backSiteList"><a href="#" lang="text:equipment_information"></a></li>
+        <li class="active"  lang="text:part_information"></li>
+    </ol>
+
+</section>
+<section class="content" id="tcontent">
+    <div class="row" >
+        <!--表格统计-->
+        <div class="col-md-12">
+            <div class="box">
+                <div class="overlay" style="display: none;" id="load_">
+                    <i class="fa icon-refresh icon-spin"></i>
+                </div>
+                <div class="box-header with-border">
+                    <h3 class="box-title" id="partTitle">部件</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="关闭"><i class="icon-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <form class="form-inline" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label lang="text:component_name" class="control-label"></label>
+                            <input type="text" class="form-control input-sm inputStyle" id="searchPartName" lang="placeholder:part_name">
+                        </div>
+                        <div class="form-group">
+                            <label lang="text:part_no" class="control-label"></label>
+                            <input type="text" class="form-control input-sm inputStyle" id="searchPartNo" lang="placeholder:part_no">
+                        </div>
+                        <div class="form-group">
+                            <label lang="text:serial_number" class="control-label"></label>
+                            <input type="text" class="form-control input-sm inputStyle" id="searchSerial" lang="placeholder:serial_number">
+                        </div>
+
+                        <div class="form-group" style="display:none;">
+                            <label lang="text:device_part_model" class="control-label"></label>
+                            <input type="text" class="form-control input-sm inputStyle" id="searchPartModel"lang="placeholder:enter_the_model">
+                        </div>
+
+                        <div class="form-group">
+                            <button type="button" onclick="searchParts()" data-permissionFilter="[11]" class="btn btn-default btn-sm" data-toggle="tooltip" title="查询" lang="title:query" id="btn_research">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </div>
+                    </form>
+                    <div style="overflow:auto;">
+                        <table class="table table-bordered table-striped"  >
+                            <thead>
+                            <tr>
+                                <th lang="text:component_name">部件名称</th>
+                                <th lang="text:part_no">部件编号</th>
+                                <th lang="text:serial_number"></th>
+                                <th lang="text:device_part_model">型号</th>
+                                <th lang="text:change_time_recently">最近更换日期</th>
+                                <th lang="text:maintenance_time_recently"></th>
+                                <th lang="text:price"></th>
+                                <th lang="text:supplier"></th>
+                                <th lang="text:purchasing_time"></th>
+                                <th style="display: none;" lang="text:replace_the_record"></th>
+                                <th lang="text:operate" class="text-center"></th>
+                            </tr>
+                            </thead>
+                            <tbody id="part_table">
+                            <!--动态载入数据-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="page-footer"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--更换弹出框 -->
+<div class="modal fade" id="changeModal" >
+
+</div>
+
+<script type="text/javascript">
+
+    $("#backSiteList").click(function(event) {
+        $("#pcontent").load("admin/device_info.html",function (){
+            set_$tcontentHeight();
+        });
+    });
+    //  $('#inform_person').multiselect();
+    (function($) {
+        $.validationEngineLanguage = {
+            "giveName": {
+                "regex": /^[a-zA-Z0-9_\-\u4e00-\u9fa5]+$/i,
+                "alertText": "* Invalid name"
+            }
+        }
+    })(jQuery);
+    //自定义外部函数
+    function cloudInput(field, rules, i, options) {
+        var nohtml = new RegExp("(<[^>]+>)|(&gt|&lt|&amp|&quot|&nbsp)");
+        if (nohtml.test(field.val())) {
+            //add rules at validationengine.lang
+            return options.allrules.nohtml.alertText;
+        }
+        return true;
+    }
+    //分页回调方法
+    function pageLoadCallback(index,tabPage){
+        changeTabOne(index, tabPage);
+    }
+    //第一个标签方法调用
+    var tab=1;
+    /**
+     * 查询按钮方法
+     */
+    function searchParts() {
+        changeTabOne(0, $("#pageNumberSelect").val());
+    }
+    //第一个tab页的调用
+    function changeTabOne(cursor, limit) {
+        $("#changeTable").show();
+        // cursor 表示从结果的第几条开始
+        // limit  查询多少条
+        $("#refresh").show();
+        tab=1;
+        var params={
+            verbose:100,
+            cursor:cursor,
+            limit:limit
+        };
+        params = this.getSearchParam(params);
+        $("#refresh").show();
+        loadDevice_parts(asset_id,params,function(data){
+            if(data.result && data.result.length>0){
+                partsTable(data);
+                renderPagination(data,changeTabOne);
+            }else{
+                clearPagination();
+                $("#part_table").empty();
+                $("#part_table").append('<tr><td colspan="11"  align="center" lang="text:no_data"></td></tr>');
+            }
+            $("#refresh").hide();
+            locale.render({element: "#init_body"});
+        },this)
+    }
+    //跳转到指定页  回调函数
+    function jumpTopage(cursor){
+        changeTabOne(cursor,$("#pageNumberSelect").val());
+    }
+    //每页显示条目切换
+    function changePageNumber(limit) {
+        changeTabOne(0,limit);
+    }
+
+    //更换部件信息回填
+    function partsTable(result){
+        $("#part_table").empty();
+        var parts=result.result;
+        for(var i=0;i<parts.length;i++){
+            var per = parts[i]
+            var partsMaintain = per.maintain;
+            var cycle = "";
+            var mtName = "";
+            var operate_change=[];
+            if(partsMaintain && partsMaintain.length>0){
+                for(var j=0;j<partsMaintain.length;j++){
+                    var main=partsMaintain[j].mtType;
+                    if(main == 3){
+                        cycle =  partsMaintain[j].cycle;
+                        var mtName = partsMaintain[j].mtName;
+                        operate_change.push(mtName);
+                    }
+                }
+            }else{
+                cycle = "";
+                mtName = "";
+            }
+            var pTable =
+                    '<tr id=' + per.pid + '>'+
+                    '<td>'+(typeof(per.part_name) == 'undefined'?'':per.part_name)+'</td>'+
+                    '<td>'+(typeof(per.part_no) == 'undefined'?'':per.part_no)+'</td>'+
+                    '<td>'+(typeof(per.serial) == 'undefined'?'':per.serial)+'</td>'+
+                    '<td>'+ (typeof(per.model) == 'undefined'?'':per.model)+'</td>'+
+                    '<td>'+ (typeof(per.last_replace_ts) == 'undefined'?'':schneider.util.dateFormat(per.last_replace_ts, "yyyy-MM-dd hh:mm")) +'</td>'+
+                    '<td>'+ (typeof(per.last_maintain_ts) == 'undefined'?'':schneider.util.dateFormat(per.last_maintain_ts, "yyyy-MM-dd hh:mm")) +'</td>'+
+                    '<td>'+(typeof(per.price) == 'undefined'?'':per.price)+'</td>'+
+                    '<td>'+(typeof(per.vendor_name) == 'undefined'?'':per.vendor_name)+'</td>'+
+                    '<td>'+ (typeof(per.purchase_date) == 'undefined'?'':schneider.util.dateFormat(per.purchase_date, "yyyy-MM-dd"))+'</td>'+
+                    '<td  style="cursor:pointer;display: none;" onclick="changeList(\'' + per._id + '\')">'+ (typeof(per.replace_count) == 'undefined'?'':per.replace_count) +'</td>'+
+                    '<td class="text-center">'+
+                    '<span class="iconfont icon-config link-black" aria-hidden="true" id="changeModel" lang="title:part_maintain"  onclick="moreInfoParts(\'' + per._id + '\');" style=" cursor: pointer;margin:0px 10px;"></span>'+
+                    '</td>'+
+                    '</tr>';
+            $("#part_table").append(pTable);
+        }
+    }
+    // 更换记录模态框
+    var tab_his=4;
+    function changeList(Lid){
+        $("#changeListModal").modal({show:true});
+        $("#ch_list").show();
+        $("#lub_list").hide();
+        $("#ser_list").hide();
+        var limit = $("#pageNumberSelect_history").find("option:selected").val();
+        var params={
+            // cursor: cursor,
+            limit: limit,
+            pid:Lid,
+            mtType:3
+        }
+        tab_his=4;
+        loadAllHistory(params,function(data){
+            if(data.result && data.result.length>0){
+                partsTable_changeList(data);
+                renderPagination_his(data,changeList);
+            }else{
+                clearPagination_his();
+                $("#parts_modal_list").empty();
+                $("#parts_modal_list").append('<tr><td colspan="8"  align="center" lang="text:no_data"></td></tr>');
+            }
+            $("#refresh").hide();
+            locale.render({element: "#init_body"});
+        },this);
+    }
+    //更换记录模态框中的信息回填
+    function partsTable_changeList(result){
+        $("#parts_modal_list").empty();
+        var parts=result.result;
+        for(var i=0;i<parts.length;i++){
+            var per = parts[i]
+            var state=null;
+            if (per.action == 3) {
+                state = locale.get({lang: "installation"});
+            } else if (per.action == 4) {
+                state = locale.get({lang: "uninstall"});
+            }
+            var pTable =
+                    '<tr>'+
+                    '<td>'+(typeof(per.asset_name) == 'undefined'?'':per.asset_name)+'</td>'+
+                    '<td>'+(typeof(per.part_name) == 'undefined'?'':per.part_name)+'</td>'+
+                    '<td>'+ (typeof(per.current_serial) == 'undefined'?'':per.current_serial)+'</td>'+
+                    '<td>'+ (typeof(per.model) == 'undefined'?'':per.model)+'</td>'+
+                    '<td>'+ (typeof(per.update_time) == 'undefined'?'':schneider.util.dateFormat(per.update_time, "yyyy-MM-dd")) +'</td>'+
+                    '<td>'+ (typeof(per.operator) == 'undefined'?'':per.operator)+'</td>'+
+                    '<td>'+ (typeof(per.note) == 'undefined'?'':per.note)+'</td>'+
+                    '<td class="text-center">'+ (typeof(state) == 'undefined'?'':state)+'</td>'+
+                    '</tr>';
+            $("#part_table_list").append(pTable);
+        }
+        permissionFilter_pageFunc();
+        locale.render({element: "#init_body"});
+    }
+
+    //部件维护操作按钮
+    function moreInfoParts(mId){
+        $('#changeModal').modal({backdrop: 'static', keyboard: false});
+        $("#changeModal").load("admin/site_device_parts_maintain.html",function(){
+            locale.render({element: "#init_body"});
+            //详情页面报修信息表单校验
+            validator.render("#changeModal", {
+                promptPosition: "inline",
+                scroll: false
+            });
+            $('#changeModal').modal('show');
+            initChangeModal(mId,asset_id,asset_no);
+        });
+    }
+
+
+    /**
+     * 获取部件列表查询条件
+     * @param params
+     * @returns {*}
+     */
+    function getSearchParam(params) {
+        var partName = $.trim($("#searchPartName").val());
+        var partNo = $.trim($("#searchPartNo").val());
+        var serial = $.trim($("#searchSerial").val());
+        var partModel = $.trim($("#searchPartModel").val());
+
+        if (partName != "") {
+            partName = partName.match(pattern);
+            params.part_name = partName;
+        }
+        if (partNo != "") {
+            partNo = partNo.match(pattern);
+            params.part_no = partNo;
+        }
+        if (serial != "") {
+            serial = serial.match(pattern);
+            params.serial = serial;
+        }
+        if (partModel != "") {
+            partModel = partModel.match(pattern);
+            params.model = partModel;
+        }
+        params.asset_no = asset_no;
+        params.asset_id = asset_id;
+
+        $("#searchPartName").val(partName);
+        $("#searchPartNo").val(partNo);
+        $("#searchSerial").val(serial);
+//        $("#searchPartModel").val(partModel);
+        return params;
+    }
+    var asset_no;
+    var asset_id;
+
+    /**
+     * 初始化部件列表页面
+     * @param id
+     * @param assetNo
+     * @param deviceName
+     */
+    function initparts(id,assetNo,deviceName) {
+        asset_id = id;
+        asset_no = assetNo;
+
+        permissionFilter_pageFunc();
+        require(['deviceService','siteService','fieldMaintenanceService'], function (deviceService) {
+            $("#partTitle").text(deviceName+locale.get("parts"))
+            $("#page-footer").load("../admin/pagination.html",function(){
+                changeTabOne(0,$("#pageNumberSelect").val());
+            });
+        });
+        validator.render("#form_id", {
+            promptPosition: "inline",
+            scroll: false
+        });
+        $("#changePartsID").click(function (event){
+            $('#form_id').validationEngine('validate');
+        })
+        locale.render({element: "#init_body"});
+    };
+
+
+</script>

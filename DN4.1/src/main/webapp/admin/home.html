@@ -1,0 +1,50 @@
+
+<section class="content" id="tcontent" style="overflow-y: hidden;!important;">
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs" role="tablist" id="homeTabs">
+            <li id="tab1" data-permissionFilter='[91,95,97]' role="presentation" class="active" ><a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:gis" aria-expanded="true"></a></li>
+            <li id="tab2" data-permissionFilter='[49]' role="presentation"  class="" ><a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:site-list;" aria-expanded="false"></a></li>
+        </ul>
+        <div class="tab-content" id="tab_content" style="overflow-y:auto;overflow-x:hidden;">
+            <!--表格数据区-->
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+
+
+    //初始化
+
+    function changeTab(index,_id){
+        clearAndDestory();
+        switch (index){
+            case "tab2":
+                $("#tab_content").load("admin/report_site.html");
+                break;
+            default:
+                $("#tab_content").load("admin/gis.html",function () {
+                    initGis();
+                });
+                break;
+
+        }
+
+    }
+
+    $(function () {
+        locale.render({element: "#init_body"});
+        clearAndDestory();
+        //页面功能权限过滤
+        permissionFilter_pageFunc();
+        $("#homeTabs li").each(function(){
+            $(this).on("click",function () {
+                var $obj = $(this);
+                changeTab($obj.attr("id"));
+            })
+        });
+        locale.render({element: "#init_body"});
+        if($("#homeTabs li:first").attr("id")!="undefined"){
+            $("#homeTabs li:first").click();
+        }
+    });
+</script>

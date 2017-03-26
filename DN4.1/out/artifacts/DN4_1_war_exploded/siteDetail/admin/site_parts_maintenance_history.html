@@ -1,0 +1,248 @@
+<section class="content-header">
+    <h1 lang="text:maintenance_history">
+        维护历史
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#" lang="text:device_manage"></a></li>
+        <li class="active" lang="text:maintenance_history"></li>
+    </ol>
+</section>
+<section class="content" id="tcontent">
+    <div class="row">
+        <!--表格统计-->
+        <div class="col-md-12">
+            <div class="box">
+                <div class="overlay" style="display: none;" id="load">
+                    <i class="fa icon-refresh icon-spin"></i>
+                </div>
+                <div class="box-header with-border">
+                    <h3 class="box-title" id="partTitle" lang="text:maintenance_info">部件</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="关闭"><i
+                                class="icon-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <form class="form-inline" style="margin-bottom:15px;">
+                        <div class="form-group has-feedback">
+                            <input type="text" class="form-control form-control-left input-sm" id="searchDate"
+                                   readonly="readonly">
+                            <span class="glyphicon glyphicon-calendar form-control-feedback" style="left: 0;"></span>
+                        </div>
+                        <div class="form-group">
+                            <label lang="text:repair_type"></label>
+                            <select type="text" class="form-control input-sm" id="operat_type" placeholder="">
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label lang="text:machine"></label>
+                            <input type="text" id="devicename" class="form-control input-sm" style="height:30px;"
+                                   lang="placeholder:enter_the_machine_name" placeholder="请输入设备名称">
+                        </div>
+                        <div class="form-group">
+                            <label lang="text:parts"></label>
+                            <input type="text" id="partsname" class="form-control input-sm"
+                                   style="height:30px;width:180px" lang="placeholder:enter_the_components_name"
+                                   placeholder="请输入部件名称">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" onclick="searchBtn()" data-permissionFilter="[205]"
+                                    class="btn btn-default btn-sm" data-toggle="tooltip" title="查找" lang="title:query">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </div>
+                    </form>
+                    <div style="overflow:auto;" id="changeTable">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th lang="text:machine"></th>
+                                <th lang="text:component_name">部件名称</th>
+                                <th lang="text:part_no">部件编号</th>
+                                <th lang="text:repair_type"></th>
+                                <th lang="text:change_time"></th>
+                                <th lang="text:maintenance_time"></th>
+                                <th lang="text:serial_number"></th>
+                                <th lang="text:device_part_model">型号</th>
+                                <th lang="text:price"></th>
+                                <th lang="text:supplier"></th>
+                                <th lang="text:purchasing_time"></th>
+                            </tr>
+                            </thead>
+                            <tbody id="parts_modal">
+                            <!--动态添加数据-->
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="page-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+
+    function searchBtn() {
+        loadPartsMaintains(0, $("#pageNumberSelect").val());
+    }
+    //分页回调方法
+    function pageLoadCallback(index, limit) {
+        loadPartsMaintains(index, limit);
+    }
+    //第一个标签方法调用
+    var tab = 1;
+    var _id = sessionStorage.getItem("_id");
+    function getQueryParams(params) {
+        var dateArray = ($("#searchDate").val()).split("-");
+        var start_time = new Date(dateArray[0] + " 00:00:00").getTime();
+        var end_time = new Date(dateArray[1] + " 23:59:59").getTime();
+
+        var devicename = $.trim($("#devicename").val());
+        if (devicename !== "") {
+            params.device_name = devicename;
+        }
+        var partsname = $.trim($("#partsname").val());
+        if (partsname !== "") {
+            params.part_name = partsname;
+        }
+        params.start  = start_time;
+        params.end  = end_time;
+        if($("#operat_type").val()!=""){
+            params.action = $("#operat_type").val();
+            params.tag = $("#operat_type").find("option:selected").text();
+        }
+        return params;
+    }
+    function loadPartsMaintains(cursor, limit) {
+
+        // loading();
+        //tabPage 第几个导航标签
+        // cursor 表示从结果的第几条开始
+        // limit  查询多少条
+        $("#load").show();
+        var params = {
+            cursor: cursor,
+            limit: limit,
+            site_id: _id
+        }
+        params = this.getQueryParams(params);
+
+        loadPartsMaintainHistory(params, function (data) {
+            if (data.result && data.result.length > 0) {
+                partsTable(data);
+                renderPagination(data, loadPartsMaintains);
+            } else {
+                clearPagination();
+                $("#parts_modal").empty();
+                $("#parts_modal").append('<tr><td colspan="11"  align="center" lang="text:no_data"></td></tr>');
+            }
+            $("#load").hide();
+            locale.render({element: "#init_body"});
+        }, this)
+    }
+    //更换记录数据加载
+    function partsTable(result) {
+        $("#parts_modal").empty();
+        var parts = result.result;
+        var pTable = "";
+        for (var i = 0; i < parts.length; i++) {
+            var per = parts[i];
+            var stateCss = "";
+
+            if(per.action == "1"){
+                stateCss = "label-warning";
+            }else{
+                stateCss = "label-success";
+            }
+            pTable +=
+                    '<tr>' +
+                    '<td>' + (typeof(per.device_name) == 'undefined' ? '' : per.device_name) + '</td>' +
+                    '<td>' + (typeof(per.part_name) == 'undefined' ? '' : per.part_name) + '</td>' +
+                    '<td>' + (typeof(per.part_no) == 'undefined' ? '' : per.part_no) + '</td>' +
+                    '<td>' + '<span class="label '+stateCss+'">' + (typeof(per.tag) == 'undefined' ? '' : per.tag) +  '</span></td>' +
+                    '<td>' + (typeof(per.replace_time) == 'undefined' ? '' : schneider.util.dateFormat(per.replace_time, "yyyy-MM-dd hh:mm")) + '</td>' +
+                    '<td>' + (typeof(per.maintain_time) == 'undefined' ? '' : schneider.util.dateFormat(per.maintain_time, "yyyy-MM-dd hh:mm")) + '</td>' +
+                    '<td>' + (typeof(per.serial) == 'undefined' ? '' : per.serial) + '</td>' +
+                    '<td>' + (typeof(per.model) == 'undefined' ? '' : per.model) + '</td>' +
+                    '<td>' + (typeof(per.price) == 'undefined' ? '' : per.price) + '</td>' +
+                    '<td>' + (typeof(per.vendor_name) == 'undefined' ? '' : per.vendor_name) + '</td>' +
+                    '<td>' + (typeof(per.purchase_date) == 'undefined' ? '' : schneider.util.dateFormat(per.purchase_date, "yyyy-MM-dd")) + '</td>' +
+                    '</tr>';
+
+        }
+
+        $("#parts_modal").append(pTable);
+        permissionFilter_pageFunc();
+        locale.render({element: "#init_body"});
+    }
+
+    //跳转到指定页  回调函数
+    function jumpTopage(cursor) {
+        loadPartsMaintains(cursor, $("#pageNumberSelect").val());
+    }
+
+    //每页显示条目切换
+    function changePageNumber(limit) {
+        loadPartsMaintains(0, limit);
+    }
+    /**
+     * 获取部件操作方式集合
+     */
+    function loadSettings(){
+        var params = {
+            key : "part_maintain_types"
+        }
+        serachFieldForKey(params,true,function (data) {
+            if(data !="" && data.result !=undefined ){
+                var items = data.result.items;
+                var $option = "";
+                $("#operat_type").empty();
+                $option ="<option value=''>---"+locale.get("all")+"---</option>";
+                for (key in items) {
+                    $option +="<option value="+items[key]+">"+key+"</option>";
+                }
+                $("#operat_type").append($option);
+            }else{
+                $("#operat_type").empty();
+                $option ="<option value=''>---"+locale.get("all")+"---</option>";
+                $("#operat_type").append($option);
+            }
+            
+        },this)
+    }
+
+    //页面功能权限过滤
+    $(document).ready(function () {
+        permissionFilter_pageFunc();
+        $('#searchDate').daterangepicker(
+                {
+                    startDate: moment().subtract(6, 'days'),
+                    endDate: moment(),
+                    maxDate: moment(),
+                    showDropdowns: false,
+                    showWeekNumbers: false,
+                    separator: '-',
+                    locale: {
+                        format: 'YYYY/MM/DD',
+                        separator: '-',
+                        applyLabel: locale.get("apply"),
+                        cancelLabel: locale.get("cancel")
+                    }
+                },
+                function (start, end) {
+                    $('#searchDate').val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
+                }
+        );
+        require(['deviceService','fieldMaintenanceService'], function (deviceService) {
+            loadSettings();
+            $("#page-footer").load("../admin/pagination.html", function () {
+                loadPartsMaintains(0, $("#pageNumberSelect").val()); //初始化页面
+            });
+        });
+        locale.render({element: "#init_body"});
+    });
+</script>

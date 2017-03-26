@@ -1,0 +1,525 @@
+  <div class="modal-dialog"  >
+        <div class="modal-content" style="width:700px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" lang="text:part_maintain"> <span id="myModalLabe_name"></span>)</h4>
+            </div>
+            <form class="form-horizontal" id="form_id">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" lang="text:component_name"></label>
+
+                        <div class="col-sm-9">
+                            <select class="form-control" id="component_name_ch" placeholder=""></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" lang="text:repair_type"></label>
+
+                        <div class="col-sm-9">
+                            <select type="text" class="form-control" id="operat_type" placeholder="">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" lang="text:part_no"></label>
+
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="part_no" readOnly placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" lang="text:old_serial_number"></label>
+
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="serial_number_ch" readOnly placeholder="">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group change">
+                        <label class="col-sm-3 control-label">
+                            <span lang="text:new_serial_number"></span><span class="text-red">*</span>
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text"
+                                   class="form-control validate[required,specialCharacter,minSize[0],maxSize[30],funcCall[cloudInput]]"
+                                   id="serial_number1" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group change">
+                        <label class="col-sm-3 control-label" lang="text:device_part_model"></label>
+
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="model" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group change">
+                        <label class="col-sm-3 control-label" lang="text:price"></label>
+
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="price" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group change">
+                        <label class="col-sm-3 control-label" lang="text:supplier"></label>
+
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="vendor_name" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group change">
+                        <label class="col-sm-3 control-label" lang="text:purchasing_time"></label>
+
+                        <div class="col-sm-9">
+                            <div class="has-feedback">
+                                <input type="text" class="form-control" id="purchase_time" readonly="readonly" placeholder="">
+                                <span class="glyphicon glyphicon-calendar form-control-feedback" style="right: 0;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" lang="text:start_time"></label>
+
+                        <div class="col-sm-9">
+                            <div class="has-feedback">
+                                <input type="text" class="form-control" id="part_start_time" readonly="readonly" placeholder="">
+                                <span class="glyphicon glyphicon-calendar form-control-feedback" style="right: 0;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" lang="text:end_time"></label>
+
+                        <div class="col-sm-9">
+                            <div class="has-feedback">
+                                <input type="text" class="form-control" id="part_end_time" readonly="readonly"
+                                       placeholder="">
+                                <span class="glyphicon glyphicon-calendar form-control-feedback" style="right: 0;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" lang="text:comment"></label>
+
+                        <div class="col-sm-9">
+                            <textarea rows="3" cols="20" id="common" style="width:500px;resize: Vertical;"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </form>
+            <input type="hidden" value="" id="tempMid_ch"/>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default pull-left" lang="text:close"></button>
+                <button type="button" class="btn btn-primary" id="changePartsID" onclick="submitForm();"
+                        lang="text:submit"></button>
+            </div>
+        </div>
+    </div>
+
+  <script>
+
+      //自定义外部函数
+      function cloudInput(field, rules, i, options) {
+          var nohtml = new RegExp("(<[^>]+>)|(&gt|&lt|&amp|&quot|&nbsp)");
+          if (nohtml.test(field.val())) {
+              //add rules at validationengine.lang
+              return options.allrules.nohtml.alertText;
+          }
+          return true;
+      }
+
+      /**
+       * 初始化部件维护页面
+       * @param mId
+       */
+      function initChangeModal(partId,asset_id) {
+          $("#tempMid_ch").val(partId);
+          var pickerOption = {
+              language: locale.current() == 1 ? 'en' : 'zh-CN',
+              autoclose: true, //选中之后自动隐藏日期选择框
+              todayHighlight: false,
+              format: 'yyyy-mm-dd',
+              startView: 0, //起始选择范围，0为日，1为月，2为年
+              minViewMode: 0 //最小选择范围
+          }
+          //时间控件
+          var picker2Option = {
+              singleDatePicker:true,
+              startDate: new Date(),
+              endDate: moment(),
+              maxDate: moment(),
+              showDropdowns: false,
+              showWeekNumbers: false,
+              multidate:false,
+              separator: '-',
+              timePicker: true,
+              timePicker24Hour: true,
+              locale: {
+                  format: 'YYYY-MM-DD HH:mm',
+                  separator: '-',
+                  applyLabel: locale.get("apply"),
+                  cancelLabel: locale.get("cancel")
+              }
+          }
+
+          $(".change").hide();
+          //加载操作类型
+          loadSettings();
+          //获取部件信息
+          if(partId=='add') { //添加
+              loading_Allpart(asset_id,pickerOption,picker2Option);
+          }else { //编辑
+              getPartInfoById(partId,{verbose:100},function(data){
+                  var result=data.result;
+                  renderPartForm(pickerOption,picker2Option,result);
+                  var str ='<option selected="selected" value="'+result._id+'">'+result.part_name+'</option>';
+                  $("#component_name_ch").empty().append(str);
+                  $("#operat_type").change(function(){
+                      var $this = $(this);
+                      if($this.val()=="1"){
+                          $(".change").show();
+                      }else{
+                          $(".change").hide();
+                      }
+                  });
+              },this)
+          }
+
+      }
+
+
+      //工作开始时间不能大于工作结束时间
+      /*$("#part_start_time").change(function(){
+          //工作开始时间
+          var start_time = $("#part_start_time").val();
+          //工作结束时间
+          var end_time = $("#part_end_time").val();
+
+          var d_reply_time = $("#d_reply_time").val(); // 接单时间
+          var d_arrival_time = $("#d_arrival_time").val(); // 到场时间
+
+
+          // 工作开始时间不能小于接单时间
+          if(start_time&&d_reply_time) {
+              var date3 = new Date(d_reply_time).getTime() - new Date(start_time).getTime();
+              if(date3>0) {
+                  errorTipDis("start_time_nlt_reply_time");
+                  $("#part_start_time").val("");
+              }
+          }
+          //工作开始时间不能小于到场时间
+          if(start_time&&d_arrival_time) {
+              var date3 = new Date(d_arrival_time).getTime() - new Date(start_time).getTime();
+              if(date3>0) {
+                  errorTipDis("start_time_nlt_reach_time");
+                  $("#part_start_time").val("");
+              }
+          }
+
+
+
+          if(start_time&&end_time) {
+              var date3 = new Date(end_time).getTime() - new Date(start_time).getTime();   //时间差的毫秒数
+              if(date3<0) {
+                  errorTipDis("start_time_ngt_end_time");
+                  $("#part_start_time").val("");
+              }
+          }
+      });
+      $("#part_end_time").change(function(){
+          //工作开始时间
+          var start_time = $("#part_start_time").val();
+          //工作结束时间
+          var end_time = $("#part_end_time").val();
+
+          var d_arrival_time = $("#d_arrival_time").val(); // 到场时间
+          var d_reply_time = $("#d_reply_time").val(); // 接单时间
+
+          // 工作结束时间不能小于接单时间
+          if(end_time&&d_reply_time) {
+              var date3 = new Date(d_reply_time).getTime() - new Date(end_time).getTime();
+              if(date3>0) {
+                  errorTipDis("end_time_nlt_reply_time");
+                  $("#part_end_time").val("");
+              }
+          }
+          //工作结束时间不能小于到场时间
+          if(end_time&&d_arrival_time) {
+              var date3 = new Date(d_arrival_time).getTime() - new Date(end_time).getTime();
+              if(date3>0) {
+                  errorTipDis("end_time_nlt_reach_time");
+                  $("#part_end_time").val("");
+              }
+          }
+
+          if(start_time&&end_time) {
+              var date3 = new Date(end_time).getTime() - new Date(start_time).getTime();   //时间差的毫秒数
+              if(date3<0) {
+                  errorTipDis("end_time_nlt_start_time");
+                  $("#part_end_time").val("");
+              }
+          }
+      });*/
+
+
+      /**
+       * 填充表单内容
+       */
+      function renderPartForm(pickerOption,picker2Option,result) {
+          $("#serial_number_ch").val(result.serial==undefined ? "":result.serial);
+          $("#part_no").val(result.part_no);
+          $("#purchase_time").datepicker(pickerOption);
+          $("#part_start_time").daterangepicker(picker2Option);
+          $("#part_end_time").daterangepicker(picker2Option);
+          $("#model").val(result.model==undefined ? "":result.model);
+          $("#price").val(result.price==undefined ? "":result.price);
+          $("#vendor_name").val(result.vendor_name==undefined ? "":result.vendor_name);
+          $("#purchase_time").val(result.purchase_date==undefined ? "":schneider.util.dateFormat(result.purchase_date, "yyyy-MM-dd"));
+      }
+
+      /**
+       * 设置日期插件的当前时间
+       */
+      $("#part_start_time").mouseover(function(){
+          setCurrentDate("part_start_time");
+      });
+      $("#part_end_time").mouseover(function(){
+          setCurrentDate("part_end_time");
+      });
+      /**
+       * 获取登陆人信息
+       */
+      function loadThisUserInfo(callback){
+          getAPI2_user_this({verbose: 100}, function(data) {
+              callback(data.result);
+          }, this);
+      }
+      /**
+       * 获取部件操作方式集合
+       */
+      function loadSettings(){
+          var params = {
+              key : "part_maintain_types"
+          }
+          serachFieldForKey(params,true,function (data) {
+              var items = data.result.items;
+              var $option = "";
+              $("#operat_type").empty();
+              for (key in items) {
+                  $option +="<option value="+items[key]+">"+key+"</option>";
+              }
+              $("#operat_type").append($option);
+
+              if($("#operat_type").val()=="1"){
+                  $(".change").show();
+              }
+          },this)
+      }
+
+      /**
+       * 加载设备下所有的部件
+       */
+      function loading_Allpart(asset_id,pickerOption,picker2Option) {
+          getAllPart(true, asset_id,{limit:-1,verbose:100}, function (data) {
+              if (data.result.length>0) {
+                  $("#changePartsID").show();
+                  var parts = data.result;
+                  var str = '';
+                  if(parts && parts.length>0) {
+                      for(var i=0; i<parts.length;i++) {
+                          if(i==0) {
+                              str += '<option selected="selected" value="'+parts[i]._id+'">'+parts[i].part_name+'</option>';
+                          }else {
+                              str += '<option value="'+parts[i]._id+'">'+parts[i].part_name+'</option>';
+                          }
+                      }
+                  }
+                  $("#component_name_ch").empty().append(str);
+                  $("#component_name_ch").on('change',function(e){
+                      var pid = $("#component_name_ch").val();
+                      if(pid) {
+                          getPartById(pid,pickerOption,picker2Option);
+                      }
+                  });
+                  getPartById($("#component_name_ch").val(),pickerOption,picker2Option);
+              }else {
+                $("#changePartsID").hide();
+                  $("#component_name_ch").empty().append('<option selected="selected" value="" lang="text:no_data"></option>');
+                  locale.render({element: "#init_body"});
+              }
+          }, this);
+      }
+
+
+      /**
+       *根据部件ID获取部件信息
+       */
+      function getPartById(part_id,pickerOption,picker2Option) {
+          getPartInfoById(part_id,{verbose:100},function(data){
+              var result=data.result;
+              renderPartForm(pickerOption,picker2Option,result);
+              $("#operat_type").change(function(){
+                  var $this = $(this);
+                  if($this.val()=="1"){
+                      $(".change").show();
+                  }else{
+                      $(".change").hide();
+                  }
+              });
+          },this)
+      }
+
+      /**
+       * 获取表单数据
+       */
+      function getFormData() {
+          var formData = {
+              "_id": $("#component_name_ch").val(),
+              "asset_id":$("#d_asset_Id").val(),
+              "comment": $("#common").val(),
+              "model": $("#model").val(),
+              "part_no": $("#part_no").val(),
+              "price": $("#price").val(),
+              "purchase_date": $("#purchase_time").val(),
+              "serial":  $("#serial_number1").val(),
+//              "sign": "string",
+              "vendor_name": $("#vendor_name").val()
+          }
+          return formData;
+      }
+      /**
+       * 提交表单方法
+       */
+      function submitForm() {
+          var self = this;
+          if ($('#form_id').validationEngine('validate')) {
+              dialog.render({
+                  lang: "affirm_submit",
+                  buttons: [{
+                      lang: "yes", click: function () {
+                          dialog.close();
+                          /*
+                           * 提交表单
+                           * */
+                          var formData = getFormData();
+                          //工作开始时间
+                          var start_time = $("#part_start_time").val();
+                          //工作结束时间
+                          var end_time = $("#part_end_time").val();
+
+                          var d_arrival_time = $("#d_arrival_time").val(); // 到场时间
+                          var d_reply_time = $("#d_reply_time").val(); // 接单时间
+
+                          // 工作结束时间不能小于接单时间
+                          if(end_time&&d_reply_time) {
+                              var date3 = new Date(d_reply_time).getTime() - new Date(end_time).getTime();
+                              if(date3>0) {
+                                  errorTipDis("end_time_nlt_reply_time");
+                                 return;
+                              }
+                          }
+                          //工作结束时间不能小于到场时间
+                          if(end_time&&d_arrival_time) {
+                              var date3 = new Date(d_arrival_time).getTime() - new Date(end_time).getTime();
+                              if(date3>0) {
+                                  errorTipDis("end_time_nlt_reach_time");
+                                  return;
+                              }
+                          }
+
+                          // 工作开始时间不能小于接单时间
+                          if(start_time&&d_reply_time) {
+                              var date3 = new Date(d_reply_time).getTime() - new Date(start_time).getTime();
+                              if(date3>0) {
+                                  errorTipDis("start_time_nlt_reply_time");
+                                  return;
+                              }
+                          }
+                          //工作开始时间不能小于到场时间
+                          if(start_time&&d_arrival_time) {
+                              var date3 = new Date(d_arrival_time).getTime() - new Date(start_time).getTime();
+                              if(date3>0) {
+                                  errorTipDis("start_time_nlt_reach_time");
+                                  return;
+                              }
+                          }
+
+                          if(start_time&&end_time) {
+                              var date3 = new Date(end_time).getTime() - new Date(start_time).getTime();   //时间差的毫秒数
+                              if(date3<0) {
+                                  errorTipDis("end_time_nlt_start_time");
+                                  return;
+                              }
+                          }
+                          var wo_log_id = $("#wo_log_id").val(); // 维修记录id
+                          var params = {
+                              action:$("#operat_type").val(),
+                              tag : $("#operat_type").find("option:selected").text(),
+                              site_id: $("#d_site_Id").val(),
+                              wo_id:$("#d_order_id").val(),
+                              asset_no: $("#d_asset_number").val(),
+                              start: new Date($("#part_start_time").val()).getTime(),
+                              end: new Date($("#part_end_time").val()).getTime()
+                          }
+                          if(wo_log_id) { // wo_log_id值有就传值给后端
+                              params.wo_log_id = wo_log_id;
+                          }
+                          if((params.end-params.start)<0) { // 工作开始时间不能大于结束时间
+                              dialog.render({
+                                  lang:"endtime_no_lt_starttime",
+                              });
+                              return;
+                          }
+                          partsMaintain(formData,params,true, function(data){
+                              if(typeof(data.result)!="undefined") {
+                                  fillPartAndRecord(data);
+                                  dialog.render({
+                                      lang:"submit_success",
+                                      close: function() {
+                                          dialog.close();
+                                      }
+                                  });
+                                  $('#changeModal').modal('hide');
+                              }else {
+                                  dialog.render({
+                                      lang:"submit_failed",
+                                      close: function() {
+                                          dialog.close();
+                                      }
+                                  });
+                              }
+                          }, self);
+                      }
+                  }, {
+                      lang: "no", click: function () {
+                          dialog.close();
+                      }
+                  }],
+                  close: function () {
+                      dialog.close();
+                  }
+              });
+          }
+
+      }
+
+      /**
+       * 回填表单提交后的部件数据和日志数据
+       */
+      function fillPartAndRecord(data){
+          if(data.result.log!="undefined"){
+              $("#wo_log_id").val(data.result.log._id);
+          }
+          //回填部件
+          if(data.result.parts.length>0) {
+              renderParts(data.result.parts);
+          }
+          //回填更换日志
+          if(data.result.logs.length>0) {
+              renderPartRepairLogs(data.result.logs);
+          }
+      }
+  </script>

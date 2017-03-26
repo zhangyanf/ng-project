@@ -1,0 +1,13 @@
+/* 
+    Document   : style8
+    Created on : 2016-7-5, 9:43:55
+    Author     : bjj
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.dialog-height{
+    width: 800px !important;
+    height: 800px !important;
+}
+

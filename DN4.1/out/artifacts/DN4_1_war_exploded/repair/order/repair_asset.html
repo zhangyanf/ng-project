@@ -1,0 +1,269 @@
+<!--报修设备页面-->
+<div class="modal fade bs-example-modal-lg" data-backdrop='static' data-keyboard='false' id="modal_asset_list" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                    class="sr-only" onclick="close_asset_modal()">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel" lang="text:please_select_repair_asset"></h4>
+        </div>
+        <div class="modal-body">
+            <div class="box" style="border: 0px;margin: 0px">
+                <div id="query_device_overlay" class="overlay" style="display: none;">
+                    <i class="fa icon-refresh icon-spin"></i>
+                </div>
+                <!--查询条件-->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-sm-12" style="padding-bottom: 10px;">
+                            <!--查询条件-->
+                            <form class="form-inline" id="queryAssetForm">
+                                <input type="reset" style="display:none;" id="reset_form_asset"/>
+                                <div class="form-group " style="padding: 5px 0px;">
+                                         <span>
+                                            <label lang="text:device_name"></label>
+                                                <input type="text" style="width:110px;" value=""
+                                                       class="form-control input-sm " id="query_deviceName"
+                                                       lang="placeholder:enter_the_machine_name">
+                                            </span>
+                                </div>
+                                <div class="form-group " style="padding: 5px 0px;">
+                                            <span>
+                                                <label lang="text:asset_number"></label>
+                                                <input type="text" style="width:110px;" value=""
+                                                       class="form-control input-sm " id="query_assetNo"
+                                                       lang="placeholder:please_enter_the_asset_number">
+                                             </span>
+                                </div>
+                                <div class="form-group " style="padding: 5px 0px;">
+                                            <span>
+                                                <label lang="text:serial_number"></label>
+                                                <input type="text" style="width:110px;" value=""
+                                                       class="form-control input-sm " id="query_serial"
+                                                       lang="placeholder:enter_the_serial_number">
+                                             </span>
+                                </div>
+                                <div class="form-group " style="padding: 5px 0px;">
+                                            <span>
+                                                <label lang="text:site"></label>
+                                                <input type="text" style="width:110px;" value=""
+                                                       class="form-control input-sm " id="query_siteName"
+                                                       lang="placeholder:please_enter_a_site_name">
+                                             </span>
+                                </div>
+                                <div class="form-group pull-right" style="padding: 5px 0px;">
+                                    <button type="button" onclick="searchAsset()" data-permissionFilter="[ ]"
+                                            class="btn btn-default btn-sm"
+                                            data-toggle="tooltip" title="查找" lang="title:query">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                    <button type="button" onclick="resetAsset()" data-permissionFilter="[ ]"
+                                            class="btn btn-default btn-sm"
+                                            data-toggle="tooltip" title="重新填写" lang="title:reset1">
+                                        <span class="glyphicon glyphicon-refresh"></span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="asset_table_div" style="width:100%;">
+                        <table class="table table-bordered table-hover table-striped scrolltable">
+                            <thead style="display:block;overflow-y: auto;">
+                            <tr>
+                                <th lang="text:device_name" style="width:125px;">设备名称</th>
+                                <th lang="text:asset_number" style="width:125px;">资产编号</th>
+                                <th lang="text:serial_number" style="width:125px;">序列号</th>
+                                <th lang="text:model2" style="width:130px;">型号</th>
+                                <th lang="text:state" style="width:120px;">状态</th>
+                                <!--<th lang="text:model2" style="width:85px;">型号</th>
+                                <th lang="text:state" style="width:70px;">状态</th>
+                                <th lang="text:repair_state" style="width:95px;">维修状态</th>-->
+                                <th data-permissionFilter='[ ]' style="width:98px;text-align: center"
+                                    lang="text:operate">操作
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="panelContent1" style="display:block; max-height:296px;overflow-y: auto;">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!--box-body-->
+                <div id="page-footer1"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    /**
+     *  如果是详情现场下 就隐藏列表中的现场和现场搜索框
+     */
+    $(document).ready(function(){
+        if(home_detail_flag=="home") {
+            $("#queryAssetForm > div:eq(3)").show();
+            var $ths =  $("#asset_table_div > table > thead > tr > th").detach();
+            $("#asset_table_div > table > thead > tr").append('<th lang="text:site" style="width:125px;">现场</th>').append($ths);
+        }else if(home_detail_flag=="detail") {
+            $("#queryAssetForm > div:eq(3)").hide();
+            /*$("#asset_table_div > table > thead > tr > th").css("width","125px");*/
+            $("#asset_table_div > table > thead > tr > th").css("width","150px");
+            $("#asset_table_div > table > thead > tr > th:last").css("width","98px");
+        }
+        // 引入分页
+        $("#page-footer1").pagination({
+            changePage:function (cursor,limit) {
+                loading_asset_list(cursor,limit);
+            }
+        });
+        loading_asset_list(0, $("#page-footer1 .col-sm-5 select").val());
+        locale.render({element: "#init_body"});
+    });
+
+    /**
+     * 加载设备列表
+     */
+    function loading_asset_list(cursor, limit) {
+        $("#query_device_overlay").show();
+        var param = {cursor: cursor, limit: limit, verbose: 100,exist_site:false};
+        param = this.getSerachAssetData(param);
+        schneider.Ajax.request({
+            url: "/api/assets",
+            type: "GET",
+            parameters:param,
+            success: function(data) {
+                if (data.total > 0) {
+                    fillAssetList(data.result);
+                    $("#page-footer1").pagination("data",data);
+                } else {
+                    $("#page-footer1").pagination("clear");
+                    $("#panelContent1").empty();
+                    $("#panelContent1").append('<tr><td colspan="8" style="width:848px;" align="center" lang="text:no_data"></td></tr>');
+                    $("#query_device_overlay").hide();
+                    locale.render({element: "#init_body"});
+                }
+            }
+        });
+    }
+
+    /**
+     * 回填设备列表
+     */
+    function fillAssetList(data) {
+        $("#panelContent1").empty();
+        var str = "";
+        for (var i = 0; i < data.length; i++) {
+            var status = typeof(data[i].status) == 'undefined' ? '' : data[i].status;
+            var fault_count  = typeof(data[i].fault_count) == 'undefined' ? '' : data[i].fault_count;
+            var maintain_count = typeof(data[i].maintain_count) == 'undefined' ? '' : data[i].maintain_count;
+            var reparit_state = locale.get("normal");
+            if (status == 0) {
+                status = locale.get("discard");
+            } else if (status == 1) {
+                status = locale.get("normal");
+            }
+//            else if (status == 2) {
+//                status = locale.get("repair");
+//            }
+            if(fault_count&&reparit_state) {
+                if(fault_count>0||reparit_state>0) {
+                    reparit_state = locale.get("repair");
+                }
+            }
+
+            var site_name = typeof(data[i].site_name) == 'undefined' ? '' : data[i].site_name;
+            var serial = typeof(data[i].serial) == 'undefined' ? '' : data[i].serial;
+            var model = typeof(data[i].device_type) == 'undefined' ? '' : data[i].device_type;
+            var asset_no = typeof(data[i].asset_no) == 'undefined' ? '' : data[i].asset_no;
+            var device_name = typeof(data[i].device_name) == 'undefined' ? '' : data[i].device_name;
+            if(home_detail_flag=="home") {
+                str = "<tr><td style='word-break: break-all;width:125px;'>" + site_name + "</td>" +
+                    "<td style='word-break: break-all;width:125px;'>" + device_name + "</td>" +
+                    "<td style='word-break: break-all;width:125px;'>" + asset_no + "</td>" +
+                    "<td style='word-break: break-all;width:125px;'>" + serial + "</td>" +
+                    "<td style='word-break: break-all;width:130px;'>" + model + "</td>" +
+                    "<td style='word-break: break-all;width:120px;'>" + status + "</td>";
+                    /*"<td style='word-break: break-all;width:85px;'>" + model + "</td>" +
+                    "<td style='word-break: break-all;width:70px;'>" + status + "</td>"+
+                    "<td style='word-break: break-all;width:95px;'>" + reparit_state + "</td>";*/
+            }else if(home_detail_flag=="detail") {
+                /*str = "<tr><td style='word-break: break-all;width:125px;'>" + device_name + "</td>" +
+                        "<td style='word-break: break-all;width:125px;'>" + asset_no + "</td>" +
+                        "<td style='word-break: break-all;width:125px;'>" + serial + "</td>" +
+                        "<td style='word-break: break-all;width:125px;'>" + model + "</td>" +
+                        "<td style='word-break: break-all;width:125px;'>" + status + "</td>"+
+                        "<td style='word-break: break-all;width:125px;'>" + reparit_state + "</td>";*/
+                str = "<tr><td style='word-break: break-all;width:150px;'>" + device_name + "</td>" +
+                    "<td style='word-break: break-all;width:150px;'>" + asset_no + "</td>" +
+                    "<td style='word-break: break-all;width:150px;'>" + serial + "</td>" +
+                    "<td style='word-break: break-all;width:150px;'>" + model + "</td>" +
+                    "<td style='word-break: break-all;width:150px;'>" + status + "</td>";
+
+            }
+            if (data.length > 6) {
+                str += "<td style='text-align:center;width:83px;'>";
+            } else {
+                str += "<td style='text-align:center;width:98px;'>";
+            }
+            str += "<button type='button' class='btn btn-default btn-sm' data-permissionfilter='[ ]' onclick='ok("+JSON.stringify(data[i])+")' " +
+                "data-toggle='tooltip' data-placement='bottom' lang='title:okText'><i class='glyphicon glyphicon-ok'></i></button>" +
+                "</td>" +
+                "</tr>";
+            $("#query_device_overlay").hide();
+            $("#panelContent1").append(str);
+        }
+        locale.render({element: "#init_body"});
+    }
+
+    /**
+     * 重新填写搜索条件
+     */
+    function resetAsset() {
+        $("#reset_form_asset").click();
+    }
+
+    /**
+     * 获取搜索设备的条件的数据
+     */
+    function getSerachAssetData(param) {
+        //采集搜索条件的值
+        var deviceName = $.trim($("#query_deviceName").val());
+        if (deviceName !== "") {
+            deviceName = deviceName.match(pattern);
+            param.device_name = deviceName;
+            $("#query_deviceName").val(deviceName);
+        }
+        var assetNo = $.trim($("#query_assetNo").val());
+        if (assetNo !== "") {
+            assetNo = assetNo.match(pattern);
+            param.asset_no = assetNo;
+            $("#query_assetNo").val(assetNo);
+        }
+        var serial = $.trim($("#query_serial").val());
+        if (serial !== "") {
+            serial = serial.match(pattern);
+            param.serial = serial;
+            $("#query_serial").val(serial);
+        }
+
+        if(home_detail_flag=="home") {
+            var siteName = $.trim($("#query_siteName").val());
+            if (siteName !== "") {
+                siteName = siteName.match(pattern);
+                param.site_name = siteName;
+                $("#query_siteName").val(siteName);
+            }
+        }else if(home_detail_flag=="detail") {
+            param.site_id = sessionStorage.getItem("_id");
+        }
+        return param;
+    }
+
+    /**
+     * 根据搜索条件查询设备
+     */
+    function searchAsset() {
+        loading_asset_list(0, $("#page-footer1 .col-sm-5 select").val());
+    }
+
+</script>

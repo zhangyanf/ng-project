@@ -1,0 +1,61 @@
+<div class=" tab-pane row active">
+    <div class="col-md-12">
+        <div class="row" id="overview_webscada">
+            <div class="col-xs-12">
+                <div class="box box-solid">
+                    <div class="box-body">
+                        <div id="webscada" class="col-md-12 col-xs-12" style="width:100%;">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    function initOverview(siteId){
+        require(['siteService','warningService','orderService', 'echarts'], function() {
+            //本页面功能权限过滤
+            var siteId = sessionStorage.getItem("_id");
+            // console.log("siteId", siteId)
+            permissionFilter_overview(siteId);
+            var self = this;
+        });
+    }
+
+    /*
+    * 根据权限，选择是否加载相应的模块
+    **/
+    function permissionFilter_overview(siteId) {
+        //帐号的权限集合
+        var accept=sessionStorage.getItem('accept');
+        var def=sessionStorage.getItem('default');
+        var deny=sessionStorage.getItem('deny');
+        //显示模块的权限集合
+        var p_webscada=[91,95,97,92,96,98];
+        var p_alarm=[49];
+        var p_realdata=[19];
+        var p_historyTend=[19];
+
+        //判定webscada显示模块
+        if(tool_page_permission(p_webscada,accept,def,deny)==0){
+            $("#overview_webscada").remove();
+        }else{
+            getCanvasBySiteId( siteId, null, function( data) {
+                // console.log( "Detail data,", data);
+                if (!data.result || data.result.content == "" || data.result.content == undefined) {
+                    // no scada
+                    $("#webscada").append( "<div class='callout callout-info'><h4 style='font-weight: normal;'>" + locale.get({lang:"no_scada"})  + "</h4></div>");
+                } else {
+                    $("#webscada").load("../admin/scadaview.html",function(){
+                        loadSiteInfo(siteId);
+                    });
+                }
+            }, this);
+        }
+
+    }
+    
+</script>

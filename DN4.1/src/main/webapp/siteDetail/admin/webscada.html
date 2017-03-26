@@ -1,0 +1,43 @@
+<section class="content-header">
+    <h1 class="box-title" lang="text:web_scada"></h1>
+    <ol class="breadcrumb">
+        <li><a href="javascript:void(0)" onclick="goHome('siteDetail_home');"><i class="icon-home"></i> <span lang="text:home"></span></a></li>
+    </ol>
+</section>
+<section class="content" id="tcontent">
+    <div class="row"  >
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <span><h3 class="box-title" lang="text:web_scada">webscada</h3></span>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div id="webscada" class="col-md-12 col-xs-12" style="width:100%;">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function() {
+        permissionFilter_pageFunc();
+        var _id = sessionStorage.getItem("_id");
+        getCanvasBySiteId( _id, null, function( data) {
+            console.log( "Detail data,", data);
+            if (!data.result || data.result.content == "" || data.result.content == undefined) {
+                // no scada
+                $("#webscada").append( "<span style='width:100%;height:400;text-align:center;'>" + locale.get({lang:"no_data"})  + "</span>");
+            } else {
+                $("#webscada").load("../admin/scadaview.html",function(){
+                    loadSiteInfo(_id);
+                });
+            }
+        }, this);
+        locale.render({element: "#init_body"});
+    });
+</script>

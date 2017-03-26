@@ -1,0 +1,929 @@
+<div class="container-fluid">
+    <div class="row" id="add_device_bt_div">
+        <div class="col-lg-3">
+            <br/>
+        </div>
+    </div><br/>
+    <div class="row">
+        <div class="col-lg-3" id="device_div">
+            <!--设备列表-->
+            <div class="panel panel-default" style="max-height: 382px;overflow: auto">
+                <div class="panel-heading"><span lang="text:site_devices"></span><button type="button" class="btn btn-primary btn-xs pull-right" id="add_device_bt" lang="title:add_device" title=""><span class="glyphicon glyphicon-plus"></span></button></div>
+                <ul class="list-group" id="devices_list2">
+
+                </ul>
+            </div>
+        </div>
+        <!--设备列表-->
+        <div class="col-lg-9">
+            <div class="row">
+                <!--设备表单-->
+                <div class="col-lg-12 hidden" id="deviceinfo_div2">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><span lang="text:equipment_information"></span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label><span lang="text:asset_number+:"></span ><span id="asset_no2"></span></label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label><span lang="text:name1+:" ></span ><span id="device_name2"></span></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label><span lang="text:type+:"></span ><span id="device_type_type2"></span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--设备表单-->
+                <div class="col-lg-12 hidden" id="partinfo_div">
+                    <!--部件表单-->
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><span lang="text:components_info"></span>
+                            <!--<button type="button" id="submit_part" class="btn btn-primary btn-xs pull-right" lang="text:submit">提交</button>-->
+                        </div>
+                        <div class="panel-body">
+                            <input type="hidden" id="device_serial" value="" />
+                            <input type="hidden" id="device_partId" value="" />
+                            <!--设备关联serial号-->
+                            <form role="form" id="part_form">
+                                <input type="reset" id="part_form_reset" class="hidden" />
+                                <input type="hidden" id="flag_part_edit" vale="" />
+                                <div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label><span lang="text:name1"></span ><span class="text-red">*</span></label>
+                                                <input type="text" class="form-control input-sm validate[required,custom[giveName],maxSize[30]]" id="part_name" lang="placeholder:name1" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label><span lang="text:serial_number"></span ><span class="text-red">*</span></label>
+                                                <input type="text" class="form-control input-sm validate[required,custom[onlyLetterNumber],maxSize[30],funcCall[partSerialExist3]]" id="part_serial" lang="placeholder:serial_number" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label><span lang="text:part_no"></span ><span class="text-red">*</span></label>
+                                                <input type="text" class="form-control input-sm validate[required,custom[onlyLetterNumber],maxSize[30],funcCall[partSerialExist3]]" id="part_no" lang="placeholder:part_no">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label lang="text:more_part_info"></label><span id="more_part" style="cursor: pointer;" class="glyphicon glyphicon-triangle-bottom dropdown-option"></span>
+                                            </div>
+                                            <div class="col-sm-6"></div>
+                                        </div>
+                                    </div>
+                                    <div id="more_div_part" class="hidden">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label lang="text:device_part_model"></label>
+                                                    <input type="text" class="form-control input-sm validate[custom[onlyLetterNumber],maxSize[30]]" id="part_model" lang="placeholder:device_part_model" placeholder="">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label lang="text:purchasing_time"></label>
+                                                    <input type="text" class="form-control datePlugin input-sm" id="factory_ts" lang="placeholder:purchasing_time" readonly="readonly">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label lang="text:supplier"></label>
+                                                    <input type="text" class="form-control input-sm validate[custom[giveName],maxSize[30]]" id="part_vendor_name" lang="placeholder:supplier" placeholder="">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label lang="text:price+(+munit+)"></label>
+                                                    <input type="text" class="form-control input-sm validate[custom[number],min[0]" id="price" lang="placeholder:price" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <button id="part_cancel" class="btn btn-default btn-sm btn-block" lang="text:cancel"></button>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <button type="button" id="submit_part" class="btn btn-primary btn-sm btn-block" lang="text:submit"></button>&nbsp;
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--部件表单-->
+                <div class="col-lg-12 hidden" id="parts_div">
+                    <!--部件列表-->
+                    <div class="panel panel-default" style="max-height: 155px;overflow: auto;">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading"><span lang="text:device_components"></span><button id="add_part_bt" type="button" class="btn btn-primary btn-xs pull-right"><span lang="title:add_component" title="" class="glyphicon glyphicon-plus"></span></button>
+                        </div>
+                        <!-- Table -->
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th lang="text:name1" style="width:22%;"></th>
+                                <th lang="text:serial_number" style="width:22%;"></th>
+                                <th lang="text:device_part_model" style="width:22%;"></th>
+                                <th lang="text:operate" style="text-align: center ;width:13%;"></th>
+                            </tr>
+                            </thead>
+                            <tbody id="device_parts_tbody">
+                            <tr>
+                                <td colspan="6" align="center" lang="text:no_data"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!--部件列表-->
+            </div>
+        </div>
+    </div>
+</div>
+<!--提交之后的js-->
+<script>
+
+    //验证配置和校验规则
+    validator.render("#part_form", {
+        promptPosition: "inline",
+        scroll: false
+    });
+
+    //验证元器件序列号是否存在
+    function partSerialExist3(field, rules, i, options) {
+        if ($("#flag_part_edit").val() == "") {
+            var serial = $.trim(field[0].value);
+            if (serial != '') {
+                var flag = false;
+                var $tr = $("#device_parts_tbody tr");
+                for (var i = 0; i < $tr.length; i++) {
+                    if ($($tr[i]).prop("id").substring(5) == serial) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag) {
+                    var message = locale.get("serial_number_already_exists");
+                    return message;
+                }
+            }
+        }
+    }
+
+    $("#more_part").click(function() {
+        if ($("#more_div_part").prop("class") == "hidden") {
+            $("#more_div_part").removeClass("hidden").addClass("show");
+            $("#factory_ts").datepicker(pickerOption)
+        } else {
+            $("#more_div_part").removeClass("show").addClass("hidden");
+        }
+        if ($("#more_part").prop("class") == "glyphicon glyphicon-triangle-bottom dropdown-option") {
+            $("#more_part").removeClass("glyphicon glyphicon-triangle-bottom dropdown-option").addClass("glyphicon glyphicon-triangle-top");
+        } else {
+            $("#more_part").removeClass("glyphicon glyphicon-triangle-top").addClass("glyphicon glyphicon-triangle-bottom dropdown-option");
+        }
+    });
+    $("#part_no").bind( "input propertychange", function() {
+        $(".formErrorContent").remove();
+        for( var i = 0; i < devices.length; i++) {
+            if( devices[i]._id == edit_device_id) {
+                if( devices[i].parts && devices[i].parts.length != 0) {
+                    for( var j = 0; j < devices[i].parts.length; j++) {
+                        if( old_part_no != devices[i].parts[j].part_no) {
+                            if( $(this).val() == devices[i].parts[j].part_no ) {
+                                $("#part_no").parent().append('<div class="parentFormdevice_form formError inline" style="opacity: 0.87; position: relative; top: 0px; left: 0px; margin-top: 0px;">' +
+                                    '<div class="formErrorContent">* ' + locale.get({lang:"part_number_already_exists"}) + '</div> </div>');
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+    $("#part_cancel").click(function() {
+        old_serial = "";
+        old_part_no = "";
+        // $("#add_part_bt").click();
+        $("#partinfo_div").removeClass("show").addClass("hidden");
+        $("#device_partId").val("");
+    });
+
+
+    //回填设备列表
+    function fillDeviceList2() {
+        $("#devices_list2").empty();
+        $("#asset_no2").text("");
+        $("#device_name2").text("");
+        $("#device_type_type2").text("");
+        if(devices.length==0) {
+            $("#devices_list2").append('<li class="list-group-item" lang="text:no_data"></li>');
+        }
+        // this devices is the devices's data
+        for ( var i = 0; i < devices.length; i++) {
+            // four types of device
+            var device_data = devices[i];
+            if( devices[i].device_parameter != undefined) {
+                //get the device_parameter
+                var device_parameter = device_data.device_parameter/*.replace( /\s/g, "_")*/;
+                // console.log( "this is device_parameter,", device_parameter);
+                // Ethernet Controller
+                if( device_parameter.type == "Ethernet" || device_parameter.type == "RS485" || device_parameter.type == "RS232") {
+                    // edit_device_id = device_data._id;
+                    $("#devices_list2").append('<li id="part' + device_data.asset_no+ '" class="list-group-item">' +
+                        '<span style="display:inline-block;width:76%;">' + device_data.device_name + '</span>' +
+                        '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkDevice2(\'' + device_data.asset_no + '\')"></span>' +
+                        '</li>');
+                    // Port Controller
+                    // } else if( device_parameter.type == "RS485" || device_parameter.type == "RS232") {
+                    // console.log( " Port Controller's data,", device_data);
+                    // Generic Ethernet
+                } else if( device_parameter.type == "generic Ethernet" || device_parameter.type == "generic serial port") {
+                    //
+                    // console.log( " Generic's  data,", device_data);
+                    // edit_device_id = device_data._id;
+                    $("#devices_list2").append('<li id="part' + device_data.asset_no + '" class="list-group-item">' +
+                        '<span style="display:inline-block;width:76%;">' + device_data.device_name + '</span>' +
+                        '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkDevice2(\'' + device_data.asset_no + '\')" title="编辑"></span>' +
+                        '</li>');
+                    // Generic Serial Port
+                    // } else if( device_parameter.type == "generic serial port") {
+                    // console.log( " Generic Serial Port's data,", device_data);
+                }
+                // other devices
+            } else {
+                // console.log(" other's data,", device_data);
+                // edit_device_id = device_data._id;
+                $("#devices_list2").append('<li id="part' + device_data.asset_no + '" class="list-group-item">' +
+                    '<span style="display:inline-block;width:76%;">' + device_data.device_name + '</span>' +
+                    '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkDevice2(\'' + device_data.asset_no + '\')" title="编辑"></span>' +
+                    '</li>');
+            }
+            if (i == 0) { //显示第一条设备信息
+                $("#part" + devices[0].asset_no + " span:eq(1)").click();
+                edit_device_id = devices[0]._id;
+                old_asset_no = devices[0].asset_no;
+                $("#part" + devices[0].asset_no).addClass("list-group-item-success");
+            }
+        }
+        locale.render({
+            element: "#init_body"
+        });
+
+    }
+
+    // 添加部件按钮
+    $("#add_part_bt").click(function() {
+        $("#device_partId").val("");
+        old_serial = "";
+        $(".formErrorContent").remove();
+        $("#connParam_div").empty().removeClass("show").addClass("hidden");
+        // $("#part_serial").prop("readonly", "");
+        // $("#type").prop("disabled", "");
+        $("#part_form_reset").click();
+        $("#partinfo_div").removeClass("hidden").addClass("show");
+        if ($("#more_div_part").prop("class") == "show") {
+            $("#more_div_part").removeClass("show").addClass("hidden");
+        }
+        if ($("#more_part").prop("class") == "glyphicon glyphicon-triangle-top") {
+            $("#more_part").removeClass("glyphicon glyphicon-triangle-top").addClass("glyphicon glyphicon-triangle-bottom dropdown-option");
+        }
+        locale.render({
+            element: "#init_body"
+        });
+    });
+
+
+    //查看设备信息
+    function checkDevice2( asset_no) {
+        // find current device
+        for( var i = 0; i < devices.length; i++) {
+            if( asset_no == devices[i].asset_no) {
+                var current_device = devices[i];
+                edit_device_id = devices[i]._id;
+                old_asset_no = devices[i].asset_no;
+                break;
+            }
+        }
+        var asset_no = current_device.asset_no;
+        var device_name = current_device.device_name;
+        $("#asset_no2").text("");
+        $("#device_name2").text("");
+        $("#device_type_type2").text("");
+        $("#asset_no2").text( asset_no);
+        $("#device_name2").text( device_name);
+        if( current_device.device_type == "" || current_device.device_type == undefined) {
+            $("#device_type_type2").text("");
+        } else {
+            $("#device_type_type2").text( current_device.device_type);
+        }
+        $("#devices_list2").find("li").removeClass("list-group-item-success");
+        $("#part" + asset_no).addClass("list-group-item-success");
+        $("#deviceinfo_div2").removeClass("hidden").addClass("show");
+        $("#partinfo_div").addClass("hidden");
+        $("#parts_div").removeClass("hidden").addClass("show");
+        $("#device_serial").val(asset_no);
+        $("#flag_edit").val("edit");
+        //回填设备信息 回填设备列表
+        fillDevicePrat( asset_no);
+    }
+
+    var old_part_no = "";
+    //回填设备信息 回填设备列表
+    function fillDevicePrat( asset_no) {
+        var data;
+        var asset_no = asset_no;
+        for (var i = 0; i < devices.length; i++) {
+            if (devices[i].asset_no == asset_no) {
+                data = devices[i];
+                break;
+            }
+        }
+        if ( typeof(data) != "undefined") {
+            if (typeof(data.parts) != "undefined") {
+                if (data.parts.length == 0) {
+                    $("#device_parts_tbody").empty().append('<tr><td colspan="6"  align="center" lang="text:no_data"></td></tr>');
+                } else {
+                    var type = "";
+                    $("#device_parts_tbody").empty();
+                    for (var i = 0; i < data.parts.length; i++) {
+                        if (data.parts[i].type == 1) {
+                            type = locale.get("ip_device");
+                        } else if (data.parts[i].type == 2) {
+                            type = locale.get("port_device");
+                        } else if (data.parts[i].type == 3) {
+                            type = locale.get("parts");
+                        }
+                        old_part_no = data.parts[i].part_no;
+                        $("#device_parts_tbody").append('<tr id="part_' + data.parts[i].serial + '">' +
+                            '<td style="width:22%;word-break: break-all;">' + data.parts[i].part_name + '</td>' +
+                            '<td style="width:22%;word-break: break-all;">' + data.parts[i].serial + '</td>' +
+                            '<td style="width:22%;word-break: break-all;">' + (typeof(data.parts[i].model) == "undefined" ? "" : data.parts[i].model) + '</td>' +
+                            // '<td style="width:21%;word-break: break-all;">' + type + '</td>' +
+                            // '<td style="width:15%;word-break: break-all;"></td>' +
+                            // '<td style="width:15%;word-break: break-all;"></td>' +
+                            '<td style="text-align:center;width:13%;">' +
+                            '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkPart(\'' + data.parts[i].serial + '\',\'' + data.parts[i]._id + '\')" style="cursor:pointer" title="编辑"></span>&nbsp&nbsp' +
+                            '<span onclick="delPart(this,\'' + data.parts[i].serial + '\',\'' + data.parts[i]._id + '\')" class="glyphicon glyphicon-remove link-black" style="cursor:pointer"  lang="title:delete" title="删除"></span>' +
+                            '</td>' +
+                            '</tr>');
+
+                    }
+                }
+            } else {
+                $("#device_parts_tbody").empty().append('<tr><td colspan="6"  align="center" lang="text:no_data"></td></tr>');
+            }
+        }
+        locale.render({
+            element: "body"
+        });
+    }
+
+    //提交部件信息
+    $("#submit_part").click(function() {
+        if ($('#part_form').validationEngine('validate')) {
+            var device_serial = $("#device_serial").val();
+            if (device_serial == "") {
+                errorTipDis("please_add_device");
+                $("#part_form_reset").click();
+            } else {
+                //采集数据
+                var model = $("#part_model").val(); //型号
+                var type = 3; // 类型
+                var serial = $("#part_serial").val(); //序列号
+                var part_name = $("#part_name").val(); //序列号
+                var vendor_id; //供应商Id 暂时不传值
+                var vendor_name = $("#part_vendor_name").val(); //供应商
+                var price = $("#price").val(); //单价
+                var factory_ts = $("#factory_ts").val(); // 出厂时间
+                var part_no = $("#part_no").val();
+                if (factory_ts != "") {
+                    factory_ts = dateConvertUnixtime(factory_ts); // 出厂时间
+                }
+                //校验串口
+                if (type == 2) {
+                    var flag = portParam();
+                    if (!flag) {
+                        return;
+                    }
+                }
+                var connectionParam;
+                if (type != 3) {
+                    connectionParam = $("#connParam").val();
+                }
+                var typeParam = "";
+                if (type == 1) {
+                    typeParam = locale.get("ip_device");
+                } else if (type == 2) {
+                    typeParam = locale.get("port_device");
+                } else if (type == 3) {
+                    typeParam = locale.get("parts");
+                }
+
+                var part = {
+                    "model": model,
+                    "type": type,
+                    "serial": serial,
+                    "part_name": part_name,
+                    "vendor_name": vendor_name,
+                    "price": price,
+                    "purchase_date": factory_ts,
+                    "connectionParam": connectionParam,
+                    "part_no": part_no
+                };
+                //在元器件列表添加一条数据
+                if ($("#flag_part_edit").val() && $("#device_partId").val()) { //编辑
+                    var device_serial = $("#device_serial").val();
+                    var device_partId=$("#device_partId").val();
+                    Array.prototype.remove = function(dx) {
+                        if (isNaN(dx) || dx > this.length) {
+                            return false;
+                        }
+                        for (var i = 0, n = 0; i < this.length; i++) {
+                            if (this[i] != this[dx]) {
+                                this[n++] = this[i]
+                            }
+                        }
+                        this.length -= 1
+                    };
+                    for (var i = 0; i < devices.length; i++) {
+                        if (devices[i]._id/*serial*/ == edit_device_id/*device_serial*/) {
+                            for (var j = 0; j < devices[i].parts.length; j++) {
+                                if (devices[i].parts[j]._id == device_partId) {
+
+                                    //该处还有问题
+                                    devices[i].parts.remove(j);
+                                    devices[i].parts.push(part);
+
+                                    if( devices[i].parts.length > 0) {
+                                        dialog.render({
+                                            lang: "submit_success"
+                                        });
+                                    } else {
+                                        dialog.render({
+                                            lang: "submit_failed"
+                                        });
+                                    }
+
+
+
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+
+                    $("#part_" + serial).empty().prop("id", "part_" + serial);
+                    $("#part_" + serial).append('<td style="width:22%;word-break: break-all;">' + part_name + '</td>' +
+                        '<td style="width:22%;word-break: break-all;">' + serial + '</td>' +
+                        '<td style="width:22%;word-break: break-all;">' + model + '</td>' +
+                        // '<td style="width:21%;word-break: break-all;">' + 3 + '</td>' +
+                        // '<td style="width:15%;word-break: break-all;"></td>' +
+                        // '<td style="width:15%;word-break: break-all;"></td>' +
+                        '<td style="text-align:center;width:13%;">' +
+                        '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkPart(\'' + serial + '\')" style="cursor:pointer" title="编辑"></span>&nbsp&nbsp' +
+                        '<sapn onclick="delPart(this,\'' + serial + '\')" class="glyphicon glyphicon-remove link-black"  lang="title:delete" style="cursor:pointer" title="删除"></sapn>' +
+                        '</td>');
+                    // $("#part_serial").prop("readonly", "");
+                } else { //添加
+                    //往设备信息插入元器件的信息
+                    for (var i = 0; i < devices.length; i++) {
+                        if (devices[i]._id/*serial*/ == edit_device_id/*device_serial*/) {
+                            if (typeof(devices[i].parts) == "undefined") {
+                                devices[i].parts = [];
+                                devices[i].parts.push(part);
+                            } else {
+                                devices[i].parts.push(part);
+                            }
+                            if( devices[i].parts.length > 0 ) {
+                                dialog.render({
+                                    lang: "submit_success"
+                                });
+                            } else {
+                                dialog.render({
+                                    lang: "submit_failed"
+                                });
+                            }
+                            break;
+                        } else if( devices[i].asset_no == $("#asset_no").val()) {
+                            if (typeof(devices[i].parts) == "undefined") {
+                                devices[i].parts = [];
+                                devices[i].parts.push(part);
+                            } else {
+                                devices[i].parts.push(part);
+                            }
+                            if( devices[i].parts.length > 0 ) {
+                                dialog.render({
+                                    lang: "submit_success"
+                                });
+                            } else {
+                                dialog.render({
+                                    lang: "submit_failed"
+                                });
+                            }
+                            break;
+                        }
+                    }
+                    if ($("#device_parts_tbody").find("tr td:eq(0)").text() == locale.get("no_data")) { //设备列表中没有数据
+                        $("#device_parts_tbody").empty();
+                    }
+                    $("#device_parts_tbody").append('<tr id="part_' + serial + '">' +
+                        '<td style="width:22%;word-break: break-all;">' + part_name + '</td>' +
+                        '<td style="width:22%;word-break: break-all;">' + serial + '</td>' +
+                        '<td style="width:22%;word-break: break-all;">' + model + '</td>' +
+                        // '<td style="width:21%;word-break: break-all;">' + 3 + '</td>' +
+                        // '<td style="width:15%;word-break: break-all;"></td>' +
+                        // '<td style="width:15%;word-break: break-all;"></td>' +
+                        '<td style="text-align:center;width:13%;">' +
+                        '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkPart(\'' + serial + '\')" style="cursor:pointer" title="编辑"></span>&nbsp&nbsp' +
+                        '<sapn onclick="delPart(this,\'' + serial + '\')" class="glyphicon glyphicon-remove link-black" style="cursor:pointer"  lang="title:delete" title="删除"></sapn>' +
+                        '</td>' +
+                        '</tr>');
+                }
+            }
+            $(".formErrorContent").remove();
+            $("#part_form_reset").click();
+            $("#flag_part_edit").val("");
+            // $("#add_part_bt").click();
+            $("#partinfo_div").removeClass("show").addClass("hidden");
+            $("#device_partId").val("");
+            old_serial = "";
+            locale.render({
+                element: "#init_body"
+            });
+        }
+    });
+
+    //查看部件信息
+    function checkPart(serial , dev_part_id) {
+        $("#device_partId").val(dev_part_id);
+        $(".formErrorContent").remove();
+        $("#partinfo_div").removeClass("hidden").addClass("show");
+        $("#connParam_div").removeClass("show").addClass("hidden");
+        var device_serial = $("#device_serial").val();
+        // $("#type").prop("disabled", "disabled");
+        $("#flag_part_edit").val("edit");
+        if ($("#more_div_part").prop("class") == "show") {
+            $("#more_div_part").removeClass("show").addClass("hidden");
+        }
+        if ($("#more_part").prop("class") == "glyphicon glyphicon-triangle-top") {
+            $("#more_part").removeClass("glyphicon glyphicon-triangle-top").addClass("glyphicon glyphicon-triangle-bottom dropdown-option");
+        }
+        var data;
+        for (var i = 0; i < devices.length; i++) {
+            if (devices[i]._id == edit_device_id) {
+                for (var j = 0; j < devices[i].parts.length; j++) {
+                    if (devices[i].parts[j].serial == serial) {
+                        data = devices[i].parts[j];
+                        break;
+                    }
+                }
+            }
+        }
+        if (typeof(data) != "undefined") {
+            fillPartInfo(data);
+        }
+    }
+
+    //回填部件信息
+    function fillPartInfo(data) {
+        // console.log( "test data of parts,", data);
+        $("#part_model").val(data.model); //型号
+        // $("#part_serial").prop("readonly", "readonly");
+        $("#part_serial").val(data.serial); //序列号
+        old_serial = data.serial;
+        $("#part_name").val(data.part_name); //名称
+        $("#part_vendor_name").val(data.vendor_name); //供应商
+        $("#price").val(data.price); //单价
+        $("#part_no").val( data.part_no);
+        if (typeof(data.factory_ts) == "undefined" || data.factory_ts == "") {
+            $("#factory_ts").val(""); // 出厂时间
+        } else {
+            $("#factory_ts").val(unixtimeConvertDate(data.factory_ts)); // 出厂时间
+        }
+        //类型和参数
+        var connectionParam = data.connectionParam;
+        var type = data.type;
+        $("#type>option").each(function() {
+            var $option = $(this);
+            if ($option.val() == type) {
+                $option.prop("selected", "selected");
+            }
+        });
+        if (type == 1) { //ip设备
+            $("#connParam_div").removeClass("hidden").addClass("show");
+            $("#connParam_div").empty().append('<div class="form-group"><label><span lang="text:ip_address"></span ><span class="text-red">*</span></label>' +
+                '<input value="' + connectionParam + '" type="text" class="form-control input-sm validate[required,custom[ip]]" id="connParam" lang="placeholder:ip_address" placeholder="IP地址"></div>');
+        } else if (type == 2) { //串口参数
+            $("#connParam_div").removeClass("hidden").addClass("show");
+            $("#connParam_div").empty().append('<div class="form-group"> <label><span lang="text:+port_param"></span ><span class="text-red">*</span></label>' +
+                '<input value="' + connectionParam + '" type="text" class="form-control input-sm" id="connParam" onblur="portParam()" onfocus="portFocus()"  placeholder="9600-8-N-1"></div>');
+        } else if (type == 3) { //部件
+            $("#connParam_div").removeClass("show").addClass("hidden");
+        }
+        if (typeof(data.maintain) != "undefined") {
+            for (var i = 0; i < data.maintain.length; i++) {
+                if (data.maintain[i].mtType == 1) {
+                    // $("#inform_person1").val(data.maintain[i].mtName);
+                    $("#inform_person1 option").each(function() {
+                        var $option = $(this);
+                        if ($option.val() == data.maintain[i].mtId) {
+                            $option.prop("selected", "selected");
+                        }
+                    });
+                    $("#replace_cycle1").val(data.maintain[i].cycle);
+                } else if (data.maintain[i].mtType == 2) {
+                    //$("#inform_person2").val(data.maintain[i].mtName);
+                    $("#inform_person2 option").each(function() {
+                        var $option = $(this);
+                        if ($option.val() == data.maintain[i].mtId) {
+                            $option.prop("selected", "selected");
+                        }
+                    });
+                    $("#replace_cycle2").val(data.maintain[i].cycle);
+                } else if (data.maintain[i].mtType == 3) {
+                    //$("#inform_person3").val(data.maintain[i].mtName);
+                    $("#inform_person3 option").each(function() {
+                        var $option = $(this);
+                        if ($option.val() == data.maintain[i].mtId) {
+                            $option.prop("selected", "selected");
+                        }
+                    });
+                    $("#replace_cycle3").val(data.maintain[i].cycle);
+                }
+            }
+        }
+        locale.render({
+            element: "#init_body"
+        });
+    }
+
+    //删除部件
+    function delPart(del, serial, part_id) {
+        dialog.render({
+            lang: "confirm_to_delete_part",
+            buttons: [{
+                lang: "yes",
+                click: function() {
+                    var device_serial = $("#device_serial").val();
+                    // $("#part_serial").prop("readonly", "");
+                    Array.prototype.remove = function(dx) {
+                        if (isNaN(dx) || dx > this.length) {
+                            return false;
+                        }
+                        for (var i = 0, n = 0; i < this.length; i++) {
+                            if (this[i] != this[dx]) {
+                                this[n++] = this[i]
+                            }
+                        }
+                        this.length -= 1
+                    }
+                    var flag = false;
+                    if ($("#device_parts_tbody tr").length == 1) {
+                        flag = true;
+                    }
+                    $(del).parent().parent().remove();
+                    for (var i = 0; i < devices.length; i++) {
+                        if (devices[i].serial == device_serial) {
+                            for (var j = 0; j < devices[i].parts.length; j++) {
+                                if (devices[i].parts[j].serial == serial) {
+                                    devices[i].parts.remove(j);
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    if (flag) {
+                        $("#device_parts_tbody").empty().append('<tr><td colspan="6"  align="center" lang="text:no_data"></td></tr>');
+                    }
+                    locale.render({
+                        element: "#init_body"
+                    });
+                    dialog.close();
+                }
+            }, {
+                lang: "no",
+                click: function() {
+                    dialog.close();
+                }
+            }],
+
+            close: function() {
+                dialog.close();
+            }
+        });
+        locale.render({
+            element: "#init_body"
+        });
+    }
+
+    //提交设备(到数据库）
+    function submitDevice(siteId) {
+        if (devices.length == 0 && $("#addBox").attr("flag") == "add") { //跳过配置
+            deviceMessage = "C";
+            partMessage = "C";
+        } else if (devices.length == 0 && $("#addBox").attr("flag") == "edit" && dFlag == "YES") { //编辑配置
+            deviceMessage = "B";
+            partMessage = "C";
+            for(var i = 0; i < devices.length; i++) {
+                if(devices[i].part) {
+                    partMessage = "B";
+                    break;
+                }
+            }
+        } else if (devices.length == 0 && $("#addBox").attr("flag") == "edit" && dFlag == "NO") { //跳过配置
+            deviceMessage = "C";
+            partMessage = "C";
+        } else {
+            for (var i = 0; i < devices.length; i++) {
+                devices[i].site_id = siteId;
+                if ( devices[i]._id == undefined) {
+                   /* addDevice(false, devices[i], function( data) {
+                        // console.log( "addDevice's data,", data);
+                        if( data.result != "undefined") {
+                            deviceMessage = "B";
+                            partMessage = "B";
+                        }
+                    }, this);*/
+                    // update device
+                    $.ajax({
+                        url: "/api/assets?access_token=" + sessionStorage.getItem("accessToken"),
+                        type: "post",
+                        async: false,
+                        traditional: true,
+                        contentType: "application/json;charset=utf-8",
+                        data: JSON.stringify(devices[i]),
+                        success: function(data) {
+                            if( data.result != "undefined") {
+                                deviceMessage = "B";
+                                partMessage = "B";
+                            }
+                        }
+                    });
+                } else {
+                    updateDevice(false, devices[i]._id, devices[i], function(data) {
+                        // console.log( "updateDevice'data,", data);
+                        if (typeof(data.result) != "undefined") {
+                            deviceMessage = "B";
+                            partMessage = "B";
+                        }
+                    }, this);
+
+                }
+            }
+        }
+        locale.render({
+            element: "#init_body"
+        });
+    }
+
+
+    //3.第四步提示信息函数
+    function message() {
+        var message = "";
+        if ($("#addBox").attr("flag") == "add") { //添加提示
+            if (siteMessage == true) {
+                message = "1." + locale.get("add_site_success");
+                $("#message1_div").empty().append('<img src="images/ok.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            } else {
+                message = "1." + locale.get("add_site_failed");
+                $("#message1_div").empty().append('<img src="images/failed.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            }
+            if (gatewayMessage == "A") {
+                message = "2." + locale.get("add_gateway_failed");
+                $("#message2_div").empty().append('<img src="images/failed.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            } else if (gatewayMessage == "B") {
+                message = "2." + locale.get("add_gateway_success");
+                $("#message2_div").empty().append('<img src="images/ok.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            } else if (gatewayMessage == "C") {
+                message = "2." + locale.get("jump_gateway_config");
+                $("#message2_div").empty().append('<img src="images/skip.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            }
+            if (deviceMessage == "A") {
+                message = "3." + locale.get("add_device_failed");
+                $("#message3_div").empty().append('<img src="images/failed.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            } else if (deviceMessage == "B") {
+                message = "3." + locale.get("add_device_success");
+                $("#message3_div").empty().append('<img src="images/ok.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            } else if (deviceMessage == "C") {
+                message = "3." + locale.get("jump_device_config");
+                $("#message3_div").empty().append('<img src="images/skip.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            }
+            if (partMessage == "A") {
+                message = "4." + locale.get("add_part_failed");
+                $("#message4_div").empty().append('<img src="images/failed.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            } else if (partMessage == "B") {
+                message = "4." + locale.get("add_part_success");
+                $("#message4_div").empty().append('<img src="images/ok.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            } else if (partMessage == "C") {
+                message = "4." + locale.get("jump_part_config");
+                $("#message4_div").empty().append('<img src="images/skip.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            }
+        } else { //编辑提示
+            if (siteMessage == true) {
+                message = "1." + locale.get("update_site_success");
+                $("#message1_div").empty().append('<img src="images/ok.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            } else {
+                message = "1." + locale.get("update_site_failed");
+                $("#message1_div").empty().append('<img src="images/failed.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            }
+            if (gatewayMessage == "A") {
+                message = "2." + locale.get("update_gateway_failed");
+                $("#message2_div").empty().append('<img src="images/failed.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            } else if (gatewayMessage == "B") {
+                message = "2." + locale.get("update_gateway_success");
+                $("#message2_div").empty().append('<img src="images/ok.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label></span>');
+            } else if (gatewayMessage == "C") {
+                message = "2." + locale.get("jump_gateway_config");
+                $("#message2_div").empty().append('<img src="images/skip.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            }
+            if (deviceMessage == "A") {
+                message = "3." + locale.get("update_device_failed");
+                $("#message3_div").empty().append('<img src="images/failed.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            } else if (deviceMessage == "B") {
+                message = "3." + locale.get("update_device_success");
+                $("#message3_div").empty().append('<img src="images/ok.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            } else if (deviceMessage == "C") {
+                message = "3." + locale.get("jump_device_config");
+                $("#message3_div").empty().append('<img src="images/skip.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            }
+            if (partMessage == "A") {
+                message = "4." + locale.get("update_part_failed");
+                $("#message4_div").empty().append('<img src="images/failed.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            } else if (partMessage == "B") {
+                message = "4." + locale.get("update_part_success");
+                $("#message4_div").empty().append('<img src="images/ok.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            } else if (partMessage == "C") {
+                message = "4." + locale.get("jump_part_config");
+                $("#message4_div").empty().append('<img src="images/skip.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+            }
+        }
+        locale.render({
+            element: "#init_body"
+        });
+    }
+
+    //上一步
+    $("#AddPreStep３").click(function(event) {
+        $("#four_div").removeClass("finished").addClass("todo");
+        $("#four_div").find("label span:eq(1)").removeClass("label");
+        $("#four").empty().append("４");
+        $("#three_div").removeClass("current").addClass("finished");
+        $("#three_div").find("label span:eq(1)").addClass("label");
+        $("#three").empty().append("３");
+        $(".addDeviceContentBox").show();
+        $(".addPartContentBox").hide();
+    });
+
+    //最后提交函数
+    $("#finishAdd").bind( "click", function(event) {
+        /*//1.添加现场--2.添加网关--3.添加设备
+         addSubmit();*/
+        if ($("#addBox").attr("flag") == "edit") {
+            targetInfo = window.targetInfo;
+        } else if ($("#addBox").attr("flag") == "add") {
+            targetInfo = "";
+        }
+        addSubmit(lat, lng, targetInfo); //提交现场
+        submitDate(globalSiteId, globalSiteName); //提交网关
+        submitDevice(globalSiteId); //提交设备
+        message(); //填充提示信息
+        devices = []; //清空设备数据
+        liveSiteList(0, $("#pageNumberSelect").val()); //刷新现场列表
+        //跳转到第五步 完成
+        $(".addPartContentBox").hide();
+        $(".addFinishContentBox").show();
+        $("#four_div").removeClass("finished").addClass("current");
+        $("#four").empty().append('<span class="glyphicon glyphicon-ok"></span> ');
+        $("#five_div").removeClass("todo").addClass("current");
+        $("#five_div").find("label span:eq(1)").addClass("label");
+        $("#five").empty().append('<span class="glyphicon glyphicon-ok"></span> ');
+    });
+
+
+
+
+</script>

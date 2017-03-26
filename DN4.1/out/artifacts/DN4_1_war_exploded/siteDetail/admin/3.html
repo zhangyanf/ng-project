@@ -1,0 +1,378 @@
+<script type="text/javascript" >
+    require(['warningService', 'echarts'], function(siteService) {
+        fillWarnTbl();
+        fillRealDatas();
+    });
+
+
+    var faultOption = {
+        title: {
+            text: '故障分析',
+            x: 'center'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        //  color:['#128226', '#419406','#1496e2','#f2ae0a'],
+                legend: {
+                    orient: 'vertical',
+                    x: 'left',
+                    y: 'bottom',
+                    data: ['主皮带线', '贴I/O贴纸', '贴主机板缓冲垫', '贴磁架缓冲垫']
+                },
+        toolbox: {
+            show: true,
+            feature: {
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        calculable: true,
+        series: [
+            {
+                name: '故障',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '40%'],
+                data: [
+                    {value: 25, name: '主皮带线'},
+                    {value: 8.3, name: '贴I/O贴纸'},
+                    {value: 0, name: '贴主机板缓冲垫'},
+                    {value: 66.7, name: '贴磁架缓冲垫'}
+                ]
+            }
+        ]
+    };
+    var runOption = {
+        title: {
+            text: '运行时间',
+            x: 'center'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        color: ['#1abf06', '#f10009', '#1a3768', '#909090'],
+        legend: {
+            orient: 'vertical',
+            x: 'left',
+            y: 'bottom',
+            data: ['正常运行', '故障停机', '正常停机', '离线']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        calculable: true,
+        series: [
+            {
+                name: '运行时间',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '50%'],
+                data: [
+                    {value: 79, name: '正常运行'},
+                    {value: 10, name: '故障停机'},
+                    {value: 5, name: '正常停机'},
+                    {value: 6, name: '离线'}
+                ]
+            }
+        ]
+    };
+    var chartIds = [];
+
+    drawChart("failure-analysis", faultOption);
+    drawChart("run-time", runOption);
+
+    //查询报警统计
+    function fillWarnTbl() {
+        var levels = "1,2,3,4,5";
+        var states = "1,2,3";
+        loadAllAlarm(0, 1468547939722, levels, states, 0, function (data) {
+            if (data.result == undefined || data.result.length == 0) {
+                var $tr = '<tr><td colspan="6"  align="center">无数据</td></tr>';
+                $("#warning").append($tr);
+                $("#warning").empty().append($tr);
+            } else {
+                var len = data.result.length;
+                var clogs = data.result;
+
+                for (var i = 0; i < len; i++) {
+                    var levels = null;
+                    if (clogs[i].level == 1) {
+                        levels = "严重警告";
+                    } else if (clogs[i].level == 2) {
+                        levels = "重要警告";
+                    } else if (clogs[i].level == 3) {
+                        levels = "次要警告";
+                    } else if (clogs[i].level == 4) {
+                        levels = "警告";
+                    } else if (clogs[i].level == 5) {
+                        levels = "提醒";
+                    }
+                    var states = null;
+                    if (clogs[i].state == 1) {
+                        states = "未确认"
+                    } else if (clogs[i].state == 2) {
+                        states = "已确认"
+                    } else if (clogs[i].state == 3) {
+                        states = "已清除"
+                    }
+                    var $tr = '<tr id=' + clogs[i]._id + ' onclick="doclick(this);">'
+                            + '<td>' + levels + '</td>'
+                            + '<td>' + clogs[i].createTime + '</td>'
+                            + '<td>' + clogs[i].desc + '</td>'
+                            + '<td>' + clogs[i].sourceName + '</td>'
+                            + '<td>' + states + '</td>';
+
+                    $tr += '</tr>';
+                    $("#warning").append($tr);
+                }
+            }
+        }, this);
+    }
+    //查询实时数据
+    function fillRealDatas() {
+        var levels = "1,2,3,4,5";
+        var states = "1,2,3";
+        loadAllAlarm(0, 1468547939722, levels, states, 0, function (data) {
+            if (data.result == undefined || data.result.length == 0) {
+                var $tr = '<tr><td colspan="6"  align="center">无数据</td></tr>';
+                $("#rt_data").append($tr);
+                $("#rt_data").empty().append($tr);
+            } else {
+                var len = data.result.length;
+                var clogs = data.result;
+
+                for (var i = 0; i < len; i++) {
+                    var levels = null;
+                    if (clogs[i].level == 1) {
+                        levels = "严重警告";
+                    } else if (clogs[i].level == 2) {
+                        levels = "重要警告";
+                    } else if (clogs[i].level == 3) {
+                        levels = "次要警告";
+                    } else if (clogs[i].level == 4) {
+                        levels = "警告";
+                    } else if (clogs[i].level == 5) {
+                        levels = "提醒";
+                    }
+                    var states = null;
+                    if (clogs[i].state == 1) {
+                        states = "未确认"
+                    } else if (clogs[i].state == 2) {
+                        states = "已确认"
+                    } else if (clogs[i].state == 3) {
+                        states = "已清除"
+                    }
+                    var $tr = '<tr id=' + clogs[i]._id + ' onclick="doclick(this);">'
+                            + '<td>' + levels + '</td>'
+                            + '<td>' + clogs[i].createTime + '</td>'
+                            + '<td>' + clogs[i].sourceName + '</td>';
+
+                    $tr += '</tr>';
+                    $("#rt_data").append($tr);
+                }
+            }
+        }, this);
+
+    }
+    //绘制图表
+    function drawChart(id, option) {
+        require(
+                [
+                    'echarts',
+                    //'echarts/theme/infographic',
+                    'echarts/chart/line', // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
+                    'echarts/chart/bar',
+                    'echarts/chart/pie'
+                ],
+                function (ec, theme) {
+                    //--- 折柱 ---  
+                    var myChart = ec.init(document.getElementById(id), theme);
+                    //图表显示提示信息 
+                    myChart.showLoading({
+                        text: "图表数据正在努力加载...",
+                        x: "center",
+                        y: "center",
+                        textStyle: {
+                            color: "white",
+                            fontSize: 14
+                        },
+                        effect: "spin"
+                    });
+
+                    myChart.setOption(option);
+                    myChart.hideLoading();
+                    chartIds[id] = myChart;
+                }
+        );
+    }
+
+</script>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        抓棉机
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="icon-dashboard"></i> Home</a></li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content" id="tcontent">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                     <h3 class="box-title"></h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="col-md-6 col-xs-6">
+                        <img src="/images/plucker.png" alt="" style="width:100%">
+                    </div>
+                    <div class="col-md-6 col-xs-6">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table no-margin">
+                                    <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>数据点</th>
+                                            <th>状态</th>  
+                                        </tr>
+                                    </thead>
+                                    <tbody id="data_status"> 
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-12"> 
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <span class="label bg-green"> </span>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <span class="label bg-yellow"> </span>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <span class="label bg-red"> </span>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <span class="label bg-gray"> </span>
+                            </div>
+             
+                          </div>
+                    </div>
+
+                </div> 
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">报警统计</h3>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table no-margin">
+                            <thead>
+                                <tr>
+                                    <th>级别</th>
+                                    <th>告警时间</th>
+                                    <th>描述</th> 
+                                    <th>告警来源</th> 
+                                </tr>
+                            </thead>
+                            <tbody id="warning"> 
+
+                            </tbody>
+                        </table>
+                    </div> 
+                </div> 
+            </div>
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">实时数据</h3>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table no-margin">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>数据点</th>
+                                    <th>数值</th> 
+                                    <th>单位</th> 
+                                </tr>
+                            </thead>
+                            <tbody id="rt_data"> 
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.box-body -->
+                <!--            <div class="box-footer clearfix">
+                              <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
+                              <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
+                            </div> -->
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-7 col-xs-3 plucker4">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">故障分析</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div id="failure-analysis" class="col-md-12 col-xs-12" style="height:400px;width:98%;padding:1px" align="left">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-7 col-xs-3 plucker5">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">运行时间</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div id="run-time" class="col-md-12 col-xs-12" style="height:300px;width:98%;padding:1px" align="left">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</section>

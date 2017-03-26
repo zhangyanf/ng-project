@@ -1,0 +1,304 @@
+<!--导入机构信息service.js-->
+<script type="application/javascript">
+    
+   require(['organizationInfoService'], function (organizationInfoService) {
+       //初始化页面
+       get_token();
+       get_organization_info();
+   });
+
+   // 初始化加载国际化
+   locale.render({element: "#init_body"});
+
+    //获取机构信息
+    function get_organization_info() {
+        var params = {"verbose":100};
+        getOrganizationInfo(params,function(data){
+            var json = data.result;
+            if(json){
+                $("#organ_name").val(json.name);
+                $("#organ_address").val(json.address);
+                $("#organ_website").val(json.website);
+                $("#organ_telephone").val(json.phone);
+                $("#organ_fax").val(json.fax);
+                $("#organ_email").val(json.email);
+                $("#organ_creator").text(json.creator);
+                $("#organ_createtime").text(UinxConversionDateFormat(json.createTime));
+                $("#organ_updatetime").text(UinxConversionDateFormat(json.updateTime));
+            }
+        },this);
+    }
+
+    // 获取该机构下的令牌
+    function get_token() {
+        var params = {"verbose":100};
+        getToken(params,function(data){
+            if(data.result) {
+                for(var i = 0; i<data.result.length; i++) {
+                    if(i==0) {
+                        if(data.result[i]!=null) {
+                            $("#token_code_1").val(data.result[i].keyCode);
+                            $("#apply_token_button_1").css("display","none");
+                            $("#reset_token_button_1").css("display","inline-block");
+                        }else {
+                            $("#apply_token_button_1").css("display","inline-block");
+                            $("#reset_token_button_1").css("display","none");
+                        }
+                    }else if(i==1) {
+                        if(data.result[i]!=null) {
+                            $("#token_code_2").val(data.result[i].keyCode);
+                            $("#apply_token_button_2").css("display","none");
+                            $("#reset_token_button_2").css("display","inline-block");
+                        }else {
+                            $("#apply_token_button_2").css("display","inline-block");
+                            $("#reset_token_button_2").css("display","none");
+                        }
+                    }else if(i==2) {
+                        if(data.result[i]!=null) {
+                            $("#token_code_3").val(data.result[i].keyCode);
+                            $("#apply_token_button_3").css("display","none");
+                            $("#reset_token_button_3").css("display","inline-block");
+                        }else {
+                            $("#apply_token_button_3").css("display","inline-block");
+                            $("#reset_token_button_3").css("display","none");
+                        }
+                    }else if(i==3) {
+                        if(data.result[i]!=null) {
+                            $("#token_code_4").val(data.result[i].keyCode);
+                            $("#apply_token_button_4").css("display","none");
+                            $("#reset_token_button_4").css("display","inline-block");
+                        }else {
+                            $("#apply_token_button_4").css("display","inline-block");
+                            $("#reset_token_button_4").css("display","none");
+                        }
+                    }else if(i==4) {
+                        if(data.result[i]!=null) {
+                            $("#token_code_5").val(data.result[i].keyCode);
+                            $("#apply_token_button_5").css("display","none");
+                            $("#reset_token_button_5").css("display","inline-block");
+                        }else {
+                            $("#apply_token_button_5").css("display","inline-block");
+                            $("#reset_token_button_5").css("display","none");
+                        }
+                    }
+                }
+            }
+        },this);
+    }
+
+    //申请令牌
+    function apply_token(tag,num) {
+        var params = {"verbose":100,"sn":num};
+        applyToken(params,function(data){
+            if(data.result.keyCode) {
+                var $span = $(tag);
+                $span.parent().find("input:eq(0)").val(data.result.keyCode);
+                $span.find("a:eq(0)").css("display","none");
+                $span.parent().find("span:eq(0) a:eq(0)").css("display","inline-block");
+            }
+        },this);
+    }
+
+    // 重置令牌
+    function reset_token(tag,num) {
+        var keyCode = $(tag).parent().find("input:eq(0)").val();
+        console.log("keyCode:"+keyCode);
+        var params = {"keyCode":keyCode,"sn":num};
+        resetToken(params,function(data){
+            if(data.result.keyCode) {
+                $(tag).parent().find("input:eq(0)").val(data.result.keyCode);
+            }
+        },this);
+    }
+
+    // 修改机构信息
+    function edit_organization_info() {
+        var address = $("#organ_address").val();
+        var email = $("#organ_email").val();
+        var fax = $("#organ_fax").val();
+        var name = $("#organ_name").val();
+        var phone = $("#organ_telephone").val();
+        var website = $("#organ_website").val();
+        var params = {"verbose":100};
+        var requestData ={"address":address,"email":email,"fax":fax,"name":name,"phone":phone,"website":website};
+        editOrganizationInfo(params,requestData,function(data){
+            var json = data.result;
+            if(json){
+                $("#organ_name").val(json.name);
+                $("#organ_address").val(json.address);
+                $("#organ_website").val(json.website);
+                $("#organ_telephone").val(json.phone);
+                $("#organ_fax").val(json.fax);
+                $("#organ_email").val(json.email);
+                $("#organ_creator").text(json.creator);
+                $("#organ_createtime").text(UinxConversionDateFormat(json.createTime));
+                $("#organ_updatetime").text(UinxConversionDateFormat(json.updateTime));
+                organ_info_cancel();
+            }
+        },this);
+    }
+
+    //编辑按钮
+    function organ_info_edit() {
+        $("#organ_info_form input").each(function(){
+            $(this).css("border-color","");
+            $(this).attr("disabled",false);
+        });
+        $("#organ_info_edit").css("display","none");
+        $("#organ_info_submit").css("display","inline-block");
+        $("#organ_info_cancel").css("display","inline-block");
+    }
+
+    //取消按钮
+    function organ_info_cancel() {
+        $("#organ_info_form input").each(function(){
+            $(this).css("border-color","transparent");
+            $(this).attr("disabled",true);
+        });
+        $("#organ_info_edit").css("display","inline-block");
+        $("#organ_info_submit").css("display","none");
+        $("#organ_info_cancel").css("display","none");
+    }
+
+    // 把时间“2012-12-12 14:20:21”格式转化成时间戳
+    function dateFormateConversiionUnix(format) {
+        return Date.parse(new Date(format))/1000;
+    }
+
+    // 把时间戳转化成“2012-12-12 12:12:12” 格式的日期
+    function UinxConversionDateFormat(UinxTime) {
+        var date = new Date(UinxTime*1000);
+        var year = date.getFullYear();//获取完整的年份(4位,1970)
+        var month = (date.getMonth()+1)>=10?(date.getMonth()+1):"0"+(date.getMonth()+1);//获取月份(0-11,0代表1月,用的时候记得加上1)
+        var day = date.getDate()>=10?date.getDate():"0"+date.getDate();//获取日(1-31)
+        var hours = date.getHours()>=10?date.getHours():"0"+date.getHours();//获取小时数(0-23)
+        var minutes = date.getMinutes()>=10?date.getMinutes():"0"+date.getMinutes();//获取分钟数(0-59)
+        var seconds = date.getSeconds()>=10?date.getSeconds():"0"+date.getSeconds();//获取秒数(0-59)
+        return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+    }
+
+    
+</script>
+<div style="background-color: rgb(255, 255, 255); width: 350px; border: 2px solid rgb(221, 221, 221); border-radius: 1em; padding-left: 20px; padding-bottom: 20px; position: absolute; top: 150px; left: 300px;" id="org_info_wrapper" class="org_info_wrapper  org_info_div">
+    <div style="text-align: right;" class="organ_button_wrapper_top  org_info_div">
+        <span class="organ_button_edit"><a style="display: inline-block;" title="编辑" onclick="organ_info_edit();" class="cloud-button cloud-button-icon-only" id="organ_info_edit" lang="title:edit"><i class="glyphicon glyphicon-pencil"></i></a></span>
+    </div>
+    <form id="organ_info_form">
+        <div style="margin: 8px 0px;" class="info_row  org_info_div">
+            <label style="display: inline-block; width: 110px;" for="organ_name" class="organ_info_label" lang="text:organization_name+：">机构名称：</label>
+            <input disabled="false" style="border-color: transparent;text-align: left; margin-left: 30px; width: 150px;" class="info_form_text" id="organ_name"  type="text">
+        </div>
+        <div style="margin: 8px 0px;" class="info_row  org_info_div">
+            <label style="display: inline-block; width: 110px;" for="organ_address" class="organ_info_label" lang="text:organization_address+：">机构地址：</label>
+            <input disabled="disabled" style="border-color: transparent;text-align: left; margin-left: 30px; width: 150px;" id="organ_address" class="info_form_text" type="text">
+        </div>
+        <div style="margin: 8px 0px;" class="info_row  org_info_div">
+            <label style="display: inline-block; width: 110px;" for="organ_website" class="organ_info_label" lang="text:website+：">网址：</label>
+            <input disabled="disabled" style="border-color: transparent;text-align: left; margin-left: 30px; width: 150px;" id="organ_website" class="info_form_text" type="text">
+        </div>
+        <div style="margin: 8px 0px;" class="info_row  org_info_div">
+            <label style="display: inline-block; width: 110px;" for="organ_telephone" class="organ_info_label" lang="text:telephone+：">电话：</label>
+            <input disabled="disabled" style="border-color: transparent;text-align: left; margin-left: 30px; width: 150px;" id="organ_telephone" class="info_form_text" type="text">
+        </div>
+        <div style="margin: 8px 0px;" class="info_row  org_info_div">
+            <label style="display: inline-block; width: 110px;" for="organ_fax" class="organ_info_label" lang="text:fax+：">传真：</label>
+            <input disabled="disabled" style="border-color: transparent;text-align: left; margin-left: 30px; width: 150px;" id="organ_fax" class="info_form_text" type="text">
+        </div>
+        <div style="margin: 8px 0px;" class="info_row  org_info_div">
+            <label style="display: inline-block; width: 110px;" for="organ_email" class="organ_info_label" lang="text:email+：">邮箱：</label>
+            <input disabled="disabled" style="border-color: transparent;text-align: left; margin-left: 30px; width: 150px;" id="organ_email" class="info_form_text" type="text">
+        </div>
+        <div style="margin: 8px 0px;" class="info_row  org_info_div">
+            <label style="display: inline-block; width: 110px;" class="organ_info_label" lang="text:creator+：">创建人：</label>
+            <span style="text-align: left; margin-left: 30px; width: 150px;" id="organ_creator"></span>
+        </div>
+        <div style="margin: 8px 0px;" class="info_row  org_info_div">
+            <label style="display: inline-block; width: 110px;" class="organ_info_label" lang="text:create_time+：">创建时间：</label>
+            <span style="text-align: left; margin-left: 30px; width: 150px;" id="organ_createtime"></span>
+        </div>
+        <div style="margin: 8px 0px;" class="info_row  org_info_div">
+            <label style="display: inline-block; width: 110px;" class="organ_info_label" lang="text:update_time+：">更新时间：</label>
+            <span style="text-align: left; margin-left: 30px; width: 150px;" id="organ_updatetime"></span>
+        </div>
+        <div style="text-align: center; margin-top: 10px;" class="organ_button_wrapper_bottom  org_info_div">
+            <span id="organ_button_submit"><a style="display: none;" title="提交" class="cloud-button cloud-button-body" onclick="edit_organization_info();" id="organ_info_submit" lang="title:submit"><i class="glyphicon glyphicon-ok"></i><span class="cloud-button-item cloud-button-text" lang="text:submit">提交</span></a></span>
+            <span id="organ_button_cancel"><a style="display: none;" title="取消" class="cloud-button cloud-button-body" onclick="organ_info_cancel();" id="organ_info_cancel" lang="title:cancel"><i class="glyphicon glyphicon-remove"></i><span class="cloud-button-item cloud-button-text" lang="text:cancel">取消</span></a></span>
+        </div>
+    </form>
+</div>
+<div style="background-color: rgb(255, 255, 255); width: 526px; border: 2px solid rgb(221, 221, 221); border-radius: 1em; padding-left: 20px; position: absolute; top: 150px; left: 770px;" id="token-info-wrapper" class="token-info-wrapper">
+    <div style="margin: 8px 0px;" class="info_row  token_info_div">
+        <label style="display: inline-block; width: 100px;" for="token_code_1" class="token_info_label">API KEY 1：</label>
+        <input style="text-align: left; margin-left: 30px; width: 270px;" id="token_code_1" class="token_code_content" readonly="readonly" type="text">
+        <span onclick="reset_token(this,1);" id="reset_token_1"><a style="display: none;"  title="重置令牌" class="cloud-button cloud-button-body cloud-button-text-only" id="reset_token_button_1" lang="title:reset_token"><span  class="cloud-button-item cloud-button-text" lang="text:reset_token">重置令牌</span></a></span>
+        <span onclick="apply_token(this,1);" id="apply_token_1"><a style="display: none;"  title="申请令牌" class="cloud-button cloud-button-body cloud-button-text-only" id="apply_token_button_1" lang="title:apply_token"><span class="cloud-button-item cloud-button-text" lang="text:apply_token">申请令牌</span></a></span>
+    </div>
+    <div style="margin: 8px 0px;" class="info_row  token_info_div">
+        <label style="display: inline-block; width: 100px;" for="token_code_2" class="token_info_label">API KEY 2：</label>
+        <input style="text-align: left; margin-left: 30px; width: 270px;" id="token_code_2" class="token_code_content" readonly="readonly" type="text">
+        <span onclick="reset_token(this,2);" id="reset_token_2"><a style="display: inline-block;" title="重置令牌" class="cloud-button cloud-button-body cloud-button-text-only" id="reset_token_button_2" lang="title:reset_token"><span class="cloud-button-item cloud-button-text" lang="text:reset_token">重置令牌</span></a></span>
+        <span onclick="apply_token(this,2);" id="apply_token_2"><a style="display: none;" title="申请令牌" class="cloud-button cloud-button-body cloud-button-text-only" id="apply_token_button_2" lang="title:apply_token"><span class="cloud-button-item cloud-button-text" lang="text:apply_token">申请令牌</span></a></span>
+    </div>
+    <div style="margin: 8px 0px;" class="info_row  token_info_div">
+        <label style="display: inline-block; width: 100px;" for="token_code_3" class="token_info_label">API KEY 3：</label>
+        <input style="text-align: left; margin-left: 30px; width: 270px;" id="token_code_3" class="token_code_content" readonly="readonly" type="text">
+        <span onclick="reset_token(this,3);" id="reset_token_3"><a style="display: inline-block;" title="重置令牌" class="cloud-button cloud-button-body cloud-button-text-only" id="reset_token_button_3" lang="title:reset_token"><span class="cloud-button-item cloud-button-text" lang="text:reset_token">重置令牌</span></a></span>
+        <span onclick="apply_token(this,3);" id="apply_token_3"><a style="display: none;" title="申请令牌" class="cloud-button cloud-button-body cloud-button-text-only" id="apply_token_button_3" lang="title:apply_token"><span class="cloud-button-item cloud-button-text" lang="text:apply_token">申请令牌</span></a></span>
+    </div>
+    <div style="margin: 8px 0px;" class="info_row  token_info_div">
+        <label style="display: inline-block; width: 100px;" for="token_code_4" class="token_info_label">API KEY 4：</label>
+        <input style="text-align: left; margin-left: 30px; width: 270px;" id="token_code_4" class="token_code_content" readonly="readonly" type="text">
+        <span onclick="reset_token(this,4);" id="reset_token_4"><a style="display: none;" title="重置令牌" class="cloud-button cloud-button-body cloud-button-text-only" id="reset_token_button_4" lang="title:reset_token"><span class="cloud-button-item cloud-button-text" lang="text:reset_token">重置令牌</span></a></span>
+        <span onclick="apply_token(this,4);" id="apply_token_4"><a style="display: inline-block;" title="申请令牌" class="cloud-button cloud-button-body cloud-button-text-only" id="apply_token_button_4" lang="title:apply_token"><span class="cloud-button-item cloud-button-text" lang="text:apply_token">申请令牌</span></a></span>
+    </div>
+    <div style="margin: 8px 0px;" class="info_row  token_info_div">
+        <label style="display: inline-block; width: 100px;" for="token_code_5" class="token_info_label">API KEY 5：</label>
+        <input style="text-align: left; margin-left: 30px; width: 270px;" id="token_code_5" class="token_code_content" readonly="readonly" type="text">
+        <span onclick="reset_token(this,5);" id="reset_token_5"><a style="display: none;" title="重置令牌" class="cloud-button cloud-button-body cloud-button-text-only" id="reset_token_button_5" lang="title:reset_token"><span class="cloud-button-item cloud-button-text" lang="text:reset_token">重置令牌</span></a></span>
+        <span onclick="apply_token(this,5);" id="apply_token_5"><a style="display: inline-block;" title="申请令牌" class="cloud-button cloud-button-body cloud-button-text-only" id="apply_token_button_5" lang="title:apply_token"><span class="cloud-button-item cloud-button-text" lang="text:apply_token">申请令牌</span></a></span>
+    </div>
+    <style type="text/css">
+        .cloud-button-text {
+            height: 20px;
+            line-height: 20px;
+            margin: 0 3px;
+        }
+        .cloud-button-item {
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .cloud-button-body {
+            box-shadow: 1px 1px 2px #B0B1B5;
+            border-top: 1px solid #DDE1E4;
+            border-left: 1px solid #DDE1E4;
+            border-bottom: 1px solid #D7DBDE;
+            border-right: 1px solid #D7DBDE;
+            background: linear-gradient(to bottom, #f2f6f9 0%,#f5f6fa 8%,#e3e4e9 80%,#e1e2e7 92%,#e3e4e8 100%);
+        }
+        .cloud-button {
+            -moz-user-select: none;
+            cursor: pointer;
+            margin-right: 4px;
+            padding: 0 6px;
+            color: #5e5e60;
+            vertical-align: middle;
+            margin-bottom: 4.4px;
+        }
+        .cloud-button-hover .cloud-button-item, .cloud-button-active .cloud-button-item {
+            color: #3eae25;
+        }
+        a:hover, a:hover > input, a:hover > div, a:hover > p, a:hover > li, a:hover > span, a:hover > img, a:hover > button {
+            text-decoration: underline;
+            cursor: pointer;
+            color: #83a82f;
+            color: #3eae25;
+        }
+        .info_form_text {
+            text-overflow: ellipsis;
+            background: transparent;
+            border: 1px solid #ccc;
+        }
+    </style>
+</div>
+

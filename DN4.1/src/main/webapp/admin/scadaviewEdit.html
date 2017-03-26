@@ -1,0 +1,2936 @@
+<!--**************webScada的编辑*********************
+*2016-10-10 Lee李杰
+* 配置 -> 现场 —> 具体某个现场 -> WebScada -> 编辑
+*-->
+<script src="plugins/plupload-2.1.9/js/plupload.full.min.js"></script>
+<style type="text/css">
+    ul,
+    li {
+        list-style: none;
+    }
+
+
+    .info-wrapper {
+        width: auto;
+    }
+
+
+    .info-header {
+        margin-top: 10px;
+        overflow: hidden;
+    }
+
+
+    .info-header #info-names {}
+
+
+    .info-form-row .site-info-form-label {
+        text-align: left;
+        display: inline-block;
+        width: 70px;
+    }
+
+
+    .info-form-row .info-doc-label {
+        display: inline-block;
+        width: 35px;
+    }
+
+
+    .info-form-row {
+        margin: 0;
+    }
+
+
+    .info-site-ip-row {
+        height: 18px;
+        line-height: 18px;
+    }
+
+
+    .info-site-ip-signal {
+        display: inline-block;
+        margin-bottom: -2px;
+    }
+
+
+    .info-map {
+        width: 100%;
+        height: 120px;
+        margin: 10px 0;
+        border: 1px solid silver;
+    }
+
+
+    .info-buttonset-site {
+        text-align: left;
+        margin: 10px 0 0 0;
+    }
+
+
+    .info-buttonset-site .cloud-button-body-main {
+        margin: 1px 2px;
+        padding: 1px 5px;
+    }
+
+
+    .info-site-pic-row {
+        height: 132px;
+        border: 1px solid rgb(172, 166, 168);
+    }
+
+
+    .info-site-pic-row a {
+        margin: 3px 0px 0px 0px;
+        float: right;
+    }
+
+
+    #info-site-pic {
+        float: left;
+        width: 176px;
+        height: 132px;
+    }
+
+
+    #info-devices-table {
+        border: 1px solid rgb(215, 216, 218);
+        overflow: auto
+    }
+
+
+    #site-cus-info-qtip .cloud-bubble-hide {
+        display: none;
+    }
+
+
+
+    .site-info-btns {
+        width: 22px;
+        height: 23px;
+        float: left;
+    }
+
+
+    .info-site-favor {
+        float: left;
+    }
+
+
+    .info-device-info {
+        border: 1px solid rgb(194, 194, 194);
+    }
+
+
+    .info-device-info-title {
+        background-color: rgb(231, 231, 231);
+        height: 25px;
+        line-height: 25px;
+        padding-left: 10px;
+    }
+
+
+    .info-device-info-content-row {
+        margin: 5px 0px 5px 10px;
+    }
+
+
+    .info-device-info-content-row span {
+        word-wrap: break-word;
+        margin-left: 14px;
+    }
+
+
+    .info-device-info-close {
+        float: right
+    }
+
+
+    .info-site-automatic-positioning a {
+        margin-left: 0px
+    }
+
+
+    #info-site-automatic-positioning-site span.cloud-button-text {
+        width: 150px;
+        height: 40px;
+    }
+
+
+    #info-site-automatic-positioning-site span.cloud-button-checkbox-icon {
+        margin-top: -13px;
+    }
+
+
+    .info-remark-row label {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+
+    .remark {
+        border: 1px solid #C9C9C9;
+        width: 138px;
+        height: 40px;
+        display: inline-block;
+        background: transparent;
+        outline: none;
+    }
+
+
+    .siteInfo,
+    .info-site-contact-row,
+    .info-remark-row {
+        width: 47%;
+        display: inline-block;
+        vertical-align: top;
+    }
+
+
+    .info-form {}
+
+
+    #siteInfos {
+        display: inline-block;
+        border: 1px solid #C9C9C9;
+        border-bottom-color: rgba(255, 0, 0, 0);
+    }
+
+
+    .data {
+        border: 1px solid #C9C9C9;
+        /* height:395px; */
+        overflow: hidden;
+    }
+
+
+    .cloud-toolbar-container {
+        overflow: auto;
+    }
+
+
+    .cloud-toolbar-leftcontainer {
+        position: relative;
+        float: left;
+        /* margin : 3px 0; */
+        border-style: none;
+        height: 20px;
+        padding-left: 8px;
+    }
+
+
+    .cloud-toolbar-leftcontainer a,
+    .cloud-toolbar-rightcontainer a {
+        cursor: pointer;
+    }
+
+
+    .cloud-toolbar-rightcontainer {
+        position: relative;
+        margin: 3px 5px 3px 15px;
+        float: right;
+        border-style: none;
+    }
+
+
+    .cloud-toolbar-item {
+        display: inline-block;
+        margin: 0 2px;
+    }
+
+
+    .cloud-toolbar-item-content {
+        float: right;
+    }
+
+
+    #agentcanvas-info {
+        border-left: #d2d6de;
+    }
+
+
+    .toolbar-scada-1-button {
+        margin-left: 5px;
+        float: left;
+        width: 48px;
+        height: 20px;
+        border: 0;
+        cursor: pointer;
+        background-color: #1EAB38;
+        color: #fff;
+    }
+
+
+    .toolbar-scada-2-button {
+        margin-left: 5px;
+        float: left;
+        width: 110px;
+        height: 20px;
+        border: 0;
+        cursor: pointer;
+        background-color: #1EAB38;
+        color: #fff;
+    }
+
+
+    .toolbar-scada-3-button {
+        margin-left: 5px;
+        float: left;
+        width: 145px;
+        height: 20px;
+        border: 0;
+        cursor: pointer;
+        background-color: #1EAB38;
+        color: #fff;
+    }
+
+
+    .toolbar-scada-4-button {
+        margin-left: 30px;
+        float: left;
+        width: 85px;
+        height: 20px;
+        border: 0;
+        cursor: pointer;
+        background-color: #1EAB38;
+        color: #fff;
+    }
+
+
+    #toolbar-all-screen-button {
+        margin-left: 5px;
+        float: left;
+        /* width:80px;*/
+        height: 20px;
+        border: 0;
+        cursor: pointer;
+        /*background-color:#1EAB38;*/
+        color: #fff;
+    }
+
+
+    .agent-scanvas-module-view-drawable {
+        text-shadow: #ffffff 0 1px 0;
+        padding: 5px 0px 0px 5px;
+    }
+
+
+    .agent-scanvas-module-view-drawable ul {
+        position: relative;
+        display: block;
+        height: auto;
+        padding-left: 15px;
+    }
+
+
+    .agent-scanvas-module-view-drawable ul li {
+        float: left;
+        text-align: center;
+        color: #333;
+        height: 70px;
+        width: 70px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+
+    .agent-scanvas-module-view-drawable ul li img {
+        margin-bottom: 0px;
+    }
+
+
+    .agent-scanvas-module-view-drawable ul li.mouse-hover {
+        background-color: rgba(100, 100, 100, .15);
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
+    }
+
+
+    .agent-view-drawable-hover {
+        background-color: rgba(100, 100, 100, .15);
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
+    }
+
+
+    .agent-scanvas-module-view-drawable ul li.x-view-selected {
+        background-color: rgba(100, 100, 100, .15);
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
+    }
+
+
+    .agent-scanvas-module-view-drawable li strong {
+        font-weight: normal;
+        color: #005ba9;
+        display: block;
+        font-size: 6px;
+    }
+
+
+    .agent-scanvas-module-view-drawable li span {
+        color: #656565;
+    }
+    /*padding:10px 7px 0px 7px;*/
+
+
+    .agent-scanvas-sidebar {
+        overflow: hidden;
+        position: absolute;
+        border-top: 1px solid #e5e5e5;
+        background: whiteSmoke;
+        overflow: auto;
+        width: 239px;
+    }
+
+
+    .agent-scanvas-sidebar .agent-title {
+        display: block;
+        font-size: 8pt;
+        border-bottom: 1px solid #e5e5e5;
+        font-weight: normal;
+        padding: 6px 0px 6px 14px;
+        margin: 0px;
+        cursor: pointer;
+        background: #eeeeee;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.4em;
+    }
+
+
+    .agent-scanvas-sidebar .agent-title:hover {
+        background: #e5e5e5;
+    }
+
+
+    .agent-scanvas-sidebar a {
+        color: black;
+    }
+
+
+    .agent-scanvas-side {
+        border-bottom: 1px solid #e5e5e5;
+        padding-top: 2px;
+        padding-bottom: 6px;
+        padding-left: 1px;
+        padding-right: 0px;
+        overflow: hidden;
+    }
+
+
+    .canvas-glasspane {
+        position: absolute;
+        left: 550px;
+        top: 200px;
+        padding: 20px 70px 40px 10px;
+        background: white;
+        border: thin solid rgba(0, 0, 0, 0.2);
+        color: black;
+        cursor: pointer;
+        -webkit-box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 20px;
+        -moz-box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 20px;
+        box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 20px;
+    }
+
+
+    .canvas-edit {
+        position: absolute;
+        left: 250px;
+        top: 119px;
+        padding: 0px 5px 3px 20px;
+        background: white;
+        border: thin solid rgba(0, 0, 0, 0.2);
+        color: #eeeeee;
+        font-family: Droid Sans, Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        cursor: pointer;
+        -webkit-box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 20px;
+        -moz-box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 20px;
+        box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 20px;
+    }
+
+
+    .canvas-move {
+        position: absolute;
+        padding: 0px 5px 3px 20px;
+        color: #eeeeee;
+        font-family: Droid Sans, Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+
+    .canvas-move-dashed {
+        position: absolute;
+        color: #eeeeee;
+        border: 1px dashed #000;
+        cursor: pointer;
+    }
+
+
+    .canvas-thermometer {
+        position: absolute;
+    }
+
+
+    .canvas-delete {}
+
+
+    .canvas-new {}
+
+
+    .edit {
+        overflow-y: hidden;
+    }
+
+
+    .canvas-icon-bold {
+        background-image: url(./webscada/images/bold.jpg);
+        width: 21px;
+        height: 21px;
+    }
+
+
+    #agentcanvas-center-content {
+        border: 1px solid #e5e5e5;
+        width: 804px;
+    }
+
+
+    #agentcanvas-center-canvas {
+        border: 1px solid #e5e5e5;
+    }
+
+
+    #agentcanvas,
+    #agentcanvas-center {
+        height: 100%;
+        overflow: auto;
+    }
+
+
+    #toolbar {
+        position: relative;
+        margin-top: 2px;
+        border-style: none;
+        height: 20px;
+        overflow: auto;
+    }
+
+
+    #toolbar span {
+        display: inline-block;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        cursor: pointer;
+        margin-right: 4px;
+        padding: 0 6px;
+        color: #5e5e60;
+        vertical-align: middle;
+    }
+
+
+    #toolbar-search-box {
+        margin: 3px 0 0 0;
+        float: left;
+        width: auto;
+        height: 20px;
+    }
+
+
+    #toolbar-search-hint {
+        color: #999;
+    }
+
+
+    #toolbar-search-hint,
+    #toolbar-search-input {
+        margin: 0;
+        padding: 0;
+        float: left;
+        width: 220px;
+        height: 20px;
+    }
+
+
+    #toolbar-search-button {
+        margin-left: 5px;
+        float: left;
+        width: 48px;
+        height: 20px;
+        background: url("../images/search.png");
+        border: 0;
+        cursor: pointer;
+    }
+
+
+    .cloud-toolbar-leftcontainer a {
+        position: relative;
+        float: left;
+        padding: 2px;
+        border-style: none;
+        height: 20px;
+    }
+
+
+    .addScadaNameContent,
+    .editScadaName,
+    .refreshTimeBox {
+        z-index: 15002;
+        position: absolute;
+        opacity: 1;
+        display: block;
+        background-color: #fff;
+        display: none;
+    }
+
+
+    .addScadaNameContent,
+    .refreshTimeBox {
+        margin-top: 28px;
+    }
+
+
+    .editScadaName {
+        margin-top: 3px;
+        margin-left: 20px;
+    }
+
+
+    .addScadaNameContent-arrow,
+    .editScadaName-arrow {
+        background-color: transparent !important;
+        border: 0px !important;
+        width: 8px;
+        height: 8px;
+        line-height: 8px;
+        left: -1px;
+        top: -8px;
+    }
+
+
+    .addScadaNameContent-body,
+    .editScadaName-body,
+    .refreshTimeBox-body {
+        /* position: relative; */
+        overflow: hidden;
+        padding: 5px 9px;
+        text-align: left;
+        word-wrap: break-word;
+        font-size: 10.5px;
+        line-height: 12px;
+        direction: ltr;
+        border: 1px solid #e2e2e2;
+    }
+
+
+    .addScadaNameContent-body input,
+    .editScadaName-body input,
+    .refreshTimeBox-body {
+        margin-left: 5px;
+    }
+
+
+    #new-canvas-name,
+    #edit-canvas-name,
+    #refresh {
+        padding: 2px 0;
+        width: 110px;
+        height: 18px;
+        display: inline-block;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        text-indent: 3px;
+        border-top-color: silver;
+        border-color: #c9c9c9;
+    }
+
+
+    #varBox,
+    #editVarBox,
+    .otherBox,
+    .expressionBox {
+        display: none;
+    }
+
+
+    .editVarheader ul li {
+        margin: 0px;
+        padding: 0px;
+    }
+    /* uploader */
+
+
+    .cloud-uploader-container {
+        display: inline-block;
+    }
+
+
+    .cloud-uploader-queue {
+        background-color: white;
+        padding: 4px;
+        margin: 3px 0px;
+    }
+
+
+    .cloud-uploader-queue-item {
+        background-color: #F5F5F5;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        font: 11px Verdana, Geneva, sans-serif;
+        margin-top: 5px;
+        max-width: 350px;
+        padding: 10px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        word-break: break-all;
+        word-wrap: break-word;
+    }
+
+
+    .cloud-uploader-queue-item p {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        word-break: break-all;
+        word-wrap: break-word;
+    }
+
+
+    .cloud-uploader-queue-item span {
+        height: 20px;
+        line-height: 20px;
+        word-break: break-all;
+        word-wrap: break-word;
+    }
+
+
+    .cloud-uploader-queue-item-progress {
+        background-color: #E5E5E5;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+
+    .cloud-uploader-queue-item-cancel a {
+        float: right;
+        height: 16px;
+        width: 16px;
+        margin-right: 0px;
+    }
+    /**
+    * item component stylesheet.
+    */
+
+
+    .cloud-item {
+        cursor: pointer;
+        float: left;
+        margin: 10px 0 0 10px;
+        text-align: left;
+        /*border: 1px solid #dde1e4;*/
+        -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+
+    body .cloud-item-active {
+        background: #fff;
+        -webkit-box-shadow: 0 0 0 #fff;
+        -moz-box-shadow: 0 0 0 #fff;
+        box-shadow: 0 0 0 #fff;
+    }
+
+
+    .cloud-item-body {
+        position: relative;
+        width: 180px;
+        border-left: 1px solid #dde1e4;
+        border-right: 1px solid #dde1e4;
+        border-top: 1px solid #dde1e4;
+    }
+
+
+    .cloud-item-status-inherent .cloud-item-widget {
+        display: none;
+    }
+
+
+    .cloud-item-clicked .cloud-item-statusbar,
+    .cloud-item-active .cloud-item-statusbar {}
+
+
+    .cloud-item-status-default .cloud-item-statusbar {
+        border-left: 1px solid #dde1e4;
+        border-right: 1px solid #dde1e4;
+    }
+
+
+    .cloud-item-status-online .cloud-item-statusbar {
+        background-color: #60803d;
+        border: none;
+    }
+
+
+    .cloud-item-status-offline .cloud-item-statusbar {
+        background-color: #b9b9b9;
+        border: none;
+    }
+
+
+    .cloud-item-content {
+        padding-left: 20px;
+        width: 145px;
+    }
+
+
+    .cloud-item-content div,
+    .cloud-item-content p,
+    .cloud-item-content span {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+
+    .cloud-item-widget-container {
+        height: 24px;
+    }
+
+
+    .cloud-item-widget {
+        cursor: pointer;
+        float: right;
+        height: 16px;
+        margin: 4px 5px 0 4px;
+        text-align: center;
+        width: 16px;
+    }
+
+
+    .cloud-item-select {
+        border-style: none;
+        left: 4px;
+        position: absolute;
+        top: 4px;
+    }
+
+
+    .cloud-item-marker {
+        border: 1px solid #dde1e4;
+    }
+
+
+    .cloud-item-marker .cloud-item-body {
+        width: 149px;
+    }
+
+
+    .cloud-item-marker .cloud-item-content {
+        margin: 5px 0 5px 35px;
+        width: 90px;
+        padding-left: 0;
+        border: none;
+    }
+
+
+    .cloud-item-marker .cloud-item-widget {
+        position: absolute;
+    }
+
+
+    .cloud-item-marker .cloud-item-desc {
+        padding: 2px 0;
+    }
+
+
+    .cloud-item-marker .cloud-item-icon {
+        left: 25px;
+    }
+
+
+    .cloud-item-marker .cloud-item-favor {
+        right: 1px;
+        top: 9px;
+    }
+
+
+    .cloud-item-marker .cloud-item-select {
+        margin: 0;
+        left: 6px;
+        top: 3px;
+    }
+
+
+    .cloud-item-marker .cloud-item-shared {
+        left: 6px;
+        bottom: 4px;
+        margin: 0;
+    }
+
+
+    .cloud-item-notification {
+        -khtml-border-radius: 7px;
+        -moz-border-radius: 7px;
+        -webkit-border-radius: 7px;
+        background-color: #4B7126;
+        border: 1px solid transparent;
+        border-radius: 7px;
+        color: white;
+        font-size: 10px;
+        line-height: 14px;
+    }
+
+
+    .cloud-item-desc {
+        padding: 8px 0;
+    }
+
+
+    .cloud-item-icon-container {
+        float: left;
+        position: relative;
+        width: 36px;
+    }
+
+
+    .cloud-item-statusbar {
+        height: 3px;
+        background-color: transparent;
+    }
+
+
+    .cloud-item-statusbar-online {
+        background-color: rgb(33, 196, 33);
+    }
+
+
+    .cloud-item-statusbar-offline {
+        background-color: rgb(165, 165, 165);
+    }
+
+
+    .cloud-icon-item-marker {
+        background-position: 0 -91px;
+    }
+
+
+    .cloud-icon-item-entity {
+        background-position: 0 -70px;
+    }
+
+
+    .cloud-item-status-default {
+        background: #999;
+        background: -moz-linear-gradient(bottom, #e4e7ec 0%, #dfe2e7 4%, #f2f3f7 91%, #f4f8fb 100%);
+        background: -webkit-gradient(linear, left bottom, left top, color-stop(0%, #e4e7ec), color-stop(4%, #dfe2e7), color-stop(91%, #f2f3f7), color-stop(100%, #f4f8fb));
+        background: -webkit-linear-gradient(bottom, #e4e7ec 0%, #dfe2e7 4%, #f2f3f7 91%, #f4f8fb 100%);
+        background: -o-linear-gradient(bottom, #e4e7ec 0%, #dfe2e7 4%, #f2f3f7 91%, #f4f8fb 100%);
+        background: -ms-linear-gradient(bottom, #e4e7ec 0%, #dfe2e7 4%, #f2f3f7 91%, #f4f8fb 100%);
+        background: linear-gradient(to top, #e4e7ec 0%, #dfe2e7 4%, #f2f3f7 91%, #f4f8fb 100%);
+        filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#e4e7ec', endColorstr='#f4f8fb', GradientType=0);
+    }
+
+
+    .cloud-item-status-inherent {
+        border-bottom: 1px solid #DFDFDF;
+        background: #f4f8fb;
+        background: -moz-linear-gradient(top, #f4f8fb 0%, #edeef2 25%, #d9d9d9 61%, #d0cccd 86%, #cccbc9 91%, #ccc8c9 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f4f8fb), color-stop(25%, #edeef2), color-stop(61%, #d9d9d9), color-stop(86%, #d0cccd), color-stop(91%, #cccbc9), color-stop(100%, #ccc8c9));
+        background: -webkit-linear-gradient(top, #f4f8fb 0%, #edeef2 25%, #d9d9d9 61%, #d0cccd 86%, #cccbc9 91%, #ccc8c9 100%);
+        background: -o-linear-gradient(top, #f4f8fb 0%, #edeef2 25%, #d9d9d9 61%, #d0cccd 86%, #cccbc9 91%, #ccc8c9 100%);
+        background: -ms-linear-gradient(top, #f4f8fb 0%, #edeef2 25%, #d9d9d9 61%, #d0cccd 86%, #cccbc9 91%, #ccc8c9 100%);
+        background: linear-gradient(to bottom, #f4f8fb 0%, #edeef2 25%, #d9d9d9 61%, #d0cccd 86%, #cccbc9 91%, #ccc8c9 100%);
+        filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#f4f8fb', endColorstr='#ccc8c9', GradientType=0);
+    }
+
+
+    #content-scadaview-scada {
+        cursor: default;
+    }
+    /**======================================
+    *变量弹出框
+    */
+
+
+    .expressionShow,
+    {
+        height: 100px;
+    }
+
+
+    #expression {
+        height: 60px;
+        border-radius: 5px;
+    }
+
+
+    #optionTable {
+        padding-top: 10px;
+    }
+
+
+    .content-header-var li {
+        padding: 0px;
+        margin: 0px;
+    }
+
+
+    .content-moulde,
+    li.varEditBoxHeader {
+        display: none;
+    }
+    /* #optionTable input {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    } */
+
+
+    #select_formula_box tr td span,
+    #select_var_box tr td span {
+        width: 100%;
+    }
+    /*#titleGridTitle_table_body tr td input, #imageGridTitle_table_body tr td input, #customImageGrid_table_body tr td input, #customImageGrid_table_body_other tr td input, #customImageGrid_table_body_9 tr td input, #customImageGrid_table_body_8 tr td input {*/
+    /*width: 100%;*/
+    /*border: 1px solid #ccc;*/
+    /*border-radius: 4px;*/
+    /*}*/
+
+
+    #select_formula_box tr td {
+        word-break: break-all;
+    }
+
+
+    .varEditBoxHeader a {
+        margin-top: 6px;
+        background: #eee;
+        border-color: #eee;
+        color: #2896dd;
+        -webkit-transition: all .2s ease-in-out;
+        -o-transition: all .2s ease-in-out;
+        transition: all .2s ease-in-out;
+        padding: 5px 10px;
+        font-size: 12px;
+        margin-top: 6px;
+        font-size: 14px;
+        font-weight: 700;
+        margin-right: 3px;
+        border-color: #cdcdcd;
+        color: #333;
+        padding-top: 7px;
+        padding-bottom: 7px;
+        border-radius: 4px 4px 0 0;
+    }
+
+
+    .varEditBoxHeader a:hover {
+        cursor: pointer;
+    }
+
+
+    .varEditBoxHeader a:hover,
+    .varEditBoxHeader a.navsActive {
+        border-top-color: #3c8dbc;
+        /* background-color: #eee;
+        border: 1px solid #ddd;
+        cursor: default;
+        padding-top: 7px;
+        padding-bottom: 7px;
+        margin-top: 2px;
+        background: #2896dd;
+        color: #fff;
+        border-color: #2896dd;
+        margin-top: 2px;
+        padding-top: 9px;
+        padding-bottom: 9px; */
+    }
+
+
+    .pageWhite {
+        background: #fff;
+        padding: 10px;
+        /* border: 1px solid #ccc; */
+        border-radius: 4px;
+        border-top: 3px solid #222;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-top: 0;
+    }
+
+
+    #var_list_box li {
+        display: inline-block;
+        width: 100%;
+    }
+
+
+    #var_list_box li a {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+
+    #var_list_box li ul.treeview_menu,
+    #var_list_box li ul.treeview_menu li {
+        display: block;
+    }
+
+
+    #var_list_box li ul.treeview_menu {
+        padding-left: 10px;
+    }
+
+
+    #show_var_detail_info .form-group {
+        margin-bottom: 0px;
+    }
+
+
+    #var_list_box .treeview_menu li {
+        padding-left: 16px;
+        cursor: pointer;
+    }
+
+
+    #var_list_box .treeview_menu li:hover {
+        background-color: #f9f9f9;
+    }
+
+
+    #var_list_box .treeview_menu li {
+        background: url(./admin/webscada/images/tree_line.gif) 0 0 no-repeat;
+    }
+
+
+    .link-box {
+        display: none;
+    }
+
+
+    .btn_active {
+        color: #fff;
+        background-color: #3071a9;
+        border-color: #285e8e;
+    }
+    /*==================Scada=================*/
+
+
+    #agentcanvas-center-canvas {
+        height: 500px;
+        width: 666px;
+    }
+
+
+    #agentcanvas-center-canvas canvas {
+        /* position: absolute; */
+    }
+</style>
+
+<!--webscada头部信息区域 start-->
+<section class="content-header" id="content_header_scada">
+    <h1 lang="text:web_scada"></h1>
+    <ol class="breadcrumb" style="margin-right: 30px;cursor: pointer;">
+        <li>
+            <a href="#" lang="text:config"></a>
+        </li>
+        <li id="backSiteList">
+            <a lang="text:site"></a>
+        </li>
+        <li class="active" lang="text:web_scada"></li>
+    </ol>
+</section>
+<!--END-->
+<!--WebScada主体区域 Start-->
+<div class="content row" id="tcontent" flag="editScada">
+    <div>
+        <div class="box box-solid" style="width: 1010px;">
+            <!--Content Start-->
+            <div class="info-wrapper" style="">
+                <div class="siteData">
+                    <div class="data">
+                        <!--WebScada 展示区域 Start-->
+                        <div id="scadaview-template" style="display: none;">
+                            <div id="content-scadaview">
+                                <div id="content-scadaview-toolbar" class="content-scadaview-toolbar">
+                                    <!--上方工具栏-->
+                                    <form id="toolbar-search-box" style="width:auto;height:5px; display: none;">
+                                        <label style="margin:auto 10px auto 10px"><span lang="text:scada;"></span></label>
+                                        <select id="multiselect">
+                                          </select>
+                                        <span id="split" style="padding-left:10px;margin-right:4px;">|</span>
+                                    </form>
+                                    <div class="cloud-toolbar-leftcontainer" style="position: relative;float: left;margin-top: 2px;border-style: none;height: 20px;">
+                                        <a id="toolbar-all-screen-button" class="glyphicon glyphicon-fullscreen text-light-blue" lang="title:full_screen_display"
+                                            style="margin-right: 5px;"></a>
+                                        <a id="toolbar-scada-edit-button-all" class="glyphicon glyphicon-edit text-light-blue" data-permissionfilter="[92]" lang="title:edit"
+                                            style=""></a>
+                                    </div>
+                                    <div id="cloud-toolbar-rightcontainer" class="cloud-toolbar-rightcontainer" style="position: relative;margin: 2px 5px 3px 15px;float: right;border-style: none;height: 24px;">
+                                        <div class="cloud-toolbar-item" style="display:inline-block;margin:0 2px;">
+                                            <div id="notice-bar-timer" class="cloud-toolbar-item-content" style="float:right;">
+                                                <ul>
+                                                    <li style="width:190px">
+                                                        <p style="background:#1EAB38;color:#fff;text-align:center;" id="timer"></p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="ui-helper-clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--END-->
+                        <!--WebScada 编辑区域 Start-->
+                        <div id="agentcanvas" class="ui-layout-container row">
+                            <!--编辑主体区域Start-->
+                            <div id="agentcanvas-center" class="col-md-10 col-xs-10" style="padding-left: 30px;width: 846px;">
+                                <!--名称区域Start-->
+                                <div id="agentcanvas-center-toolbar" style="margin-top: 12px;">
+                                </div>
+                                <!--END-->
+                                <!--面板区域Start-->
+                                <!--END-->
+                            </div>
+                            <!--END-->
+                            <!--编辑工具区域 Start-->
+                            <div id="agentcanvas-info" class="col-md-2 col-xs-2"></div>
+                            <!--END-->
+                        </div>
+                        <!--END-->
+                    </div>
+
+                </div>
+            </div>
+            <!--END-->
+        </div>
+    </div>
+</div>
+<!--END-->
+<!--添加scada||复制scda模态框 Start-->
+<!-- <div class="modal fade bs-example-modal-lg" id="createBox" data-target=".bs-example-modal-lg">
+    <div class="modal-dialog modal-lg" data-target=".bs-example-modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" align="center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close_createBox">
+                    <span aria-hidden="true" lang="title:click_to_close">×</span>
+                </button>
+                <h4 lang="text:the_site_has_no_picture;">该画面没有元素</h4>
+            </div>
+            <div class="modal-body" style="padding:60px;">
+                <div class="col-md-12 col-xs-12" align="center">
+                    <div class="col-md-6 col-xs-6">
+                        <button type="button" class="btn btn-primary" lang="text:add_content" id="creatScada">添加元素</button>
+                    </div>
+                    <div class="col-md-6 col-xs-6" align="center">
+                        <button type="button" class="btn btn-primary" lang="text:copy_from_the_other_site" id="copyFromSite">从其他现场复制画面</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+<!--END-->
+<!--复制scada模态框 Start-->
+<div class="modal fade bs-example-modal-lg" id="copyBox" data-target=".bs-example-modal-lg">
+    <div class="modal-dialog modal-lg" data-target=".bs-example-modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" lang="title:click_to_close">×</span>
+                </button>
+                <h4 lang="text:copy_from_the_other_site" class="copyTo modal-title" style="display: none;"></h4>
+                <h4 lang="text:application_to_other_site" class="toCopy modal-title" style="display: none;"></h4>
+            </div>
+            <div class="modal-body" style="overflow: auto;height: 450px;">
+                <div class="col-md-12 col-xs-12">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <input style="cursor:auto;" type="text" name="search" class="form-control input-sms" id="scadaSearch" placeholder lang="placeholder:enter_the_site_name">
+                            <button type="button"  class="btn btn-default btn-sm clo-md-2" data-toggle="tooltip" title="查询"
+                                lang="title:query" id="btn_research">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </div>
+                        <div class="form-group pull-right">
+                            <button type="button" id="doCopyScada" class="btn btn-primary" lang="text:copy;"></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-12 col-xs-12" id="scadaSiteList" style="overflow: auto;width: 100%;padding-top: 10px;">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <th style="width: 5%;"></th>
+                            <th style="width:7%" lang="{text:state}"></th>
+                            <th style="width:16%;" lang="text:site_name"></th>
+                            <th lang="text:address"></th>
+                            <th style="width:13%" lang="{text:business_state}"></th>
+                            <th style="width:13%;" lang="text:contact_name"></th>
+                            <th style="width:13%;" lang="text:contact_phone"></th>
+                            <th style="width:17%;" lang="text:contactor_email"></th>
+                        </thead>
+                        <tbody id="scadaSiteList_tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--END-->
+<!--变量写入 Start-->
+<div class="modal fade bs-example-modal-sm" id="varBox" data-target=".bs-example-modal-sm">
+    <div class="modal-dialog modal-sm" data-target=".bs-example-modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" lang="title:click_to_close">×</span>
+                </button>
+                <h4 lang="text:var_write_in" class="modal-title"></h4>
+            </div>
+            <div class="modal-body" align="center">
+                <div id="editVar-form-content" style="width: 100%" align="center">
+                    <form id="editVar-form-wrapper" class="form-horizontal">
+                        <div class="row form-horizontal">
+                            <div class="col-xs-12 form-group">
+                                <div class="col-xs-4">
+                                    <span class="editVar-form-table" lang="text:varible_id"></span>:
+                                </div>
+                                <div class="col-xs-8">
+                                    <input type="text" class="form-control" name="editVar-form-var-id" id="editVar-form-var-id">
+                                </div>
+                            </div>
+                            <div class="col-xs-12 form-group">
+                                <div class="col-xs-4">
+                                    <span class="editVar-form-table" lang="text:varible_name"></span>
+                                </div>
+                                <div class="col-xs-8">
+                                    <input type="text" class="form-control" name="editVar-form-var-name" id="editVar-form-var-name">
+                                </div>
+                            </div>
+                            <div class="col-xs-12 form-group">
+                                <div class="col-xs-4">
+                                    <span class="editVar-form-table" lang="text:history_device_name"></span>
+                                </div>
+                                <div class="col-xs-8">
+                                    <input type="text" class="form-control" name="editVar-form-device-name" id="editVar-form-device-name">
+                                </div>
+                            </div>
+                            <div class="col-xs-12 form-group">
+                                <div class="col-xs-4">
+                                    <span class="editVar-form-table" lang="text:variableValue"></span>
+                                </div>
+                                <div class="col-xs-8">
+                                    <input type="text" class="form-control" name="editVar-form-var-val" id="editVar-form-var-val">
+                                </div>
+                            </div>
+                            <div class="col-xs-12 form-group">
+                                <div class="col-xs-6">
+                                    <button type="button" class="btn btn-primary" data-toggle="button" id="varSubmit" lang="text:submit"></button>
+                                </div>
+                                <div class="col-xs-6">
+                                    <button type="button" class="btn btn-primary" data-toggle="button" data-dismiss="modal" aria-label="Close" lang="text:cancel"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--END-->
+<!--编辑状态对元器件进行编辑 Start-->
+<div class="modal fade bs-example-modal-lg" id="editVarBox" data-target=".bs-example-modal-lg">
+    <div class="modal-dialog modal-lg" data-target=".bs-example-modal-lg">
+        <div class="modal-content  row">
+            <div class="modal-header" align="left">
+                <button id="close_var_modal_top" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" lang="title:click_to_close">×</span>
+                </button>
+                <h4 lang="text:title" class="pull-left modal-title"></h4>
+            </div>
+            <div class="modal-body nav-tabs-custom" style="overflow: auto;height: 450px;">
+                <ul class="content-header-var col-md-12 nav nav-tabs" role="tablist">
+                    <!--变量-->
+                    <li class="varEditBoxHeader expressionHeader presentation">
+                        <a id="expressionHeader" role="tab" data-toggle="tab" lang="text:variables_title"></a>
+                    </li>
+                    <li class="varEditBoxHeader variableSetHeaderr presentation">
+                        <a id="variableSetHeader" role="tab" data-toggle="tab" lang="text:variable_set"></a>
+                    </li>
+                    <li class="varEditBoxHeader propertiesHeader presentation">
+                        <a id="propertiesHeader" role="tab" data-toggle="tab" lang="text:properties"></a>
+                    </li>
+                    <!-- <li class="varEditBoxHeader basicTabTitleHeader presentation">
+                        <a id="basicTabTitleHeader" role="tab" data-toggle="tab" lang="text:basic_tab_title"></a>
+                    </li>
+                    <li class="varEditBoxHeader basicTabTitlePipeFormHeader presentation">
+                        <a id="basicTabTitlePipeFormHeader" role="tab" data-toggle="tab" lang="text:basic_tab_title"></a>
+                    </li>
+                    <li class="varEditBoxHeader titleGridTitleHeader presentation">
+                        <a id="titleGridTitleHeader" role="tab" data-toggle="tab" lang="text:title_grid_title"></a>
+                    </li>
+                    <li class="varEditBoxHeader imageGridTitleHeader presentation">
+                        <a id="imageGridTitleHeader" role="tab" data-toggle="tab" lang="text:image_grid_title"></a>
+                    </li> -->
+                    <li class="varEditBoxHeader customImageGridTitleHeader presentation">
+                        <a id="customImageGridTitleHeader" role="tab" data-toggle="tab" lang="text:custom_image_grid_title"></a>
+                    </li>
+                    <li class="varEditBoxHeader scaleTitleHeader presentation">
+                        <a id="scaleTitleHeader" role="tab" data-toggle="tab" lang="text:scale_title"></a>
+                    </li>
+                    <li class="varEditBoxHeader endPointGridHeader presentation" style="display: none;">
+                        <a id="endPointGridHeader" role="tab" data-toggle="tab" lang="text:end_point_grid_title"></a>
+                    </li>
+                    <li class="varEditBoxHeader linkHeader presentation">
+                        <a id="linkHeader" role="tab" data-toggle="tab" lang="text:link"></a>
+                    </li>
+                </ul>
+                <div class="col-md-12 form-horizontal pageWhite " id="optionTable">
+                    <!--内容-->
+                    <!--表达式-->
+                    <form id="expression_content" class="form-group content-moulde">
+                        <!-- This is new style var-->
+                        <div class="expressionShow col-md-12">
+                            <!--This is var list-->
+                            <div class="col-md-5">
+                                <ul id="var_list_box" class="col-xs-12"></ul>
+                            </div>
+                            <!--This is detail about var-->
+                            <div class="col-md-7">
+                                <div id="show_var_detail_info" class="col-xs-12"></div>
+                            </div>
+                        </div>
+                    </form>
+                    <!--变量值设置-->
+                    <form id="variableSet_content" class="form-group content-moulde">
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <span class="control-label pull-right" lang="text:flow_to"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <select id="flow_to" class="form-control">
+                                    <option class="forward" value="1" lang="text:positive"></option>
+                                    <option class="backward" value="0" lang="text:opposite"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <span class="control-label pull-right" lang="text:pipe_color"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <div id="pipe_color_select" class="col-xs-12 input-group colorpicker-component">
+                                    <input id="pipe_color" type="text" class="form-control" />
+                                    <span id="pipe_color_next" class="input-group-addon" style="width: 50%"><i style="width: 100%;background-color: #111;"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <span class="control-label pull-right" lang="text:flow_color"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <div id="flow_color_select" class="col-xs-12 input-group colorpicker-component">
+                                    <input id="flow_color" type="text" class="form-control" />
+                                    <span id="flow_color_next" class="input-group-addon" style="width: 50%"><i style="width: 100%;background-color: #111;"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3 ">
+                                <span class="control-label pull-right" lang="text:variable_value+ +variable_flow"></span>
+                                <!--<span class="control-label" lang="text:variable_flow"></span>-->
+                            </div>
+                            <div class="col-md-8">
+                                <select id="variableflow_select" class="form-control">
+                                    <option class="flow_bigger" value="1" lang="text:gt"></option>
+                                    <option class="flow_equal" value="2" lang="text:equal"></option>
+                                    <option class="flow_small" value="3" lang="text:lt"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <span class="control-label pull-right"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="flowValue" id="flow_value" class="form-control validate[required,custom[number]]" />
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <span class="control-label pull-right" lang="text:variable_value+ +variable_stop"></span>
+                                <!--<span class="control-label" lang="text:variable_stop"></span>-->
+                            </div>
+                            <div class="col-md-8">
+                                <select id="variableflow_stop_select" class="form-control">
+                                    <option class="stop_bigger" value="1" lang="text:gt"></option>
+                                    <option class="stop_equal" value="2" lang="text:equal"></option>
+                                    <option class="stop_small" value="3" lang="text:lt"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <span class="control-label pull-right" lang="text:"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="stopValue" id="stop_value" class="form-control validate[required,custom[number]]" />
+                            </div>
+                        </div>
+                    </form>
+                    <!-- Properties-->
+                    <form id="properties_content" class="form-group content-moulde">
+                        <!--位置 Form-->
+                        <div id="basicTabTitle_content" class="form-group content-moulde-property col-md-12">
+                            <div class="col-md-12">
+                                <div class="col-md-6 col-xs-12 form-group">
+                                    <div class="col-xs-4">
+                                        <span class="control-label pull-right" lang="text:x"></span>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <input type="text" name="x_coordinate" id="x_coordinate" class="form-control validate[required,custom[number]]">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-xs-12 form-group">
+                                    <div class="col-xs-4">
+                                        <span class="control-label pull-right" lang="text:y"></span>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <input type="text" name="y_coordinate" id="y_coordinate" class="form-control validate[required,custom[number]]">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-6 col-xs-12 form-group">
+                                    <div class="col-xs-4">
+                                        <span class="control-label pull-right" lang="text:width"></span>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <input type="text" name="basic_width" id="basic_width" class="form-control validate[required,custom[number]]">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-xs-12 form-group">
+                                    <div class="col-xs-4">
+                                        <span class="control-label pull-right" lang="text:height"></span>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <input type="text" name="basic_height" id="basic_height" class="form-control validate[required,custom[number]]">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-6 col-xs-12 form-group">
+                                    <div class="col-xs-4">
+                                        <span class="control-label pull-right" lang="text:display_scale"></span>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <select id="basic_display_scale" class="form-control">
+                                            <option value="240">240</option>
+                                            <option value="180">180</option>
+                                            <option value="140">140</option>
+                                            <option value="120">120</option>
+                                            <option value="100">100</option>
+                                            <option value="90">90</option>
+                                            <option value="80">80</option>
+                                            <option value="70">70</option>
+                                            <option value="60">60</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--位置 pipe-->
+                        <div id="basicTabTitle_pipeForm_content" class="form-group content-moulde-property col-md-12">
+                            <div class="col-md-12">
+                                <div class="col-md-6 col-xs-12 form-group">
+                                    <div class="col-xs-4">
+                                        <span class="control-label pull-right" lang="text:x"></span>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <input type="text" name="x_coordinate_pipe" id="x_coordinate_pipe" class="form-control validate[required,custom[number]]"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-xs-12 form-group">
+                                    <div class="col-xs-4">
+                                        <span class="control-label pull-right" lang="text:y"></span>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <input type="text" name="y_coordinate_pipe" id="y_coordinate_pipe" class="form-control validate[required,custom[number]]"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-6 col-xs-12 form-group">
+                                    <div class="col-xs-4">
+                                        <span class="control-label pull-right" lang="text:width"></span>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <input type="text" name="basic_width_pipe" id="basic_width_pipe" class="form-control validate[required,custom[number]]" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-xs-12 form-group">
+                                    <div class="col-xs-4">
+                                        <span class="control-label pull-right" lang="text:height"></span>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <input type="text" name="basic_height_pipe" id="basic_height_pipe" class="form-control validate[required,custom[number]]"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--文字-->
+                        <div id="titleGridTitle_content" class="form-group content-moulde-property col-md-12">
+                            <div class="col-md-12">
+                                <div class="btn-group  pull-right">
+                                    <button id="add_title_grid_title" type="button" class="btn btn-default btn-sm" title="添加" data-toggle="tooltip" data-placement="bottom"
+                                        lang="title:add">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                    </button>
+                                    <button id="delete_title_grid_title" type="button" class="btn btn-default btn-sm" title="" data-toggle="tooltip" data-placement="bottom"
+                                        lang="title:delete">
+                                        <i class="glyphicon glyphicon-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="padding-top: 10PX;">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th width="40px"></th>
+                                            <th lang="text:title_grid_title"></th>
+                                            <th lang="text:x" width="105px"></th>
+                                            <th lang="text:y" width="105px"></th>
+                                            <th lang="text:bold" width="80px"></th>
+                                            <th lang="text:size" width="65px"></th>
+                                            <th lang="text:font" width="85px"></th>
+                                            <th lang="text:color" width="85px"></th>
+                                            <th lang="text:text_align" width="165px"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="titleGridTitle_table_body"></tbody>
+                                </table>
+                            </div>
+                            <!--8-->
+                        </div>
+                        <!--图片-->
+                        <div id="imageGridTitle_content" class="form-group content-moulde-property col-md-12">
+                            <h4 class="col-md-12 box-title" text="lang:image_grid_title"></h4>
+                            <!-- 隐藏图片上的添加删除按钮 -->
+                            <div class="col-md-12" style="display:none">
+                                <div class="btn-group  pull-right">
+                                    <button id="add_image_grid_title" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="bottom"
+                                        lang="title:add">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                    </button>
+                                    <button id="delete_image_grid_title" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="bottom"
+                                        lang="title:delete">
+                                        <i class="glyphicon glyphicon-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th width="40px"></th>
+                                            <th lang="text:el"></th>
+                                            <th id="image_variable_value" style="display: none" lang="text:variable_value" width="110px"></th>
+                                            <th lang="text:width" style="display: none" width="110px"></th>
+                                            <th lang="text:height" style="display: none" width="110px"></th>
+                                            <th lang="text:wpercent" style="display: none" width="160px"></th>
+                                            <th lang="text:hpercent" style="display: none" width="160px"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="imageGridTitle_table_body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                    <!--自定义组件-->
+                    <form id="customImageGridTitle_content" class="box box-solid form-group content-moulde" style="box-shadow: none;">
+                        <div class="overlay" style="display: none;" id="overlay">
+                            <i class="fa icon-refresh icon-spin"></i>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="pull-left" style="margin-left: 10px;">
+                                <span lang="text:the_largest_image" style="color: red;"></span>
+                            </div>
+                            <div class="btn-group  pull-right">
+                                <button id="upload_picture" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="bottom" lang="title:upload_picture">
+                                    <i class="icon-download-alt"></i>
+                                </button>
+                                <button id="delete_upload_picture" type="button" class="btn btn-default btn-sm" title="deleteText" data-toggle="tooltip"
+                                    data-placement="bottom" lang="title:delete">
+                                    <i class="glyphicon glyphicon-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <!-- 其他动画类型 -->
+                            <table class="table table-bordered table-hover" id="this_type_other" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th width="40px" align="center">
+                                            <input type="checkbox" name="custom-all" id="custom-all">
+                                        </th>
+                                        <th lang="text:el"></th>
+                                        <th lang="text:width" width="110px" style="display: none;"></th>
+                                        <th lang="text:height" width="110px" style="display: none;"></th>
+                                        <th lang="text:type;" style="display:none;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customImageGrid_table_body_other"></tbody>
+                            </table>
+                            <!-- type == 9 -->
+                            <table class="table table-bordered table-hover" id="this_type_9" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th width="40px"></th>
+                                        <th lang="text:el"></th>
+                                        <th lang="text:width" style="display: none;"></th>
+                                        <th lang="text:height" style="display: none;"></th>
+                                        <th lang="text:duration"></th>
+                                        <th lang="text:type" style="display: none;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customImageGrid_table_body_9"></tbody>
+                            </table>
+                            <!-- type == 8 -->
+                            <table class="table table-bordered table-hover" id="this_type_8" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th width="40px"></th>
+                                        <th lang="text:el"></th>
+                                        <th lang="text:width" style="display:none;"></th>
+                                        <th lang="text:height" style="display:none;"></th>
+                                        <th lang="text:animator_min"></th>
+                                        <th lang="text:animator_equal"></th>
+                                        <th lang="text:animator_max"></th>
+                                        <th lang="text:animator_equal"></th>
+                                        <th lang="text:type" style="display: none;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customImageGrid_table_body_8"></tbody>
+                            </table>
+                        </div>
+                    </form>
+                    <!--刻度-->
+                    <form id="scaleTitle_content" class="form-group content-moulde">
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <span class="control-label pull-right" lang="text:min_value"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="min_value" id="min_value" class="form-control validate[required,custom[number]]" value="0" />
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <span class="control-label pull-right" lang="text:max_value"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="max_value" id="max_value" class="form-control validate[required,custom[number]]" value="0" />
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <span class="control-label pull-right" lang="text:aliquots"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="aliquots" id="aliquots" class="form-control validate[required,custom[number]]" value="0" />
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <span class="control-label pull-right" lang="text:display_scale"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <select id="display_scale" class="form-control">
+                                    <option value="120">120</option>
+                                    <option value="110">110</option>
+                                    <option value="100">100</option>
+                                    <option value="90">90</option>
+                                    <option value="80">80</option>
+                                    <option value="70">70</option>
+                                    <option value="60">60</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    <!--端点-->
+                    <form id="endPointGrid_content" class="form-group content-moulde" style="display: none;">
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <span class="control-label pull-right" lang="text:x"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="x_end_point" id="x_end_point" class="form-control validate[required,custom[number]]" value="0/">
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <span class="control-label pull-right" lang="text:y"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="y_end_point" id="y_end_point" class="form-control validate[required,custom[number]]" value="0" />
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <span class="control-label pull-right" lang="text:font_size"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="font_size_end_point" id="font_size_end_point" class="form-control validate[required,custom[number]]"
+                                    value="0" />
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <span class="control-label pull-right" lang="text:border_color"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="border_color_end_point" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <span class="control-label pull-right" lang="text:fill_color"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="fill_color_end_point" class="form-control" />
+                            </div>
+                        </div>
+                    </form>
+                    <!--Link-->
+                    <form id="link_content" class="form-group content-moulde">
+                        <div class="col-md-12 form-group">
+                            <!-- <div class="col-md-12 form-group">
+                                <div class="col-xs-12 text-danger form-control" lang="text:link_reminder" style="border: none;"></div>
+                            </div> -->
+                            <div class="col-md-12 link-title">
+                                <!-- <div class="col-xs-12 btn-group form-group">
+                                    <button id="default_link" class="btn btn-default btn-sm link-button col-xs-12" type="button" data-toggle="tooltip" data-placement="bottom" lang="text:default_link"></button>
+                                    <button id="outter_link" class="btn btn-default btn-sm link-button col-xs-12" type="button" data-toggle="tooltip" data-placement="bottom" lang="text:out_link"></button>
+                                    <button id="inner_link" class="btn btn-default btn-sm link-button col-xs-12" type="button" data-toggle="tooltip" data-placement="bottom" lang="text:inner_link" style="margin-top: 5px; "></button>
+                                </div>
+                                <div class="col-xs-12 btn-group form-group">
+                                    <div class="col-xs-12">
+                                        <span lang="text:add_link"></span>
+                                    </div>
+                                    <div class="col-xs-12" id="state_box">
+                                        <form class="form-group">
+                                            <div class="yes_box form-control" style="border:none;">
+                                                <input type="checkbox" name="yes" id="yes_link" class="link_state">
+                                                <span lang="text:ok"></span>
+                                            </div>
+                                            <div class="no_box form-control" style="border:none;">
+                                                <input type="checkbox" name="no" id="no_link" class="link_state">
+                                                <span lang="text:no"></span>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div> -->
+                                <div class="col-md-4">
+                                    <label class="checkbox-inline" align="center">
+                                    <input type="radio" name="default_link" id="no_link">
+                                    <span lang="text:no_link"></span>
+                                </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="checkbox-inline" align="center">
+                                    <input type="radio" name="inner_link" id="inner_link">
+                                    <span lang="text:inner_link"></span>
+                                </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="checkbox-inline" align="center">
+                                    <input type="radio" name="outter_link" id="outter_link">
+                                    <span lang="text:out_link"></span>
+                                </label>
+                                </div>
+                            </div>
+                            <div class="col-md-12 link-content">
+                                <div class="col-xs-12" id="link_content_show">
+                                    <div class="col-xs-12 link-box" id="default_box">
+                                        <div class="col-xs-12 outter_header">
+                                            <!-- <span lang="text:no_link" style="font-weight: bold;"></span> -->
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 link-box" id="outter_box">
+                                        <!-- <div class="col-xs-12 outter_header">
+                                            <span lang="text:out_link" style="font-weight: bold;"></span>
+                                        </div> -->
+                                        <div class="col-md-12 form-group">
+                                            <div class="col-md-3">
+                                                <span class="control-label pull-right" lang="text:name1"></span>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input id="outter_name" class="form-control" lang="placeholder:name1" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <div class="col-md-3">
+                                                <span class="control-label pull-right" lang="text:link"></span>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input id="outter_link_link" class="form-control validate[required,custom[url]]" lang="placeholder:show_link" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <div class="col-md-3">
+                                                <span class="control-label pull-right" lang="text:description"></span>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <textarea id="outter_des" class="form-control" lang="placeholder:description"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 link-box" id="inner_box">
+                                        <!-- <div class="col-xs-12">
+                                            <span lang="text:inner_link" style="font-weight: bold;"></span>
+                                        </div> -->
+
+                                        <div class="col-md-12 form-group">
+                                            <div class="col-md-3">
+                                                <span class="control-label pull-right" lang="text:name1"></span>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input id="inner_name" class="form-control" lang="placeholder:name1" />
+                                            </div>
+                                        </div>
+                                        <!-- query current site and find webScada -->
+                                        <div class="col-md-12 form-group">
+                                            <div class="col-md-3">
+                                                <span class="control-label pull-right" lang="text:link"></span>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <select id="current_scada_link" class="form-control"></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 form-group">
+                                            <div class="col-xs-3">
+                                                <span class="control-label pull-right" lang="text:description"></span>
+                                            </div>
+                                            <div class="col-xs-8">
+                                                <textarea id="inner_des" class="form-control" lang="placeholder:description"></textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div id="next_Step_Site" class="addSiteContentBox">
+                    <button type="button" class="btn btn-primary" id="var_submit_sel" lang="text:save"></button>
+                    <button id="close_var_modal_bottom" type="button" class="btn pull-left btn-default" data-dismiss="modal" lang="text:close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table style="display:none;">
+    <thead></thead>
+    <tbody id="this_for_temp" style="display:none;"></tbody>
+</table>
+<!--END-->
+<!--//WebScada加载显示-->
+<script type="text/javascript">
+    //国际化
+    locale.render({
+        element: "body"
+    });
+    /*var contentHieght = $(".main-sidebar").height() - 50;
+    $(".data").height( contentHieght);*/
+    //得到现场id
+    //验证
+    validator.render("#expression_content", {
+        promptPosition: "inline",
+        scroll: false
+    });
+    validator.render("#variableSet_content", {
+        promptPosition: "inline",
+        scroll: false
+    });
+    validator.render("#basicTabTitle_content", {
+        promptPosition: "inline",
+        scroll: false
+    });
+    validator.render("#basicTabTitle_pipeForm_content", {
+        promptPosition: "inline",
+        scroll: false
+    });
+    validator.render("#titleGridTitle_content", {
+        promptPosition: "inline",
+        scroll: false
+    });
+    validator.render("#imageGridTitle_content", {
+        promptPosition: "inline",
+        scroll: false
+    });
+    validator.render("#customImageGridTitle_content", {
+        promptPosition: "inline",
+        scroll: false
+    });
+    validator.render("#scaleTitle_content", {
+        promptPosition: "inline",
+        scroll: false
+    });
+    validator.render("#endPointGrid_content", {
+        promptPosition: "inline",
+        scroll: false
+    });
+    validator.render("#link_content", {
+        promptPosition: "inline",
+        scroll: false
+    });
+
+    $("#agentcanvas").hide();
+    $("#createBox").hide();
+    $("#copyBox").hide();
+    $("#canvas-edit").hide();
+    var selectSiteId;
+    var current_site_id;
+    //回到现场列表
+    $("#close_createBox").unbind("click").click(function (e) {
+        //$("#pcontent").load("admin/config_siteList.html");
+        $(".modal-backdrop").remove();
+    });
+
+    function loadSiteInfo(selectSiteId, select_site_name) {
+        // selectSiteId = selectSiteId;
+        // console.log("siteId in loadSiteInfo,", selectSiteId);
+        loading();
+        current_site_id = selectSiteId;
+        var select_site_name = select_site_name;
+        require([setting.host + '/admin/webscada/pandect/components/content-scada'], function (ContentScada) {
+            var self = this;
+            self.contentScada = ContentScada;
+            this.canvasOptions = {};
+            self.siteid = selectSiteId;
+            self.sitename = select_site_name;
+            self.contentScada = ContentScada;
+            self.contentScada.initialize();
+            window.loadDatas = function () {
+                var varValue = 0;
+                if (varValue == 0) {
+                    varValue = 1;
+                } else if (varValue == 1) {
+                    varValue = 0;
+                }
+                // 获取设备实时数据
+                if (self.contentScada.infoBoard) {
+                    var canvasData = self.contentScada.infoBoard.getData();
+                } else {
+                    var canvasData = "";
+                }
+                var items = canvasData.items;
+                var aliasJson = {};
+                var aliasList = [];
+                var alias_VarId = {};
+                var siteId_alias_varId = {};
+                // console.log("items in loadDatas,", items);
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].a) {
+                        var var_id = items[i].a;
+                        var site_id = self.siteid;
+                        rt_data(site_id, {
+                            varIds: var_id
+                        }, function (data) {
+                            // console.log("this is rt_data, data,", i, data);
+                            if (data.result && data.result != undefined) {
+                                var siteId = data.siteId;
+                                var vars_rt = data.result.vars;
+                                // console.log("vars_rt in get_real_time,", i, vars_rt);
+                                for (var i = 0; i < vars_rt.length; i++) {
+                                    var rt_times = vars_rt[i].endTime ? vars_rt[i].endTime : 0;
+                                    var rt_id = vars_rt[i].id ? vars_rt[i].id : "";
+                                    var rt_timestamp = vars_rt[i].timestamp ? vars_rt[i].timestamp : 0;
+                                    var rt_value = vars_rt[i].value ? vars_rt[i].value : 0;
+                                    self.contentScada.updateCanvasValue(rt_times, rt_id, rt_timestamp, rt_value);
+                                }
+                            }
+                        }, this);
+                        //console.log( "var_id,", var_id);
+                    }
+                }
+            }
+            //var Global=require("./webscada/pandect/canvas/Global");
+
+            //绘制canvas 加载变量值
+            renderCanvasItems = function (scadaData) {
+                var self = this;
+                if (scadaData && Ext.isArray(scadaData) && scadaData.length > 0) {
+                    for (var i = 0; i < scadaData.length; i++) {
+                        var data = scadaData[i];
+                        self.canvasOptions[data.canvasId] = data;
+
+                        $("#multiselect").append("<option value='" + data.canvasId + "'>" + data.canvasText + "</option>");
+                    }
+                    $("#multiselect option").eq(0).attr("selected", true);
+                    self.contentScada.infoBoard.loadData(scadaData[0]);
+                    self.selectedScadaId = scadaData[0].canvasId;
+                } else if (scadaData) {
+                    $("#multiselect").append("<option value='" + self.siteid + "'>" + self.sitename + "</option>");
+                    $("#multiselect").find("option[value=" + self.siteid + "]").attr("selected", true);
+                    self.canvasOptions[self.siteid] = scadaData;
+                    self.contentScada.infoBoard.loadData(scadaData);
+                } else {
+                    if (self.sitename && self.sitename != undefined) {
+                        $("#multiselect").append("<option value='" + self.siteid + "'>" + self.sitename + "</option>");
+                        $("#multiselect").find("option[value=" + self.siteid + "]").attr("selected", true);
+                    } else {
+                        getSiteById(selectSiteId, null, function (data) {
+                            self.sitename = data.result.name;
+                            $("#multiselect").append("<option value='" + self.siteid + "'>" + self.sitename + "</option>");
+                            $("#multiselect").find("option[value=" + self.siteid + "]").attr("selected", true);
+                        }, this);
+                    }
+                }
+            };
+            var defaulthtmls = $("<div id='noticeText' style='font-family:Droid Sans, Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;margin-left:50px;'>" + locale.get({
+                lang: 'the_site_has_no_picture'
+            }) + "</div>");
+            $("#multiselect").bind('change', function () {
+                var selectedId = $("#multiselect").find("option:selected").val();
+                self.selectedScadaId = selectedId;
+
+                var canvas = self.contentScada.infoBoard.canvas.dom;
+                self.contentScada.clearDynamicComponentTimer();
+                self.contentScada.clearDynamicComponentElementTimer();
+
+                self.contentScada.infoBoard.sortedDrawables = []; //.clear();
+                self.contentScada.infoBoard.canvas.ctx2d.clearRect(0, 0, canvas.width, canvas.height);
+                var canvasData = self.canvasOptions[selectedId];
+
+                if (canvasData.items.length == 0) {
+                    self.contentScada.renderDefaultDiv(true, defaulthtmls);
+                } else {
+                    self.contentScada.renderDefaultDiv(false);
+                }
+                self.contentScada.infoBoard.loadData(canvasData);
+            });
+
+            //获取现场下的 scada
+            getWebScada = function () {
+                // console.log(" this.sitename when initialize getWebScada,", this.sitename);
+                self.sitename = this.sitename;
+                self.contentScada.clearDynamicComponentTimer(); //清除动态组件的定时器
+                self.siteList = [];
+                var list = [];
+                list.push(selectSiteId);
+                list.push(self.sitename);
+                self.siteList.push(list);
+                var defaulthtmls = $("<div id='noticeText' style='font-family:Droid Sans, Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;margin-left:50px;'>" + locale.get({
+                    lang: 'the_site_has_no_picture'
+                }) + "</div>");
+                //根据现场id获取现场下的 scada
+                // console.log(" self.sitename before getCanvasBySiteId,", self.sitename);
+                getCanvasBySiteId(selectSiteId, null, function (data) {
+                    if (!data.result || data.result.content == "" || data.result.content == undefined) {
+                        // 清除整个 canvas 画面,将下拉框里的组态画面清空
+                        self.siteid = selectSiteId;
+                        self.scadaData = null;
+                        var editData = {
+                            siteid: self.siteid,
+                            sitename: self.sitename,
+                            newScadaData: null,
+                            siteList: self.siteList,
+                            selectedScadaId: null,
+                            infoBoard: self.contentScada.infoBoard
+                        };
+                        //console.log("creatScada,editData,", editData);
+                        creatScada(editData);
+                    } else {
+                        //console.log("biu there has scada,", data);
+                        var result = data.result;
+                        var scadaData = result.content;
+                        self.siteid = selectSiteId;
+                        self.newScadaData = scadaData;
+                        self.contentScada.clearDynamicComponentTimer(); //清除动态组件的定时器
+                        self.contentScada.clearCanvas();
+                        self.contentScada.clearTime();
+                        self.contentScada.renderSiteName_div(self.sitename);
+
+                        if (scadaData[0] && scadaData[0].items && scadaData[0].items.length > 0) {
+                            if (scadaData[0].refreshInterval) {
+                                self.contentScada.refreshInterval = scadaData[0].refreshInterval * 1000;
+                            } else {
+                                self.contentScada.refreshInterval = 10 * 1000;
+                            }
+                            if (self.contentScada.refreshTimerId) {
+                                window.clearInterval(self.contentScada.refreshTimerId);
+                                self.contentScada.refreshTimerId = null;
+                            }
+
+                            self.contentScada.openCanvasView(scadaData);
+                        } else {
+                            if (self.contentScada.refreshTimerId) {
+                                window.clearInterval(self.contentScada.refreshTimerId);
+                            }
+                            self.contentScada.refreshInterval = 10 * 1000;
+                        }
+                        /*********display***********/
+                        self.renderCanvasItems(scadaData);
+                        /*********display***********/
+                        if (scadaData[0] && scadaData[0].items && scadaData[0].items.length > 0) {
+                            self.contentScada.renderDefaultDiv(false);
+                            self.renderGetRole(false);
+                        } else {
+                            self.contentScada.renderDefaultDiv(true, defaulthtmls);
+                            self.renderGetRole(true);
+                        }
+                        unload();
+                    }
+                    //点击**编辑**事件
+                    $("#toolbar-scada-edit-button-all").on( "click", function (event) {
+                        $("#canvas-edit").hide();
+                        $("#content_header_scada").empty().height("26");
+                        var selectedId = $("#multiselect").find("option:selected").val();
+                        var selectedScadaId = selectedId;
+                        // renderDrawableProperty 构建一个AgentDrawableProperty 结构体 传入一个对象
+                        // selector : 编辑区域
+                        // service: API调用
+                        // siteid: 当前现场的id
+                        // newScadaData: newScadaData ???
+                        // siteList:: this.siteList ???
+                        // selectedScadaId: this.selectedScadaId
+                        // console.log("this.seitename in toolbar-scada-edit-button-all,", this.sitename, ", self.sitename,", self.sitename);
+                        if (self.sitename == undefined) {
+                            self.sitename = $("#multiselect").find("option:selected").text();
+                        }
+                        // console.log(   "self.contentScada",self.contentScada,", self.contentScada.infoBoard,", self.contentScada.infoBoard);
+                        var editData = {
+                            siteid: siteid,
+                            sitename: self.sitename,
+                            newScadaData: self.newScadaData,
+                            siteList: self.siteList,
+                            selectedScadaId: selectedScadaId,
+                            infoBoard: self.contentScada.infoBoard
+                        };
+                        //console.log("click toolbar-scada-edit-button-all, editData,", editData);
+                        $("#scadaview-template").hide();
+                        $("#agentcanvas").show();
+                        $("#toolbar-scada-edit-button-all").attr("flag", "edit");
+                        editScadaInfo(editData);
+                    });
+                    if( !data.result || data.result.content == "" || data.result.content == undefined) {
+                        // go straigt to edit
+                    } else {
+                        $("#toolbar-scada-edit-button-all").click();
+                    }
+                    //点击 **全屏事件**
+                    $("#toolbar-all-screen-button").unbind("click").click(function (event) {
+                        screen_event();
+                    });
+
+                    function screen_event() {
+                        //屏幕高宽
+                        var screen_height = window.screen.height;
+                        var screen_width = window.screen.width;
+                        //全屏的元素
+                        var element = document.getElementById("scadaview-template");
+                        //当前元素的宽高以及canvas宽高
+                        var current_element_height = $("#scadaview-template").height();
+                        var current_element_width = $("#scadaview-template").width();
+                        //状态判断  icon-screenshot
+                        var full_screen_status = $("#scadaview-template").attr("screen");
+
+                        if (full_screen_status == 1) {
+                            //当前状态为全屏
+                            //退出全屏
+                            if (document.exitFullscreen) {
+                                document.exitFullscreen();
+                            } else if (document.msExitFullscreen) {
+                                document.msExitFullscreen();
+                            } else if (document.mozCancelFullScreen) {
+                                document.mozCancelFullScreen();
+                            } else if (document.webkitExitFullscreen) {
+                                document.webkitExitFullscreen();
+                            }
+                            $("#toolbar-all-screen-button").removeClass('icon-screenshot').addClass('glyphicon-fullscreen');
+                            $("#scadaview-template").attr('screen', 0);
+                            $("#scadaview-template canvas").width("auto");
+                            $("#scadaview-template canvas").height("500");
+                        } else {
+                            //当前状态非全屏
+                            //进入全屏
+                            if (element.requestFullscreen) {
+                                element.requestFullscreen();
+                            } else if (element.mozRequestFullScreen) {
+                                element.mozRequestFullScreen();
+                            } else if (element.webkitRequestFullscreen) {
+                                element.webkitRequestFullscreen();
+                            }
+                            $("#toolbar-all-screen-button").removeClass('glyphicon-fullscreen').addClass('icon-screenshot');
+                            $("#scadaview-template").attr('screen', 1);
+                            $("#scadaview-template canvas").height(screen_height - 45);
+                            $("#scadaview-template canvas").width(screen_width);
+                        }
+                    }
+                    /*document.addEventListener( "keydown", function( e) {
+                        if( e.keyCode == 27) {
+                            screen_event();
+                        }
+                    });*/
+                }, this);
+            }
+            renderGetRole = function (display) {
+
+                $("#toolbar-scada-edit-button-all").hide();
+
+                $("#canvas-glasspane").css("display", "none");
+
+            }
+
+            window.destroyScada = function () {
+                if (self.contentScada.refreshTimerId) {
+                    window.clearInterval(self.contentScada.refreshTimerId);
+                }
+                if (self.contentScada && self.contentScada != undefined) {
+
+                    self.contentScada.clearCanvas();
+                    self.contentScada.clearTime();
+                    self.contentScada.openCanvasView(null);
+                    self.contentScada.destroy();
+                    self.contentScada.infoBoard = null;
+                    //Nts.Module.Common.Canvas.Drawable = {};
+                    //Nts.Module.Common.Canvas.Board = {};
+                    self.contentScada = null;
+                }
+            };
+            renderGetRole = function (display) {
+
+                //$("#toolbar-scada-edit-button-all").hide();
+
+                $("#canvas-glasspane").css("display", "none");
+
+            }
+            self.getWebScada();
+            //Link Event
+            renderLinkEvent = function () {
+                var self = this;
+                var canvasId = $("#content-scadaview-scada canvas").attr("id");
+                var canvasObject = this.contentScada.infoBoard.canvas;
+                $("#" + canvasId + "").unbind("click").click(function (event) {
+                    var offX = event.offsetX;
+                    var offY = event.offsetY;
+                    var canvasData = self.contentScada.infoBoard.getData();
+                    var items = canvasData.items;
+                    // console.log(items,"items");
+                    for (var i = 0; i < items.length; i++) {
+                        var x = items[i].x;
+                        var y = items[i].y;
+                        var w = items[i].w;
+                        var h = items[i].h;
+                        var xp = x + w;
+                        var yp = y + h;
+                        if ((offX >= x && offX <= xp) && (offY >= y && offY <= yp)) {
+                            var linkInfo = items[i].link;
+                            // console.log( "linkInfo, ", linkInfo);
+                            //console.log( items[i].a);
+                            //console.log("offX,", offX, ",x,",x,",xp,",xp,",offY,",offY, ",y,",",yp,",yp);
+                            if (linkInfo != undefined && linkInfo.state == 1) {
+                                self.goToLink(linkInfo);
+                            }
+                            break;
+                        }
+                    }
+                });
+            }
+            renderLinkEvent();
+            goToLink = function (info) {
+                var self = this;
+                // console.log("this is link basic info,", info);
+                var link_type = info.type;
+                var link_detail = info.linkInfo;
+                $("#toolbar-search-box").hide();
+                if (link_type == "outter") {
+                    var outter_link = link_detail.link;
+                    window.open("" + outter_link + "");
+                } else {
+                    var inner_link = link_detail.link;
+                    $("#multiselect option").removeAttr('selected');
+                    $("#multiselect").find("option[value=" + inner_link + "]").attr("selected", true);
+                    var selectedId = inner_link;
+                    // console.log( " this is test, selectedId,", selectedId);
+                    self.selectedScadaId = selectedId;
+
+                    var canvas = self.contentScada.infoBoard.canvas.dom;
+                    self.contentScada.clearDynamicComponentTimer();
+                    self.contentScada.clearDynamicComponentElementTimer();
+
+                    self.contentScada.infoBoard.sortedDrawables = []; //.clear();
+                    self.contentScada.infoBoard.canvas.ctx2d.clearRect(0, 0, canvas.width, canvas.height);
+                    var canvasData = self.canvasOptions[selectedId];
+
+                    if (canvasData.items.length == 0) {
+                        self.contentScada.renderDefaultDiv(true, defaulthtmls);
+                    } else {
+                        self.contentScada.renderDefaultDiv(false);
+                    }
+                    self.contentScada.infoBoard.loadData(canvasData);
+                }
+            };
+            //变量编辑事件
+            renderModelEvent = function () {
+                //console.log("start editVar");
+                var self = this;
+                var varValue = 0;
+                //console.log( this.contentScada);
+                var canvasId = $("#content-scadaview-scada canvas").attr("id");
+                var canvasObject = this.contentScada.infoBoard.canvas;
+                //console.log("canvasObject,",canvasObject);
+                var ctx = canvasObject.ctx2d;
+                //console.log("ctx,",ctx);
+                $("#" + canvasId + "").dblclick(function (event) {
+                    //console.log("biu biu biu,", event);
+                    var offX = event.offsetX;
+                    var offY = event.offsetY;
+                    var canvasData = self.contentScada.infoBoard.getData();
+                    var items = canvasData.items;
+                    //console.log(items,"items");
+                    for (var i = 0; i < items.length; i++) {
+                        var x = items[i].x;
+                        var y = items[i].y;
+                        var w = items[i].w;
+                        var h = items[i].h;
+                        var xp = x + w;
+                        var yp = y + h;
+                        if (items[i].writeVarable == true) {
+                            //console.log(" is writeVarable,",i, items[i]);
+                        }
+                        if ((offX >= x && offX <= xp) && (offY >= y && offY <= yp)) {
+                            if (items[i].a && items[i].a.length > 0 && items[i].writeVarable == true) {
+                                //console.log("there is writeVarable,", i,items[i]);
+                                //console.log( items[i].a);
+                                //console.log("offX,", offX, ",x,",x,",xp,",xp,",offY,",offY, ",y,",",yp,",yp);
+                                self.editVar(items[i].a);
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+            //变量编辑事件 加载函数
+            //self.renderModelEvent();
+            editVar = function (address) {
+                //console.log( address,"address");
+                var self = this;
+                var varId = address[0].varId.toString();
+                var siteId = varId.split("_")[0];
+                var alias = varId.split("_")[1];
+                var varId = varId.split("_")[2];
+                var siteList = self.targetList;
+                //console.log("siteId,",siteId,",alias,",alias,",varId,",varId);
+                var editOptions = {
+                    siteList: siteList,
+                    siteId: siteId,
+                    varId: varId,
+                    alias: alias
+                };
+                editVarForm(editOptions);
+            }
+            editVarForm = function (options) {
+                //console.log( "editOptions", options);
+                $("#editVar-form-wrapper input").val("");
+                var self = this;
+                $("#varBox").modal({
+                    backdrop: 'static',
+                    keyboard: false,
+                    show: true
+                });
+                $("#varBox").show();
+                self.siteList = options.siteList;
+                self.siteId = options.siteId;
+                self.varId = options.varId;
+                self.alias = options.alias;
+                self.modelId = null;
+                self.varType = null;
+                self.plcId = "";
+                self.deviceId = "";
+                self.plcName = "";
+                self.gatewayId = "";
+                self.varName = "";
+                self.varVal = "";
+                self.searchObj = null;
+                //网关
+                if (self.alias == "gw") {
+                    //网关
+                    var params = {
+                        limit: 0,
+                        site_id: self.siteId,
+                        verbose: 100
+                    };
+                    getGatewayBySiteId(params, function (data) {
+                        //console.log("getGatewayBySiteId", data);
+                        var deviceResult = data.result;
+                        for (var i = 0; i < deviceResult.length; i++) {
+                            self.modelId = deviceResult[i].modelId;
+                            self.plcId = deviceResult[i].plcId;
+                            self.deviceId = deviceResult[i]._id;
+                            self.plcName = deviceResult[i].name;
+                            self.gatewayId = deviceResult[i].gatewayId;
+                            self.getModel(self.modelId, self.plcId, self.deviceId, self.plcName, self.gatewayId);
+                        }
+                    }, this);
+                } else {
+                    //机型
+                    var parmas = {
+                        limit: 0,
+                        site_id: self.siteId,
+                        verbose: 100
+                    };
+                    getAPI_machines(parmas, function (data) {
+                        //console.log("getAPI_machines",data);
+                        var deviceResult = data.result;
+                        for (var i = 0; i < deviceResult.length; i++) {
+                            self.modelId = deviceResult[i].modelId;
+                            self.plcId = deviceResult[i].plcId;
+                            self.deviceId = deviceResult[i]._id;
+                            self.plcName = deviceResult[i].name;
+                            self.gatewayId = deviceResult[i].gatewayId;
+                            self.getModel(self.modelId, self.plcId, self.deviceId, self.plcName, self.gatewayId);
+                        }
+                    }, this);
+                }
+                self.getModel = function (modelId, plcId, deviceId, plcName, gatewayId) {
+                    //console.log( "arguments", arguments);
+                    var modelId = modelId;
+                    var plcId = plcId;
+                    var deviceId = deviceId;
+                    var plcName = plcName;
+                    var varId = self.varId;
+                    var gatewayId = gatewayId;
+                    //console.log("gatewayId",gatewayId);
+                    $("#editVar-form-device-name").val(plcName).attr("readOnly", "readOnly");
+                    var params = {
+                        limit: 0,
+                        site_id: self.siteId,
+                        verbose: 100
+                    };
+                    getVarsByModelId(modelId, params, false, function (data) {
+                        //console.log("getVarsByModelId", data);
+                        var varInfo = data.result.varInfo;
+                        for (var i = 0; i < varInfo.length; i++) {
+                            var vars = varInfo[i].vars;
+                            for (var u = 0; u < vars.length; u++) {
+                                if (vars[u]._id == varId) {
+                                    var varType = vars[u].type;
+                                    var varName = vars[u].name;
+                                    $("#editVar-form-var-id").val(varId).attr("readOnly", "readOnly");
+                                    $("#editVar-form-var-name").val(varName).attr("readOnly", "readOnly");
+                                    $("#editVar-form-var-type").val(varType);
+                                    self.searchObj = {
+                                        varId: varId,
+                                        gwId: gatewayId,
+                                        deviceId: self.deviceId,
+                                        varType: varType,
+                                        plcId: self.plcId,
+                                        plcName: plcName,
+                                        varName: varName
+                                    };
+                                    break;
+                                }
+                            }
+                        }
+                    }, this);
+                    //变量提交
+                    $("#varSubmit").unbind("click").click(function (event) {
+                        var varVal = $("#editVar-form-var-val").val();
+                        var searchObj = self.searchObj;
+                        searchObj.varValue = varVal;
+                        //console.log("searchObj,",searchObj);
+                        if (varVal) {
+                            //console.log("going");
+                            varEditData(null, searchObj, function (data) {
+                                //console.log("varEdit", data);
+                                $("#varBox").hide();
+                            }, this);
+                        }
+                    });
+                };
+            }
+            window.destroyScada = function () {
+                if (self.contentScada.refreshTimerId) {
+                    window.clearInterval(self.contentScada.refreshTimerId);
+                }
+                if (self.contentScada && self.contentScada != undefined) {
+
+                    self.contentScada.clearCanvas();
+                    self.contentScada.clearTime();
+                    self.contentScada.openCanvasView(null);
+                    self.contentScada.destroy();
+                    self.contentScada.infoBoard = null;
+                    //Nts.Module.Common.Canvas.Drawable = {};
+                    //Nts.Module.Common.Canvas.Board = {};
+                    self.contentScada = null;
+                }
+            };
+        });
+        locale.render({
+            element: "body"
+        });
+    }
+    //返回现场列表
+    $("#backSiteList").unbind("click").click(function (event) {
+        $("#pcontent").load("admin/config_site.html", function (i) {
+            set_$tcontentHeight();
+        });
+    });
+
+</script>
+<!--WebScada//展示编辑区域-->
+<script>
+    $(document).ready(function () {
+        permissionFilter_pageFunc();
+        require(['siteService'], function () {
+            var queryContent = "";
+            loadScadaList(queryContent);
+        });
+        locale.render({
+            element: "#init_body"
+        });
+    });
+
+    function loading() {
+        $("#overlay1").show();
+    }
+
+    function unload() {
+        $("#overlay1").hide();
+    }
+    //增加 创建scada函数
+    function creatScada(editData) {
+        $("#toolbar-scada-edit-button-all").hide();
+        $('#createBox').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: true
+        });
+        $('#createBox').show();
+        //console.log("editData in creatScada,", editData);
+        //直接创建scada
+        /*$("#creatScada").click(function(event) {
+          console.log("click,event,", event);*/
+        $(".modal-backdrop").remove();
+        $("#scadaview-template").hide();
+        $("#agentcanvas").show();
+        $("#toolbar-scada-edit-button-all").attr("flag", "edit");
+        //console.log("editScadaInfo,editData,click",editData);
+        editScadaInfo(editData);
+        /*});*/
+        /*$("#copyFromSite").unbind("click").click(function(event) {
+            $('#createBox').hide();
+            $("#copyBox").attr("flag","copyTo");
+            $("#copyBox").attr("createToCopy", "createToCopy");
+            $("#copyBox").show();
+            $(".copyTo").show();
+            $(".toCopy").hide();
+            $('#copyBox').modal({backdrop: 'static', keyboard: false, show: true});
+            copyScada( current_site_id);
+        });*/
+    }
+    //复制scada函数
+    window.copyScada = function (siteid) {
+        $("#scadaSiteList_tbody").empty();
+        selectSiteId = siteid;
+        //列表加载函数
+        var queryContent = "";
+        loadScadaList(queryContent);
+        $("#btn_research").unbind("click").click(function (event) {
+            // console.log( "test,", $("#scadaSearch").validationEngine( "validate"));
+            var queryContent = $("#scadaSearch").val();
+            // console.log( "test,", /^[a-zA-Z0-9_\-\u4e00-\u9fa5]+$/i.test( queryContent));
+            if( queryContent == "") {
+                loadScadaList(queryContent);
+            } else if( /^[a-zA-Z0-9_\-\u4e00-\u9fa5]+$/i.test( queryContent)) {
+                loadScadaList(queryContent);
+            } else {
+                dialog.render({
+                    lang: "contain_illegal_char"
+                });
+            }
+        });
+        $("#copyBox div.modal-header button.close").unbind("click").click(function (event) {
+            $("#copyBox").hide();
+            if ($("#copyBox").attr("createToCopy") == "createToCopy") {
+                $(".modal-backdrop").remove();
+            }
+        });
+    }
+    //筛选现场
+    function loadScadaList(queryContent) {
+        var params = {
+            limit: 0,
+            verbose: 100,
+            name: queryContent
+        };
+        loadAllSite(params, function (data) {
+            if (data && data.total != undefined && data.total > 0) {
+                loading();
+                scadaList(data);
+                unload();
+            } else {
+                $('#scadaSiteList_tbody').empty();
+                var $tr = '<tr><td colspan="9" align="center">' + locale.get("no_data") + '</td></tr>';
+                $("#scadaSiteList_tbody").append($tr);
+            }
+        }, this);
+    }
+    //为现场列表填值
+    function scadaList(data) {
+        $('#scadaSiteList_tbody').empty();
+        var len = data.result.length;
+        var clogs = data.result;
+        for (var i = 0; i < len; i++) {
+            var address = null;
+            if (clogs[i] != undefined) {
+                var $tr = '<tr class="targetBox">' +
+                    '<td><input id="' + clogs[i]._id + '" type="checkbox"></td>';
+
+                if (clogs[i].online == 1) {
+                    //在线
+                    $tr += '<td style="word-break: break-all;" ><div style="width: 14px;height: 14px;margin: 3px 0 0 3px;background-image: url(images/cloud-table-online.png);display: inline-block;"></div></td>';
+                } else {
+                    //离线
+                    $tr += '<td style="word-break: break-all;" ><div style="width: 14px;height: 14px;margin: 3px 0 0 3px;background-image: url(images/cloud-table-offline.png);display: inline-block;"></div></td>';
+                }
+
+                $tr += '<td style="word-break: break-all;" id="infoName' + clogs[i]._id + '" ></td>' +
+                    '<td style="word-break: break-all;" id="infoAddress' + clogs[i]._id + '"></td>' +
+                    '<td style="word-break: break-all;" id="infoState' + clogs[i]._id + '"></td>' +
+                    '<td style="word-break: break-all;" id="infoConName' + clogs[i]._id + '"></td>' +
+                    '<td style="word-break: break-all;" id="infoConPho' + clogs[i]._id + '"></td>' +
+                    '<td style="word-break: break-all;" id="infoConEmail' + clogs[i]._id + '"></td>'
+                $tr += '</tr>';
+                $('#scadaSiteList_tbody').append($tr);
+                //现场信息
+                var siteName = clogs[i].name;
+                if (siteName == undefined) {
+                    siteName = "";
+                } else {
+                    siteName = clogs[i].name
+                }
+                $("#infoName" + clogs[i]._id + "").html(siteName);
+                var address = clogs[i].address;
+                if (address == undefined) {
+                    address = "";
+                } else {
+                    address = clogs[i].address;
+                }
+                $("#infoAddress" + clogs[i]._id + "").html(address);
+                var state = null;
+                var oState = clogs[i].businessState;
+                if (oState == 0) {
+                    state = locale.get("construction");
+                } else if (oState == 1) {
+                    state = locale.get("commissionin");
+                } else if (oState == 2) {
+                    state = locale.get("fault");
+                } else if (oState == 3) {
+                    state = locale.get("overhaul");
+                }
+                $("#infoState" + clogs[i]._id + "").html(state);
+                var conName = null;
+                var conPho = null;
+                var conEmail = null;
+                if (clogs[i].contact == undefined) {
+                    conName = "";
+                    conPho = "";
+                    conEmail = "";
+                } else {
+                    conName = clogs[i].contact.name;
+                    if (conName == undefined) {
+                        conName = "";
+                    } else {
+                        conName = clogs[i].contact.name;
+                    }
+                    conPho = clogs[i].contact.phone;
+                    if (conPho == undefined) {
+                        conPho = "";
+                    } else {
+                        conPho = clogs[i].contact.phone;
+                    }
+                    conEmail = clogs[i].contact.email;
+                    if (conEmail == undefined) {
+                        conEmail = "";
+                    } else {
+                        conEmail = clogs[i].contact.email;
+                    }
+                }
+                $("#infoConName" + clogs[i]._id + "").html(conName);
+                $("#infoConPho" + clogs[i]._id + "").html(conPho);
+                $("#infoConEmail" + clogs[i]._id + "").html(conEmail);
+            }
+        }
+        $('#scadaSiteList_tbody > tr > td > input').on('click', function (event) {
+            $("#scadaSiteList_tbody tr td input[type='checkbox']:checked").prop("checked", false);
+            $(this).prop("checked", true);
+            getSiteById($("#scadaSiteList_tbody tr td input[type='checkbox']:checked").attr("id"), null, function (data) {
+                //console.log(data);
+            }, this);
+        });
+        $("#doCopyScada").unbind("click").click(function (event) {
+            //targetCopyId 是现场列表中的选择的id
+            var copyFlag = $("#copyBox").attr("flag");
+            //console.log("copyFlag", copyFlag);
+            //选择的现场
+            var targetCopyId = $("#scadaSiteList_tbody tr td input[type='checkbox']:checked").attr("id");
+            //console.log("copy id,", targetCopyId);
+            if (targetCopyId) {
+                //得到当前选择现场的scada
+                getCanvasBySiteId(targetCopyId, null, function (data) {
+                    //console.log("first data,", data);
+                    if (!data.result) {
+                        data.result = null;
+                    }
+                    var siteListData = data;
+                    //console.log("selectSiteId, ", selectSiteId);
+                    getCanvasBySiteId(selectSiteId, null, function (current_data) {
+                        //console.log("current_data, ", current_data);
+                        /*if(  current_data.result == undefined) {
+                             current_data.result.content = null;
+                        }*/
+                        var currentData = current_data;
+                        if (copyFlag == "copyTo") {
+                            //从其他现场复制画面
+                            if (siteListData.result) {
+                                var canvasData = siteListData.result.content;
+                                var data = {
+                                    name: "a_scada_" + (1 + Math.floor(Math.random() * (999999999))),
+                                    type: "1",
+                                    content: canvasData
+                                };
+                                onScadaOk(selectSiteId, data);
+                            } else {
+                                dialog.render({
+                                    lang: "selected_site_noscada"
+                                });
+                            }
+                        } else {
+                            //画面应用到其他现场
+                            if (currentData.result) {
+                                var canvasData = currentData.result.content;
+                                var data = {
+                                    name: "a_scada_" + (1 + Math.floor(Math.random() * (999999999))),
+                                    type: "1",
+                                    content: canvasData
+                                };
+                                onScadaOk(targetCopyId, data);
+                            } else {
+                                dialog.render({
+                                    lang: "selected_site_noscada"
+                                });
+                            }
+                        }
+                    }, this);
+                }, this);
+            } else {
+                dialog.render({
+                    lang: "select_one_site"
+                });
+            }
+            //对复制执行操作
+            function onScadaOk(targetId, scadaData) {
+                //targetId 是 要复制scada到的现场，scadaData是目标内容
+                var self = this;
+                //console.log("there is onScadaOk, targetId,", targetId,",scadaData,", scadaData);
+                getCanvasBySiteId(targetId, null, function (data) {
+                    //console.log();
+                    if (data.result) {
+                        if (scadaData.name) {
+                            delete scadaData.name;
+                        }
+                        updateScada(null, scadaData, targetId, function (data) {
+                            //console.log("done 1");
+                            $("#copyBox").hide();
+                            $(".modal-backdrop").remove();
+                            $("#pcontent").load("admin/scadaviewEdit.html", function () {
+                                loadSiteInfo(targetId);
+                                set_$tcontentHeight();
+                            });
+                        }, this);
+                    } else {
+                        addScada(null, scadaData, targetId, function (data) {
+                            //console.log("done 2");
+                            $("#copyBox").hide();
+                            $(".modal-backdrop").remove();
+                            $("#pcontent").load("admin/scadaviewEdit.html", function () {
+                                loadSiteInfo(targetId);
+                                set_$tcontentHeight();
+                            });
+                        }, this);
+                    }
+                }, this);
+            }
+        });
+    }
+    //搜索现场
+    function scadaSearchFun() {
+        var queryContent = $("#scadaSearch").val();
+        loadScadaList(queryContent);
+    }
+    //点击**编辑提交** 按钮
+    /*$("#toolbar-scada-save-button").unbind("click").click(function(event) {
+        dialog.render({
+            lang: "affirm_modify",
+            buttons: [{lang: "yes"}],
+        });
+    });*/
+
+</script>
+<!--编辑的内部函数的调用-->
+<script>
+    //编辑区的内容展示
+    function editScadaInfo(editData) {
+        //console.log("this is editData,",editData);
+        destroyScada();
+        $("#content_header_scada").empty().height("26");
+        require([setting.host + '/admin/webscada/agent/AgentDrawableProperty'], function (AgentDrawablePanel) {
+            // $("#content_header_scada").empty().height("26");
+            var self = this;
+            this.AgentDrawablePanel = AgentDrawablePanel;
+            self.editData = editData;
+
+            this.AgentDrawablePanel.initialize(self.editData);
+            /*$("#agentcanvas-center-canvas canvas").height( contentHieght - 50);*/
+            var canvasData = self.AgentDrawablePanel.infoBoard.getData();
+            //loadDatas();
+        });
+        //函数说明
+        //
+        //renderSiteName : 为agentCanvasDraw.renderSiteName_div();加入sitename
+        //
+        //renderCanvasTool 构建一个AgentCanvasToolProperty 结构体， 传入一个对象
+        // selector: 工具栏
+        // agentCanvasDraw: agentCanvasDraw
+        // service: API调用
+        // global: 0
+        //
+        //renderEvent 事件函数
+        // A. agentCanvasDraw.on("rendDraw":function(data){ agentCanvasTool.reDrawElement(data)}); rendDraw??
+        // B. agentCanvasTool.on("showOptionWin":function(){agentCanvasDraw.onproperty()});
+        //renderTool
+        // this.agentCanvasDraw.agentCanvasTool = this.agentCanvasTool;
+        //destory
+        // if (this.agentCanvasTool)this.agentCanvasTool.destroy();if (this.agentCanvasDraw)this.agentCanvasDraw.destroy();
+    }
+
+</script>

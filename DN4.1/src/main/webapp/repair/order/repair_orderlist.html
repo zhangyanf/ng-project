@@ -1,0 +1,1017 @@
+<!--样式-->
+<style>
+    .tab_position {
+        position: relative;
+    }
+
+    .tab_btn_close {
+        position: absolute;
+        top: -5px;
+        right: -2px;
+    }
+
+    .tab_btn_close_color {
+        color: rgba(0, 0, 0, 0.3)
+    }
+
+    .tab_btn_close_color:hover {
+        color: red;
+    }
+   /* 工单状态条样式*/
+    .sui-steps {
+        font-size: 0px;
+        overflow: hidden;
+        line-height: 0px;
+        margin: 18px 0px;
+    }
+    .sui-steps .wrap {
+        display: inline-block;
+    }
+    .sui-steps .wrap>div {
+        width: 148px;
+        height: 32px;
+        display: inline-block;
+        line-height: 32px;
+        vertical-align: top;
+        font-size: 12px;
+        position: relative;
+    }
+    .sui-steps .wrap>div>label {
+        margin-left: 26px;
+        cursor: default;
+    }
+    .sui-steps .triangle-right {
+        display: inline-block;
+        width: 0px;
+        height: 0px;
+        border-style: solid;
+        border-width: 16px;
+        position: absolute;
+        right: -31px;
+        z-index: 1;
+    }
+    .sui-steps .triangle-right-bg {
+        display: inline-block;
+        width: 0px;
+        height: 0px;
+        border-style: solid;
+        border-width: 16px;
+        position: absolute;
+        right: -31px;
+        z-index: 1;
+        border-width: 19px;
+        right: -39px;
+        border-color: transparent transparent transparent #FFF;
+        top: -3px;
+    }
+
+    /*完成的状态样式*/
+    .sui-steps .finished {
+        background-color:#03a4d2;
+        color: #ffffff;
+    }
+    .sui-steps .finished .triangle-right {
+        border-color: transparent transparent transparent #03a4d2;
+    }
+
+    /*正在进行的状态样式*/
+    .sui-steps .current {
+        background-color: #0073b7;
+        color: #ffffff;
+    }
+    .sui-steps .current .triangle-right {
+        border-color: transparent transparent transparent #0073b7;
+    }
+
+    /*未完成状态样式*/
+        .sui-steps .todo {
+            background-color: #eeeeee;
+            color: #999999;
+        }
+    .sui-steps .todo .triangle-right {
+        border-color: transparent transparent transparent #eeeeee;
+    }
+
+
+</style>
+
+<section class="content-header" xmlns="http://java.sun.com/jsf/facelets">
+    <h1 lang="text:orderlist">
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#" lang="text:repair_manage"></a></li>
+        <li class="active" lang="text:orderlist"></li>
+    </ol>
+</section>
+
+<section class="content" id="tcontent">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="alert alert-warning alert-dismissible">
+                <h4>
+                    <i class="icon fa fa-info"></i>
+                    <span lang="text:order_total"> 工单总数 </span>
+                    <span id="order_total" class="pull-right"></span>
+                </h4>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="alert alert-danger alert-dismissible">
+                <h4>
+                    <i class="icon fa fa-info"></i>
+                    <span lang="text:order_unconfirmed_total"> 未处理工单 </span>
+                    <span id="order_unconfirmed_total" class="pull-right"></span>
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="nav-tabs-custom">
+        <!--标签页 Nav tabs-->
+        <ul class="nav nav-tabs" role="tablist" id="myNavTabs">
+            <li role="presentation" class="active">
+                <a role="tab" data-toggle="tab" lang="text:order_info" href="#tab_list">工单列表</a>
+                <input type="hidden" id="siteId">
+            </li>
+        </ul>
+        <!--标签页 Tab panes-->
+        <div class="tab-content" id="myPanesTabs" style="padding-bottom: 1px;">
+            <div role="tabpanel" class="tab-pane active row" id="tab_list"><!--列表信息-->
+                <div class="col-md-12">
+                    <div class="box box-solid" style="margin-bottom: 0px;box-shadow: 0px 0px;">
+                        <!--加载数据等待-->
+                        <div class="overlay" style="display: none;">
+                            <i class="fa icon-refresh icon-spin"></i>
+                        </div>
+                        <!--查询条件-->
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-sm-12" style="padding-bottom: 10px;">
+
+                                    <!--查询条件-->
+                                    <form class="form-inline">
+                                        <div class="form-group">
+                                            <span class="text-yellow"><i class="iconfont icon-Artificial-warranty"></i><span lang="text:artificial_service_work_sheet" style="padding:0 20px 0 5px;"> </span></span>
+                                            <span class="text-red"><i class="iconfont icon-Warning-maintenance"></i><span lang="text:alarm_fault_repair_order" style="padding:0 20px 0 5px;"> </span></span>
+                                            <span class="text-light-blue"><i class="iconfont icon-Preventive-plan"></i><span lang="text:preventive_plan_work_order" style="padding:0 20px 0 5px;"> </span></span>
+                                            <span class="text-green"><i class="iconfont icon-temporary-maintenance"></i><span lang="text:temporary_work_order" style="padding:0 20px 0 5px;"> </span></span>
+                                        </div>
+                                    </form>
+                                    <form class="form-inline">
+                                        <div class="form-group " style="padding: 5px 0px;">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" value="new"  name="order_status"/><span lang="text:new2"></span>
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" value="accepted"  name="order_status"/><span lang="text:accepted"></span>
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" value="processing"  name="order_status"/><span lang="text:processing"></span>
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" value="finished"  name="order_status"/><span lang="text:finished"></span>
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" value="closed"  name="order_status"/><span lang="text:closed"></span>
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" value="rejected"  name="order_status"/><span lang="text:rejected"></span>
+                                            </label>
+                                        </div>
+                                    </form>
+                                    <form class="form-inline">
+                                        <div class="form-group has-feedback">
+                                            <input type="text" class="form-control form-control-left input-sm" id="searchDate" readonly="readonly">
+                                            <span class="glyphicon glyphicon-calendar form-control-feedback" style="left: 0;"></span>
+                                        </div>
+                                         <div class="form-group home_detail_siteName" style="padding: 5px 0px;">
+                                            <span>
+                                                <label lang="text:site"></label>
+                                                <input type="text" class="form-control input-sm autoRetrieve" id="site_name"
+                                                       lang="placeholder:please_enter_the_site_name">
+                                            </span>
+                                        </div>
+                                        <div class="form-group" style="padding: 5px 0px;">
+                                            <div class="input-group" id="searchAssetSpan">
+                                                <div class="input-group-btn" id="radio_select_assetid">
+                                                    <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <span name="radio_select_assetid" data-val="2" lang="text:device_name"></span><span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="javascript:void(0)" lang="text:asset_number" onclick="select_assetId_content(1)">资产编号</a></li>
+                                                        <li><a href="javascript:void(0)" lang="text:device_name" onclick="select_assetId_content(2)">设备名称</a></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="form-group">
+                                                    <span>
+                                                        <input type="text" name="searchAssetValue" class="form-control input-sm autoRetrieve" id="asset_no"
+                                                               lang="placeholder:please_enter_the_asset_number" style="display:none;">
+                                                    <input type="text" name="searchAssetValue" class="form-control input-sm autoRetrieve" id="device_name"
+                                                           lang="placeholder:enter_the_machine_name">
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="form-group " style="padding: 5px 0px;">
+                                            <span>
+                                                <label lang="text:repair_engineer"></label>
+                                                <input type="text" class="form-control input-sm" id="repair_engineer"
+                                                       lang="placeholder:please_enter_the_repair_engineer">
+                                            </span>
+                                        </div>
+                                        <div class="form-group " style="padding: 5px 0px;">
+                                            <span>
+                                                <label lang="text:order_type"></label>
+                                                <select type="text" class="form-control input-sm" id="order_type">
+                                                    <option value="" lang="text:---+all+---"></option>
+                                                    <option value="1" lang="text:artificial_service_work_sheet"></option>
+                                                    <option value="2" lang="text:alarm_fault_repair_order"></option>
+                                                    <option value="3" lang="text:preventive_plan_work_order"></option>
+                                                    <option value="4" lang="text:temporary_work_order"></option>
+                                                </select>
+                                            </span>
+                                        </div>
+
+                                        <!--<div class="form-group " style="padding: 5px 0px;">-->
+                                            <!--<span >-->
+                                                <!--<select id="assetSelect" class="form-control input-sm">-->
+                                                    <!--<option value="1" lang="text:asset_number" selected="selected"></option>-->
+                                                    <!--<option value="2" lang="text:history_device_name"></option>-->
+                                                <!--</select>-->
+                                                <!--<input type="text" name="searchAssetValue" class="form-control input-sm autoRetrieve" id="asset_no"-->
+                                                       <!--lang="placeholder:please_enter_the_asset_number">-->
+                                            <!--</span>-->
+                                        <!--</div>-->
+
+                                        <!--<div class="form-group " style="padding: 5px 0px;">-->
+                                            <!--<span>-->
+                                                <!--<label lang="text:history_device_name"></label>-->
+                                                <!--<input type="text" class="form-control input-sm autoRetrieve"-->
+                                                       <!--id="history_device_name"-->
+                                                       <!--lang="placeholder:enter_the_machine_name">-->
+                                            <!--</span>-->
+                                        <!--</div>-->
+
+                                        <div class="form-group" style="padding: 5px 0px;">
+                                            <button type="button" onclick="searchOrder()" data-permissionFilter="[215,217 ]"
+                                                    class="btn btn-default btn-sm"
+                                                    data-toggle="tooltip" title="查找" lang="title:query">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                            </button>
+                                        </div>
+                                        <div class="form-group box-tools pull-right" style="padding: 5px 0px;">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-default btn-sm" title='新增'
+                                                        data-permissionFilter="[ ]"
+                                                        data-toggle='tooltip' data-placement="bottom" lang="title:add"
+                                                        onclick="show_model_createOrder();" data-permissionFilter="[214]">
+                                                    <i class="glyphicon glyphicon-plus"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-default btn-sm" title='删除'
+                                                        data-permissionFilter="[214]"
+                                                        data-toggle='tooltip' data-placement="bottom"
+                                                        lang="title:delete" onclick="delete_order()">
+                                                    <i class="glyphicon glyphicon-minus"></i>
+                                                </button>
+                                                <!--<button type="button" id="btn_export" onclick="exportData()"
+                                                        class="btn btn-default btn-sm" data-toggle="tooltip"
+                                                        lang="title:export">
+                                                    <i class="icon-upload-alt"></i>
+                                                </button>-->
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div>
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th id="tableHead_selectAll" style="width:30px;" class="text-center">
+                                            <input type="checkbox" id="tableHead_checkbok" data-toggle='tooltip'
+                                                   data-placement="bottom" lang="title:check_all">
+                                        </th>
+                                        <th lang="text:site" >现场</th>
+                                        <th lang="text:device_name" >设备名称</th>
+                                        <th lang="text:order_number" style="width:180px;">订单编号</th>
+                                        <th lang="text:repair_time" style="width:140px;"></th>
+                                       <!-- <th lang="text:asset_number" style="width:14%;">资产编号</th>-->
+                                        <th class="text-center" lang="text:order_status" style="width:110px;">工单状态</th>
+                                        <th class="text-center" lang="text:order_type" style="width:100px">工单类型</th>
+                                        <th data-permissionFilter='[ ]' class="text-center" style="width:80px"
+                                            lang="text:operate">操作
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="panelContent">
+                                    <!--动态载入数据-->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div><!--box-body-->
+                        <div id="page-footer"></div>
+                    </div>
+                </div>
+            </div><!--列表信息-->
+            <div role="tabpanel" class="tab-pane" id="tab_create_panes"></div><!--创建工单信息-->
+            <div role="tabpanel" class="tab-pane" id="tab_detail_panes"></div><!--工单详情信息-->
+        </div>
+    </div>
+</section>
+
+<!--设备列表模态框-->
+<div  id="modal_asset_list_div">
+
+</div>
+
+<!--更换部件弹出框 -->
+<div class="modal fade" data-backdrop='static' data-keyboard='false' id="changeModal" >
+
+</div>
+
+<script>
+    /**
+     * 全局变量home_detail_flag 标识home（首页加载） 或 detail（详情页加载）
+     */
+    var home_detail_flag = 'home'; // 默认为home
+
+    /**
+     * 搜索日期插件
+     */
+    $('#searchDate').daterangepicker(
+        {
+            startDate: moment().subtract(6, 'days'),
+            endDate: moment(),
+            maxDate: moment(),
+            showDropdowns: false,
+            showWeekNumbers: false,
+            separator: '-',
+            locale: {
+                format: 'YYYY/MM/DD',
+                separator: '-',
+                applyLabel: locale.get("apply"),
+                cancelLabel: locale.get("cancel")
+            }
+        },
+        function (start, end) {
+            $('#searchDate').val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
+        }
+    );
+
+    /**
+     * 日期控件
+     */
+   /* var picker2Option = {
+        singleDatePicker:true,
+        startDate: new Date(),
+        showDropdowns: false,
+        showWeekNumbers: false,
+        multidate:false,
+        separator: '-',
+        timePicker: true,
+        timePicker24Hour: true,
+        drops:"up",
+        locale: {
+            format: 'YYYY-MM-DD HH:mm',
+            separator: '-',
+            applyLabel: locale.get("apply"),
+            cancelLabel: locale.get("cancel")
+        }
+    }*/
+
+    /**
+     * 日期控件 不能选择未来时间
+     */
+    var picker2Option = {
+        singleDatePicker:true,
+        startDate: new Date(),
+        endDate: moment(),
+        maxDate: moment(),
+        showDropdowns: false,
+        showWeekNumbers: false,
+        multidate:false,
+        separator: '-',
+        timePicker: true,
+        timePicker24Hour: true,
+        drops:"up",
+        locale: {
+            format: 'YYYY-MM-DD HH:mm',
+            separator: '-',
+            applyLabel: locale.get("apply"),
+            cancelLabel: locale.get("cancel")
+        }
+    }
+
+    /**
+     * 设置日期插件的startDate 为当前最新时间
+     */
+    function setCurrentDate(idStr) {
+        picker2Option.maxDate = new Date();
+        var date = $("#"+idStr).val();
+        $("#"+idStr).prop("cacheDate",date);
+        picker2Option.startDate = new Date();
+        $("#"+idStr).daterangepicker(picker2Option);
+        $("#"+idStr).val(date);
+    }
+    /**
+     * 绑定自动检索
+     */
+    $(".autoRetrieve").keyup(function(event){
+        var ele = $(event.target); //目标对象
+        ele.removeAttr("autovalue"); //清空autovalue
+        var value = $.trim(ele.val()); //input value值
+        var id = ele.attr("id"); //input 标签的id属性值
+        if(value!="") {
+            if(id=="site_name") { //现场
+                addElement(ele,"name");//添加div标签
+                searchSiteList2(false,{name:value},function(data){ //查询数据
+                    if(data.total>0) {
+                        suggestionAndMarker(data.result,"name",ele);
+                    }
+                },this);
+            }else if(id=="asset_no") { //资产编号
+                addElement(ele,"asset_no");//添加div标签
+                loadDeviceByCondition2(false,{asset_no:value},function(data){ //查询数据
+                    if(data.total>0) {
+                        suggestionAndMarker(data.result,"asset_no",ele);
+                    }
+                },this);
+            }else if(id=="device_name") { // 设备名称
+                addElement(ele,"device_name");//添加div标签
+                loadDeviceByCondition2(false,{device_name:value},function(data){ //查询数据
+                    if(data.total>0) {
+                        suggestionAndMarker(data.result,"device_name",ele);
+                    }
+                },this);
+            }
+        }else {
+             $("#autoname").remove();
+             $("#autoasset_no").remove();
+             $("#autodevice_name").remove();
+        }
+    });
+
+    /**
+     * 查询工单条件 设备名称和设备编号之间的切换
+     */
+    $("#assetSelect").on("click",function(e){
+        var  $option= $(e.target);
+        $("#searchAssetSpan > input[name='searchAssetValue']").removeAttr("autovalue");
+        $("#searchAssetSpan > input[name='searchAssetValue']").val("");
+        if($option.val()==1) {
+            var message = locale.get("please_enter_the_asset_number");
+            $("#searchAssetSpan > input[name='searchAssetValue']").attr("placeholder",message);
+            $("#searchAssetSpan > input[name='searchAssetValue']").attr("id","asset_no");
+        }else {
+            var message = locale.get("enter_the_machine_name");
+            $("#searchAssetSpan > input[name='searchAssetValue']").attr("placeholder",message);
+            $("#searchAssetSpan > input[name='searchAssetValue']").attr("id","device_name");
+        }
+    });
+
+    /**
+     *  获取当前用户信息
+     */
+    function getUserInfo() {
+        var user = null;
+        getAPI2_user_this2(false,{verbose: 100}, function(data) {
+            if(data.result) {
+                user = {userName:data.result.name,userId:data.result._id,email:data.result.email,phone:data.result.phone};
+            }
+        }, this);
+        if(user) {
+            return user;
+        }
+    }
+
+    /**
+     * 获取工单总数
+     */
+    function getOrderTotal(siteId) {
+        var params = {};
+        if(siteId){
+            params.site_id = siteId;
+        } 
+        getOrderList(true,params,function(data){
+            $("#order_total").text(data.total);
+        },this);
+    }
+    /**
+     * 获取未处理工单总数
+     */
+    function getUnconfirmedOrderTotal(siteId) {
+        var params = {
+            states:['new']
+        }; 
+        if(siteId){
+            params.site_id = siteId; 
+        }  
+        
+        getOrderList(true,params,function(data){
+            $("#order_unconfirmed_total").text(data.total);
+        },this);
+
+    }
+
+    function select_assetId_content(tag){
+        $("input[name='searchAssetValue']").removeAttr("autovalue");
+        $("input[name='searchAssetValue']").val("");
+        if(tag==1) {
+            $("#radio_select_assetid > button > span[name='radio_select_assetid']").attr("lang","text:asset_number");
+            $("#radio_select_assetid > button > span[name='radio_select_assetid']").attr("data-val","1");
+            $("#asset_no").show();
+            $("#device_name").hide();
+           /* var message = locale.get("please_enter_the_asset_number");
+            $("input[name='searchAssetValue']").attr("placeholder",message);
+            $("input[name='searchAssetValue']").attr("id","asset_no");*/
+        }else {
+            $("#radio_select_assetid > button > span[name='radio_select_assetid']").attr("lang","text:device_name");
+            $("#radio_select_assetid > button > span[name='radio_select_assetid']").attr("data-val","2");
+            $("#asset_no").hide();
+            $("#device_name").show();
+           /* var message = locale.get("enter_the_machine_name");
+            $("input[name='searchAssetValue']").attr("placeholder",message);
+            $("input[name='searchAssetValue']").attr("id","device_name");*/
+        }
+        locale.render({element: "#init_body"});
+
+    }
+    /**
+     * 获取工单列表查询条件
+     * @param params
+     * @returns {*}
+     */
+    function getSearchParam(params) {
+        var $input2 = $("#site_name");
+        var value2 = $.trim($input2.val());
+        if(value2) {
+            if(!$input2.attr("autovalue")) {
+                if($("#autoname > p").length>0) { //自动补全的现场
+                    var arrp = $("#autoname > p");
+                   // var flag = true;
+                    for(var i = 0; i < arrp.length; i++) {
+                        if($(arrp[i]).text()==value2){
+                            $input2.attr("autovalue",$(arrp[i]).attr("id"));
+                          //  flag = false;
+                            break;
+                        }
+                    }
+                  /*  if(flag) {
+                        errorTipDis("this_site_nonexistence");
+                        return false;
+                    }*/
+                }
+            }
+        }
+        //设备名称和设备编号失去焦点判断取值
+        var assetId_type_select= $("#radio_select_assetid > button > span[name='radio_select_assetid']").attr("data-val");
+        if(assetId_type_select==1) { // 资产编号 asset_no
+            var $input = $("#asset_no");
+            var value = $.trim($input.val());
+            if(value) {
+                if(!$("#asset_no").attr("autovalue")) {
+                    if($("#autoasset_no > p").length>0) { //自动补全的现场
+                        var arrp = $("#autoasset_no > p");
+                        var flag = true;
+                        for(var i = 0; i < arrp.length; i++) {
+                            if($(arrp[i]).text()==value){
+                                $input.attr("autovalue",$(arrp[i]).attr("id"));
+                                flag = false;
+                                break;
+                            }
+                        }
+                        if(flag) {
+                            errorTipDis("this_device_nonexistence");
+                            return false;
+                        }
+                    }else { // 没有自动补全的现场
+                        errorTipDis("this_device_nonexistence");
+                        return false;
+                    }
+
+                }
+            }
+        }else { //设备名称 device_name
+            var $input = $("#device_name");
+            var value = $.trim($input.val());
+            if(value) {
+                if(!$("#device_name").attr("autovalue")) {
+                    if($("#autodevice_name > p").length>0) { //自动补全的现场
+                        var arrp = $("#autodevice_name > p");
+                        var flag = true;
+                        for(var i = 0; i < arrp.length; i++) {
+                            if($(arrp[i]).text()==value){
+                                $input.attr("autovalue",$(arrp[i]).attr("id"));
+                                flag = false;
+                                break;
+                            }
+                        }
+                        if(flag) {
+                            errorTipDis("this_device_nonexistence");
+                            return false;
+                        }
+                    }else { // 没有自动补全的现场
+                        errorTipDis("this_device_nonexistence");
+                        return false;
+                    }
+
+                }
+            }
+        }
+        var dateArray = ($("#searchDate").val()).split("-");
+        var start_time = new Date(dateArray[0] + " 00:00:00").getTime();
+        var end_time = new Date(dateArray[1] + " 23:59:59").getTime();
+        var siteId = $("#site_name").attr("autovalue");
+        var assetId ;
+        if(assetId_type_select==1) {
+            assetId = $("#asset_no").attr("autovalue");
+        }else {
+            assetId = $("#device_name").attr("autovalue");
+        }
+        var state = $("[name=order_status]:checked"); //工单状态
+        var order_type = $("#order_type").val(); //工单类型
+        var executor = $.trim($("#repair_engineer").val()); //维修工程师
+        if(siteId) {
+            params.site_id = siteId;
+        }else {
+            params.site_name=$.trim($("#site_name").val());
+        }
+        if(assetId) {
+            params.asset_id = assetId;
+        }
+        if(state.length>0) {
+            var states = [];
+            state.each(function(){
+                var $input = $(this);
+                states.push($input.val());
+            });
+            params.states = states;
+        }
+        if(order_type) {
+            params.order_types = [order_type];
+        }
+        if(executor) {
+            params.executor = executor;
+        }
+        params.start_time = start_time;
+        params.end_time = end_time;
+        // 清除自动补全的html代码 autoname  autoasset_no autodevice_name
+        $("#autoname").remove();
+        $("#autoasset_no").remove();
+        $("#autodevice_name").remove();
+        return params;
+    }
+
+
+    /**
+     * 调用api 查询工单列表，并填充数据
+     * @param cursor
+     * @param limit
+     */
+    function research_site(cursor, limit) {
+        var params = {
+            cursor: cursor,
+            limit: limit,
+            verbose: "100"
+        };
+        params = this.getSearchParam(params);
+        if(params==false) { //如果params ==false 就停止查询
+            return;
+        }
+        if(home_detail_flag=="detail") {
+            params.site_id =$("#siteId").val();
+        }
+        loading();
+        getOrderList(true, params, function (data) {
+            if (data.total > 0) {
+                fill_order_list(data.result);
+                renderPagination(data, research_site);
+            }else if(data.error_code==10016){
+                clearPagination();
+                $("#panelContent").empty();
+                $("#panelContent").append('<tr><td colspan="9"  align="center" lang="text:no_data"></td></tr>');
+                unload();
+                locale.render({element: "#init_body"});
+            } else {
+                clearPagination();
+                $("#panelContent").empty();
+                $("#panelContent").append('<tr><td colspan="9"  align="center" lang="text:no_data"></td></tr>');
+                unload();
+                locale.render({element: "#init_body"});
+            }
+        }, this);
+    }
+    /**
+     * 查询按钮方法
+     */
+    function searchOrder() {
+        research_site(0, $("#pageNumberSelect").val());
+    }
+
+    /**
+     *  填充工单列表
+     *  @param data
+     */
+    function fill_order_list(data) {
+        $("#panelContent").empty();
+        $("#tableHead_checkbok").attr("checked",false);
+        var str = "";
+        for (var i = 0; i < data.length; i++) {
+            //工单类型1：人工报修的工单；2：报警转故障工单； 3: 预防性计划工单
+            var orderType = typeof(data[i].wo.order_type) == 'undefined' ? '' : data[i].wo.order_type;
+            var orderTypeCss = "";
+            var title = "";
+            var orderTypeColor = '';
+            if (orderType == 1) {
+                orderTypeCss = "icon-Artificial-warranty";
+                orderTypeColor = "text-yellow";
+                title = locale.get("artificial_service_work_sheet");
+            } else if (orderType == 2) {
+                orderTypeCss = "icon-Warning-maintenance";
+                orderTypeColor = "text-red";
+                title = locale.get("alarm_fault_repair_order");
+            } else if (orderType == 3) {
+                orderTypeCss = "icon-Preventive-plan";
+                orderTypeColor = "text-light-blue";
+                title = locale.get("preventive_plan_work_order");
+            } else if (orderType == 4) {
+                orderTypeCss = "icon-temporary-maintenance";
+                orderTypeColor = "text-green";
+                title = locale.get("temporary_work_order");
+            }
+            //new（创建） -->accepted（接单）-->processing(进行中)-->finished(完成)-->closed(关闭)
+            //           |-->rejected(退回)
+            var state = (typeof( data[i].wo.state) == 'undefined' ? '' : data[i].wo.state);
+            var stateCss = "";
+            if(state=="new") {
+                state = locale.get("new2");
+                stateCss = "label-success";
+            }else if(state=="accepted") {
+                state = locale.get("accepted");
+                stateCss = "label-info";
+            }else if(state=="processing") {
+                state = locale.get("processing");
+                stateCss = "label-info";
+            }else if(state=="finished") {
+                state = locale.get("finished");
+                stateCss = "label-success";
+            }else if(state=="closed") {
+                state = locale.get("closed");
+                stateCss = "label-warning";
+            }else if(state=="rejected") {
+                state = locale.get("rejected");
+                stateCss = "label-danger";
+            }
+            var order_no = (typeof(data[i].wo.order_no) == 'undefined' ? '' : data[i].wo.order_no);
+           var name = (typeof(data[i].wo.device_name) == 'undefined' ? '' : data[i].wo.device_name);
+            str = "<tr><td><input type='checkbox'  value='" + data[i].wo._id + "'/></td>";
+                    if(home_detail_flag=="home") {
+             str += "<td style='word-break: break-all;'>" +
+                    "<a href='javascript:void(0)' onclick='detail_popUp(\"" +(typeof(data[i].wo.site_id) == 'undefined' ? '' : data[i].wo.site_id)+ "\")'>"+(typeof(data[i].wo.site_name) == 'undefined' ? '' : data[i].wo.site_name)+"</a></td>";
+                    }else if(home_detail_flag=="detail") {
+             str += "<td style='word-break: break-all;'>"+(typeof(data[i].wo.site_name) == 'undefined' ? '' : data[i].wo.site_name)+"</td>";
+                    }
+
+             str += "<td style='word-break: break-all;'>" + name + "</td>" +
+                    "<td style='word-break: break-all;'>" + order_no+ "</td>" +
+                    "<td style='word-break: break-all;'>" + (typeof(data[i].wo.create_time) == 'undefined' ? '' :schneider.util.dateFormat(data[i].wo.create_time,'yyyy-MM-dd hh:mm') ) + "</td>" +
+                    //"<td style='word-break: break-all;width:14%;'>" + (typeof(data[i].wo.asset_no) == 'undefined' ? '' : data[i].wo.asset_no) + "</td>" +
+                    "<td style='word-break: break-all;' class='text-center'><span class='label "+stateCss+"'>" + state + "</span></td>" +
+                    "<td style='word-break: break-all;' class='text-center "+orderTypeColor+"'><i style='font-size:20px;' title='"+title+"' class='iconfont "+orderTypeCss+"'></i></td>" +
+                    "<td class='text-center'>" +
+                    "<span data-toggle='tooltip' title='编辑' lang='title:edit' data-permissionFilter='[214]'" +
+                    "onclick='showModel_detail_order(\"" + data[i].wo._id + "\",\"" +order_no + "\")' style='padding: 3px 6px;'><span class='glyphicon glyphicon-edit link-black' aria-hidden='true' style=' cursor: pointer;'></span>&nbsp;</span>" +
+                    "</td>" +
+                    "</tr>";
+            $("#panelContent").append(str);
+        }
+        //给input添加onclick事件
+        $("tbody > tr > td > input").on("click", function () {
+            var selected_rolesId = $("#panelContent tr td input[type='checkbox']:checked");
+            var allUsers_nowPage = $("#panelContent tr td input");
+            if (selected_rolesId.length < allUsers_nowPage.length) {
+                $("#tableHead_checkbok").prop("checked", false);
+            }
+            if (selected_rolesId.length == allUsers_nowPage.length) {
+                $("#tableHead_checkbok").prop("checked", true);
+            }
+        });
+        locale.render({element: "#init_body"});
+        unload();
+    }
+
+
+    /**
+     * 工单列表全选
+     */
+    $("#tableHead_selectAll").on('click', function (event) {
+        var selected = $("#panelContent tr td input[type='checkbox']:checked");
+        var allSiteCurrentPage = $("#panelContent tr td input");
+        if (allSiteCurrentPage.length > 0) {
+            if (selected.length < allSiteCurrentPage.length) {
+                $("#panelContent tr td input").prop("checked", true);
+                $("#tableHead_checkbok").prop("checked", true);
+            } else {
+                $("#panelContent tr td input").prop("checked", false);
+                $("#tableHead_checkbok").prop("checked", false);
+            }
+        }
+    });
+
+    /**
+     * 每页显示条目切换回调函数
+     */
+    function changePageNumber(limit) {
+        research_site(0, limit);
+    }
+
+    /**
+     *跳转到指定页  回调函数
+     */
+    function jumpTopage(cursor) {
+        research_site(cursor, $("#pageNumberSelect").val());
+    }
+
+    /**
+     * 删除工单
+     */
+    function delete_order() {
+        var siteId = $("#siteId").val();
+        var selected_orders = $("#panelContent tr td input[type='checkbox']:checked");
+        if (selected_orders.length > 0) {
+            dialog.render({
+                lang: "confirm_to_delete_order",
+                buttons: [{
+                    lang: "yes", click: function () {
+                        selected_orders.each(function () {
+                            deleteOrder(false, $(this).val(), function (data) {
+
+                            }, this);
+                        });
+                        //获取工单总数和未处理工单总数
+                        getOrderTotal(siteId);
+                        getUnconfirmedOrderTotal(siteId);
+                        research_site(0, parseInt($("#pageNumberSelect").val()));
+                        $("#tableHead_checkbok").prop("checked", false);
+                        dialog.close();
+                    }
+                }, {
+                    lang: "no", click: function () {
+                        selected_orders.attr("checked", false);
+                        $("#tableHead_checkbok").prop("checked", false);
+                        dialog.close();
+                    }
+                }],
+                close: function () {
+                    dialog.close();
+                }
+            });
+        } else {
+            errorTipDis("select_del");
+        }
+        locale.render({element: "#init_body"});
+    }
+
+    /**
+     * yyyy-mm-dd hh:mm日期转时间戳
+     */
+    function dateConvertUnixtime2(datetime) {
+        datetime = datetime.replace(/\-/g, '/');
+        return new Date(datetime).getTime();
+    }
+
+    /**
+     * 显示创建工单tab页
+     */
+    function show_model_createOrder() {
+
+        if ($("#tab_create_nav").length == 0) {
+            $("#myNavTabs").append(' <li role="presentation" class="tab_position" id="tab_create_nav">' +
+                '<a role="tab" lang="text:create_order" data-toggle="tab" href="#tab_create_panes">创建工单</a>' +
+                '<div class="pull-right tab_btn_close" data-toggle="tooltip" lang="title:close">' +
+                '<button class="btn btn-box-tool tab_btn_close_color" onclick="closeCreateTab()"><i class="glyphicon glyphicon-remove"></i></button>' +
+                '</div></li>');
+        }
+        $("#myNavTabs a[lang='text:create_order']").click();
+        //清空故障设备信息和维修信息表单
+        $(".formErrorContent").remove();
+        $("#c_reset").click();
+        $("#c_repair_reset").click();
+        //清除校验错误提示
+        $(".formErrorContent").hide();
+        //给报修日期设置当天的初始值
+        $("#c_repair_date").val(schneider.util.dateFormat(new Date().getTime(), "yyyy-MM-dd hh:mm"));
+        //给报修人报修电话设置默认值
+        $("#c_repair_man").val(getUserInfo().userName);
+        $("#c_repair_phone").val(getUserInfo().phone);
+        //加载工程师下拉框数据
+        $("#c_assigned_engineer").empty().append('<option value="" lang="text:--+please_select_engineer+--">--请选择工程师--</option> ');
+        searchAPI2_users2({verbose:50,roleName:"DeviceSense"},true,function(data){
+            if(data.total>0) {
+                for(var i=0; i < data.result.length;i++) {
+                    str = '<option value="'+data.result[i]._id+'">'+data.result[i].name+'</option> ';
+                    $("#c_assigned_engineer").append(str);
+                }
+            }
+        },this)
+        locale.render({element: "#init_body"});
+    }
+
+
+    /**
+     * 显示工单详情tab页
+     */
+    function showModel_detail_order(id,order_no) { 
+        //加载工程师下拉框数据
+        $("#d_assigned_engineer").empty().append('<option value="" lang="text:--+please_select_engineer+--">--请选择工程师--</option> ');
+        searchAPI2_users2({verbose:50,roleName:"DeviceSense"},true,function(data){
+            if(data.total>0) {
+                for(var i=0; i < data.result.length;i++) {
+                    str = '<option value="'+data.result[i]._id+'">'+data.result[i].name+'</option> ';
+                    $("#d_assigned_engineer").append(str);
+                }
+            }
+        },this)
+
+        // 展开一个详情页面
+        if ($("#tab_detail_nav").length == 0) {
+            $("#myNavTabs").append(' <li role="presentation" class="tab_position" id="tab_detail_nav">' +
+                '<a role="tab"  data-toggle="tab" href="#tab_detail_panes"></a>' +
+                '<div class="pull-right tab_btn_close" data-toggle="tooltip" lang="title:close">' +
+                '<button class="btn btn-box-tool tab_btn_close_color" onclick="closeDetailTab()"><i class="glyphicon glyphicon-remove"></i></button>' +
+                '</div></li>');
+        }
+
+
+        //展开多个详情页面
+       /* if ($("#"+id).length == 0) {
+            //  onclick='renderOrderDetail(\"" +id + "\")'
+            $("#myNavTabs").append(' <li role="presentation" class="tab_position" id="' + id + '">' +
+                "<a role='tab' data-toggle='tab' href='#tab_detail_panes'></a>" +
+                '<div class="pull-right tab_btn_close" data-toggle="tooltip" lang="title:close">' +
+                '<button class="btn btn-box-tool tab_btn_close_color" onclick="closeDetailTab(this)"><i class="glyphicon glyphicon-remove"></i></button>' +
+                '</div></li>');
+        }*/
+       // var tabTitle = $("#"+id).find("a:first").text();
+        //$("#"+id).find("a:first").text(order_no);
+        $("#tab_detail_nav").find("a:first").text(order_no);
+      //  $("#"+id).find("a:first").click();
+        $("#tab_detail_nav").find("a:first").click();
+        $(".formErrorContent").remove();
+        renderOrderDetail(id);
+        locale.render({element: "#init_body"});
+    }
+
+    /**
+     *   阻断keydown事件
+     */
+    $('body').keypress(function(event) {
+        if (event.keyCode === 10 || event.keyCode === 13)
+            event.preventDefault();
+    });
+
+    /**
+     * 加载该页面时的初始化操作
+     * @param {string} page : home or detail
+     */
+    function init_order(page,siteId){
+        home_detail_flag = page;
+        permissionFilter_pageFunc();
+        $("#siteId").val(siteId);
+        require(['deviceService', 'orderService','siteService','scheduleService','fieldMaintenanceService','usersManagementService'], function () {
+            if(page=="home"){ 
+               // 如果是首页加载就显示site_name
+                $(".home_detail_siteName").show();
+                // 加载工单列表分页页面
+                $("#page-footer").load("admin/pagination.html", function () {
+                    research_site(0, $("#pageNumberSelect").val());
+                });
+                // 加载创建工单tab页面
+                $("#tab_create_panes").load("repair/order/add_order_tab.html");
+                // 加载报修设备页面
+                $("#modal_asset_list_div").load("repair/order/repair_asset.html");
+                // 加载工单详情页面
+                $("#tab_detail_panes").load("repair/order/detail_order_tab.html"); 
+             
+        }else if(page=="detail") {
+            // 如果是详情页加载就隐藏site_name
+            $(".home_detail_siteName").hide(); 
+            // 加载工单列表分页页面
+            $("#page-footer").load("../admin/pagination.html", function () {
+                research_site(0, $("#pageNumberSelect").val());
+            });
+            // 加载创建工单tab页面
+            $("#tab_create_panes").load("../repair/order/add_order_tab.html");
+            // 加载报修设备页面
+            $("#modal_asset_list_div").load("../repair/order/repair_asset.html");
+            // 加载工单详情页面
+            $("#tab_detail_panes").load("../repair/order/detail_order_tab.html"); 
+        }
+        //获取工单总数和未处理工单总数
+                getOrderTotal(siteId);
+                getUnconfirmedOrderTotal(siteId);
+                locale.render({element: "#init_body"});
+        });
+        
+    }
+</script>

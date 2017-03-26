@@ -1,0 +1,929 @@
+<!--控制器管理页面-->
+<style type="text/css">
+    .input_readOnly{
+        border: none;
+        background-color: white;
+    }
+    .icon_click{
+        cursor: pointer;
+    }
+    .icon_click:hover{
+        color: rgba(45, 210, 31, 0.71);
+    }
+    #CTRight_advanceOptions{
+        cursor: pointer;
+        color: rgba(103, 135, 116, 0.91);
+    }
+    #CTRight_advanceOptions:hover{
+        color: #1fc651;
+    }
+    #tableHead_selectAll {
+        cursor: pointer;
+    }
+
+    #tableHead_selectAll:hover {
+        color: #1fc651;
+    }
+</style>
+
+<script type="text/javascript">
+//表单验证配置
+    validator.render("#form_details", {
+        promptPosition: "inline",
+        scroll: false
+    });
+    var defaultPlc = {
+        name: "",
+        modelId: "",
+        siteName: "",
+        siteId: "",
+        vendorId: 0,
+        comment: "",
+        serialNumber: "",
+        alias: "",
+        machineConfig: {
+            mbAddress: "",
+            mbIp: "",
+            mbPort: "",
+            mbBaud: "",
+            mbDataBit: "",
+            mbStopBit: "",
+            mbParity: "",
+            queryInterval: "60",
+            alarmTrapInterval: "120",
+            alarmTrapTimeout: "30",
+            statusTrapInterval: "60",
+            statusTrapTimeout: "30",
+            sensorRWTimeout: "10",
+            usingStatus: "0",
+            workMode: "0",
+            cmdMode: "0"
+        }
+    };
+    //阻止回车事件
+    $('body').keypress(function(event) {
+        if (event.keyCode === 10 || event.keyCode === 13)
+            event.preventDefault();
+    });
+
+    function fun_queryReport(field, rules, i, options) {
+        var period_S;
+        var periodM;
+        var reg = /^[\+]?\d+$/;
+        if (reg.test($.trim(field[0].value)) && reg.test($("#AO_right_researchCycle").val())) {
+            period_S = parseInt($.trim(field[0].value));
+            periodM = parseInt($("#AO_right_researchCycle").val());
+            if ((period_S % periodM) > 0) {
+                var strInfo = locale.get("status_multiple_queryInterval");
+                return strInfo;
+                locale.render({element: "#init_body"});
+            }
+        }
+    }
+
+
+    //加载主要数据
+    function loadData_mainData(data) {
+        $("#panelContent1_table1").empty();
+        $.each(data.result, function(n, data) {
+            var str = "<tr>" +
+                    "<td><input type='checkbox' value='" + data._id + "' class='tabs-checked'></td>" +
+                    "<td style='word-break: break-all;'>" + data.name + "</td>" +
+                    "<td>" + data.model + "</td>" +
+                    "<td>" + (data.siteName ? data.siteName : "") + "</td>" +
+                    "<td style='text-align:center;'>" +
+                    "<span class='glyphicon glyphicon-edit link-black' lang='title:edit' data-permissionFilter='[29]'  onclick='show_detailedData(\"" + data._id + "\")' style=' cursor: pointer;'></span>" +
+//                    "<span data-toggle='tooltip' title='更多信息' lang='title:moreInformation' onclick='show_detailedData(\"" + data._id + "\")' style='padding: 3px 6px;'>" +
+//                    "<span class='glyphicon glyphicon-th-list ' aria-hidden='true' style='cursor: pointer;'></span>&nbsp;</span>" +
+                    "</td>" +
+                    "</tr>";
+            $("#panelContent1_table1").append(str);
+        });
+
+        $("tbody > tr > td > input").on("click", function() {
+            var selected_usersId = $("#panelContent1_table1 tr td input[type='checkbox']:checked");
+            var allUsers_nowPage = $("#panelContent1_table1 tr");
+            if (selected_usersId.length < allUsers_nowPage.length) {
+                $("#tableHead_selectAll").prop("checked", false);
+            }
+            if (selected_usersId.length == allUsers_nowPage.length) {
+                $("#tableHead_selectAll").prop("checked", true);
+            }
+        });
+        locale.render({element: "#init_body"});
+    }
+    //加载详细数据
+    /*
+     *dt1--安装现场数据
+     *data--机器信息
+     *dt2--机器类型数据
+     */
+    function loadData_detailedData(dt1, data, dt2) {
+
+        $("#optionId").removeAttr("optionDataType");
+        $("#area_detailedData select").attr("disabled", "disabled");
+        $("#area_detailedData input").attr("readonly", "true");
+        $("#area_detailedData input").addClass("input_readOnly");
+        var siteId = (typeof(data.result.siteId) == 'undefined') ? "" : data.result.siteId;
+        $("#machineName").val(data.result.name);  //机器名
+        var machineType = data.result.model;        //机型
+        $("#TC_right_installationSite").empty();
+        $("#TC_right_installationSite").append("<option></option>");
+        if (dt1.result && dt1.total > 0) {
+            var sites = dt1.result;
+            $.each(sites, function(n, site) {
+                if (siteId == site._id) {
+                    $("<option selected='selected'>").val(site._id).text(site.name).appendTo($("#TC_right_installationSite"));
+                } else {
+                    $("<option>").val(site._id).text(site.name).appendTo($("#TC_right_installationSite"));
+                }
+            });
+        }
+        modelsMap = {};
+        $("#TC_right_machineType").empty();
+        if (dt2.result && dt2.total > 0) {
+            var models = dt2.result;
+            $.each(models, function(n, model) {
+                if (machineType == model.name) {
+                    $("<option selected='selected'>").val(model._id).text(model.name).appendTo($("#TC_right_machineType"));
+                } else {
+                    $("<option>").val(model._id).text(model.name).appendTo($("#TC_right_machineType"));
+                }
+                modelsMap[model._id] = model;
+            });
+        }
+        $("#TC_right_address").val(data.result.machineConfig.mbAddress);//机器地址
+        $("#TC_right_macineIP").val(data.result.machineConfig.mbIp);//机器Ip
+        $("#TC_right_port").val(data.result.machineConfig.mbPort);//端口号
+        $("#TC_right_serialNumber").val(data.result.serialNumber);//序列号
+        $("#info-form-deviceconfig-mbBaud").val(data.result.machineConfig.mbBaud);  //波特率
+        $("#info-form-deviceconfig-mbDataBit").val(data.result.machineConfig.mbDataBit);  //数据位
+        $("#info-form-deviceconfig-mbParity").val(data.result.machineConfig.mbParity);   //奇偶校验位
+        $("#info-form-deviceconfig-mbStopBit").val(data.result.machineConfig.mbStopBit);//停止位
+
+        $("#TC_right_alias").val(data.result.alias);//别名
+        $("#AO_right_researchCycle").val(data.result.machineConfig.queryInterval);//查询机器周期
+        $("#AO_right_alarmTimeInterval").val(data.result.machineConfig.alarmTrapInterval);//报警间隔
+        $("#AO_right_alarmOverTime").val(data.result.machineConfig.alarmTrapTimeout);//报警上报超时
+        $("#AO_right_stateReportedCycle").val(data.result.machineConfig.statusTrapInterval);//状态上报周期
+        $("#AO_right_stateReportedOverTime").val(data.result.machineConfig.statusTrapTimeout);//状态上报超时
+        $("#AO_right_machine_RW_OverTime").val(data.result.machineConfig.sensorRWTimeout);//机器读写超时
+
+        $("#AO_right_stateUsed").empty();//使用状态
+        $("#AO_right_stateUsed").append("<option value='1' lang='text:enabled'>启用</option><option value='0' lang='text:disabled'>停用</option>");
+        $("#AO_right_stateUsed option[value=" + data.result.machineConfig.usingStatus + "]").attr("selected", true);
+
+        $("#AO_right_workMode").empty();   //工作模式
+        $("#AO_right_workMode").append("<option value='1' lang='text:postive_mode'>主动模式</option><option value='0' lang='text:passive_mode'>被动模式</option>");
+        $("#AO_right_workMode option[value=" + data.result.machineConfig.workMode + "]").attr("selected", true);
+
+        $("#AO_right_orderMode").empty();   //命令模式
+        $("#AO_right_orderMode").append("<option value='0' lang='text:no_read_no_write'>不可读,不可写</option> <option value='1' lang='text:read_only'>可读,不可写</option><option value='2' lang='text:write_only'>不可读,可写</option><option value='3' lang='text:read_and_write'>可读,可写</option>");
+        $("#AO_right_orderMode option[value=" + data.result.machineConfig.cmdMode + "]").attr("selected", true);
+
+        locale.render({element: "#init_body"});
+    }
+
+
+</script>
+
+<section class="content-header">
+    <h1 lang="text:controller">
+        控制器
+        <small>Version 2.0</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#" lang="text:config"></a></li>
+      <li class="active" lang="text:controller"></li>
+    </ol>
+</section>
+<section class="content" id="tcontent">
+    <!--标签导航-->
+    <!--<ul class="nav nav-tabs" role="tablist" id="myNavTabs">-->
+    <!--<li role="presentation" class="active" onclick="showNavTabContent(1)"><a-->
+    <!--role="tab" data-toggle="tab">所有控制器</a></li>-->
+    <!--<li role="presentation" onclick="showNavTabContent(2)"><a role="tab"-->
+    <!--data-toggle="tab">其他控制器</a>-->
+    <!--</li>-->
+    <!--</ul>-->
+    <!--导航内容-->
+    <div class="tab-content" id="allNavTabContent">
+        <div id="NavTabContent1">
+            <div id="area_mainData"><!--主要数据区-->
+                <div class="box">
+                    <!--加载数据等待-->
+                    <div class="overlay" style="display: none;" id="overlay1">
+                        <i class="fa icon-refresh icon-spin"></i>
+                    </div>
+                    <div class="box-header with-border">
+                        <span><h3 class="box-title" lang="text:controller_info">&nbsp;</h3></span>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-12" style="padding-bottom: 10px;"><!--查询条件-->
+                                <form class="form-inline">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="machines_name" placeholder="请输入控制器名称"
+                                               lang="placeholder:enter_the_controller_name" style="height: 30px;width: 200px;">
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" onclick="searchFun()" class="btn btn-default btn-sm" data-toggle="tooltip" title="查找" lang="title:query" id="btn_research">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </div>
+                                    <div class="form-group box-tools pull-right">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default btn-sm" title='新增' data-permissionFilter="[90]"
+                                                    data-toggle='tooltip' data-placement="bottom" lang="title:add" onclick="increaseMachines();">
+                                                <i class="glyphicon glyphicon-plus"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-sm" title='删除' data-permissionFilter="[90]"
+                                                    data-toggle='tooltip' data-placement="bottom" lang="title:delete" onclick="deleteMachines();">
+                                                <i class="glyphicon glyphicon-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div><!--查询条件-->
+                        </div>
+                        <div>
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th  style="width:30px;">
+                                            <input type="checkbox" id="tableHead_selectAll" data-toggle='tooltip' data-placement="bottom" lang="title:check_all">
+                                        </th>
+                                        <th lang="text:controller_name" style="width:25%;">控制器名</th>
+                                        <th lang="text:model">机型</th>
+                                        <th lang="text:installation_site">安装现场</th>
+                                        <th style="width:60px;text-align:center;" lang="text:operate"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="panelContent1_table1">
+
+                                    <!--动态载入数据-->
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!--box-body-->
+                    <div id="page-footer">
+
+
+                    </div>
+                </div>
+            </div><!--主要数据区-->
+        </div>
+    </div>
+</section>
+<!--控制器详细信息模态框-->
+<div class="modal fade" id="modal_detailedData">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="change_detailedData()">
+                    <span aria-hidden="true">×</span></button>
+                <h4 id="modal_title" class="modal-title"></h4>
+            </div>
+            <div class="box box-solid">
+                <div class="overlay" style="display: none;" id="overlay2">
+                    <i class="fa icon-refresh icon-spin"></i>
+                </div>
+                <div class="modal-body" style="max-height:450px;overflow: auto;">
+                    <div id="area_detailedData"><!--详细数据区-->
+                        <!--加载数据等待-->
+
+                        <form class="form-horizontal" id="form_details">
+                            <!--清空form数据-->
+                            <input type="reset" style="display:none;" id="form_reset" />
+                            <div class="form-group ">
+                                <label class="col-sm-4 control-label" >
+                                  <span lang="text:controller_name"></span ><span class="text-red">*</span>
+                                </label>
+                                <div class="col-sm-7">
+                                    <input type="text" id="machineName" lang="placeholder:enter_the_controller_name" class="form-control input_readOnly validate[required,maxSize[30]]" value="">
+
+                                </div>
+                            </div>
+                            <div class="form-group info-plc-model-row">
+                                <label class="col-sm-4 control-label" >
+                                    <span lang="text:model"></span><span class="text-red">*</span>
+                                </label>
+                                <div class="col-sm-7">
+                                    <select id="TC_right_machineType" class="form-control validate[required]" >
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group info-form-network-port">
+                                <label class="col-sm-4 control-label" >
+                                    <span lang="text:plc_mbadddress"></span ><span class="text-red">*</span>
+                                </label>
+
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control validate[required,custom[integer],min[0]]" value="" id="TC_right_address"  >
+                                </div>
+                            </div>
+                            <div class="form-group info-form-ethernetport-row">
+                                <label class="col-sm-4 control-label" >
+                                    <span lang="text:plc_ip"></span ><span class="text-red">*</span>
+                                </label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control validate[required,custom[ip]]" value="" id="TC_right_macineIP" >
+                                </div>
+                            </div>
+                            <div class="form-group info-form-deviceconfig-mbport-row">
+                                <label class="col-sm-4 control-label" >
+                                    <span lang="text:port"></span ><span class="text-red">*</span>
+                                </label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control validate[required,custom[integer],min[1],max[65535]]" value="" id="TC_right_port"  >
+                                </div>
+                            </div>
+                            <div class="form-group" >
+                                <label class="col-sm-4 control-label" lang="text:serial_number">
+                                    <!--<span lang="text:serial_number+:">序列号</span>-->
+                                </label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" value="" id="TC_right_serialNumber" >
+                                </div>
+                            </div>
+                            <div class="form-group info-form-network-port">
+                                <label class="col-sm-4 control-label" >
+                                  <span lang="text:baud_rate"></span ><span class="text-red">*</span>
+                                </label>
+                                <div class="col-sm-7">
+                                    <select type="text" id="info-form-deviceconfig-mbBaud" class="form-control validate[required]"><!--  value="9600" -->
+                                        <option value="110" >110</option>
+                                        <option value="300" >300</option>
+                                        <option value="600" >600</option>
+                                        <option value="1200" >1200</option>
+                                        <option value="2400" >2400</option>
+                                        <option value="4800" >4800</option>
+                                        <option value="9600" selected="selected">9600</option>
+                                        <option value="19200" >19200</option>
+                                        <option value="38400" >38400</option>
+                                        <option value="57600" >57600</option>
+                                        <option value="115200" >115200</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group info-form-network-port">
+                                <label class="col-sm-4 control-label" >
+                                  <span lang="text:data_bit"></span ><span class="text-red">*</span>
+                                </label>
+                                <div class="col-sm-7">
+                                    <select id="info-form-deviceconfig-mbDataBit" class="form-control validate[required]" ><!-- value="8" -->
+                                        <option value="6" >6</option>
+                                        <option value="7" >7</option>
+                                        <option value="8" >8</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group info-form-network-port">
+                                <label class="col-sm-4 control-label" >
+                                  <span lang="text:stop_bit"></span ><span class="text-red">*</span>
+                                </label>
+                                <div class="col-sm-7">
+                                    <select type="text" id="info-form-deviceconfig-mbStopBit" class="form-control validate[required]" ><!-- value="N" -->
+                                        <option value="1" >1</option>
+                                        <option value="2" >2</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group info-form-network-port">
+                                <label class="col-sm-4 control-label"  lang="text:parity_check"></label>
+                                <div class="col-sm-7">
+                                    <select type="text" id="info-form-deviceconfig-mbParity" class="form-control validate[required]"><!--  value="1" --><!-- not validated -->
+                                        <option value="N" >NONE</option>
+                                        <option value="O" >ODD</option>
+                                        <option value="E" >EVEN</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" >
+                                <label class="col-sm-4 control-label" lang="text:install_site">
+                                    <!--<span lang="text:install_site">安装现场</span>：-->
+                                </label>
+                                <div class="col-sm-7">
+                                    <select id="TC_right_installationSite" class="form-control">
+                                        <option></option>
+                                    </select>
+                                </div>
+                                <!--<div class="col-sm-2">-->
+                                <!--<span class="glyphicon glyphicon-eye-open icon_click"></span>-->
+                                <!--</div>-->
+                            </div>
+                            <div class="form-group" >
+                                <label class="col-sm-4 control-label" lang="text:plc_aliases">
+                                    <!--<span lang="text:plc_aliases">别名</span>：-->
+                                </label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" value="" id="TC_right_alias" >
+                                </div>
+                            </div>
+
+                            <br />
+                            <div class="col-sm-12">
+                                <label lang="text:advanced_options">高级选项</label>&nbsp;&nbsp;&nbsp;
+                                <span class="glyphicon glyphicon-triangle-bottom" id="CTRight_advanceOptions" data-toggle="collapse"
+                                      onclick="change_advanceOptionsContent()" href="#advanceOptions_content" aria-expanded="false"
+                                      aria-controls="advanceOptions_content"></span>
+                            </div>
+                            <div id="advanceOptions_content" class="collapse">
+                                <form class="form-horizontal">
+                                    <div style="border: 1px solid rgb(229, 229, 229);margin:30px 14px">
+                                        <div class="form-group" style="font-size: 12px; margin-top:10px;">
+                                            <label class="col-sm-4 control-label" >
+                                                <span lang="text:query_interval"></span ><span class="text-red">*</span>
+                                            </label>
+                                            <div class="col-sm-7" >
+                                                <input type="text" class="form-control input-sm validate[required,custom[integer],min[5],max[3600]]"
+                                                       value="" id="AO_right_researchCycle">
+                                            </div>
+                                            <div  class="col-sm-1" style="padding-left: 1px;padding-right: 1px;padding-top: 7px;" lang="text:seconds">
+                                                秒
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="font-size: 12px; ">
+                                            <label class="col-sm-4 control-label">
+                                                <span lang="text:alarm_trap_interval"></span ><span class="text-red">*</span>
+                                            </label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control input-sm validate[required,min[3],max[3600],custom[integer]]"
+                                                       value="" id="AO_right_alarmTimeInterval">
+                                            </div>
+                                            <div  class="col-sm-1" style="padding-left: 1px;padding-right: 1px;padding-top: 7px;" lang="text:seconds">
+                                                秒
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="font-size: 12px; ">
+                                            <label class="col-sm-4 control-label" >
+                                                <span lang="text:alarm_trap_timeout"></span ><span class="text-red">*</span>
+                                            </label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control input-sm validate[required,min[5],max[30],custom[integer]]"
+                                                       value="" id="AO_right_alarmOverTime">
+                                            </div>
+                                            <div  class="col-sm-1" style="padding-left: 1px;padding-right: 1px;padding-top: 7px;" lang="text:seconds">
+                                                秒
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="font-size: 12px; ">
+                                            <label class="col-sm-4 control-label" >
+                                                <span lang="text:status_trap_interval"></span ><span class="text-red">*</span>
+                                            </label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control validate[required,min[5],max[86400],custom[integer],funcCall[fun_queryReport]]"
+                                                       value="" id="AO_right_stateReportedCycle">
+                                            </div>
+                                            <div  class="col-sm-1" style="padding-left: 1px;padding-right: 1px;padding-top: 7px;" lang="text:seconds">
+                                                秒
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="font-size: 12px; ">
+                                            <label class="col-sm-4 control-label">
+                                                <span lang="text:status_trap_timeout"></span ><span class="text-red">*</span>
+                                            </label>
+                                            <div class="col-sm-7" >
+                                                <input type="text" class="form-control input-sm validate[required,min[5],max[30],custom[integer]]"
+                                                       value="" id="AO_right_stateReportedOverTime">
+                                            </div>
+                                            <div  class="col-sm-1" style="padding-left: 1px;padding-right: 1px;padding-top: 7px;" lang="text:seconds">
+                                                秒
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="font-size: 12px; ">
+                                            <label class="col-sm-4 control-label" >
+                                                <span lang="text:sensor_rw_timeout"></span ><span class="text-red">*</span>
+                                            </label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control input-sm validate[required,min[1],max[30],custom[integer]]"
+                                                       value="" id="AO_right_machine_RW_OverTime">
+                                            </div>
+                                            <div  class="col-sm-1" style="padding-left: 1px;padding-right: 1px;padding-top: 7px;" lang="text:seconds">
+                                                秒
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="font-size: 12px ">
+                                            <label class="col-sm-4 control-label" >
+                                                <span lang="text:using_status"></span ><span class="text-red">*</span>
+                                            </label>
+                                            <div class="col-sm-7">
+                                                <select id="AO_right_stateUsed"  class="validate[required] form-control">
+                                                    <option value="1" lang="text:enabled">启用</option>
+                                                    <option value="0" lang="text:disabled">停用</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="font-size: 12px; ">
+                                            <label class="col-sm-4 control-label"  >
+                                                <span lang="text:work_mode"></span ><span class="text-red">*</span>
+                                            </label>
+                                            <div class="col-sm-7">
+                                                <select id="AO_right_workMode"  class="validate[required] form-control">
+                                                    <option value="1" lang="text:postive_mode">主动模式</option>
+                                                    <option value="0" lang="text:passive_mode">被动模式</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="font-size: 12px; " >
+                                            <label class="col-sm-4 control-label" >
+                                                <span lang="text:cmd_mode"></span ><span class="text-red">*</span>
+                                            </label>
+                                            <div class="col-sm-7" >
+                                                <select id="AO_right_orderMode"  class="validate[required] form-control">
+                                                    <option value="0" lang="text:no_read_no_write">不可读,不可写</option>
+                                                    <option value="1" lang="text:read_only">可读,不可写</option>
+                                                    <option value="2" lang="text:write_only">不可读,可写</option>
+                                                    <option value="3" lang="text:read_and_write">可读,可写</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                </form>
+                            </div>
+                    </div>
+                    </form>
+                </div><!--详细数据区-->
+            </div>
+            <div class="modal-footer">
+                <span id="optionId" optionDataType="" machineId="">
+                    <button type="button" class="btn btn-default pull-left" onclick="cancel_submitDate()" data-dismiss="modal" lang="text:close">关闭</button>
+                    <button type="button" class="btn btn-primary" data-permissionfilter="[90]" onclick="submitDate()"  lang="text:submit">提交</button>
+                </span>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+    function showNavTabContent(navTab) {
+        $("#allNavTabContent > div").each(function() {
+            $(this).hide();
+        });
+        switch (navTab) {
+            case 1:
+                $("#NavTabContent1").show();
+                $("#form_reset").click();
+                $("#optionId").removeAttr("optionDataType");
+                $("#optionId").removeAttr("machineId");
+                func_navTab_one(0, $("#pageNumberSelect").val());
+                break;
+            default:
+                break;
+        }
+    }
+    function func_navTab_one(cursor, lim) {
+        loading1();
+        var params = {limit: lim, cursor: cursor, verbose: 100};
+        var inputValue = $("#machines_name").val().replace(/\s/g, "");
+        if (inputValue !== "") {
+            inputValue = inputValue.match(pattern);
+            params.name = inputValue;
+        }
+
+        $("#machines_name").val(inputValue);
+        getAPI_machines(params, function(data) {
+            //返回:cursor,limit,total,result
+            if (data.total && data.total > 0) {
+                //加载分页工具
+                loadData_mainData(data);
+                renderPagination(data, func_navTab_one);
+            } else {
+                clearPagination();
+                $("#panelContent1_table1").empty();
+                $("#panelContent1_table1").append('<tr><td colspan="5"  align="center" lang="text:no_data"></td></tr>');
+            }
+            unload1();
+            $("#tableHead_selectAll").prop("checked", false);
+            locale.render({element: "#init_body"});
+        }, this);
+    }
+
+    //每页显示条数切换
+    function changePageNumber(limit) {
+        func_navTab_one(0, limit);
+    }
+    //跳转到指定页  回调函数
+    function jumpTopage(cursor) {
+        func_navTab_one(cursor, $("#pageNumberSelect").val());
+    }
+    //查询按钮方法
+    function searchFun() {
+        func_navTab_one(0, $("#pageNumberSelect").val());
+    }
+    //机器详细信息
+    function show_detailedData(mID) {
+        $("#form_reset").click();
+        $("#modal_title").text(locale.get('editController'));
+        $('#modal_detailedData').modal({backdrop: 'static', keyboard: false});
+        $('#modal_detailedData').modal('show');
+//        $("#edit_icon").show();
+        $("#optionId").attr("machineId", mID);
+        $(".info-form-network-port").hide();
+        $(".info-form-ethernetport-row").hide();
+        $(".info-form-deviceconfig-mbport-row").hide();
+        loading2();
+        var paramsStr1 = {verbose: 1, limit: 0};
+        var paramsStr2 = {verbose: 100};
+        var paramsStr3 = {verbose: 4, limit: 0, gateway: 'false'};
+        getAPI_sites(paramsStr1, function(dt1) {
+            getAPI_machines_$ID(mID, paramsStr2, function(data) {
+                getAPI_models(paramsStr3, function(dt2) {
+                    loadData_detailedData(dt1, data, dt2);
+                    swapByModelIOType($("#TC_right_machineType").val());
+                    editMachinesData();
+                    unload2();
+                }, this);
+            }, this);
+        }, this);
+        locale.render({element: "#init_body"});
+    }
+
+    //新增控制器
+    function increaseMachines() {
+        var modal_title = locale.get('addController');
+        $("#modal_title").text(modal_title);
+        $('#modal_detailedData').modal({backdrop: 'static', keyboard: false});
+        $('#modal_detailedData').modal('show');
+        var paramsStr1 = {verbose: 1, limit: 0};
+        var paramsStr3 = {verbose: 4, limit: 0, gateway: 'false'};
+        $("#area_detailedData select").removeAttr("disabled");
+        $("#area_detailedData option").removeAttr("selected");
+        $("#area_detailedData input").removeAttr("readonly");
+        $("#area_detailedData input").removeClass("input_readOnly");
+        $(".info-form-network-port").hide();
+        $(".info-form-ethernetport-row").hide();
+        $(".info-form-deviceconfig-mbport-row").hide();
+        $("#form_reset").click();
+        $("#optionId").attr("optionDataType", "post");
+//        $("#edit_icon").hide();
+        getAPI_models(paramsStr3, function(dt2) {
+            $("#TC_right_machineType").empty();
+//            for(var n1=0;n1<dt2.total;n1++){
+//                $("#TC_right_machineType").append(" <option value='"+dt2.result[n1]._id+"'>"+dt2.result[n1].name+"</option>");
+//            }
+            if (dt2.result && dt2.total > 0) {
+                var models = dt2.result;
+                $.each(models, function(n, model) {
+                    $("<option>").val(model._id).text(model.name).appendTo($("#TC_right_machineType"));
+                    modelsMap[model._id] = model;
+                });
+            }
+            swapByModelIOType($("#TC_right_machineType").val());
+        }, this);
+        loading2();
+        getAPI_sites(paramsStr1, function(dt1) {
+            $("#TC_right_installationSite").empty();
+            $("#TC_right_installationSite").append("<option></option>");
+            for (var m1 = 0; m1 < dt1.total; m1++) {
+                $("#TC_right_installationSite").append(" <option value='" + dt1.result[m1]._id + "'>" + dt1.result[m1].name + "</option>");
+            }
+            unload2();
+        }, this);
+        $("#AO_right_alarmTimeInterval").val('120');
+        $("#AO_right_alarmOverTime").val('30');
+        $("#AO_right_researchCycle").val('60');
+        $("#AO_right_machine_RW_OverTime").val('10');
+        $("#AO_right_stateReportedCycle").val('60');
+        $("#AO_right_stateReportedOverTime").val('30');
+        locale.render({element: "#init_body"});
+    }
+    //删除控制器
+    function deleteMachines() {
+        var selected_users = $("#panelContent1_table1 tr td input[type='checkbox']:checked");
+        if (selected_users.length > 0) {
+            dialog.render({
+                lang: "deleteController",
+                buttons: [{lang: "yes", click: function() {
+                            var params = {};
+                            selected_users.each(function() {
+                                deleteAPI_machines_$ID($(this).val(), params);
+                            });
+                            func_navTab_one(0, $("#pageNumberSelect").val());
+                            dialog.close();
+                        }}, {lang: "no", click: function() {
+                            dialog.close();
+                        }}],
+                close: function() {
+                    dialog.close();
+                }
+            });
+        } else {
+            dialog.render({
+                lang: "select_del"
+            });
+        }
+        locale.render({element: "#init_body"});
+    }
+    //修改控制器数据
+    function editMachinesData() {
+//        loading2();
+        $("#optionId").attr("optionDataType", "put");
+//        $("#edit_icon").hide();
+        $("#area_detailedData select").removeAttr("disabled");
+        $("#area_detailedData input").removeAttr("readonly");
+        $("#area_detailedData input").removeClass("input_readOnly");
+        $("#TC_right_machineType").attr("disabled", "disabled"); //更新时忽略机型
+//        var paramsStr1 = {verbose: 1, limit: 0};
+//        var site_id = $("#TC_right_installationSite").val();
+//        getAPI_sites(paramsStr1, function(dt1) {
+//            $("#TC_right_installationSite").empty();
+//            $("#TC_right_installationSite").append("<option></option>");
+//            for (var m1 = 0; m1 < dt1.total; m1++) {
+//                if (site_id == dt1.result[m1]._id) {
+//                    $("#TC_right_installationSite").append("<option value='" + dt1.result[m1]._id + "' selected='selected'>" + dt1.result[m1].name + "</option>");
+//                } else {
+//                    $("#TC_right_installationSite").append("<option value='" + dt1.result[m1]._id + "'>" + dt1.result[m1].name + "</option>");
+//                }
+//            }
+//            unload2();
+//        }, this);
+    }
+    //取消提交数据修改和新增
+    function cancel_submitDate() {
+        if ($("#optionId").attr("optionDataType") == "post") {
+//            $("#modalBtn_close").click();
+            $("#form_reset").click();
+            $("#optionId").removeAttr("optionDataType");
+            $(".parentFormform_details.formError.inline").remove();
+        }
+        if ($("#optionId").attr("optionDataType") == "put") {
+            $("#TC_right_installationSite").empty();
+            $("#form_reset").click();
+//            $("#edit_icon").show();
+            var mID = $("#optionId").attr("machineId");
+            show_detailedData(mID);
+            $(".parentFormform_details.formError.inline").remove();
+        }
+    }
+    //提交修改数据和新增数据
+    function submitDate() {
+        var operationType = $("#optionId").attr("optionDataType"); //post And put
+        var sendData;
+        var alias = $("#TC_right_alias").val();
+        var model = $("#TC_right_machineType").find("option:selected").text();
+        var modelId = $("#TC_right_machineType ").val();
+        var name = $("#machineName").val();
+        var serialNumber = $("#TC_right_serialNumber").val();
+        var siteId = $("#TC_right_installationSite").val();
+        var siteName = $("#TC_right_installationSite").find("option:selected").text();
+        var vendorId = 0;    //
+        var alarmTrapInterval = $("#AO_right_alarmTimeInterval").val();
+        var alarmTrapTimeout = $("#AO_right_alarmOverTime").val();
+        var cmdMode = $("#AO_right_orderMode").val();
+        var mbAddress = $("#TC_right_address").val();
+        var mbIp = $("#TC_right_macineIP").val();
+        var mbPort = $("#TC_right_port").val();
+        var mbBaud = $("#info-form-deviceconfig-mbBaud").val();  //波特率
+        var mbDataBit = $("#info-form-deviceconfig-mbDataBit").val();  //数据位
+        var mbParity = $("#info-form-deviceconfig-mbParity").val();   //奇偶校验位
+        var mbStopBit = $("#info-form-deviceconfig-mbStopBit").val();//停止位
+        var queryInterval = $("#AO_right_researchCycle").val();
+        var sensorRWTimeout = $("#AO_right_machine_RW_OverTime").val();
+        var statusTrapInterval = $("#AO_right_stateReportedCycle").val();
+        var statusTrapTimeout = $("#AO_right_stateReportedOverTime").val();
+        var usingStatus = $("#AO_right_stateUsed").val();
+        var workMode = $("#AO_right_workMode").val();
+        sendData = {alias: alias, model: model, modelId: modelId, name: name, serialNumber: serialNumber, vendorId: vendorId,
+            machineConfig: {alarmTrapInterval: alarmTrapInterval, alarmTrapTimeout: alarmTrapTimeout, cmdMode: cmdMode, mbAddress: mbAddress, mbBaud: mbBaud, mbDataBit: mbDataBit,
+                mbIp: mbIp, mbParity: mbParity, mbPort: mbPort, mbStopBit: mbStopBit, queryInterval: queryInterval, sensorRWTimeout: sensorRWTimeout,
+                statusTrapInterval: statusTrapInterval, statusTrapTimeout: statusTrapTimeout, usingStatus: usingStatus, workMode: workMode}};
+        var params2;
+        if (siteId != "") {
+            sendData.siteId = siteId;
+            sendData.siteName = siteName;
+            params2 = {cancel_site: ""};
+        } else {
+            params2 = {cancel_site: 1};
+        }
+        if ($('#form_details').validationEngine('validate')) {
+            if (operationType == "post") {
+                loading2();
+                postAPI_machines(sendData, null, function(data) {
+                    unload2();
+                    $('#modal_detailedData').modal('hide');
+                    dialog.render({
+                        lang: "save_success"
+                    });
+                    func_navTab_one(0, $("#pageNumberSelect").val());
+
+                }, this);
+            }
+            if (operationType == "put") {
+                loading2();
+                var mID = $("#optionId").attr("machineId");
+                putAPI_machines_$ID(mID, sendData, params2, function(data) {
+//                    $("#modalBtn_close").click();
+//                    $("#form_reset").click();
+                    unload2();
+                    $('#modal_detailedData').modal('hide');
+                    dialog.render({
+                        lang: "save_success"
+                    });
+
+                    func_navTab_one(0, $("#pageNumberSelect").val());
+                }, this);
+            }
+        }
+    }
+
+    //面板_高级区域闭合
+    function change_advanceOptionsContent() {
+        if ($("#CTRight_advanceOptions").attr("aria-expanded") == 'true') {
+            $("#CTRight_advanceOptions").removeClass();
+            $("#CTRight_advanceOptions").addClass("glyphicon glyphicon-triangle-bottom");
+        }
+        if ($("#CTRight_advanceOptions").attr("aria-expanded") == 'false') {
+            $("#CTRight_advanceOptions").removeClass();
+            $("#CTRight_advanceOptions").addClass("glyphicon glyphicon-triangle-top");
+        }
+    }
+    //关闭模态框
+    function change_detailedData() {
+        $("#modal_title").text("");
+        $(".parentFormform_details.formError.inline").remove();
+        if ($("#CTRight_advanceOptions").attr("aria-expanded") == 'true') {
+            $("#CTRight_advanceOptions").click();
+        }
+    }
+
+
+    $("#tableHead_selectAll").on("click", function() {
+        var selected_usersId = $("#panelContent1_table1 tr td input[type='checkbox']:checked");
+        var allUsers_nowPage = $("#panelContent1_table1 tr");
+        if (allUsers_nowPage.length > 0) {
+            if (selected_usersId.length < allUsers_nowPage.length) {
+                $("#panelContent1_table1 tr td input").prop("checked", true);
+                $("#tableHead_selectAll").prop("checked", true);
+            } else {
+                $("#panelContent1_table1 tr td input").prop("checked", false);
+                $("#tableHead_selectAll").prop("checked", false);
+            }
+        }
+    });
+    function loading1() {
+        $("#overlay1").show();
+    }
+    function unload1() {
+        $("#overlay1").hide();
+    }
+    function loading2() {
+        $("#overlay2").show();
+    }
+    function unload2() {
+        $("#overlay2").hide();
+    }
+    //更换机型方法
+    function swapByModelIOType(modelId) {
+        var model = modelsMap[modelId];
+        this.element = $("#form_details");
+        if (model) {
+            if (model.ioType == "1" || model.ioType == "3") {//serial_port
+                this.element.find(".info-form-serialport-row").show();
+                this.element.find(".info-form-network-port").show();
+                this.element.find(".info-form-deviceconfig-mbport-row").hide();
+                this.element.find(".info-form-ethernetport-row").hide();
+            } else if (model.ioType == "2") {//ethernet_port
+                this.element.find(".info-form-serialport-row").hide();
+                this.element.find(".info-form-network-port").hide();
+                if (model.sensorType == "61446") {
+                    this.element.find(".info-form-deviceconfig-mbport-row").show();
+                } else {
+                    this.element.find(".info-form-deviceconfig-mbport-row").hide();
+                }
+                ;
+                this.element.find(".info-form-ethernetport-row").show();
+            } else if (model.ioType == "0") {//GIO
+                this.element.find(".info-form-serialport-row").show();
+                this.element.find(".info-form-network-port").show();
+                this.element.find(".info-form-ethernetport-row").show();
+            }
+        }
+    }
+    //change机型监听事件
+    function modelTypeSelectListener() {
+        $("#TC_right_machineType").change(function() {
+            var modelId = $(this).val();
+            swapByModelIOType(modelId);
+        });
+    }
+    var modelsMap = {};
+//页面功能权限过滤
+    $(document).ready(function() {
+        permissionFilter_pageFunc();
+        //初始化页面
+        require(['machinesService'], function(machinesService) {
+            $("#page-footer").load("admin/pagination.html", function() {
+                showNavTabContent(1);
+            });
+        });
+        modelTypeSelectListener();
+        locale.render({element: "#init_body"});
+    });
+</script>

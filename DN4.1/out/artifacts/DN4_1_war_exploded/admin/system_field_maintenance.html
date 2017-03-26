@@ -1,0 +1,464 @@
+<section class="content-header">
+    <h1 lang="text:field_maintenance">
+        <small>Version 2.0</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#" lang="text:system"></a></li>
+        <li class="active" lang="text:field_maintenance"></li>
+    </ol>
+</section>
+
+<section class="content" id="tcontent">
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!--表格数据区-->
+        <div class=" tab-pane row active">
+            <div class="col-md-12">
+                <div class="box">
+                    <!--加载数据等待-->
+                    <div class="overlay" style="display: none;">
+                        <i class="fa icon-refresh icon-spin"></i>
+                    </div>
+                    <div class="box-header with-border">
+                        <span><h3 class="box-title" lang="text:field_info"></h3></span>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                                    title="Collapse"><i class="icon-minus fa-minus"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="box-body" id="systemBody">
+                        <div class="col-sm-12">
+                            <div class="col-sm-4" id="treeAll">
+                            </div>
+                            <div class="col-sm-8" id="fieldTable">
+                                <div class="box-header with-border text-center">
+                                    <span><h3 class="box-title" id="fieldName"></h3></span>
+                                    <div class="form-group pull-right">
+                                        <button type="button" class="btn btn-default btn-sm" title='新增'
+                                                id="addFieldInfo" onclick="addFieldInfo();">
+                                            <i class="glyphicon glyphicon-plus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-sm" title='删除'
+                                                id="deleteFieldInfo" onclick="updateFieldInfo('delete')">
+                                            <i class="glyphicon glyphicon-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <form id="formField">
+                                    <table class="table table-bordered table-hover table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th class="col-sm-1 text-center" id="selectAll">
+                                                <div style="margin:auto">
+                                                    <input type="checkbox" id="checkbox" lang="text:check_all">
+                                                </div>
+                                            </th>
+                                            <th class="col-sm-4 text-center" lang="text:configuration_item"></th>
+                                            <th class="col-sm-7 text-center" lang="text:configuration_value"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="fieldTbody" style="max-height:296px;overflow-y: auto;">
+
+                                        </tbody>
+                                    </table>
+                                </form>
+                                <div class="modal-footer"
+                                     style="padding-top: 15px;padding-right: 0px;padding-bottom: 10px;">
+                                    <button type="button" class="btn btn-primary" onclick="updateFieldInfo('save')"
+                                            data-dismiss="modal" lang="text:save">保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--box-body-->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="js/system_field_default.js"></script>
+<script>
+    //根据所选字段显示该字段详细配置
+    showFields = function (name) {
+        if (name == "全部" || name == "All") {
+            return;
+        } else if (name == "邮件发送" || name == "Mail Settings") {
+            name = "mail_settings";
+        } else if (name == "部件操作类型" || name == "Component operation type") {
+            name = "part_maintain_types";
+        }
+        var params = {key: name};
+        serachFieldForKey(params, false, function (data) {
+            if ($.isEmptyObject(data)) {
+                if (name == "mail_settings") {
+                    data = mail_settings_default;
+                }
+            } else {
+                data = data.result;
+            }
+
+            $("#fieldTbody").empty();
+            $("#addFieldInfo").show();
+            $("#deleteFieldInfo").show();
+            $("#checkbox").attr("checked", false);
+            $("#checkbox").prop("disabled", false);
+            $("#fieldName").text(name);
+            $("#fieldName").attr("lang", "text:" + name);
+            $("#fieldName").attr("value", name);
+            $("#selectAll").show();
+
+            var fieldTbodyAppend = "";
+            num = 0;
+            if (data.items == null) {
+                fieldTbodyAppend += '<tr class="targetBox"><td class="col-sm-12 text-center" colspan="3" lang="text:no_data"></td></tr>';
+            } else {
+                for (var key in data.items) {
+                    num = num + 1;
+//                    fieldTbodyAppend += '<tr class="targetBox"><td class="col-sm-1 text-center"><input type="checkbox"></td>';
+                    if (name == "mail_settings") {
+                        $("#addFieldInfo").hide();
+                        $("#deleteFieldInfo").hide();
+                        $("#checkbox").prop("disabled", true);
+                        $("#selectAll").hide();
+                        fieldTbodyAppend += '<tr class="targetBox"><td style="display: none;"></td><td class="col-sm-4">' +
+                                '<lable type="text" class="form-control" style="background-color:transparent; border:none;" ' +
+                                'id="fieldInfoKey' + num + '" readonly value="' + key + '" lang="text:' + key + '"></lable></td>' +
+                                '<td class="col-sm-7">';
+                        if (key == "host") {
+                            fieldTbodyAppend += '<input type="text" class="form-control validate[required, custom[domainName]]" style="background-color:transparent;" ' +
+                                    ' id="fieldInfoValue' + num + '" oninput="OnInput(\'' + name + '\')" value="' + data.items[key] + '"></td></tr>';
+                        } else if (key == "port") {
+                            fieldTbodyAppend += '<input type="text" class="form-control validate[required, custom[portNumber]]" style="background-color:transparent;" ' +
+                                    ' id="fieldInfoValue' + num + '" oninput="OnInput(\'' + name + '\')" value="' + data.items[key] + '"></td></tr>';
+                        } else if (key == "auth") {
+                            fieldTbodyAppend += '<select class="form-control input-sm" style="background-color:transparent;"' +
+                                    'oninput="OnInput(\'' + name + '\')" id="fieldInfoValue' + num + '" >';
+                                    if (data.items[key] == "true") {
+                                        fieldTbodyAppend += '<option value="true" selected="selected">' + locale.get("true") + '</option>' +
+                                                '<option value="false">' + locale.get("false") + '</option></select></td>';
+                                    } else {
+                                        fieldTbodyAppend += '<option value="true"">' + locale.get("true") + '</option>' +
+                                                '<option value="false" selected="selected">' + locale.get("false") + '</option></select></td></tr>';
+                                    }
+                        } else if (key == "username") {
+                            fieldTbodyAppend += '<input type="text" class="form-control validate[required, custom[email]]" style="background-color:transparent;" ' +
+                                    ' id="fieldInfoValue' + num + '" oninput="OnInput(\'' + name + '\')" value="' + data.items[key] + '"></td></tr>';
+                        } else if (key == "password") {
+                            fieldTbodyAppend += '<input type="password" class="form-control" style="background-color:transparent;" ' +
+                                    ' id="fieldInfoValue' + num + '" oninput="OnInput(\'' + name + '\')" value="' + data.items[key] + '"></td></tr>';
+                        } else {
+                            fieldTbodyAppend += '<input type="text" class="form-control" style="background-color:transparent;" ' +
+                                    ' id="fieldInfoValue' + num + '" oninput="OnInput(\'' + name + '\')" value="' + data.items[key] + '"></td></tr>';
+                        }
+                    } else if (name == "part_maintain_types") {
+                        fieldTbodyAppend += '<tr class="targetBox"><td class="col-sm-1 text-center"><input type="checkbox"></td>' +
+                                '<td class="col-sm-4">' +
+                                '<input type="text" class="form-control" style="background-color:transparent;"' +
+                                ' id="fieldInfoKey' + num + '" oninput="OnInput(\'' + name + '\')" value="' + key + '"></td>' +
+                                '<td class="col-sm-7">' +
+                                '<select class="form-control input-sm" style="background-color:transparent;"' +
+                                'oninput="OnInput(\'' + name + '\')" id="fieldInfoValue' + num + '" >';
+                        if (data.items[key] == "1") {
+                            fieldTbodyAppend += '<option value="1" selected="selected">' + locale.get("change") + '</option>' +
+                                    '<option value="2">' + locale.get("maintains") + '</option></select></td>';
+                        } else {
+                            fieldTbodyAppend += '<option value="1">' + locale.get("change") + '</option>' +
+                                    '<option value="2" selected="selected">' + locale.get("maintains") + '</option></select></td></tr>';
+                        }
+                    } else {
+                        fieldTbodyAppend += '<tr class="targetBox"><td class="col-sm-1 text-center"><input type="checkbox"></td>' +
+                                '<td class="col-sm-4">' +
+                                '<input type="text" class="form-control" style="background-color:transparent;"' +
+                                'oninput="OnInput(\'' + name + '\')" id="fieldInfoKey' + num + '"  value="' + key + '"></td>' +
+                                '<td class="col-sm-7">' +
+                                '<input type="text" class="form-control" style="background-color:transparent;"' +
+                                'oninput="OnInput(\'' + name + '\')" id="fieldInfoValue' + num + '"  value="' + data.items[key] + '"></td></tr>';
+                    }
+                }
+            }
+            $("#fieldTbody").append(fieldTbodyAppend);
+            if (name == "mail_settings") {
+                $("#fieldTbody tr td input[type='checkbox']").prop("disabled", true);
+                $("#fieldTbody tr td input[type='checkbox']").prop("disabled", true);
+                //验证配置
+                validator.render("#formField", {
+                    promptPosition: "inline",
+                    scroll: false
+                });
+            }
+        }, this);
+        locale.render({element: "#init_body"});
+    };
+
+    //添加配置项
+    addFieldInfo = function () {
+        if(num == 0){
+            $("#fieldTbody").empty();
+        }
+        num = num + 1;
+        var key = $("#fieldName").attr("value");
+        if (key == "part_maintain_types") {
+            $("#fieldTbody").append(
+                    '<tr class="targetBox"><td class="col-sm-1 text-center"><input type="checkbox"></td>' +
+                    '<td class="col-sm-4">' +
+                    '<input type="text" class="form-control" id="fieldInfoKey' + num + '" oninput="OnInput(\'' + key + '\')" value=""></td>' +
+                    '<td class="col-sm-7">' +
+                    '<select class="form-control input-sm" id="fieldInfoValue' + num + '" oninput="OnInput(\'' + key + '\')">' +
+                    '<option value="1" lang="text:change"></option>' +
+                    '<option value="2" lang="text:maintains"></option></select></td></tr>'
+            );
+        } else {
+            $("#fieldTbody").append(
+                    '<tr class="targetBox"><td class="col-sm-1 text-center"><input id="" type="checkbox"></td>' +
+                    '<td class="col-sm-4">' +
+                    '<input type="text" class="form-control" id="fieldInfoKey' + num + '" oninput="OnInput(\'' + key + '\')" value=""></td>' +
+                    '<td class="col-sm-7">' +
+                    '<input type="text" class="form-control" id="fieldInfoValue' + num + '" value="" oninput="OnInput(\'' + key + '\')"></td></tr>'
+            );
+        }
+        locale.render({element: "#init_body"});
+    };
+
+
+    //添加/删除/修改 字段信息
+    updateFieldInfo = function (type) {
+        var key = $("#fieldName").attr("value");
+        var bodyCheck = $("#fieldTbody tr td input[type='checkbox']:checked");
+        var bodyTr = $("#fieldTbody tr");
+        var params = {
+            oId: "56f1369c633d7c2b5f00106e"
+        };
+        if (type == "delete") { //删除
+            if (bodyCheck.length > 0) {
+                if (bodyCheck.length == bodyTr.length) {
+                    noChecked();
+                    errorTipDis("keep_least_one");
+                    return;
+                } else {
+                    var items = {};
+                    var submit = {};
+                    var judge = [];
+                    for (var i = 0; i < bodyTr.length; i++) {
+                        var name = $("#fieldInfoKey" + (i + 1)).val();
+                        var value = $("#fieldInfoValue" + (i + 1)).val();
+                        if (!$("#fieldTbody tr td input[type='checkbox']")[i].checked) {
+                            if ($.trim(name) != "" && $.trim(value) != "") {
+                                items[name] = value;
+                            }
+                        } else{
+                            if($.trim(name) == "" && $.trim(value) == ""){
+                                judge.push(i);
+                            } else{
+                                submit[name] = value;
+                            }
+                        }
+                    }
+                    for (var j = 0; j < judge.length; j++) {
+                        var index = judge[j];
+                        $("#fieldTbody tr")[index].remove();
+                    }
+                    if ($.isEmptyObject(submit)) {
+                        noChecked();
+                        return;
+                    }
+                    if ($.isEmptyObject(items)) {
+                        noChecked();
+                        errorTipDis("keep_least_one");
+                        return;
+                    }
+                    var data = {
+                        key: key,
+                        items: items
+                    };
+                    dialog.render({
+                        lang: "confirm_delete_field",
+                        buttons: [{
+                            lang: "yes", click: function () {
+                                if (result) {
+                                    updateFieldForKey(params, data, false, function (data) {
+                                        if (data.result == "ok") {
+                                            dialog.render({
+                                                lang: "submit_success",
+                                            });
+                                            showFields(key);
+                                        }
+                                    }, this)
+                                }
+                                dialog.close();
+                            }
+                        }, {
+                            lang: "no", click: function () {
+                                dialog.close();
+                            }
+                        }],
+                        close: function () {
+                            dialog.close();
+                        }
+                    });
+                }
+            } else {
+                errorTipDis("choose_delete_field");
+                return;
+            }
+        } else {  //保存
+            if ($('#formField').validationEngine('validate')) { //执行提交
+                var items = {};
+                var ii = 0;
+                for (var i = 1; i <= bodyTr.length; i++) {
+                    var name = $("#fieldInfoKey" + i).val();
+                    if (key == "mail_settings") {
+                        name = $("#fieldInfoKey" + i).attr("value");
+                    }
+                    var value = $("#fieldInfoValue" + i).val()
+                    if ($.trim(name) != "" && $.trim(value) != "") {
+                        items[name] = value;
+                        ii = ii + 1;
+                    }
+                }
+                console.log(items);
+                if ($.isEmptyObject(items)) {
+                    errorTipDis("field_record_cannot_empty");
+                    return;
+                } else if (key == "mail_settings") {
+                    if (ii != 6) {
+                        errorTipDis("field_all_info_complete");
+                        return;
+                    }
+                }
+                var data = {
+                    key: key,
+                    items: items
+                };
+                dialog.render({
+                    lang: "confirm_save_field",
+                    buttons: [{
+                        lang: "yes", click: function () {
+                            if (result) {
+                                updateFieldForKey(params, data, false, function (data) {
+                                    if (data.result == "ok") {
+                                        dialog.render({
+                                            lang: "submit_success",
+                                        });
+                                        showFields(key);
+                                    }
+                                }, this)
+                            }
+                            dialog.close();
+                        }
+                    }, {
+                        lang: "no", click: function () {
+                            dialog.close();
+                        }
+                    }],
+                    close: function () {
+                        dialog.close();
+                    }
+                });
+            }
+        }
+    }
+
+    //工单列表全选
+    $("#selectAll").on('click', function (event) {
+        var selected = $("#fieldTbody tr td input[type='checkbox']:checked");
+        var allBodyPage = $("#fieldTbody tr td input[type='checkbox']");
+        if (allBodyPage.length > 0) {
+            if (selected.length < allBodyPage.length) {
+                $("#fieldTbody tr td input").prop("checked", true);
+                $("#checkbox").prop("checked", true);
+            } else {
+                noChecked();
+            }
+        }
+    });
+
+    function noChecked(){
+        $("#fieldTbody tr td input").prop("checked", false);
+        $("#checkbox").prop("checked", false);
+    }
+
+
+    function OnInput(key) {
+        if (key == "邮件发送") {
+            key = "mail_settings";
+        } else if (key == "部件操作类型") {
+            key = "part_maintain_types";
+        }
+        var trees = $("#treeAll ul li");
+        if (trees.length > 0) {
+            for (var i = 0; i < trees.length; i++) {
+                if (trees[i].innerText == key) {
+                    trees[i].style = 'background-color:#828282';
+                }
+            }
+        }
+    }
+
+    //阻断keydown事件
+    $('body').keypress(function (event) {
+        if (event.keyCode === 10 || event.keyCode === 13)
+            event.preventDefault();
+    });
+
+    $(function () {
+        $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+        $('.tree li.parent_li > span').on('click', function (e) {
+            var children = $(this).parent('li.parent_li').find(' > ul > li');
+            if (children.is(":visible")) {
+                children.hide('fast');
+                $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
+            } else {
+                children.show('fast');
+                $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
+            }
+            e.stopPropagation();
+        });
+    });
+
+    $(document).ready(function () {
+        var num;
+        //查询字段信息
+        require(['fieldMaintenanceService'], function () {
+            var params = {oId: "56f1369c633d7c2b5f00106e"};
+            var nodes = [];
+            serachFieldMaintenance(params, false, function (data) {
+                console.log(data);
+                $("#treeAll").empty();
+                //system_field_default 配置文件中有几个配置项，该data长度即小于几
+                if (data.length < settings_default.length) {
+                    data = settings_default;
+                }
+                for (var i = 0; i < data.length; i++) {
+                    var node = {
+                        "text": (locale.get(data[i].key) == null ? data[i].key : locale.get(data[i].key)),
+                        "tags": ['id']
+                    };
+                    nodes.push(node);
+                }
+            }, this);
+
+            //生成树形图
+            $('#treeAll').treeview({
+                data: [
+                    {
+                        text: (locale.get("all")),
+                        nodes: nodes,
+                        state: {
+                            selected: false
+                        }
+                    }
+                ],
+                color: "#10b0ec",
+            });
+            //默认显示第一条
+            showFields(nodes[0].text);
+            //为树形图节点添加点击事件
+            $('#treeAll').on('nodeSelected', function (event, data) {
+                showFields(data.text);
+            })
+        });
+        locale.render({element: "#init_body"});
+    });
+</script>

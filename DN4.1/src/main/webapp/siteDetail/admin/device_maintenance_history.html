@@ -1,0 +1,440 @@
+
+<section class="content-header">
+    <h1 lang="text:maintenance_history">
+      维护历史
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#" lang="text:device_manage"></a></li>
+      <li class="active" lang="text:maintenance_history"></li>
+    </ol>
+</section>
+<section class="content" id="tcontent">
+  <div class="nav-tabs-custom">
+      <ul class="nav nav-tabs" role="tablist" id="myNavTabs">
+      <li role="presentation" class="active" onclick="showTabContent(1)">
+          <a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:replace_the_record"></a>
+      </li>
+      <li role="presentation" onclick="showTabContent(2)" >
+          <a href="javascript:void(0)" role="tab" lang="text:lubrication_record" data-toggle="tab" ></a>
+      </li>
+      <li role="presentation" onclick="showTabContent(3)" >
+          <a href="javascript:void(0)" role="tab" lang="text:maintenance_records" data-toggle="tab" ></a>
+      </li>
+  </ul>
+      <!-- Tab panes -->
+      <div class="tab-content" style="padding-bottom: 0px;">
+          <!--表格数据区-->
+          <div class=" tab-pane row active">
+              <div class="col-md-12">
+                  <div class="box box-solid" style="margin-bottom: 0px;box-shadow: 0px 0px;">
+                      <!--加载数据等待-->
+                      <div class="overlay" style="display: none;" id="refresh">
+                          <i class="fa icon-refresh icon-spin"></i>
+                      </div>
+                      <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-12" style="padding-bottom: 10px;">
+                                <form class="form-inline">
+                                    <div class="form-group has-feedback">
+                                        <input type="text" class="form-control form-control-left input-sm" id="searchDate" readonly="readonly">
+                                        <span class="glyphicon glyphicon-calendar form-control-feedback" style="left: 0;"></span>
+                                    </div>
+                                    <div class="form-group">
+                                      <label lang="text:machine_name"></label>
+                                        <input type="text" id="devicename" class="form-control input-sm" style="height:30px;" lang="placeholder:enter_the_machine_name" placeholder="请输入设备名称">
+                                      </div>
+                                      <div class="form-group">
+                                          <label lang="text:parts"></label>
+                                          <input type="text" id="partsname" class="form-control input-sm" style="height:30px;width:180px"lang="placeholder:enter_the_components_name" placeholder="请输入部件名称">
+                                      </div>
+                                      <div class="form-group" >
+                                          <button type="button" onclick="searchBtn()" data-permissionFilter="[205]" class="btn btn-default btn-sm" data-toggle="tooltip" title="查找" lang="title:query">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                          </button>
+                                      </div>
+                                      <!-- <div class="form-group pull-right" >
+                                          <button type="button" id="btn_export" onclick="exportData()"
+                                                  class="btn btn-default btn-sm" data-toggle="tooltip" lang="title:export">
+                                              <span class="icon-upload-alt"></span>
+                                          </button>
+                                      </div> -->
+                                     </form>
+                            </div>
+                        </div>
+                          <div style="overflow:auto;display:none" id="changeTable">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th lang="text:machine_name"></th>
+                                    <th lang="text:component_name"></th>
+                                    <th lang="text:serial_number"></th>
+                                    <th lang="text:device_part_model">型号</th>
+                                    <th lang="text:change_time">最近更换日期</th>
+                                    <th lang="text:operating_personnel">通知人员</th>
+                                    <th lang="text:comment"></th>
+                                    <th lang="text:operate" class="text-center"></th>
+                                </tr>
+                                </thead>
+                                <tbody id="parts_modal">
+                                <!--动态添加数据-->
+
+                                 </tbody>
+                            </table>
+                          </div>
+                          <div style="overflow:auto;display:none;" id="lubricationTable">
+                              <table class="table table-bordered table-hover table-striped" >
+                                  <thead>
+                                  <tr>
+                                    <th lang="text:device_name"></th>
+                                    <th lang="text:component_name">元件名</th>
+                                    <th lang="text:serial_number"></th>
+                                    <th lang="text:device_part_model">型号</th>
+                                    <th lang="text:lubrication_time">最近更换日期</th>
+                                    <th lang="text:operating_personnel">通知人员</th>
+                                    <th lang="text:comment"></th>
+                                  </tr>
+                                  </thead>
+                                  <tbody id="logContent">
+
+                                  <!--动态载入数据-->
+
+                                  </tbody>
+                              </table>
+                          </div>
+                          <div style="overflow:auto; display:none;" id="checkTablepart">
+                              <table class="table table-bordered table-hover table-striped">
+                                  <thead>
+                                  <tr>
+                                    <th lang="text:device_name"></th>
+                                    <th lang="text:component_name">元件名</th>
+                                    <th lang="text:serial_number"></th>
+                                    <th lang="text:device_part_model">型号</th>
+                                    <th lang="text:servicing_time">最近更换日期</th>
+                                    <th lang="text:operating_personnel">通知人员</th>
+                                    <th lang="text:comment"></th>
+                                  </tr>
+                                  </thead>
+                                  <tbody id="checkTable">
+
+                                  <!--动态载入数据-->
+
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div><!--box-body-->
+                      <div id="page-footer">
+
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+  </div>
+</section>
+<script type="text/javascript">
+  //nav-tabs选择项切换
+  function showTabContent(tabPage) {
+      $("#pageNumberSelect option").removeAttr("selected");
+      $("#pageNumberSelect option:first").attr('selected',true);
+      $("#panelContent").empty();
+      $("#tableHead_checkbok").prop("checked", false);
+      pageLoadCallback(0,tabPage);
+
+  }
+  function searchBtn(){
+    if (tab==1) {
+      changeTabOne(0,$("#pageNumberSelect").val());
+    }
+    else if (tab==2) {
+      changeTabTwo(0,$("#pageNumberSelect").val());
+    }
+    else if (tab==3) {
+      changeTabThree(0,$("#pageNumberSelect").val());
+    }
+  }
+  //分页回调方法
+  function pageLoadCallback(index,tabPage){
+      switch (tabPage) {
+          case 1:
+              changeTabOne(index, tabPage);
+              break;
+          case 2:
+              changeTabTwo(index, tabPage);
+              break;
+          case 3:
+              changeTabThree(index, tabPage);
+              break;
+          default:
+              break;
+      }
+  }
+      //第一个标签方法调用
+      var tab = 1;
+      var _id = sessionStorage.getItem("_id");
+      function changeTabOne(cursor, tabPage) {
+        $("#changeTable").show();
+        $("#lubricationTable").hide();
+        $("#checkTablepart").hide();
+          // loading();
+          //tabPage 第几个导航标签
+          // cursor 表示从结果的第几条开始
+          // limit  查询多少条
+          $("#refresh").show();
+          var limit = $("#pageNumberSelect").find("option:selected").val();
+          var params={
+            cursor: cursor,
+            limit: limit,
+            site_id:_id,
+            mtType:3
+          }
+          var dateArray = ($("#searchDate").val()).split("-");
+          var start_time = new Date(dateArray[0] + " 00:00:00").getTime() ;
+          var end_time = new Date(dateArray[1] + " 23:59:59").getTime() ;
+          tab = 1;
+          var devicename=$.trim($("#devicename").val());
+          if (devicename !== "") {
+              params.asset_name = devicename;
+          }
+          var partsname=$.trim($("#partsname").val());
+          if (partsname !== "") {
+              params.part_name = partsname;
+          }
+          params.start_time = start_time;
+          params.end_time = end_time;
+          loadAllHistory(params,function(data){
+              if(data.result && data.result.length>0){
+                  partsTable(data);
+                  renderPagination(data,changeTabOne);
+              }else{
+                clearPagination();
+                $("#parts_modal").empty();
+                $("#parts_modal").append('<tr><td colspan="8"  align="center" lang="text:no_data"></td></tr>');
+              }
+              $("#refresh").hide();
+              locale.render({element: "#init_body"});
+            },this)
+          }
+          //第二个标签方法调用
+        function changeTabTwo(cursor, tabPage) {
+          $("#changeTable").hide();
+          $("#lubricationTable").show();
+          $("#checkTablepart").hide();
+          $("#refresh").show();
+          var limit = $("#pageNumberSelect").find("option:selected").val();
+          var params={
+            cursor: cursor,
+            limit: limit,
+            mtType:1
+          }
+          tab = 2;
+          var devicename=$.trim($("#devicename").val());
+          if (devicename !== "") {
+              params.asset_name = devicename;
+          }
+          var partsname=$.trim($("#partsname").val());
+          if (partsname !== "") {
+              params.part_name = partsname;
+          }
+          loadAllHistory(params,function(data){
+              if(data.result && data.result.length>0){
+                  partsTable1(data);
+                  renderPagination(data,changeTabTwo);
+              }else{
+                clearPagination();
+                $("#logContent").empty();
+                $("#logContent").append('<tr><td colspan="7"  align="center" lang="text:no_data"></td></tr>');
+              }
+              $("#refresh").hide();
+              locale.render({element: "#init_body"});
+            },this)
+        }
+        //第三个标签方法调用
+      function changeTabThree(cursor, tabPage) {
+        $("#changeTable").hide();
+        $("#lubricationTable").hide();
+        $("#checkTablepart").show();
+        $("#refresh").show();
+        tab = 3;
+        var limit = $("#pageNumberSelect").find("option:selected").val();
+        var params={
+          cursor: cursor,
+          limit: limit,
+          mtType:2
+        }
+        var devicename=$.trim($("#devicename").val());
+        if (devicename !== "") {
+            params.asset_name = devicename;
+        }
+        var partsname=$.trim($("#partsname").val());
+        if (partsname !== "") {
+            params.part_name = partsname;
+        }
+        loadAllHistory(params,function(data){
+            if(data.result && data.result.length>0){
+                partsTable2(data);
+                renderPagination(data,changeTabThree);
+            }else{
+              clearPagination();
+              $("#checkTable").empty();
+              $("#checkTable").append('<tr><td colspan="7"  align="center" lang="text:no_data"></td></tr>');
+            }
+            $("#refresh").hide();
+            locale.render({element: "#init_body"});
+          },this)
+
+      }
+  //更换记录数据回填
+  function partsTable(result){
+    $("#parts_modal").empty();
+    var parts=result.result;
+    var pTable = "";
+      for(var i=0;i<parts.length;i++){
+        var per = parts[i];
+        var partsMaintain = parts[i].maintainers;
+        var operator=[];
+        if(partsMaintain && partsMaintain.length>0){
+          for(var j=0;j<partsMaintain.length;j++){
+                var mtName = partsMaintain[j].name;
+                operator.push(mtName);
+          }
+        }
+        var state=null;
+        if (per.action == 3) {
+            state = locale.get("installation");
+        } else if (per.action == 4) {
+            state = locale.get( "uninstall");
+        }
+
+        pTable +=
+        '<tr>'+
+          '<td>'+(typeof(per.asset_name) == 'undefined'?'':per.asset_name)+'</td>'+
+          '<td>'+(typeof(per.part_name) == 'undefined'?'':per.part_name)+'</td>'+
+          '<td>'+ (typeof(per.current_serial) == 'undefined'?'':per.current_serial)+'</td>'+
+          '<td>'+ (typeof(per.part_model) == 'undefined'?'':per.part_model)+'</td>'+
+          '<td>'+ (typeof(per.update_time) == 'undefined'?'':schneider.util.dateFormat(per.update_time, "yyyy-MM-dd")) +'</td>'+
+          '<td>'+ operator+'</td>'+
+          '<td>'+ (typeof(per.note) == 'undefined'?'':per.note)+'</td>'+
+          '<td class="text-center">'+ (typeof(state) == 'undefined'?'':state)+'</td>'+
+        '</tr>';
+
+    }
+
+    $("#parts_modal").append(pTable);
+    permissionFilter_pageFunc();
+    locale.render({element: "#init_body"});
+  }
+  //润滑记录数据回填
+  function partsTable1(result){
+    $("#logContent").empty();
+    var parts=result.result;
+      for(var i=0;i<parts.length;i++){
+        var per = parts[i];
+        var partsMaintain = per.maintainers;
+        var operator=[];
+        if(partsMaintain && partsMaintain.length>0){
+          for(var j=0;j<partsMaintain.length;j++){
+                var mtName = partsMaintain[j].name;
+                operator.push(mtName);
+          }
+        }
+          var pTable =
+          '<tr>'+
+            '<td>'+(typeof(per.asset_name) == 'undefined'?'':per.asset_name)+'</td>'+
+            '<td>'+(typeof(per.part_name) == 'undefined'?'':per.part_name)+'</td>'+
+            '<td>'+ (typeof(per.current_serial) == 'undefined'?'':per.current_serial)+'</td>'+
+            '<td>'+ (typeof(per.part_model) == 'undefined'?'':per.part_model)+'</td>'+
+            '<td>'+ (typeof(per.update_time) == 'undefined'?'':schneider.util.dateFormat(per.update_time, "yyyy-MM-dd")) +'</td>'+
+            '<td>'+ operator+'</td>'+
+            '<td>'+ (typeof(per.note) == 'undefined'?'':per.note)+'</td>'+
+          '</tr>';
+          $("#logContent").append(pTable);
+  }
+        permissionFilter_pageFunc();
+        locale.render({element: "#init_body"});
+}
+  //检查记录数据回填
+  function partsTable2(result){
+    $("#checkTable").empty();
+    var parts=result.result;
+      for(var i=0;i<parts.length;i++){
+        var per = parts[i];
+        var partsMaintain = per.maintainers;
+        var operator=[];
+        if(partsMaintain && partsMaintain.length>0){
+          for(var j=0;j<partsMaintain.length;j++){
+                var mtName = partsMaintain[j].name;
+                operator.push(mtName);
+          }
+        }
+        var pTable =
+        '<tr>'+
+          '<td>'+(typeof(per.asset_name) == 'undefined'?'':per.asset_name)+'</td>'+
+          '<td>'+(typeof(per.part_name) == 'undefined'?'':per.part_name)+'</td>'+
+          '<td>'+ (typeof(per.current_serial) == 'undefined'?'':per.current_serial)+'</td>'+
+          '<td>'+ (typeof(per.part_model) == 'undefined'?'':per.part_model)+'</td>'+
+          '<td>'+ (typeof(per.update_time) == 'undefined'?'':schneider.util.dateFormat(per.update_time, "yyyy-MM-dd")) +'</td>'+
+          '<td>'+ operator +'</td>'+
+          '<td>'+ (typeof(per.note) == 'undefined'?'':per.note)+'</td>'+
+        '</tr>';
+        $("#checkTable").append(pTable);
+  }
+      permissionFilter_pageFunc();
+      locale.render({element: "#init_body"});
+}
+  //跳转到指定页  回调函数
+  function jumpTopage(cursor){
+      if(tab ==1){
+        changeTabOne(cursor,$("#pageNumberSelect").val());
+      }else if(tab==2){
+          changeTabTwo(cursor,$("#pageNumberSelect").val());
+      }else if(tab==3){
+          changeTabThree(cursor,$("#pageNumberSelect").val());
+      }
+
+  }
+
+  //每页显示条目切换
+  function changePageNumber(limit) {
+      if(tab == 1){
+        changeTabOne(0,limit);
+      }else if(tab==2){
+        changeTabTwo(0,limit);
+      }else if(tab==3){
+        changeTabThree(0,limit);
+      }
+
+  }
+
+  $('#searchDate').daterangepicker(
+          {
+              startDate: moment().subtract(6, 'days'),
+              endDate: moment(),
+              maxDate: moment(),
+              showDropdowns: false,
+              showWeekNumbers: false,
+              separator: '-',
+              locale: {
+                  format: 'YYYY/MM/DD',
+                  separator: '-',
+                  applyLabel: locale.get("apply"),
+                  cancelLabel: locale.get("cancel")
+              }
+          },
+          function (start, end) {
+                  $('#searchDate').val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
+          }
+  );
+  //页面功能权限过滤
+  $(document).ready(function(){
+    permissionFilter_pageFunc();
+    require(['deviceService'],function(deviceService){
+      $("#page-footer").load("../admin/pagination.html", function () {
+            showTabContent(1);//初始化页面
+      });
+
+    });
+    locale.render({element: "#init_body"});
+  });
+</script>

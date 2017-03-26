@@ -1,0 +1,551 @@
+<script type="text/javascript">
+  require(['echarts'], function(lapperService) {
+      init();
+  });
+locale.render({element: "#init_body"});
+    $('#qmjcs').multiselect();
+         function end(){
+        var mydate = new Date();
+        var str = "" + mydate.getFullYear() + "-";
+        str += (mydate.getMonth()+1) + "-";
+        console.log(str);
+        str += mydate.getDate();
+        console.log(str);
+        return str;
+        }
+      $("#endDate").val(end());
+     function start() {
+        var now = new Date();
+        var date = new Date(now.getTime() -  24 * 3600 * 1000);
+        var str = "" + date.getFullYear() + "-";
+        str += (date.getMonth()+1) + "-";
+        str += date.getDate();
+        return str;
+    }
+    $("#startDate").val(start());
+
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "H+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+    // 图表绘制
+        function drawChart(id,option){
+
+                  require(
+                          [
+                            'echarts',
+                            'echarts/chart/line', // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
+                            'echarts/chart/bar',
+                            'echarts/chart/pie'
+                          ],
+                          function (ec, theme) {
+                              //--- 折柱 ---
+                              var myChart = ec.init(document.getElementById(id), theme);
+                              //图表显示提示信息
+                              myChart.showLoading({
+                                  text: "图表数据正在努力加载...",
+                                  x: "center",
+                                  y: "center",
+                                  textStyle: {
+                                      color: "white",
+                                      fontSize: 14
+                                  },
+                                  effect: "spin"
+                              });
+
+                              myChart.setOption(option);
+                              myChart.hideLoading();
+                              chartIds[id] = myChart;
+                          }
+                     );
+                  }
+                    function init(){
+                      var varIds = $("#qmjcs").val();
+                      console.log(varIds);
+                      var deviceId = "57ab308f9e620b22b6747767";
+                      var devices = [];
+                      var device = {
+                          "varIds": varIds,
+                          "deviceId": deviceId
+                      };
+                      devices.push(device);
+                      console.log(devices);
+                      var startTime=$("#startDate").val();
+                      var start_time = new Date(startTime).getTime()/1000;
+                      console.log(start_time);
+                      var endTime=$("#endDate").val();
+                      var end_time = new Date(endTime).getTime()/1000;
+                      console.log(end_time);
+                      var limit =3;
+                      var params= JSON.stringify({
+                          "devices":devices
+                      });
+                      console.log(params);
+                      var query= {
+                          limit: limit,
+                          start_time:start_time,
+                          end_time:end_time,
+                          verbose: "100"
+                      };
+
+                      loadLapperData(params,query,function(data) {
+                        if(data.result == undefined || data.result.length == 0){
+                            $('#gdyl_footer').html('无数据');
+                        }else if(data.result[0].vars[0].values == undefined || data.result[0].vars[0].values.length == 0){
+                            $('#gdyl_footer').html('图表暂无数据');
+                        }else{
+                          var values = data.result[0].vars[0].values;
+                          var lx = [];
+                          var ly = [];
+                          for (var i = 0, len = values.length; i < len; i++) {
+                              var temp = values[i];
+                              function getLocalTime(nS) {
+                                  return new Date(parseInt(nS) * 1000).Format("yyyy-MM-dd HH:mm:ss").substring(10,16);
+                              }
+                              lx[i] = getLocalTime(temp[0]);
+                              ly[i] = parseInt(temp[1]);
+                          }
+                          console.log(lx);
+                          console.log(ly);
+                        var   pipelineOption = {
+                              tooltip: {
+                                  trigger: 'axis'
+                              },
+                              legend: {
+                                  data: ['管道压力']
+                              },
+                              toolbox: {
+                                  show: true,
+                                  feature: {
+                                      magicType: {show: true, type: ['line', 'bar']},
+                                      restore: {show: true},
+                                      saveAsImage: {show: true}
+                                  }
+                              },
+                              xAxis: {
+                                  type: 'category',
+                                  boundaryGap: false,
+                                  data: lx
+                              },
+                              yAxis: {
+                                  type: 'value',
+                                  axisLabel: {
+                                      formatter: '{value} '
+                                  }
+                              },
+                              series: [
+                                  {
+                                      name: '管道压力',
+                                      type: 'line',
+                                      data: ly,
+                                      markPoint: {
+                                          data: [
+                                              {type: 'max', name: '最大值'},
+                                              {type: 'min', name: '最小值'}
+                                          ]
+                                      },
+                                      markLine: {
+                                          data: [
+                                              {type: 'average', name: '平均值'}
+                                          ]
+                                      }
+                                  }
+                              ]
+                          };
+                        var   hitspeedOption = {
+                              tooltip: {
+                                  trigger: 'axis'
+                              },
+                              legend: {
+                                  data: ['打手速度']
+                              },
+                              toolbox: {
+                                  show: true,
+                                  feature: {
+                                      magicType: {show: true, type: ['line', 'bar']},
+                                      restore: {show: true},
+                                      saveAsImage: {show: true}
+                                  }
+                              },
+                              xAxis: {
+                                  type: 'category',
+                                  boundaryGap: false,
+                                  data: lx
+                              },
+                              yAxis: {
+                                  type: 'value',
+                                  axisLabel: {
+                                      formatter: '{value} '
+                                  }
+                              },
+                              series: [
+                                  {
+                                      name: '打手速度',
+                                      type: 'line',
+                                      data: ly,
+                                      markPoint: {
+                                          data: [
+                                              {type: 'max', name: '最大值'},
+                                              {type: 'min', name: '最小值'}
+                                          ]
+                                      },
+                                      markLine: {
+                                          data: [
+                                              {type: 'average', name: '平均值'}
+                                          ]
+                                      }
+                                  }
+                              ]
+                          };
+
+                        var   givespeedOption = {
+                              tooltip: {
+                                  trigger: 'axis'
+                              },
+                              legend: {
+                                  data: ['给棉速度']
+                              },
+                              toolbox: {
+                                  show: true,
+                                  feature: {
+                                      magicType: {show: true, type: ['line', 'bar']},
+                                      restore: {show: true},
+                                      saveAsImage: {show: true}
+                                  }
+                              },
+                              xAxis: {
+                                  type: 'category',
+                                  boundaryGap: false,
+                                  data: lx
+                              },
+                              yAxis: {
+                                  type: 'value',
+                                  axisLabel: {
+                                      formatter: '{value} '
+                                  }
+                              },
+                              series: [
+                                  {
+                                      name: '给棉速度',
+                                      type: 'line',
+                                      data: ly,
+                                      markPoint: {
+                                          data: [
+                                              {type: 'max', name: '最大值'},
+                                              {type: 'min', name: '最小值'}
+                                          ]
+                                      },
+                                      markLine: {
+                                          data: [
+                                              {type: 'average', name: '平均值'}
+                                          ]
+                                      }
+                                  }
+                              ]
+                          };
+                        var   numberOption = {
+                              tooltip: {
+                                  trigger: 'axis'
+                              },
+                              legend: {
+                                  data: ['开车台数']
+                              },
+                              toolbox: {
+                                  show: true,
+                                  feature: {
+                                      magicType: {show: true, type: ['line', 'bar']},
+                                      restore: {show: true},
+                                      saveAsImage: {show: true}
+                                  }
+                              },
+                              xAxis: {
+                                  type: 'category',
+                                  boundaryGap: false,
+                                  data: lx
+                              },
+                              yAxis: {
+                                  type: 'value',
+                                  axisLabel: {
+                                      formatter: '{value} '
+                                  }
+                              },
+                              series: [
+                                  {
+                                      name: '开车台数',
+                                      type: 'line',
+                                      data: ly,
+                                      markPoint: {
+                                          data: [
+                                              {type: 'max', name: '最大值'},
+                                              {type: 'min', name: '最小值'}
+                                          ]
+                                      },
+                                      markLine: {
+                                          data: [
+                                              {type: 'average', name: '平均值'}
+                                          ]
+                                      }
+                                  }
+                              ]
+                          };
+                          drawChart("gdyl_footer",pipelineOption);
+                          // drawChart("cmyl-chart1",cottonOption);
+
+                        }
+
+                      },this);
+
+
+                    }
+
+
+
+            function sureBtn() {
+                    var a = $('#qmjcs').val();
+                    console.log(a)
+                    if (a == null) {
+                    $("#allChars").empty();
+                    var xmylHtml = '<div class="row">' +
+                    '<div class="col-md-12">' +
+                    '<div class="box">' +
+                    '<div class="box-header with-border">' +
+                    '<span id="cltj_title_1"><h3 class="box-title">管道压力</h3></span>' +
+                    '<div class="box-tools pull-right">' +
+                    '<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="box-body">' +
+                    '<div id="gdyl-char3" class="col-md-12 col-xs-12" style="height:350px;width:98%;padding:1px"  align="left">' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+                    $("#allChars").append(xmylHtml);
+                    require(
+                    [
+                            'echarts',
+                            'echarts/chart/line', // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
+                            'echarts/chart/bar',
+                            'echarts/chart/pie',
+                    ],
+                    function(ec) {
+                    var gdylChar3 = ec.init(document.getElementById("gdyl-char3"));
+                            gdylChar3.setOption(pipelineOption);
+                    }
+            );
+            } else {
+                   var c = a.length;
+                    console.log(c)
+                    $("#allChars").empty();
+                    var xmylHtml = '<div class="row">' +
+                    '<div class="col-md-6">' +
+                    '<div class="box">' +
+                    '<div class="box-header with-border">' +
+                    '<span id="cltj_title_1"><h3 class="box-title">管道压力</h3></span>' +
+                    '<div class="box-tools pull-right">' +
+                    '<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="box-body">' +
+                    '<div id="gdyl-char4" class="col-md-12 col-xs-12" style="height:220px;width:98%;padding:1px"  align="left">' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' ;
+                    for(var i = 0; i < c;i++){
+                        var name = "";
+                        var id = "";
+                        if(a[i]==400060){
+                            name="打手速度";
+                            id = "dssd-char1";
+                        }else if(a[i]==400136){
+                            name="给棉速度";
+                            id="gmsd-char1";
+                        }else if(a[i]==400028){
+                            name="开车台数";
+                            id="kcts-char1";
+                        }
+                    xmylHtml += '<div class="col-md-6">' +
+                    '<div class="box">' +
+                    '<div class="box-header with-border">' +
+                    '<span id="cltj_title_1"><h3 class="box-title">'+ name +'</h3></span>' +
+                    '<div class="box-tools pull-right">' +
+                    '<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="box-body">' +
+                    '<div id="'+ id +'" class="col-md-12 col-xs-12" style="height:220px;width:98%;padding:1px"  align="left">' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' ;
+                    }
+                  xmylHtml += "</div>";
+                    $("#allChars").append(xmylHtml);
+                    require(
+                    [
+                            'echarts',
+                            'echarts/chart/line', // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
+                            'echarts/chart/bar',
+                            'echarts/chart/pie',
+                    ],
+                    function(ec) {
+                            var gdylChar4 = ec.init(document.getElementById("gdyl-char4"));
+                            gdylChar4.setOption(pipelineOption);
+                            var c = a.length;
+                            for(var i = 0;i < c;i++){
+                                if(a[i]==400060){
+                                    var dssdChar1 = ec.init(document.getElementById("dssd-char1"));
+                                     dssdChar1.setOption(hitspeedOption);
+                                }else if(a[i]==400136){
+                                     var gmsdChar1 = ec.init(document.getElementById("gmsd-char1"));
+                                     gmsdChar1.setOption(givespeedOption);
+                                }else if(a[i]==400028){
+                                     var kctsChar1 = ec.init(document.getElementById("kcts-char1"));
+                                     kctsChar1.setOption(numberOption);
+                                }
+                            }
+
+                    }
+            );
+        }
+    }
+    function ShowDiv(page, tag){
+        var i = 1;
+        var el;
+        while (el = document.getElementById(tag + i)) {
+            if (i == page)
+                el.style.display = "block";
+            else
+                el.style.display = "none";
+            i++;
+        }
+        require(
+                [
+                    'echarts',
+                    'echarts/chart/line', // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
+                    'echarts/chart/bar',
+                    'echarts/chart/pie',
+                ],
+                 function (ec) {
+                    var gdylChar2 = ec.init(document.getElementById("gdyl-char2"));
+                    gdylChar2.setOption(mOption);
+                    }
+                );
+    }
+</script>
+<!-- Main content -->
+<section class="content-header">
+    <h1 lang="text:cotton_cleaning_machine">
+        清棉机
+        <small>Version 2.0</small>
+    </h1>
+
+
+    <ol class="breadcrumb">
+        <li><a href="javascript:void(0)" onclick="click2url(1)"><i class="icon-home"></i> Home</a></li>
+    </ol>
+</section>
+<section class="content" id="tcontent">
+    <div class="row">
+        <div class="from-group" role="toolbar">
+            <div class="col-md-2">
+                <select id="qmj" class="form-control " style="width: 70%" onchange="ShowDiv(parseInt(this.value), 'div');">
+                    <option value="1" selected="selected" lang="text:cotton_cleaning_machine">清棉机1</option>
+                    <option value="2" lang="text:cotton_cleaning_machine">清棉机2</option>
+                </select>
+            </div>
+            <div class="col-xs-2">
+                <!--<label for="zmjcs" class="col-sm-4 control-label" >参数选择</label>-->
+                <select id="qmjcs" style="width: 180px;" multiple="multiple">
+                    <option value="400060" selected="selected" lang="text:fighter_speed">打手速度</option>
+                    <option value="400136" lang="text:feeder_speed">给棉速度</option>
+                    <option value="400028" lang="text:drive_number">开车台数</option>
+                </select>
+
+            </div>
+            <div class="col-md-3">
+                <label for="startDate" class="col-sm-5 control-label" style="margin-top:6px;" lang="text:start_date">开始日期</label>
+                <div class="input-group date" >
+                    <div class="input-group-addon">
+                        <i class="icon-calendar"></i>
+                    </div>
+                    <input type="text"  id="startDate" data-provide="date-picker" class="form-control"  readonly="readonly"
+                           onFocus="WdatePicker();">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <!-- <label for="exampleInputPassword1">结束日期</label> -->
+                <label class="col-sm-5 control-label" style="margin-top:6px;" lang="text:end_date">截止日期</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="icon-calendar"></i>
+                    </div>
+                    <input type="text"  id="endDate" data-provide="date-picker" class="form-control"  readonly="readonly"  onFocus="WdatePicker();"/>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="button" id="sureBtn" class="btn btn-default pull-left"  style="margin: 0px 15px;" onClick="sureBtn();" lang="text:confirm">确定</button>
+                <button type="button" class="btn btn-default pull-left" style="display: none" lang="text:export">导出</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="allChars" style="margin-top: 20px;">
+        <!--管道压力1-->
+        <div class="row" id="div1" style="display: block">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title" lang="text:pipeline_pressure">管道压力</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>
+                            <!--button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="icon-times"></i></button-->
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div id="gdyl-char1" class="col-md-12 col-xs-12" style="height:350px;width:98%;padding:1px"  align="left">
+
+                        </div>
+                    </div><!-- /.box-body -->
+                    <div class="box-footer">
+                    		<span class="text-center text-info center-block"  id="gdyl_footer"></span>
+                		</div>
+                </div><!-- /.box -->
+            </div>
+        </div>
+        <!--管道压力2-->
+        <div class="row" id="div2" style="display: none">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title" lang="text:pipeline_pressure">管道压力2</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>
+                            <!--button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="icon-times"></i></button-->
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div id="gdyl-char2" class="col-md-12 col-xs-12" style="height:350px;width:98%;padding:1px"  align="left">
+
+                        </div>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </div>
+        </div>
+    </div>
+
+</section>

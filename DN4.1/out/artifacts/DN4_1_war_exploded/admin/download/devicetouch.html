@@ -1,0 +1,101 @@
+<script type="application/javascript">
+    locale.render({element: "#init_body"});
+
+</script>
+<style type="text/css">
+    .maintain-channel-title {
+        color: #8DB552;
+        font-size: 26px
+    }
+    .maintain-channel-row p {
+        position: absolute;
+        font-family: arial;
+        color: #6A6A6A;
+        left: 79px
+    }
+    .backgroundImage{
+        background-image:url(downloads/download-backgroundImage.png);
+        background-repeat: no-repeat;
+        background-size: 100%;
+        background-position:bottom center;
+    }
+    .flex-container {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-justify-content: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        /*width: 460px;*/
+    }
+    .flex-item1 {
+        width: 650px;
+        margin-top: 80px;
+        text-align: left;
+    }
+    .flex-item2 {
+        width: 350px;
+        margin-top: 60px;
+    }
+    .flex-item_step {
+       text-align: center;
+        margin: 10px 0px 10px 0px;
+    }
+</style>
+<section class="content backgroundImage" id="user-content" style="margin-left: 0px;">
+    <div style="width: 100%;padding: 50px 0px 20px 0px;" align="center">
+       <div class="flex-container">
+           <div class="flex-item1">
+               <p style="font-size: 23px;text-align: left;" class="maintain-channel-title text-light-blue" lang="text:how_to_maintain_channel"></p>
+               <div class="flex-container" style="margin-top: 15px;padding-right: 50px;">
+                   <div class="flex-item_step" style="width: 160px;">
+                       <div class="flex-container" style="flex-direction: column;">
+                           <div class="flex-item_step">
+                               <img src="./images/devicetouch-2.png" height="90px">
+                           </div>
+                           <div class="flex-item_step" style="font-size: 17px;color: #666" lang="text:download_dt_client_install">
+
+                           </div>
+                           <div class="flex-item_step">
+                                <button type="button" id="download-dt-client" class="btn btn-primary btn-lg" lang="text:click_download"></button>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="flex-item_step" style="width: 60px;">
+                       <img src="./images/devicetouch-3.png" style="position: relative; top: 35px;">
+                   </div>
+                   <div class="flex-item_step" style="width: 160px;">
+                       <div class="flex-container" style="flex-direction: column;">
+                            <div class="flex-item_step">
+                                <img src="./images/devicetouch-1.png" height="90px">
+                            </div>
+                            <div class="flex-item_step" style="font-size: 17px;color: #666" lang="text:login_dt_client">
+
+                            </div>
+                       </div>
+                   </div>
+                   <div class="flex-item_step" style="width: 60px;">
+                       <img src="./images/devicetouch-3.png" style="position: relative; top: 35px;">
+                   </div>
+                   <div class="flex-item_step" style="width: 160px;">
+                       <div class="flex-container" style="flex-direction: column;">
+                           <div class="flex-item_step">
+                               <img src="./images/devicetouch-4.png" height="90px" style="margin-top: 5px;" >
+                           </div>
+                           <div class="flex-item_step" style="font-size: 17px;color: #666;margin-top: 5px;" lang="text:create_channel_success">
+
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+           <div class="flex-item2">
+               <img style="width: 350px" src="images/login/pc-ds.png">
+           </div>
+       </div>
+    </div>
+</section>
+<script type="text/javascript">
+    $("#download-dt-client").on("click",function () {
+        location.href="downloads/DeviceTouch.rar";
+    });
+</script>

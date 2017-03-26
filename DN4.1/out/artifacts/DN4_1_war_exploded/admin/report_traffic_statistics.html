@@ -1,0 +1,684 @@
+
+<style type="text/css">
+    #statistics_data_table > tr > td{
+        word-break: break-all;
+    }
+</style>
+<script type="text/javascript">
+
+    //查询按钮方法
+    function searchFun() {
+        reset_statistics(0, $("#pageNumberSelect").val());
+    }
+    //获取参数
+    function reset_statistics(cursorstart, lim) {
+        var online;     //联网状态
+        var showMonth;  //月份
+        var name;       //网关名称
+        var verbose = 100;//信息详细级别
+        var cursor;  //表示从结果的第几条开始
+        var limit = lim;  //每次请求返回的条目数量。
+        showMonth = $("#showMonth").val().replace(/\-/g, "");
+        cursor = cursorstart;
+        var params = {verbose: verbose, cursor: cursor, limit: limit};
+        name = $.trim($("#gateway_name").val());
+        if (name !== "") {
+            name = name.match(pattern);
+            params.name = name;
+        }
+        $("#gateway_name").val(name);
+        if ($("#onlineCheckbox1").is(":checked") && $("#onlineCheckbox0").is(":checked")) {
+            //online可忽略
+        } else {
+            if ($("#onlineCheckbox1").is(":checked")) {
+                online = 1;
+            } else if ($("#onlineCheckbox0").is(":checked")) {
+                online = 0;
+            } else {
+                online = -1;
+            }
+            params.online = online;
+        }
+        getData(params, showMonth);
+    }
+
+    //根据参数获取数据
+    function getData(params, month) {
+        loading1();
+        getAPI_devices(params, function(data) {
+            var resourceIds = [];
+            if (data.result && data.result.length > 0) {
+                for (var i = 0; i < data.result.length; i++) {
+                    resourceIds.push(data.result[i]._id);
+                }
+                var params2 = {month: month};
+                var sendData = {resourceIds: resourceIds};
+                postAPI_traffic_month_list(params2, sendData, function(result) {
+                    $("#statistics_data_table").empty();
+                    builtDataForTable(data, result, month);
+                    renderPagination(data, reset_statistics);
+                }, this);
+            } else {
+                clearPagination();
+                $("#statistics_data_table").empty();
+                $("#statistics_data_table").append('<tr><td colspan="8"  align="center" lang="text:no_data"></td></tr>');
+                locale.render({element: "#init_body"});
+
+            }
+            unload1();//加载分页工具
+
+        }, this);
+    }
+    //组装数据-table
+    function builtDataForTable(data, result, month) {
+        var objStore;
+        var objTems = [];
+        for (var l = 0; l < data.result.length; l++) {
+            // 组合数据
+            objStore = new Object();
+            objStore.siteName = (typeof(data.result[l].siteName) == "undefined") ? "" : data.result[l].siteName;
+            objStore.name = (typeof(data.result[l].name) == "undefined") ? "" : data.result[l].name;
+            for (var n = 0; n < result.result.length; n++) {
+                if (result.result[n].deviceId.toLowerCase() == data.result[l]._id) {
+                    objStore.send = result.result[n].send;
+                    objStore.receive = result.result[n].receive;
+                    objStore.total = result.result[n].total;
+                    objStore.max = result.result[n].max;
+                    objStore.deviceId = result.result[n].deviceId;
+                }
+            }
+            objTems.push(objStore);
+        }
+        var j;
+        var str;
+        for (var i = 0; i < objTems.length; i++) {
+            j = i + 1;
+            str = "<tr>" +
+//                    "<td>" + j + "</td>" +
+                    "<td>" + objTems[i].siteName + "</td>" +
+                    "<td>" + objTems[i].name + "</td>" +
+                    "<td>" + calculateFlow(objTems[i].send) + "</td>" +
+                    "<td>" + calculateFlow(objTems[i].receive) + "</td>" +
+                    "<td>" + calculateFlow(objTems[i].total) + "</td>" +
+                    "<td>" + calculateFlow(objTems[i].max) + "</td>" +
+                    "<td style='text-align:center'>" +
+                    "<span data-toggle='tooltip' title='查看' lang='title:view' style='padding: 3px 6px;' onclick='builtDataForModal(\"" + objTems[i].deviceId + "\",\"" + month + "\",\"" + objTems[i].name + "\")'><span class='glyphicon glyphicon-zoom-in link-black' aria-hidden='true' style=' cursor: pointer;'></span>&nbsp;</span>" +
+                    "<span data-toggle='tooltip' title='统计图' lang='title:charts' style='padding: 3px 6px;' onclick='builtDataMonth(\"" + objTems[i].deviceId + "\",\"" + month + "\",\"" + objTems[i].name + "\")'><span class='glyphicon glyphicon-stats link-black' aria-hidden='true' style=' cursor: pointer;'></span></span>" +
+                    "</td>" +
+                    "</tr>";
+            $("#statistics_data_table").append(str);
+        }
+
+
+        locale.render({element: "#init_body"});
+    }
+
+    //每页显示条数切换
+    function changePageNumber(limit) {
+        reset_statistics(0, limit);
+    }
+    //跳转到指定页  回调函数
+    function jumpTopage(cursor) {
+        reset_statistics(cursor, $("#pageNumberSelect").val());
+    }
+
+
+    //每月详细流量列表-model
+    function builtDataForModal(deviceId, month, name) {
+        loading1();
+        $("#statistics_data_modal").empty();
+        $("#myModalLabe_name").text(name);
+        var params = {month: month, device_id: deviceId};
+        getAPI_traffic_day(params, function(data) {
+            if (data.result && data.result.length>0) {
+                builtDataForModalNext(data);
+            }else{
+                $("#statistics_data_modal").empty();
+                $("#statistics_data_modal").append('<tr><td colspan="4"  align="center" lang="text:no_data"></td></tr>');
+            }
+            $('#myModal').modal({backdrop: 'static', keyboard: false});
+            $('#myModal').modal('show');
+            unload1();
+            locale.render({element: "#init_body"});
+        }, this);
+    }
+    function builtDataForModalNext(data) {
+        for (var i = 0; i < data.result.length; i++) {
+            var str;
+            str = "<tr>" +
+                    "<td>" + foematDate(data.result[i].date) + "</td>" +
+                    "<td>" + calculateFlow(data.result[i].send) + "</td>" +
+                    "<td>" + calculateFlow(data.result[i].receive) + "</td>" +
+                    "<td>" + calculateFlow(data.result[i].total) + "</td>" +
+                    "</tr>";
+            $("#statistics_data_modal").append(str);
+        }
+    }
+
+    //进入页面初始化
+    function initializeOne() {
+        var now = new Date();
+        var year = now.getFullYear();       //当前年
+        var month = now.getMonth() + 1;     //当前月
+        var clock = year + "-";
+        if (month < 10)
+            clock += "0";
+        clock += month;
+        $("#showMonth").val(clock);
+    }
+    //流量计算
+    function calculateFlow(flow) {
+        var flowTemp = parseInt(flow);
+        var flowData = "0B";
+        var dataTemp;
+        if (flowTemp < 1024) {
+            flowData = flowTemp + "B";
+        } else {
+            dataTemp = (flowTemp / 1024.0).toFixed(2);
+            if (parseInt(dataTemp) < 1024) {
+                flowData = dataTemp + "KB";
+            } else {
+                dataTemp = (dataTemp / 1024.0).toFixed(2);
+                if (parseInt(dataTemp) < 1024) {
+                    flowData = dataTemp + "MB";
+                } else {
+                    dataTemp = (dataTemp / 1024.0).toFixed(2);
+                    flowData = dataTemp + "GB";
+                }
+            }
+        }
+        return flowData;
+    }
+    //日期格式转换，转换api传回来格式的数据20160711
+    function foematDate(date) {
+        var dates = date + "";
+        return dates.slice(0, 4) + "-" + dates.slice(4, 6) + "-" + dates.slice(6, 8);
+    }
+
+    //导出功能
+    function exportData() {
+
+        var showMonth;  //月份
+        showMonth = $("#showMonth").val().replace(/\-/g, "");
+        var nowtime = parseInt((new Date()).getTime());
+        var deleteTime = (parseInt(nowtime / 1000) + 7 * 24 * 3600) + "";
+        var sendData = {
+            language: locale.current(),
+            month: showMonth,
+            objectIdList: [],
+            report_name: "FlowReport.xls",
+            timeout: deleteTime,
+            type: "2"
+        };
+        getAPI_reports_forms(sendData, function(data) {
+            if (data.result) {
+                var urlExport = "/api/file/" + data.result._id + "?access_token=" + sessionStorage.getItem("accessToken");
+                window.open(urlExport);
+            }
+        }, this);
+        locale.render({element: "body"});
+    }
+    //按月加载统计图
+    function builtDataMonth(deviceId, month, name) {
+        empty_ModalBody();
+        builtDataForChartsMonth(deviceId, month, name);
+        $("#model_showCharts").modal({backdrop: 'static', keyboard: false});
+        $("#model_showCharts").modal('show');
+    }
+    //加载月统计图方法
+    function builtDataForChartsMonth(deviceId, month, name) {
+        loading2();
+        $("#selectDate_charts").empty();
+        $("#chartsName_month").text(name);
+        var params = {month: month, device_id: deviceId};
+        getAPI_traffic_day(params, function(data) {
+            $("#selectDate_charts").append("<option value=\"" + month + "-" + deviceId + "-" + name + "\">" + locale.get('currentMonth') + "</option>");
+            if (data.result.length > 0) {
+                var selectdata;
+                for (var i = 0; i < data.result.length; i++) {
+                    selectdata = "<option value=\"" + data.result[i].date + "-" + deviceId + "-" + name + "\">" + foematDate(data.result[i].date) + "</option>";
+                    $("#selectDate_charts").append(selectdata);
+                }
+                //加入统计图
+                loadChartsMonth(data, month);
+            } else {
+                $("#flow_charts_showMonth").append("<div style='text-align: center;'><h2>" + locale.get('no_data') + "</h2></div>");
+            }
+            unload2();
+            locale.render({element: "#init_body"});
+        }, this);
+    }
+    //改变统计图策略
+    function changeCharts(value) {
+        empty_ModalBody();
+        //date,deviceId,name
+        var vals = value.split("-");
+        var date = vals[0];
+        var deviceId = vals[1];
+        var name = vals[2];
+        if ((date + "").length < 8) {
+            builtDataForChartsMonth(deviceId, date, name);
+            $("#selectDate_charts").blur();
+        } else {
+            loading2();
+            var deviceIds = [];
+            var startTime;
+            var endTime;
+            var monthStart = (new Date(date.slice(0, 4), parseInt(date.slice(4, 6)) - 1, date.slice(6, 8))).getTime();//开始时间戳
+            startTime = monthStart / 1000;
+            endTime = startTime + 86400;
+            deviceIds.push(deviceId);
+            var params = {startTime: startTime, endTime: endTime};
+            var sendData = {deviceIds: deviceIds};
+            postAPI_traffic(params, sendData, function(result) {
+                if (result.result[0].traffic.length > 0) {
+                    //加入统计图
+                    loadChartsDay(result.result[0].traffic, date);
+                }
+                unload2();
+                locale.render({element: "#init_body"});
+            }, this);
+        }
+    }
+    //定义日期24小时制格式
+    function dateFormatSelf1(datetime) {
+        return datetime.getFullYear() + '-' + (datetime.getMonth() + 1) + '-' + datetime.getDate() + ' ' + datetime.getHours() + ':' + datetime.getMinutes() + ':' + datetime.getSeconds();
+    }
+    //加载统计图-月
+    function loadChartsMonth(dataMonth, month) {
+        var send = locale.get("daily_tx");
+        var receive = locale.get("daily_rx");
+        var total = locale.get("daily_total");
+        var data1 = [];//日发送
+        var data2 = [];//日接收
+        var data3 = [];//日总
+        var day;
+        var data_everyDay = [];
+
+        for (var j = 0; j < dataMonth.result.length; j++) {
+            day = "" + dataMonth.result[j].date;
+            data_everyDay.push(day.slice(4, 6) + "/" + day.slice(6, 8));
+            data1.push((dataMonth.result[j].send).toFixed(3));
+            data2.push((dataMonth.result[j].receive).toFixed(3));
+        }
+        require(
+                [
+                    'echarts',
+                    'echarts/chart/line',
+                    'echarts/chart/bar',
+                    'echarts/chart/pie'
+                ],
+                function(ec) {
+                    var myChart = ec.init(document.getElementById("flow_charts_showMonth"));
+                    var option = {
+                        tooltip: {
+                            trigger: 'axis',
+                            formatter: function(a) {
+                                var relVal = receive + ':' + calculateFlow(a[0][2]) + '<br />'
+                                        + send + ':' + calculateFlow(a[1][2]) + '<br />'
+                                        + total + ':' + calculateFlow(parseInt(a[0][2]) + parseInt(a[1][2]));
+                                return relVal;
+                            }
+                        },
+                        title: {
+                            left: 'center',
+                            text: day.slice(0, 4) + '/' + (day.slice(4, 6))
+                        },
+                        legend: {
+                            data: [send, receive]
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                mark: {show: true},
+                                magicType: {show: true, type: []},
+                                restore: {show: true}
+                            }
+                        },
+                        dataZoom: {
+                            show: true,
+                            type: 'slider',
+                            start: 0,
+                            end: 100
+                        },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data: data_everyDay
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value',
+                                axisLabel: {
+                                    formatter: function(value) {
+                                        var relval;
+                                        relval = calculateFlow(value);
+                                        return relval;
+                                    }
+                                }
+                            }
+                        ],
+                        series: [
+                            {
+                                name: send,
+                                type: 'bar',
+                                stack: 'group1',
+                                barMaxWidth: 20,
+                                data: data1
+                            },
+                            {
+                                name: receive,
+                                type: 'bar',
+                                stack: 'group1',
+                                barMaxWidth: 20,
+                                data: data2
+                            }
+                        ]
+                    };
+                    myChart.setOption(option);
+                }
+        );
+        locale.render({element: "#init_body"});
+    }
+    //加载统计图-天
+    function loadChartsDay(result, date) {
+        var min_x = new Date(date.slice(0, 4), (parseInt(date.slice(4, 6)) - 1), date.slice(6, 8), 0, 0, 0);
+        var max_x = new Date(date.slice(0, 4), (parseInt(date.slice(4, 6)) - 1), date.slice(6, 8), 23, 59, 59);
+        if (1000 * result[(result.length - 1)][2] > parseInt(max_x.getTime())) {
+            max_x = new Date(1000 * result[(result.length - 1)][2]);
+        }
+
+        var data = [];
+        for (var i = 0; i < result.length; i++) {
+            data.push([(new Date(result[i][1] * 1000)), (result[i][0]).toFixed(3)]);
+            data.push([(new Date(result[i][2] * 1000)), (result[i][0]).toFixed(3)]);
+        }
+        require(
+                [
+                    'echarts',
+                    'echarts/chart/line', // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
+                    'echarts/chart/bar',
+                    'echarts/chart/pie'
+                ],
+                function(ec) {
+                    var myChart = ec.init(document.getElementById("flow_charts_showMonth"));
+                    var option = {
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: function(a) {
+                                var date = new Date(a[1]);
+                                var relVal = (parseInt(date.getMonth()) + 1) + '/'
+                                        + (parseInt(date.getDate()) < 10 ? ("0" + date.getDate()) : (date.getDate())) + '  '
+                                        + (parseInt(date.getHours()) < 10 ? ("0" + date.getHours()) : (date.getHours())) + ':'
+                                        + (parseInt(date.getMinutes()) < 10 ? ("0" + date.getMinutes()) : (date.getMinutes())) + ':'
+                                        + (parseInt(date.getSeconds()) < 10 ? ("0" + date.getSeconds()) : (date.getSeconds())) + '<br />';
+                                relVal += calculateFlow(a[2][1]);
+                                return relVal;
+                            }
+                        },
+                        title: {
+                            left: 'center',
+                            text: date.slice(0, 4) + '/' + (date.slice(4, 6)) + '/' + date.slice(6, 8)
+                        },
+                        legend: {
+                            data: ['使用流量']
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                restore: {show: true},
+                                saveAsImage: {
+                                    show: true,
+                                    title: locale.get("save_as_image"),
+                                    lang: ['']
+                                }
+                            }
+                        },
+                        dataZoom: {
+                            show: true,
+                            type: 'slider',
+                            start: 0,
+                            end: 100
+                        },
+                        xAxis: [
+                            {
+                                type: 'time',
+                                splitNumber: 10,
+                                min: min_x,
+                                max: max_x
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value',
+                                axisLabel: {
+                                    formatter: function(value) {
+                                        var relval;
+                                        relval = calculateFlow(value);
+                                        return relval;
+                                    }
+                                }
+                            }
+                        ],
+                        series: [
+                            {
+                                name: '使用流量',
+                                type: 'line',
+                                step: 'end',
+                                showSymbol: true,
+                                showAllSymbol: true,
+                                hoverAnimation: true,
+                                symbol: 'droplet',
+                                symbolSize: 4,
+                                data: data
+                            }
+                        ]
+                    };
+                    myChart.setOption(option);
+                }
+        );
+        locale.render({element: "#init_body"});
+    }
+
+</script>
+
+    <!--表格统计-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-solid"  style="margin-bottom: 0px;box-shadow: 0px 0px;">
+                <!--加载数据等待-->
+                <div class="overlay" style="display: none;" id="overlay1">
+                    <i class="fa icon-refresh icon-spin"></i>
+                </div>
+                <!--查询条件-->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-sm-12" style="padding-bottom: 10px;">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" id="onlineCheckbox1" checked="checked" value="1">
+                                        <span lang="text:online">在线</span>
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" id="onlineCheckbox0" checked="checked" value="0">
+                                        <span  lang="text:offline">离线</span>
+                                    </label>
+                                </div>
+                                <div class="form-group has-feedback" style="margin-left: 20px;">
+                                    <input type="text" class="form-control form-control-left input-sm" id="showMonth" readonly="readonly">
+                                    <span class="glyphicon glyphicon-calendar form-control-feedback" style="left: 0;"></span>
+                                </div>
+                                <!--<div class="form-group" style="margin-left: 20px;">-->
+                                <!--<label lang="text:_month" style="position: relative;top: 2px;">月份:</label>-->
+                                <!--<input type="text" id="showMonth" class="form-control" readonly="readonly" style="height: 30px;width: 140px;">-->
+                                <!--</div>-->
+                                <div class="form-group" style="margin-left: 20px;">
+                                    <label lang="text:gateway_name" style="position: relative;top: 2px;">网关名称:</label>
+                                    <input type="text" class="form-control" id="gateway_name" placeholder="为空将查询所有"
+                                           lang="placeholder:empty_is_all" style="height: 30px;width: 170px;">
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-default btn-sm" id="btn_research" data-permissionFilter="[73]" data-toggle="tooltip" title="查询"
+                                            onclick="searchFun()" lang="title:query" >
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                </div>
+                                <div class="form-group box-tools pull-right">
+                                    <button type="button" class="btn btn-default btn-sm" id="btn_export" data-permissionFilter="[73]" data-toggle="tooltip" title="导出"
+                                            onclick="exportData()" lang="title:export">
+                                        <span class="icon-upload-alt"></span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="topo_chart8">
+                        <table class="table table-bordered table-striped" id="tableFirst">
+                            <thead>
+                            <tr>
+                                <!--<th style=""></th>-->
+                                <th lang="text:site" style="width: 17%;"></th>
+                                <th lang="text:gateway" style="width: 14%;"></th>
+                                <th lang="text:monthly_tx" style="width: 14%;">月发送流量</th>
+                                <th lang="text:monthly_rx" style="width: 14%;">月接收流量</th>
+                                <th lang="text:monthly_total" style="width: 14%;">月总流量</th>
+                                <th lang="text:daily_max" style="width: 14%;">日最大流量</th>
+                                <th style="width:60px; text-align:center;" lang="text:operate"></th>
+                            </tr>
+                            </thead>
+                            <tbody id="statistics_data_table">
+                            <!--动态载入数据-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!--box-body-->
+                <div id="page-footer">
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+<!--Modal_dataflow_day-->
+<div class="modal fade bs-example-modal-lg" id="myModal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content" style="width: 800px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><span lang="text:detailed_monthly_report">月流量明细</span>(<span id="myModalLabe_name"></span>)</h4>
+            </div>
+            <div class="modal-body" style="max-height:600px;overflow:auto;">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th lang="text:date">日期</th>
+                        <th lang="text:daily_tx">日发送流量</th>
+                        <th lang="text:daily_rx">日接收流量</th>
+                        <th lang="text:daily_total">日总流量</th>
+                    </tr>
+                    </thead>
+                    <tbody id="statistics_data_modal">
+                    <!--每日流量数据填充区-->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" lang="text:close">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal_charts-->
+<div class="modal fade bs-example-modal-lg" id="model_showCharts">
+    <div class="modal-dialog modal-lg">
+        <div class="box box-solid" style="width:100%;padding:1px">
+            <!--加载数据等待-->
+            <div class="overlay" style="display: none;" id="overlay2">
+                <i class="fa icon-refresh icon-spin"></i>
+            </div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="empty_ModalBody()">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title"  >
+                    <span></span>
+                    <span lang="text:month+traffic_statistics">月流量统计</span>(<span id="chartsName_month"></span>)
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <select id="selectDate_charts" onchange="changeCharts(this.value);" class="form-control"
+                                style="border-radius:3px;">
+                            <option value="0" lang="text:currentMonth" >本月</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-body" id="flow_charts_showMonth_model" style="width: 900px">
+                <div id="flow_charts_showMonth" style="height:450px;width:870px;">
+                    <!--统计图显示区-->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" lang="text:close">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function empty_ModalBody() {
+//        $("#flow_charts_showMonth").empty();
+//        $("#flow_charts_showMonth").removeAttr("style");
+//        $("#flow_charts_showMonth").removeAttr("_echarts_instance_");
+//        $("#flow_charts_showMonth").css({"height": "450px", "width": "900px"});
+        $("#flow_charts_showMonth").remove();
+        var divStr='<div id="flow_charts_showMonth" style="height:450px;width:870px;"></div>';
+        $("#flow_charts_showMonth_model").append(divStr);
+    }
+    function loading1() {
+        $("#overlay1").show();
+    }
+    function unload1() {
+        $("#overlay1").hide();
+    }
+    function loading2() {
+        $("#overlay2").show();
+    }
+    function unload2() {
+        $("#overlay2").hide();
+    }
+
+    //初始化
+    initializeOne();
+
+    //日期控件加载
+    $('#showMonth').datepicker({
+        language: locale.current() == 1 ? 'en' : 'zh-CN',
+        autoclose: true,        //选中之后自动隐藏日期选择框
+        todayHighlight: true,
+        format: 'yyyy-mm',
+        endDate:new Date(),
+        startView: 1,//起始选择范围，0为日，1为月，2为年
+        minViewMode:1//最小选择范围
+    });
+
+    $(document).ready(function() {
+        permissionFilter_pageFunc();
+        require(['dataflowStatisticsService', 'onlineStatisticsService'], function(dataflowStatisticsService) {
+            $("#page-footer").load("admin/pagination.html", function() {
+                reset_statistics(0, $("#pageNumberSelect").val());
+            });
+        });
+        locale.render({element: "#init_body"});
+    });
+
+</script>

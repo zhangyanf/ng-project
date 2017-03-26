@@ -1,0 +1,798 @@
+<style>
+    #tableHead_selectAll {
+        cursor: pointer;
+    }
+
+    #tableHead_selectAll:hover {
+        color: #1fc651;
+    }
+
+
+</style>
+<script type="text/javascript">
+    locale.render({element: "#init_body"});
+    //验证配置
+    validator.render("#form_increseUser", {
+        promptPosition: "inline",
+        scroll: false
+    });
+    validator.render("#form_editeUser", {
+        promptPosition: "inline",
+        scroll: false
+    });
+
+    //本页全局变量
+    var current_account = {};
+
+    //验证用户名是否存在----案例
+    function functionNametest(field, rules, i, options) {
+        var name = $.trim(field[0].value);
+        if (name != '') {
+            var params = {name: name};
+            var total;
+            searchAPI2_users(params, false, function (data) {
+                total = data.total;
+            }, this);
+            if (parseInt(total) > 0) {
+                return '用户名已存在';
+            }
+        }
+    }
+
+    function innit_allRoles() {
+        var message = "--" + locale.get("select_role") + "--";
+        $("#model_increseUser_roles").empty().append('<option value="">' + message + '</option>');
+        $("#model_editeUser_roleName").empty();
+        var params = {verbose: 100};
+        searchAPI2_roles(params, function (data) {
+            if (data.result) {
+                var str;
+                for (var i = 0; i < data.result.length; i++) {
+                    switch (data.result[i].name) {
+                        case 'admin':
+                            str = "<option value='" + data.result[i]._id + "' lang='text:dn_admin'></option>";
+                            break;
+                        case 'DeviceManager':
+                            str = "<option value='" + data.result[i]._id + "' lang='text:device_manager'></option>";
+                            break;
+                        case 'DeviceSense':
+                            str = "<option value='" + data.result[i]._id + "' lang='text:device_sense'></option>";
+                            break;
+                        default:
+                            str = "<option value='" + data.result[i]._id + "'>" + data.result[i].name + "</option>";
+                            break;
+                    }
+                    $("#model_increseUser_roles").append(str);
+                    $("#model_editeUser_roleName").append(str);
+                    locale.render({element: "#init_body"});
+                }
+            }
+        }, this);
+        locale.render({element: "#init_body"});
+    }
+    $("#tableHead_selectAll").on("click", function () {
+        var selected_usersId = $("#panelContent tr td input[type='checkbox']:checked");
+        var allUsers_nowPage = $("#panelContent tr td input");
+        if (allUsers_nowPage.length > 0) {
+            if (selected_usersId.length < allUsers_nowPage.length) {
+                $("#panelContent tr td input").prop("checked", true);
+                $("#tableHead_checkbok").prop("checked", true);
+            } else {
+                $("#panelContent tr td input").prop("checked", false);
+                $("#tableHead_checkbok").prop("checked", false);
+            }
+        } else {
+            $("#tableHead_checkbok").prop("checked", false);
+        }
+    });
+
+    //加载表格填充区域
+    function tableBuild(obj) {
+        $("#panelContent").empty();
+        var str;
+        var j = 0;
+        var phone;
+        var strInput = "";
+        for (var i = 0; i < obj.length; i++) {
+            phone = typeof(obj[i].phone) == 'undefined' ? "" : obj[i].phone;
+            j = i + 1;
+            if (obj[i]._id == obj[i].owner || obj[i]._id == current_account._id) {
+                strInput = "<td><span class='glyphicon glyphicon-ban-circle link-black'></td>";
+            } else {
+                strInput = "<td><input type='checkbox' value='" + obj[i]._id + "' class='tabs-checked'></td>";
+            }
+            str = "<tr>" + strInput +
+                    "<td style='word-break: break-all;'>" + obj[i].name + "</td>" +
+                    "<td style='word-break: break-all;'>" + obj[i].email + "</td>" +
+                    "<td>" + obj[i].state + "</td>" +
+                    "<td>" + obj[i].roleName + "</td>" +
+                    "<td>" + obj[i].createTime + "</td>" +
+                    "<td>" + obj[i].totalLogin + "</td>" +
+                    "<td style='text-align:center;'>" +
+                    "<span data-toggle='tooltip' title='编辑' lang='title:edit' data-permissionFilter='[6]'" +
+                    "onclick='showModel_edit_users(\"" + obj[i].name + "\",\"" + obj[i].email + "\",\"" + phone + "\",\"" + obj[i].state + "\",\"" + obj[i].roleName + "\",\"" + obj[i]._id + "\",\"" + obj[i].roleId + "\")' style='padding: 3px 6px;'><span class='glyphicon glyphicon-edit link-black' aria-hidden='true' style=' cursor: pointer;'></span>&nbsp;</span>" +
+                    "<span data-toggle='tooltip' title='重置密码' lang='title:reset_password' data-permissionFilter='[6]'" +
+                    "onclick='showModel_repeat_password(\"" + obj[i].name + "\",\"" + obj[i].email + "\",\"" + obj[i].phone + "\",\"" + obj[i].state + "\",\"" + obj[i].roleName + "\",\"" + obj[i]._id + "\")' style='padding: 3px 6px;'><span class='glyphicon glyphicon-repeat link-black' aria-hidden='true' style=' cursor: pointer;'></span>&nbsp;</span>" +
+                    "</td>" +
+                    "</tr>";
+            $("#panelContent").append(str);
+        }
+        $("tbody > tr > td > input").on("click", function () {
+            var selected_usersId = $("#panelContent tr td input[type='checkbox']:checked");
+            var allUsers_nowPage = $("#panelContent tr td input");
+            if (selected_usersId.length < allUsers_nowPage.length) {
+                $("#tableHead_checkbok").prop("checked", false);
+            }
+            if (selected_usersId.length == allUsers_nowPage.length) {
+                $("#tableHead_checkbok").prop("checked", true);
+            }
+        });
+        permissionFilter_pageFunc();
+        locale.render({element: "#init_body"});
+    }
+
+
+    //定义工具
+    function transform_userState(state) {
+        if (state == -1)
+            return locale.get("logouted");
+        if (state == 0)
+            return locale.get("logined");
+        if (state == 1)
+            return locale.get("locked");
+    }
+    function tansform_userRoleName(roleName) {
+        var result = "";
+        if (roleName == 'DeviceManager') {
+            result = locale.get("device_manager");
+        } else if (roleName == 'admin') {
+            result = locale.get("dn_admin");
+        } else if (roleName == 'DeviceSense') {
+            result = locale.get("device_sense");
+        } else {
+            result = roleName;
+        }
+        return result;
+    }
+    function transform_userCreateTime(timestamp) {
+        var date = new Date(timestamp * 1000);
+        var month = (parseInt(date.getMonth() + 1) < 10) ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1);
+        var day = (parseInt(date.getDate()) < 10) ? ("0" + date.getDate()) : date.getDate();
+        var hour = (parseInt(date.getHours()) < 10) ? ("0" + date.getHours()) : date.getHours();
+        var minutes = (parseInt(date.getMinutes()) < 10) ? ("0" + date.getMinutes()) : date.getMinutes();
+        var seconds = (parseInt(date.getSeconds()) < 10) ? ("0" + date.getSeconds()) : date.getSeconds();
+        var formatDate;
+        formatDate = date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + seconds;
+        return formatDate;
+    }
+</script>
+<section class="content-header">
+    <h1 lang="text:user">
+        用户
+        <small>Version 2.0</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#" lang="text:system"></a></li>
+        <li class="active" lang="text:user"></li>
+    </ol>
+</section>
+<section class="content" id="tcontent">
+    <div class="nav-tabs-custom">
+
+        <ul class="nav nav-tabs" role="tablist" id="myNavTabs">
+            <li role="presentation" class="active" onclick="showTabContent(1)">
+                <a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:all_user" value="1">所有用户</a>
+            </li>
+            </li>
+            <li role="presentation" onclick="showTabContent(3)">
+                <a href="javascript:void(0)" role="tab" lang="text:dn_admin" data-toggle="tab" value="3">系统管理员</a>
+            </li>
+            <li role="presentation" onclick="showTabContent(4)">
+                <a href="javascript:void(0)" role="tab" lang="text:device_manager" data-toggle="tab" value="4">设备管理员</a>
+            </li>
+            <li role="presentation" onclick="showTabContent(5)">
+                <a href="javascript:void(0)" role="tab" lang="text:device_sense" data-toggle="tab" value="5">设备监视员</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content" style="padding-bottom: 0px;">
+            <!--表格数据区-->
+            <div class=" tab-pane row active">
+                <div class="col-md-12">
+                    <div class="box box-solid" style="margin-bottom: 0px;box-shadow: 0px 0px;">
+                        <!--加载数据等待-->
+                        <div class="overlay" style="display: none;">
+                            <i class="fa icon-refresh icon-spin"></i>
+                        </div>
+
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-sm-12" style="padding-bottom: 10px;"><!--查询条件-->
+                                    <form class="form-inline">
+                                        <div class="box-tools pull-right">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-default btn-sm" title='新增'
+                                                        data-permissionFilter="[6]"
+                                                        data-toggle='tooltip' data-placement="bottom" lang="title:add"
+                                                        onclick="showModel_increase_users();">
+                                                    <i class="glyphicon glyphicon-plus"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-default btn-sm" title='删除'
+                                                        data-permissionFilter="[6]"
+                                                        data-toggle='tooltip' data-placement="bottom"
+                                                        lang="title:delete" onclick="delete_users();">
+                                                    <i class="glyphicon glyphicon-minus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div>
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th id="tableHead_selectAll" style="width: 30px;">
+                                            <input type="checkbox" id="tableHead_checkbok" data-toggle='tooltip'
+                                                   data-placement="bottom" lang="title:check_all">
+                                        </th>
+                                        <th lang="text:username" style="width: 15%;">用户名</th>
+                                        <th lang="text:email" style="width: 20%;">邮箱</th>
+                                        <th lang="text:state">状态</th>
+                                        <th lang="text:role">角色</th>
+                                        <th lang="text:creation_time">创建时间</th>
+                                        <th lang="text:login_times">登录次数</th>
+                                        <th style="width:80px;text-align:center;" lang="text:operate"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="panelContent">
+
+                                    <!--动态载入数据-->
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div><!--box-body-->
+                        <div id="page-footer">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!--新增用户模态框-->
+<div class="modal fade" id="model_increseUser">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        onclick="clear_validationInfo()">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" lang="text:add_user"></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="form_increseUser">
+                    <div class="form-group">
+                        <label for="model_increseUser_userName" class="col-sm-2 control-label">
+                            <span lang="text:user_name"></span><span class="text-red">*</span>
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text"
+                                   class="form-control model_increseUser_userName validate[required,maxSize[30]]"
+                                   name="name" id="model_increseUser_userName"
+                                   placeholder="用户名" lang="placeholder:user_name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="model_increseUser_email" class="col-sm-2 control-label">
+                            <span lang="text:email"></span><span class="text-red">*</span>
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control validate[required,custom[email]]" name="email"
+                                   id="model_increseUser_email"
+                                   placeholder="email" lang="placeholder:email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="model_increseUser_phone" class="col-sm-2 control-label" lang="text:mobile_number">
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control validate[custom[mobile]]" name="phone"
+                                   id="model_increseUser_phone"
+                                   placeholder="phone" lang="placeholder:mobile_number">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            <span lang="text:role"></span><span class="text-red">*</span>
+                        </label>
+                        <div class="col-sm-10">
+                            <select id="model_increseUser_roles" class="validate[required]" name="roleId"
+                                    style="height:32px;">
+                                <!--角色-->
+                            </select>
+                        </div>
+                    </div>
+                    <div style="text-align:right;">
+                        <button id="btn_resetForm" type="reset" style="outline: none;background: white;border: none;"
+                                data-toggle="tooltip" title="重新填写" lang="title:reset1">
+                            <span class='glyphicon glyphicon-refresh' aria-hidden='true'
+                                  style='color:green;font-size:150%;cursor: pointer;'></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" lang="text:close"
+                        onclick="clear_validationInfo()">关闭
+                </button>
+                <button type="button" class="btn btn-primary" onclick="increase_users();" lang="text:submit">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--修改用户信息模态框-->
+<div class="modal fade" id="model_editUser">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        onclick="clear_validationInfo()">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" lang="text:edit_user"></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="form_editeUser">
+                    <input type="hidden" value="" name="_id" id="model_editeUser_id">
+                    <div class="form-group">
+                        <label for="model_editeUser_userName" class="col-sm-2 control-label">
+                            <span lang="text:user_name"></span><span class="text-red">*</span>
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control validate[required,maxSize[30]]" name="name"
+                                   id="model_editeUser_userName"
+                                   placeholder="用户名" lang="placeholder:user_name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" lang="text:email">
+                            邮箱
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" name="email" id="model_editeUser_email"
+                                   disabled="true">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="model_editeUser_phone" class="col-sm-2 control-label" lang="text:mobile_number">
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control validate[custom[mobile]]" name="phone"
+                                   id="model_editeUser_phone"
+                                   placeholder="phone" lang="placeholder:mobile_number">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" lang="text:state">
+                            状态
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="state" id="model_editeUser_state"
+                                   disabled="true">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" lang="text:role">
+                            角色
+                        </label>
+                        <div class="col-sm-10">
+                            <!--<input type="text" class="form-control" name="roleName" id="model_editeUser_roleName"-->
+                                   <!--disabled="true">-->
+                            <select id="model_editeUser_roleName" class="validate[required]" name="roleName"
+                                    style="height:32px;" disabled="disabled">
+                                <!--角色-->
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" lang="text:close"
+                        onclick="clear_validationInfo()"></button>
+                <button type="button" class="btn btn-primary" onclick="edit_users();" lang="text:submit">提交</button>
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--重置密码模态框-->
+<div id="model_repeat_password" class="modal bs-example-modal-sm" tabindex="-1" role="dialog"
+     aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <input type="hidden" value="" name="_id" id="model_repeatPwd_userId">
+                    <input type="hidden" value="" name="pictureId" id="model_repeatPwd_pictureId">
+                    <label style="position: relative;top: 15px;" lang="text:please_input_captcha">请输入验证码:</label>
+                    <img id="medel_repeatPwd_img" onclick="changePicture();" style="position: relative;left: 15px;"
+                         src="">
+                    <div class="form-group" style="position:relative;top:15px">
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" value="" id="model_repeatPwd_yzm">
+                        </div>
+                        <div class="col-sm-5">
+                            <button type="button" class="btn btn-primary" onclick="repeat_password();"
+                                    lang="text:affirm">确认
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--批量标签模态框-->
+<div class="modal fade" id="model_batchTabs">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width: 800px;">
+            <div class="modal-header" style="margin: 1px 1px 7px 1px;background: #ecf4f5;border-bottom-color: #d6c9c9;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">标签批量操作</h4>
+            </div>
+            <div class="modal-body" style="padding: 1px;">
+                <div style="height: 600px;">
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <!--标签批量操作-->
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+
+    //nav-tabs选择项切换
+    function showTabContent(tabPage) {
+
+        $("#pageNumberSelect option").removeAttr("selected");
+        $("#pageNumberSelect option:first").attr('selected', true);
+
+        $("#panelContent").empty();
+        $("#tableHead_checkbok").prop("checked", false);
+        pageLoadCallback(0, tabPage);
+
+    }
+    //分页回调方法
+    function pageLoadCallback(index, tabPage) {
+        switch (tabPage) {
+            case 1:
+                changeTabOne(index, tabPage);
+                break;
+            case 2:
+               // changeTabTwo(index, tabPage);
+                break;
+            case 3:
+                changeTabThree(index, tabPage);
+                break;
+            case 4:
+                changeTabFour(index, tabPage);
+                break;
+            case 5:
+                changeTabFive(index, tabPage);
+                break;
+            default:
+                break;
+        }
+    }
+    //第一个标签方法调用
+    function changeTabOne(cursor, tabPage) {
+        loading();
+        //tabPage 第几个导航标签
+        // cursor 表示从结果的第几条开始
+        // limit  查询多少条
+        var limit = $("#pageNumberSelect").find("option:selected").val();
+        var params = {limit: limit, cursor: cursor, verbose: 100};
+        searchAPI2_users(params, false, function (data) {
+
+            if (data.total && data.total > 0) {
+                refreshTableLogic(data, tabPage);
+                renderPagination(data, function (index, limit) {
+                    pageLoadCallback(index, tabPage);
+                });
+
+            } else {
+                clearPagination();
+                $("#panelContent").empty();
+                $("#panelContent").append('<tr><td colspan="8"  align="center" lang="text:no_data"></td></tr>');
+                locale.render({element: "#init_body"});
+            }
+            unload();
+
+        }, this);
+    }
+    //第二个标签方法调用
+    //    function changeTabTwo(cursor, tabPage) {
+    //
+    //    }
+    //第三个标签方法调用
+    function changeTabThree(cursor, tabPage) {
+        loading();
+        var name = "admin";
+        researchroles_name(name, cursor, tabPage);
+    }
+    //第四个标签方法调用
+    function changeTabFour(cursor, tabPage) {
+        loading();
+        var name = "DeviceManager";
+        researchroles_name(name, cursor, tabPage);
+    }
+    //第五个标签方法调用
+    function changeTabFive(cursor, tabPage) {
+        loading();
+        var name = "DeviceSense";
+        researchroles_name(name, cursor, tabPage);
+    }
+
+    //查询指定角色
+    function researchroles_name(name, cursor, tabPage) {
+        var limit = $("#pageNumberSelect").find("option:selected").val();
+        var params = {limit: limit, name: name};
+        searchAPI2_roles(params, function (data) {
+            var back = data;
+            if (back.result) {
+                var role_ids = back.result[0]._id;
+                var param2 = {
+                    limit: limit,
+                    cursor: cursor,
+                    verbose: 100,
+                    role_ids: role_ids,
+                    type: 2
+                };
+                searchAPI2_users(param2, true, function (data1) {
+                    if (data1.result && data1.result.length > 0) {
+                        //填充列表
+                        refreshTableLogic(data1, tabPage);
+                        //加载分页
+                        renderPagination(data1, function (index, limit) {
+                            pageLoadCallback(index, tabPage);
+                        });
+                    } else {
+                        clearPagination();
+                        $("#panelContent").empty();
+                        $("#panelContent").append('<tr><td colspan="8"  align="center" lang="text:no_data"></td></tr>');
+                        locale.render({element: "#init_body"});
+                    }
+                    unload();
+                }, this);
+            }
+        }, this);
+    }
+    //跳转到指定页  回调函数
+    function jumpTopage(cursor) {
+
+        var tabContent = $("#myNavTabs li").filter(".active").find("a").attr("value");
+        pageLoadCallback(cursor, parseInt(tabContent));
+    }
+
+    //每页显示条目切换
+    function changePageNumber(limit) {
+        var tabContent = $("#myNavTabs li").filter(".active").find("a").attr("value");
+
+        pageLoadCallback(0, parseInt(tabContent));
+
+    }
+
+
+    //根据api2_users_list结果加载数据逻辑
+    function refreshTableLogic(data, tabPage) {
+        var objTemp;
+        var objData = [];
+        for (var i = 0; i < data.result.length; i++) {
+            objTemp = new Object();
+            objTemp.name = (typeof(data.result[i].name) == "undefined") ? "" : data.result[i].name;
+            objTemp.email = data.result[i].email;
+            objTemp.state = transform_userState(data.result[i].state);
+            objTemp.roleName = tansform_userRoleName(data.result[i].roleName);
+            objTemp.roleId=data.result[i].roleId;
+            objTemp.createTime = transform_userCreateTime(data.result[i].createTime);
+            objTemp.totalLogin = data.result[i].totalLogin;
+            objTemp._id = data.result[i]._id;
+            objTemp.phone = data.result[i].phone;
+            objTemp.owner = data.result[i].owner;
+            objData.push(objTemp);
+        }
+        tableBuild(objData);
+    }
+
+    //显示添加用户模态框
+    function showModel_increase_users() {
+        $('#model_increseUser').modal({backdrop: 'static', keyboard: false});
+        $('#btn_resetForm').click();
+        $('#model_increseUser').modal('show');
+        var tabContent = ($("#myNavTabs li").filter(".active").find("a")).text();
+        $("#model_increseUser_roles > option:contains('" + tabContent + "')").prop("selected", true);
+    }
+    //显示编辑用户模态框
+    function showModel_edit_users(name, email, phone, state, roleName, _id, roleId) {
+
+        $('#model_editUser').modal({backdrop: 'static', keyboard: false});
+        $('#btn_resetForm2').click();
+        $("#model_editeUser_userName").val(name);
+        $("#model_editeUser_email").val(email);
+        $("#model_editeUser_phone").val(phone);
+        $("#model_editeUser_state").val(state);
+        $("#model_editeUser_roleName").css("background-color","#eee");
+        $("#model_editeUser_roleName > option[value='"+roleId+"']").prop("selected",true);
+        // $("#model_editeUser_roleName").val(roleName);
+        $("#model_editeUser_id").val(_id);
+        $('#model_editUser').modal('show');
+    }
+    //显示重置密码输入框
+    function showModel_repeat_password(name, email, phone, state, roleName, _id) {
+        changePicture();
+        $("#model_repeatPwd_userId").val(_id);
+        $("#model_repeatPwd_yzm").val("");
+        $("#model_repeat_password").modal('show');
+        movePasswordModel();
+    }
+    function movePasswordModel() {
+        var model_height = $("#model_repeat_password > .modal-dialog > .modal-content").height();
+        var model_width = $("#model_repeat_password > .modal-dialog > .modal-content").width();
+        var window_height = $(window).height();
+        var window_width = $(window).width();
+        $("#model_repeat_password > .modal-dialog > .modal-content").offset({
+            top: (window_height - model_height) / 2,
+            left: (window_width - model_width) / 2
+        });
+    }
+    $(window).resize(function (event) {
+        var model_height = $("#model_repeat_password > .modal-dialog > .modal-content").height();
+        var model_width = $("#model_repeat_password > .modal-dialog > .modal-content").width();
+        var content_height = $(window).height();
+        var content_widtht = $(window).width();
+        $("#model_repeat_password > .modal-dialog > .modal-content").offset({
+            top: (content_height - model_height) / 2,
+            left: (content_widtht - model_width) / 2
+        });
+    });
+
+    //添加用户
+    function increase_users() {
+        if ($('#form_increseUser').validationEngine('validate')) {
+            var params = {language: '2', verbose: '4'};
+            var email = $("#model_increseUser_email").val();
+            var name = $("#model_increseUser_userName").val();
+            var phone = $("#model_increseUser_phone").val();
+            var roleId = $("#model_increseUser_roles").val();
+            var sendData = {email: email, name: name, phone: phone, roleId: roleId};
+
+            postAPI2_users(params, sendData, function (data) {
+                if (data.error_code) {
+                    if (parseInt(data.error_code) == 20007) {
+                        errorTipDis("email_already_exists");
+                    }
+                } else {
+                    $('#model_increseUser').modal('hide');
+                    changePageNumber(30);//刷新当前标签页下的内容
+                    var showText = locale.get("2110001", " ");
+                    dialog.render({
+                        text: showText
+                    });
+                }
+                locale.render({element: "#init_body"});
+            }, this);
+        }
+    }
+    //删除用户
+    function delete_users() {
+        var selected_users = $("#panelContent tr td input[type='checkbox']:checked");
+        if (selected_users.length > 0) {
+            dialog.render({
+                lang: "deleteUserInfo",
+                buttons: [{
+                    lang: "yes", click: function () {
+                        selected_users.each(function () {
+                            deleteAPI2_users_$ID(null, $(this).val());
+                        });
+                        changePageNumber(30);//刷新当前标签页下的内容
+                        dialog.close();
+                    }
+                }, {
+                    lang: "no", click: function () {
+                        dialog.close();
+                    }
+                }],
+                close: function () {
+                    dialog.close();
+                }
+            });
+        } else {
+            errorTipDis("select_del")
+        }
+        locale.render({element: "#init_body"});
+    }
+    //编辑用户
+    function edit_users() {
+        if ($('#form_editeUser').validationEngine('validate')) {
+            $('#model_editUser').modal('hide');
+            var paramsString = {verbose: '4'};
+            var deleteUserId = $("#model_editeUser_id").val();
+            var userName = $("#model_editeUser_userName").val();
+            var sendData = {
+                name: $("#model_editeUser_userName").val(),
+                email: $("#model_editeUser_email").val(),
+                phone: $("#model_editeUser_phone").val()
+            };
+            putAPI2_users_$ID(paramsString, deleteUserId, sendData, function (data) {
+                var data_userId = data.result._id;
+                if (data_userId == current_account._id) {
+                    $("#user_info_1").text(userName);
+                    $("#user_info_3").text(userName);
+                }
+                //刷新当前标签页下的内容
+                changePageNumber(30);
+            }, this);
+        }
+    }
+    //重置密码
+    function repeat_password() {
+        $("#model_repeat_password").modal('hide');
+        var id = $("#model_repeatPwd_userId").val();
+        var pictureId = $("#model_repeatPwd_pictureId").val();
+        var varificationCode = $("#model_repeatPwd_yzm").val();
+        var sendData = {picId: pictureId, varificationCode: varificationCode};
+        var params = {language: '2', verbose: '4'};
+        putAPI2_users_$ID_resetPassword(id, sendData, params, function (data) {
+            var result = data;
+            if (result.result) {
+                dialog.render({
+                    lang: "modify_successful"
+                });
+            } else {
+                switch (result.error_code) {
+                    case 20013:
+                       errorTipDis("20013")
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }, this);
+        locale.render({element: "#init_body"});
+    }
+    //切换验证码图片
+    function changePicture() {
+        getAPI_captchas(null, function (data) {
+            var result = data;
+            $("#medel_repeatPwd_img").attr("src", "/api/captchas/" + result._id);
+            $("#model_repeatPwd_pictureId").val(result.pictureId);
+        }, this);
+    }
+    //清除验证提示
+    function clear_validationInfo() {
+        $(".formError.inline").remove();
+    }
+
+
+    //页面功能权限过滤
+    $(document).ready(function () {
+        permissionFilter_pageFunc();
+        $("#page-footer").load("admin/pagination.html", function () {
+            getAPI2_user_this({verbose: 100}, function (data) {
+                current_account._id = data.result._id;
+                showTabContent(1);//初始化页面
+                innit_allRoles();
+            }, this);
+        });
+    });
+
+</script>

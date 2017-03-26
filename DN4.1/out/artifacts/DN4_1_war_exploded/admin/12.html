@@ -1,0 +1,337 @@
+<!-- Main content -->
+<section class="content-header">
+    <h1 lang="text:production_line_statistics">
+        产线统计
+        <small>Version 2.0</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="javascript:void(0)" onclick="click2url(1);"><i class="icon-home"></i> Home</a></li>
+    </ol>
+</section>
+<section class="content" id="tcontent">
+    <div class="row">
+        <div class="from-group" role="toolbar">
+            <div class="col-md-3">
+                <label  class="col-md-5  control-label" style="margin-top:6px;" lang="text:start_date">开始日期</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="icon-calendar"></i>
+                    </div>
+                    <input type="text"  id="startDate" data-provide="date-picker" class="form-control"  readonly="readonly"
+                           onFocus="WdatePicker();">
+                </div>
+
+            </div>
+            <div class="col-md-3">
+                <!-- <label for="exampleInputPassword1">结束日期</label> -->
+                <label for="end_date_12" class="col-md-5  control-label" style="margin-top:6px;" lang="text:end_date">截止日期</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="icon-calendar"></i>
+                    </div>
+                    <input type="text"  id="endDate" data-provide="date-picker" class="form-control"  readonly="readonly"  onFocus="WdatePicker({dateFmt: 'yyyy-MM-dd '});"/>
+                    <!--  onFocus="WdatePicker({isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" -->
+                </div>
+            </div><!-- /.col-lg-6 -->
+            <div class="col-md-2">
+                <button type="button" class="btn btn-default pull-left"  style="margin: 0px 15px;"  onClick="reset_modal12()" lang="text:confirm">确定</button>
+                <button type="button" class="btn btn-default pull-left" style="display:none" lang="text:export">导出</button>
+            </div>
+        </div>
+    </div>
+    <div id="allChars" style="margin-top: 20px;">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title" lang="text:output_statistics"></h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>
+                            <!--button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="icon-times"></i></button-->
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div id="cltj-chart3_1" class="col-md-12 col-xs-12" style="height:220px;width:98%;padding:1px"  align="left">
+
+                        </div>
+                    </div>
+                </div><!-- /.box -->
+            </div>
+
+            <div class="col-md-6">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title" lang="text:energy_consumption_statistics">能耗统计</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>
+                            <!--button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="icon-times"></i></button-->
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div id="nhtj-chart3_1" class="col-md-12 col-xs-12" style="height:220px;width:98%;padding:1px"  align="left">
+
+                        </div>
+                    </div>
+                </div><!-- /.box -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title" lang="text:efficiency_statistics">效率统计</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>
+                            <!--button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="icon-times"></i></button-->
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div id="xltj-chart3_1" class="col-md-12 col-xs-12" style="height:220px;width:98%;padding:1px"  align="left">
+
+                        </div>
+                    </div>
+                </div><!-- /.box -->
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title" lang="text:operation_time">运行时间</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus"></i></button>
+                            <!--button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="icon-times"></i></button-->
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div id="yxsj-chart3_1" class="col-md-12 col-xs-12" style="height:220px;width:98%;padding:1px"  align="left">
+
+                        </div>
+                    </div>
+                </div><!-- /.box -->
+            </div>
+        </div>
+    </div>
+
+</section>
+<script type="text/javascript" >
+      locale.render({element: "#init_body"});
+     function end(){
+        var mydate = new Date();
+        var str = "" + mydate.getFullYear() + "-";
+        str += (mydate.getMonth()+1) + "-";
+        console.log(str);
+        str += mydate.getDate();
+        console.log(str);
+        return str;
+  }
+      $("#endDate").val(end());
+     function start(){
+        var mydate = new Date();
+        var str = "" + mydate.getFullYear() + "-";
+        str += (mydate.getMonth()) + "-";
+        str += mydate.getDate();
+        return str;
+  }
+
+  $("#startDate").val(start());
+  var data={
+      x:['06-28','07-01','07-04','07-07','07-13','07-16','07-19','07-22','07-25','07-28'],
+      y:[11, 11, 15, 13, 12, 13, 10,13,15,9]
+  };
+   var  outputOption = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['产量统计']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                magicType: {show: true, type: ['line', 'bar']},
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: data.x
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} h'
+            }
+        },
+        series: [
+            {
+                name:'产量统计',
+                type:'line',
+                data:data.y,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: locale.get({lang:"maxValue"})},
+                        {type: 'min', name: locale.get({lang:"minValue"})}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: locale.get({lang:"average"})}
+                    ]
+                }
+            }
+        ]
+    };
+    var  energyOption = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['能耗统计']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                magicType: {show: true, type: ['line', 'bar']},
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: data.x
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} kw/h'
+            }
+        },
+        series: [
+            {
+                name:'能耗统计',
+                type:'line',
+                data:data.y,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: locale.get({lang:"maxValue"})},
+                        {type: 'min', name: locale.get({lang:"minValue"})}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: locale.get({lang:"average"})}
+                    ]
+                }
+            }
+        ]
+    };
+    var  efficiencyOption = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['效率统计']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                magicType: {show: true, type: ['line', 'bar']},
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: data.x
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} %'
+            }
+        },
+        series: [
+            {
+                name:'效率统计',
+                type:'line',
+                data:data.y,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: locale.get({lang:"maxValue"})},
+                        {type: 'min', name: locale.get({lang:"minValue"})}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: locale.get({lang:"average"})}
+                    ]
+                }
+            }
+        ]
+    };
+    var datap={
+        pie:[
+                    {value:400, name:'抓棉机'},
+                    {value:300, name:'混棉机'},
+                    {value:200, name:'清棉机'},
+                    {value:400, name:'梳棉机'}]
+    }
+    var dOption = {
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient : 'vertical',
+            x : 'left',
+            data:['抓棉机','混棉机','清棉机','梳棉机']
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                //mark : {show: true},
+                //dataView : {show: true, readOnly: false},
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        calculable : false,
+        series : [
+            {
+                name:'',
+                type:'pie',
+                radius : '55%',
+                center: ['50%', '60%'],
+                data:datap.pie
+            }
+        ]
+    };
+    require(
+            [
+                'echarts',
+                'echarts/chart/line', // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
+                'echarts/chart/bar',
+                'echarts/chart/pie'
+            ],
+            function (ec) {
+                var cltjChart2 = ec.init(document.getElementById("cltj-chart3_1"));
+                cltjChart2.showLoading({
+                    text: '正在努力的读取数据中...'
+                });
+                cltjChart2.setOption(outputOption);
+                cltjChart2.hideLoading();
+                var nhtjChart = ec.init(document.getElementById("nhtj-chart3_1"));
+                nhtjChart.setOption(energyOption);
+                var xltjChart = ec.init(document.getElementById("xltj-chart3_1"));
+                xltjChart.setOption(efficiencyOption);
+                var yxsjChart = ec.init(document.getElementById("yxsj-chart3_1"));
+                yxsjChart.setOption(dOption);
+            }
+    );
+
+</script>
