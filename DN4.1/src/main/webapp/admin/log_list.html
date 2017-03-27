@@ -128,6 +128,7 @@
     //第一个标签方法调用
     var tab=1;
     function changeTabOne(cursor, tabPage) {
+        var self = this;
       $("#operaContent").show();
       $("#commContent").hide();
       $("#refreshIcon").show();
@@ -149,8 +150,7 @@
           language:language
         };
         tab=1;
-        searchOperationLog(params, false, function(data) {
-
+        searchOperationLog(params, true, function(data) {
             if(data.total && data.total>0){
                 tableBuild(data.result);
                 renderPagination(data,changeTabOne);
@@ -161,8 +161,7 @@
                 locale.render({element: "#init_body"});
             }
             $("#refreshIcon").hide();
-
-        }, this);
+        }, self);
     }
 
     //加载表格填充区域
@@ -335,6 +334,14 @@
     $(document).ready(function() {
         permissionFilter_pageFunc();
         require(['logService'], function (logService) {
+            // 引入分页
+//            $("#page-footer").pagination({
+//                changePage:function (cursor,limit) {
+//                    //分页内容改变的回调函数
+//                    research_site(cursor,limit);
+//                }
+//            });
+//            research_site(0, $("#page-footer .col-sm-5 select").val());
           $("#page-footer").load("admin/pagination.html",function(){
               showTabContent(1);//初始化页面
           });

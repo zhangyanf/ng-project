@@ -241,7 +241,7 @@
                                         <th lang="text:email" style="width: 20%;">邮箱</th>
                                         <th lang="text:state">状态</th>
                                         <th lang="text:role">角色</th>
-                                        <th lang="text:creation_time">创建时间</th>
+                                        <th lang="text:create_time">创建时间</th>
                                         <th lang="text:login_times">登录次数</th>
                                         <th style="width:80px;text-align:center;" lang="text:operate"></th>
                                     </tr>
@@ -279,13 +279,13 @@
                 <form class="form-horizontal" id="form_increseUser">
                     <div class="form-group">
                         <label for="model_increseUser_userName" class="col-sm-2 control-label">
-                            <span lang="text:user_name"></span><span class="text-red">*</span>
+                            <span lang="text:username"></span><span class="text-red">*</span>
                         </label>
                         <div class="col-sm-10">
                             <input type="text"
                                    class="form-control model_increseUser_userName validate[required,maxSize[30]]"
                                    name="name" id="model_increseUser_userName"
-                                   placeholder="用户名" lang="placeholder:user_name">
+                                   placeholder="用户名" lang="placeholder:username">
                         </div>
                     </div>
                     <div class="form-group">
@@ -351,12 +351,11 @@
                     <input type="hidden" value="" name="_id" id="model_editeUser_id">
                     <div class="form-group">
                         <label for="model_editeUser_userName" class="col-sm-2 control-label">
-                            <span lang="text:user_name"></span><span class="text-red">*</span>
+                            <span lang="text:username"></span><span class="text-red">*</span>
                         </label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control validate[required,maxSize[30]]" name="name"
-                                   id="model_editeUser_userName"
-                                   placeholder="用户名" lang="placeholder:user_name">
+                                   id="model_editeUser_userName" lang="placeholder:username">
                         </div>
                     </div>
                     <div class="form-group">
