@@ -52,7 +52,7 @@ var lang = {
         "home":"Home",
         "gis":"GIS",
         siteInfo: "Site Info",
-        siteList: "Site List",
+        site_list: "Site List",
         "gateway_state":"Gateway status",
         business_state: "Operation Status",
         has_not_affirmed_alarm: "You have {0} alarms not confirmed.",

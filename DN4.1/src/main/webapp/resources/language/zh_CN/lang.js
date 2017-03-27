@@ -52,7 +52,7 @@ var lang = {
         "home":"首页",
         "gis":"GIS",
         siteInfo: "现场信息",
-        siteList: "现场列表",
+        site_list: "现场列表",
         "gateway-state":"网关状态",
         business_state: "业务状态",
         "has_not_affirmed_alarm": "您有{0}个未处理告警",
