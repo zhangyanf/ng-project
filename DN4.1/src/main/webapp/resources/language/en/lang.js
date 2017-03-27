@@ -1,7 +1,16 @@
 var lang = {
     en: {
+        smart_atm:"Smart ATM",
+        languages: "Languages",
         "default": "Default",
         no_data: "No Data",
+        sign_in: "Sign In",
+        forgot_pwd: "Reset password",
+        rempwd: "Remember Me",
+        security_code: "Security Code",
+        change_pwd: "Change pwd",
+        inhand: "InHand",
+        welcome_to_inhand: "Welcome to InHand Device Networks Cloud",
         login: "Login",
         login_again: "Please login again",
         login_timeout: "Login timeout",
@@ -12,7 +21,13 @@ var lang = {
         logouted: "Logged out",
         logouttime: "Logout",
         registration: "Registration",
+        read_the_service_terms: "Review the service agreement",
+        complete_account_information: "Create an accnount",
+        finish: "Finish",
+        later_registration: "Cancel",
+        agree: "Agree",
         username: "Username",
+        password: "Password",
         phone: "Phone",
         last_login: "Last Login",
         last_login_ip: "Last Login IP",
@@ -37,22 +52,38 @@ var lang = {
         "export": "Export",
         view: "View",
         ok: "Ok",
+        all: "All",
         previous_step: "Back",
         next_step: "Next",
         finished: "Completed",
         time: "Time",
+        previous_page: "Previous page",
+        next_page: "Next page",
+        refresh_page: "Refresh",
+        first_page:"First",
+        last_page: "Last",
+        /********************************  底部信息 *********************************/
+        group_address: "3900 Jermantown Rd., Suite 150, Fairfax, VA 22030, USA ",
+        company_website_href:"http://www.inhandnetworks.com",
+        company_website:"www.inhandnetworks.com",
+        company_mailto_href:"mailto:info@inhandnetworks.com",
+        company_mailto:"info@inhandnetworks.com",
+        company_phone:"+1 (703) 348-2988",
+        all_rights_reserved: "All rights reserved.",
 
 
 
-        /******** echart ********/
+        /******************************** echart *************************************/
         line_switch: "Line chart switching",
         bar_switch: "Bar chart switching",
         restore: "Restore",
         save_as_image: "Save as image",
-        /******** 首页 ********/
+        the_chart_data_are_trying_to_load: "The Chart Data Are Trying To Load",
+        ge: "",
+        /********************************* 首页 *************************************/
         "home":"Home",
         "gis":"GIS",
-        siteInfo: "Site Info",
+        site_info: "Site Info",
         site_list: "Site List",
         "gateway_state":"Gateway status",
         business_state: "Operation Status",
@@ -69,7 +100,7 @@ var lang = {
 
 
         /******** 通知 *******/
-        "notice":"通知",
+        "notice":"Event",
         /********************************  告警管理 *********************************/
         "alarm":"Alarms",
         alarm_total: "Total Alarms",
@@ -88,15 +119,15 @@ var lang = {
         confirmAlarm: "Confirm Alarm?",
         clearAlarm: "Clear Alarm?",
         description: "Description",
-        affirmed: "Affirmed",
-        not_affirmed: "Not Affirmed",
+        unconfirmed: "Unconfirmed",
+        confirmed: "Confirmed",
         cleared: "Cleared",
         clear: "Clear",
         ffirm: "Batch Affirm",
         batch_clear: "Batch Clear",
         alarm_origin: "Alarm Origin",
-        affirm_operator: "Affirm User",
-        affirm_time: "Affirm Time",
+        confirm_account: "Confirm Account",
+        confirm_time: "Confirm Time",
         clear_operator: "Clear User",
         clear_time: "Clear Time",
         show_notification_dialog: "Show notification dialog",
@@ -115,6 +146,9 @@ var lang = {
         "log":"Log",
         content: "Content",
         ip_address: "IP address",
+
+        /********************************  维修管理 *********************************/
+        order_number: "Order Number",
 
         /******** 报表 *******/
         "report":"Report",
@@ -150,11 +184,14 @@ var lang = {
         business_state: "Operation Status",
         contact: "Contact",
         contact_info: "Contact Info",
-        contacter_name: "Contact Person",
-        contacter_phone: "Phone",
+        contact_name: "Contact Person",
+        contact_phone: "Phone",
         basic_information: "Basic Information",
         gateway_config: "Gateway Configuration",
         device_config: "Machine Configuration",
+        gateway:"Gateway",
+        ip: "IP",
+        signal_strength: "Signal Strength",
         serial_number: "Serial Number",
         model: "Model",
         show_warning_options: "Monthly Data Flow Warning",

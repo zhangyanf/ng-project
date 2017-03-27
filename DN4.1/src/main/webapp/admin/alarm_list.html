@@ -48,13 +48,13 @@
                         <div class="col-sm-12" style="padding-bottom: 10px;">
                             <div class="form-group">
                                 <span class="serious_warning"><i class="iconfont icon-alarm-serious"></i><span
-                                        lang="text:serious_warning"></span></span>&nbsp;&nbsp;&nbsp;
+                                        lang="text:severe_alarm"></span></span>&nbsp;&nbsp;&nbsp;
                                 <span class="important_warning"><i class="iconfont icon-alarm"></i><span
-                                        lang="text:important_warning"></span></span>&nbsp;&nbsp;&nbsp;
+                                        lang="text:important_alarm"></span></span>&nbsp;&nbsp;&nbsp;
                                 <span class="minor_warning"><i class="iconfont icon-alarm"></i><span
-                                        lang="text:minor_warning"></span></span>&nbsp;&nbsp;&nbsp;
+                                        lang="text:minor_alarm"></span></span>&nbsp;&nbsp;&nbsp;
                                 <span class="caution"><i class="iconfont icon-alarm"></i><span
-                                        lang="text:caution"></span></span>&nbsp;&nbsp;&nbsp;
+                                        lang="text:warn"></span></span>&nbsp;&nbsp;&nbsp;
                                 <span class="remind"><i class="iconfont icon-alarm-attention"></i><span
                                         lang="text:remind"></span></span>
                             </div>
@@ -70,13 +70,13 @@
                                     <select id="level" class="form-control input-sm">
                                         <option value="" selected="selected" lang="text:---+all+---">
                                         </option>
-                                        <option value="5"  lang="text:serious_warning">严重警告
+                                        <option value="5"  lang="text:severe_alarm">严重警告
                                         </option>
-                                        <option value="4"  lang="text:important_warning">重要警告
+                                        <option value="4"  lang="text:important_alarm">重要警告
                                         </option>
-                                        <option value="3"  lang="text:minor_warning">次要警告
+                                        <option value="3"  lang="text:minor_alarm">次要警告
                                         </option>
-                                        <option value="2"  lang="text:caution">警告
+                                        <option value="2"  lang="text:warn">警告
                                         </option>
                                         <option value="1"  lang="text:remind">提醒
                                         </option>
@@ -109,17 +109,17 @@
                                 <div class="form-group" style="padding: 5px 0px;">
                                     <label lang="text:site"></label>
                                     <input type="text" id="site" class="form-control input-sm" style="height:30px;"
-                                           lang="placeholder:enter_the_site_name" placeholder="请输入现场名称">
+                                           lang="placeholder:site_name">
                                 </div>
                                 <div class="form-group" style="padding: 5px 0px;">
                                     <label lang="text:type"></label>
                                     <input type="text" id="type" class="form-control input-sm" style="height:30px;"
-                                           lang="placeholder:enter_the_type" placeholder="请输入类型编号">
+                                           lang="placeholder:type" >
                                 </div>
                                 <div class="form-group" style="padding: 5px 0px;">
                                     <button type="button" onclick="searchAlarm()" data-permissionFilter="[49]"
                                             class="btn btn-default btn-sm"
-                                            data-toggle="tooltip" title="查找" lang="title:query">
+                                            data-toggle="tooltip"  lang="title:query">
                                         <span class="glyphicon glyphicon-search"></span>
                                     </button>
                                 </div>
@@ -137,9 +137,9 @@
                         <table class="table table-bordered table-hover table-striped">
                             <thead>
                             <tr>
-                                <th lang="text:level" style="width:50px;">级别</th>
+                                <th lang="text:alarm_level" style="width:50px;">级别</th>
                                 <th lang="text:site" style="width:160px;">现场名称</th> 
-                                <th lang="text:warning_time" style="width:155px;">告警时间</th>
+                                <th lang="text:alarm_time" style="width:155px;">告警时间</th>
                                 <th lang="text:clear_time" style="width:155px;"></th>
                                 <th lang="text:description">描述</th>
                                 <th lang="text:confirm_account" style="width:155px;"></th>
@@ -377,19 +377,19 @@
             var levelCss = "";
             var levelIcon = "";
             if (result[i].level == 5) {
-                levels = locale.get({lang: "serious_warning"});
+                levels = locale.get({lang: "severe_alarm"});
                 levelCss = "serious_warning";
                 levelIcon = "iconfont icon-alarm-serious"
             } else if (result[i].level == 4) {
-                levels = locale.get("important_warning");
+                levels = locale.get("important_alarm");
                 levelCss = "important_warning";
                 levelIcon = "iconfont icon-alarm"
             } else if (result[i].level == 3) {
-                levels = locale.get("minor_warning");
+                levels = locale.get("minor_alarm");
                 levelCss = "minor_warning";
                 levelIcon = "iconfont icon-alarm"
             } else if (result[i].level == 2) {
-                levels = locale.get("caution");
+                levels = locale.get("warn");
                 levelCss = "caution";
                 levelIcon = "iconfont icon-alarm"
             } else if (result[i].level == 1) {
@@ -497,13 +497,13 @@
             $("#info_type").val(result.type);
             var levels = null;
             if (result.level == 5) {
-                levels = locale.get("serious_warning");
+                levels = locale.get("severe_alarm");
             } else if (result.level == 4) {
-                levels = locale.get("important_warning");
+                levels = locale.get("important_alarm");
             } else if (result.level == 3) {
-                levels = locale.get("minor_warning");
+                levels = locale.get("minor_alarm");
             } else if (result.level == 2) {
-                levels = locale.get("caution");
+                levels = locale.get("warn");
             } else if (result.level == 1) {
                 levels = locale.get("remind");
             }

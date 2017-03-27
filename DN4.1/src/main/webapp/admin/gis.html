@@ -9,20 +9,20 @@
                     <i class="fa icon-refresh icon-spin"></i>
                 </div>
                 <div class="box-header with-border">
-                <span><h3 class="box-title" lang="text:site_online_state"></h3></span>
+                <span><h3 class="box-title" lang="text:gateway_state"></h3></span>
                 <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                 <i class="icon-minus fa-minus"></i></button>
                 </div>
                 </div>
-                <div class="box-body" id="online_state" style="height:190px">
+                <div class="box-body" id="online_state" style="height:220px">
                 <div class="row">
                 <div class="col-md-12">
 
                 </div>
                 </div>
                 </div>
-                <div class="box-footer ">
+                <div class="box-footer " style="display: none;">
                     <div class="row">
                         <div class="col-xs-6 text-center border-right">
                             <div class="description-block">
@@ -50,20 +50,20 @@
                     <i class="fa icon-refresh icon-spin"></i>
                 </div>
                 <div class="box-header with-border">
-                <span><h3 class="box-title" lang="text:site_business_state"></h3></span>
+                <span><h3 class="box-title" lang="text:business_state"></h3></span>
                 <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                 <i class="icon-minus fa-minus"></i></button>
                 </div>
                 </div>
-                <div class="box-body" id="bussiness_state" style="height:190px">
+                <div class="box-body" id="bussiness_state" style="height:220px">
                 <div class="row">
                 <div class="col-md-12">
 
                 </div>
                 </div>
                 </div>
-                <div class="box-footer ">
+                <div class="box-footer " style="display: none;">
                     <div class="row">
                         <div class="col-xs-3 text-center border-right">
                             <div class="description-block">
@@ -548,7 +548,7 @@
             "       <div class='input-group-btn'>"+
             "           <button id='siteBtn' type='button' class='btn btn-default pull-left btn-flat' onclick='siteList();'>"+locale.get("site")+"<i class='icon-chevron-down'></i></button>" +
             "       </div>"+
-            "       <input id='searchInput' lang='placeholder:enter_the_site_name' type='text' class='form-control '>"+
+            "       <input id='searchInput' lang='placeholder:site_name' type='text' class='form-control '>"+
             "       <div class='input-group-btn'>"+
             "           <button type='button' class='btn btn-primary pull-left btn-flat' onclick='searchSite();'><i class='icon-search'></i></button>" +
             "       </div>"+
@@ -574,11 +574,11 @@
             "</div>" +
             "<div class='box-footer'>" +
             "<div class='box-tools pull-right'>" +
-            "<button id='shouye' type='button' class='btn btn ' onclick='gopage2(1)' style='background-color: white;' title='"+locale.get("first")+"' disabled='true'><i class='icon-fast-backward'></i></button>" +
+            "<button id='shouye' type='button' class='btn btn ' onclick='gopage2(1)' style='background-color: white;' title='"+locale.get("first_page")+"' disabled='true'><i class='icon-fast-backward'></i></button>" +
             "<button id='shangyiye' type='button' class='btn btn ' onclick='gopage2(2)'style='background-color: white;' title='"+locale.get("previous_page")+"' disabled='true'><i class='icon-backward'></i></button>" +
             // "<input type='text' style='border: 1px solid #999;width:30px; border-color: #c9c9c9;height: 18px;border-radius: 4px;' readonly='readonly' id='pageInput'/>"+
             " <button type='button' class='btn btn' id='xiayiye' onclick='gopage2(3)'style='background-color: white;' title='"+locale.get("next_page")+"'><i class='icon-forward'></i></button>" +
-            "<button id='weiye' type='button' class='btn btn' onclick='gopage2(4)'style='background-color: white;' title='"+locale.get("last2")+"'><i class='icon-fast-forward'></i></button>" +
+            "<button id='weiye' type='button' class='btn btn' onclick='gopage2(4)'style='background-color: white;' title='"+locale.get("last_page")+"'><i class='icon-fast-forward'></i></button>" +
             " </div>" +
             "</div>" +
             "</div>" +
@@ -667,12 +667,36 @@
     //获取在线状态回调函数
     //绘制在线状态统计图
     function loadOnlineCallback(data) {
-        var option = pieOption;
+        var pieOptionstr = JSON.stringify(pieOption);
+        var option = $.parseJSON(pieOptionstr);
         option.series[0].name = locale.get("online_state");
+        option.series[0].radius = ['50%', '70%'];
+        option.series[0].itemStyle= {
+            normal: {
+                label: {
+                    show:true,
+                    position: 'outer',//inner
+                    formatter: function(params) {
+                        return params.name + ":" + params.value;
+
+                    }
+                },
+                labelLine: {
+                    show: true
+                }
+            },
+            emphasis: {
+                label: {
+                    show: true,
+                    position : 'center',
+                    formatter: "{b}:{c}"//{b}\n{d}%
+                }
+            }
+        };
         var seriesData = [];
         var legendData = [];
         var color=['#64B44C','#DDDDDC'];
-        var i=0;
+        var i = 0;
         for(var d in data){
             legendData.push(locale.get(d));
             seriesData.push({
@@ -685,8 +709,21 @@
             $("#sparkline-"+d).text(data[d]);
             i=i+1;
         }
-        option.series[0].data = seriesData;
+        option.tooltip = {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        }
+//        option.series[0].data = seriesData;
         option.legend.data = legendData;
+        option.series[0].data = (function () {
+            var d = [
+                {name: locale.get("online"), value: data.online},
+                {name: locale.get("offline"), value: data.offline}
+            ];
+            return d;
+        })();
+
+        option.legend.show=false;
         drawChart("online_state", option);
     }
     //获取现场业务状态数据
@@ -719,41 +756,51 @@
     //获取业务状态回调函数
     //绘制业务状态统计图
     function loadBussnessCallback(data) {
-        var bussOption = pieOption;
+        var pieOptionstr = JSON.stringify(pieOption);
+        var bussOption = $.parseJSON(pieOptionstr);
         bussOption.series[0].name = locale.get("business_state");
-//        option.legend.data = [
-//            locale.get("construction"),
-//            locale.get("commissioning"),
-//            locale.get("fault"),
-//            locale.get("overhaul")
-//        ];
-        var seriesData = [];
-        var legendData = [];
-        var color=["#6EBAE8","#64B44C","#D14936","#EA7525"];
-        var i=0;
-        for(var d in data){
-            legendData.push(locale.get(d));
-            seriesData.push({
-                name:locale.get(d),
-                value:data[d],
-                itemStyle:{
-                    normal:{color:color[i]}
+        bussOption.series[0].radius = ['50%', '70%'];
+        bussOption.series[0].itemStyle= {
+            normal: {
+                label: {
+                    show:true,
+                    position: 'outer',//inner
+                    formatter: function(params) {
+                        return params.name + ":" + params.value;
+//                        if (params.value > 0) {
+//                            return params.name + ":" + params.value;
+//                        } else {
+//                            return "";
+//                        }
+                    }
+                },
+                labelLine: {
+                    show: true
                 }
-            });
-            $("#sparkline-"+d).text(data[d]);
-            i=i+1;
+            },
+            emphasis: {
+                label: {
+                    show: true,
+                    position : 'center',
+                    formatter: "{b}:{c}"//{b}\n{d}%
+                }
+            }
+        };
+        bussOption.tooltip = {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
         }
-        bussOption.series[0].data = seriesData;
-        bussOption.legend.data = legendData;
-//        option.series[0].data = (function () {
-//            var d = [
-//                {name: locale.get("construction"), value: data.construction},
-//                {name: locale.get("commissioning"), value: data.commissioning},
-//                {name: locale.get("fault"), value: data.fault},
-//                {name: locale.get("overhaul"), value: data.overhaul}
-//            ];
-//            return d;
-//        })();
+        bussOption.series[0].data = (function () {
+            var d = [
+                {name: locale.get("construction"), value: data.construction},
+                {name: locale.get("commissioning"), value: data.commissioning},
+                {name: locale.get("fault"), value: data.fault},
+                {name: locale.get("overhaul"), value: data.overhaul}
+            ];
+            return d;
+        })();
+//        bussOption.legend.data = legendData;
+        bussOption.legend.show=false;
         drawChart("bussiness_state", bussOption);
     }
     //定时刷新加载图表

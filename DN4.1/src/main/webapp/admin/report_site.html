@@ -36,7 +36,7 @@
         });
     }
 </script>
-<section class="content-header">
+<section class="content-header" style="display:none;">
     <h1 lang="text:site">
         现场
         <small>Version 2.0</small>
@@ -191,12 +191,11 @@
                                      });
                                 </script>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="site_name"
-                                           lang="placeholder:enter_the_site_name" style="height:30px;">
+                                    <input type="text" class="form-control input-sm" id="site_name" lang="placeholder:site_name" >
                                 </div>
                                 <div class="form-group">
                                     <button type="button" onclick="searchSite()" class="btn btn-default btn-sm"
-                                            data-toggle="tooltip" title="查找" lang="title:query">
+                                            data-toggle="tooltip" lang="title:query">
                                         <span class="glyphicon glyphicon-search"></span>
                                     </button>
                                 </div>
@@ -273,9 +272,12 @@
                 if (data.total > 0) {
                     load_siteInfo(data.result);
                     //加载分页数据
-                    renderPagination(data, research_site);
+                    //绘制分页栏数据
+                    $("#page_footer").pagination("data",data);
+//                    renderPagination(data, research_site);
                 } else {
-                    clearPagination();
+//                    clearPagination();
+                    $("#page_footer").pagination("clear");
                     $("#siteInfo_table").empty();
                     $("#siteInfo_table").append('<tr><td colspan="9"  align="center" lang="text:no_data"></td></tr>');
                     locale.render({element: "#init_body"});
@@ -330,13 +332,13 @@
 
 
     //每页显示条数切换
-    function changePageNumber(limit) {
-        research_site(0, limit);
-    }
-    //跳转到指定页  回调函数
-    function jumpTopage(cursor) {
-        research_site(cursor, $("#pageNumberSelect").val());
-    }
+//    function changePageNumber(limit) {
+//        research_site(0, limit);
+//    }
+//    //跳转到指定页  回调函数
+//    function jumpTopage(cursor) {
+//        research_site(cursor, $("#pageNumberSelect").val());
+//    }
 
     //数据转换
     function fuc_businessState(businessState) {
@@ -582,9 +584,17 @@
         permissionFilter_pageFunc();
         //初始化
         require(['siteService', 'echarts'], function (siteService) {
-            $("#page-footer").load("admin/pagination.html", function () {
-                research_site(0, $("#pageNumberSelect").val());
+            // 引入分页
+            $("#page_footer").pagination({
+                changePage:function (cursor,limit) {
+                    //分页内容改变的回调函数
+                    research_site(cursor,limit);
+                }
             });
+            research_site(0, $("#pageNumberSelect").val());
+//            $("#page-footer").load("admin/pagination.html", function () {
+//                research_site(0, $("#pageNumberSelect").val());
+//            });
             var parameters = {
                 limit: 1,
                 business_state: 0
