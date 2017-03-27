@@ -1,6 +1,7 @@
 var lang = {
     zh_CN: {
         "default": "默认",
+        no_data: "无数据",
         login: "登录",
         login_again: "请重新登录",
         login_timeout: "登录超时",

@@ -1,6 +1,7 @@
 var lang = {
     en: {
         "default": "Default",
+        no_data: "No Data",
         login: "Login",
         login_again: "Please login again",
         login_timeout: "Login timeout",
