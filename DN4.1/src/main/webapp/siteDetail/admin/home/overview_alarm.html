@@ -3,28 +3,28 @@
         <div>
             <div class="form-group">
             <span class="serious_warning"><i class="iconfont icon-alarm-serious"></i><span
-                    lang="text:serious_warning"></span></span>&nbsp;&nbsp;&nbsp;
+                    lang="text:severe_alarm"></span></span>&nbsp;&nbsp;&nbsp;
             <span class="important_warning"><i class="iconfont icon-alarm"></i><span
-                    lang="text:important_warning"></span></span>&nbsp;&nbsp;&nbsp;
+                    lang="text:important_alarm"></span></span>&nbsp;&nbsp;&nbsp;
             <span class="minor_warning"><i class="iconfont icon-alarm"></i><span
-                    lang="text:minor_warning"></span></span>&nbsp;&nbsp;&nbsp;
+                    lang="text:minor_alarm"></span></span>&nbsp;&nbsp;&nbsp;
             <span class="caution"><i class="iconfont icon-alarm"></i><span
-                    lang="text:caution"></span></span>&nbsp;&nbsp;&nbsp;
+                    lang="text:warn"></span></span>&nbsp;&nbsp;&nbsp;
             <span class="remind"><i class="iconfont icon-alarm-attention"></i><span
                     lang="text:remind"></span></span>
             </div>
             <table class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th lang="text:alarm_level" style="width:50px;">级别</th>
+                    <th lang="text:alarm_level" style="width:50px;"></th>
                    <!--  <th lang="text:site" style="width:160px;">现场名称</th>
                     <th lang="text:warning_source"  style="width:150px;">告警来源</th> -->
-                    <th lang="text:alarm_time" style="width:160px;">告警时间</th>
+                    <th lang="text:alarm_time" style="width:160px;"></th>
                     <th lang="text:clear_time" style="width:160px;"></th>
-                    <th lang="text:description">描述</th>
+                    <th lang="text:description"></th>
                     <!-- <th lang="text:state" style="width:70px;">状态</th> --> 
-                    <th lang="text:type" style="width:65px;">类型</th>
-                    <th data-permissionFilter='[50]' lang="text:operation" style="text-align:center;width:60px"></th>
+                    <th lang="text:type" style="width:65px;"></th>
+                    <th data-permissionFilter='[50]' lang="text:operate" style="text-align:center;width:60px"></th>
                 </tr>
                 </thead>
                 <tbody id="historicalAlarms_table">
@@ -199,13 +199,13 @@
             $("#info_type").val(result.type);
             var levels = null;
             if (result.level == 5) {
-                levels = locale.get("serious_warning");
+                levels = locale.get("severe_alarm");
             } else if (result.level == 4) {
-                levels = locale.get("important_warning");
+                levels = locale.get("important_alarm");
             } else if (result.level == 3) {
-                levels = locale.get("minor_warning");
+                levels = locale.get("minor_alarm");
             } else if (result.level == 2) {
-                levels = locale.get("caution");
+                levels = locale.get("warn");
             } else if (result.level == 1) {
                 levels = locale.get("remind");
             }
@@ -442,19 +442,19 @@
             var levelCss = "";
             var levelIcon = "";
             if (result[i].level == 5) {
-                levels = locale.get({lang: "serious_warning"});
+                levels = locale.get({lang: "severe_alarm"});
                 levelCss = "serious_warning";
                 levelIcon = "iconfont icon-alarm-serious"
             } else if (result[i].level == 4) {
-                levels = locale.get("important_warning");
+                levels = locale.get("important_alarm");
                 levelCss = "important_warning";
                 levelIcon = "iconfont icon-alarm"
             } else if (result[i].level == 3) {
-                levels = locale.get("minor_warning");
+                levels = locale.get("minor_alarm");
                 levelCss = "minor_warning";
                 levelIcon = "iconfont icon-alarm"
             } else if (result[i].level == 2) {
-                levels = locale.get("caution");
+                levels = locale.get("warn");
                 levelCss = "caution";
                 levelIcon = "iconfont icon-alarm"
             } else if (result[i].level == 1) {

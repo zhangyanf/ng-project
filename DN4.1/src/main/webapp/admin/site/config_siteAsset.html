@@ -750,15 +750,11 @@
                 $("#device_serial").val(asset_no);
                 devices.push( add_device_data);
             }
-            if( devices) {
-                dialog.render({
-                    lang: "submit_success"
-                });
+            if( devices) { 
+                errorTipDis("submit_success")
                 $("#add_device_bt").click();
-            } else {
-                dialog.render({
-                    lang: "submit_failed"
-                });
+            } else { 
+                errorTipDis("submit_failed")
             }
             $(".formErrorContent").remove();
             $("#flag_edit").val("");
@@ -938,7 +934,7 @@
     //删除设备
     function delDevice(del, asset_no) {
         dialog.render({
-            lang: "confirm_to_delete_device",
+            lang: "affirm_delete",
             buttons: [{
                 lang: "yes",
                 click: function() {

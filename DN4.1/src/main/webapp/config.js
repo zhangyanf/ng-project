@@ -15,7 +15,7 @@
  * @property {number} config.UPGRADE_PORT.ROUTE "ROUTE升级端口号"
  */
 var setting = {
-    host: "/DN4.1",
+    host: "/smartATM",
     debugMode: false,
     CLIENT_ID: "17953450251798098136",
     CLIENT_SECRET: "08E9EC6793345759456CB8BAE52615F3",

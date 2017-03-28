@@ -1,21 +1,20 @@
 
 <!-- Main content -->
 <section class="content-header">
-    <h1 lang="text:overall_monitoring">
+    <h1 lang="text:dashboard">
     <small>Version 2.0</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#" lang="text:operation_monitoring"></a></li>
-        <li class="active" lang="text:overall_monitoring"></li>
+        <li class="active" lang="text:dashboard"></li>
     </ol>
 </section>
 <section class="content" id="tcontent" style="overflow-y: hidden;!important;">
     <div class="nav-tabs-custom">
-        <ul class="nav nav-tabs" role="tablist" id="siteTabs">
-            <li id="tab1" data-permissionFilter='[91,95,97]' role="presentation" class="active" ><a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:web_scada" aria-expanded="true"></a></li>
-            <li id="tab2" data-permissionFilter='[49]' role="presentation"  class="" ><a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:alarm;" aria-expanded="false"></a></li>
-            <li id="tab3" data-permissionFilter='[19]' role="presentation" class="" ><a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:real_time_data;" aria-expanded="false"></a></li>
-            <li id="tab4" data-permissionFilter='[19]' role="presentation" class="" ><a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:trend;" aria-expanded="false"></a></li>
+        <ul class="nav nav-tabs" role="tablist" id="siteTabs" style="display: none;"> 
+            <li id="tab5" data-permissionFilter='[91,95,97]' role="presentation" >
+                <a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:dashboard" aria-expanded="true"></a>
+            </li> 
         </ul>
         <div class="tab-content" id="tab_content" style="overflow-y:auto;overflow-x:hidden;">
             <!--表格数据区-->
@@ -67,9 +66,16 @@
                     initHistory(start_time,end_time,_id,'home');
                 });
                 break;
-            default:
+            case "tab1":
                 $("#tab_content").load("admin/home/overview.html",function () {
                     initOverview(_id);
+                });
+                break;
+            default:
+                $("#tab_content").load("admin/home/dashboard.html",function () {
+                    set_$tcontentHeight();
+                    initOverview(_id);
+                    locale.render({element: "#init_body"});
                 });
                 break;
 
