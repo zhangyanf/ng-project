@@ -352,6 +352,7 @@ var lang = {
         "delete": "删除",
         "export": "导出",
         view: "查看",
+        prompt: "提示",
         ok: "是",
         yes: "是",
         no: "否",
@@ -484,6 +485,12 @@ var lang = {
         daily_tx: "日发送流量",
         detailed_monthly_report: "月流量明细",
         signal_window: "信号曲线图",
+        reports_d: "天",
+        reports_h: "小时",
+        reports_min: "分",
+        reports_s: "秒",
+        currentMonth: "本月",
+        month: "月",
 
         /********************************  ATM报表 *********************************/
         "atm-report":"ATM报表",
@@ -509,7 +516,7 @@ var lang = {
         gateway_config: "网关配置",
         unbound: "解除绑定",
         gateway_name:"网关名称",
-        device_config: "设备配置",
+        device_config: "ATM配置",
         gateway:"网关",
         ip: "IP",
         signal_strength: "信号强度",
@@ -524,6 +531,7 @@ var lang = {
         Please_enter_email: "请输入正确邮箱地址",
         mailbox_tip: "邮箱之间按英文状态下的;分隔",
         warnhours: "24小时预警",
+        the_gateway_has_been_binding:"该网关已被绑定",
 
         machine: "设备",
         site_devices: "现场设备",
@@ -609,6 +617,9 @@ var lang = {
         package_size:"包大小",
         communication_time:"通讯时间",
         traffic_type:"流量类型",
+        unknow:"未知",
+        upstream:"上行流量",
+        downstrean:"下行流量",
 
 
         /********************************  维修模块 *********************************/

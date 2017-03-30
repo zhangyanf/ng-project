@@ -26,3 +26,14 @@ function getSiteVars_list(siteId,params,isAsync,callback,context){
         }
     });
 }
+
+function getAtmData(params,callback,context) {
+    schneider.Ajax.request({
+        url: "api/atm/data",
+        type: "GET",
+        parameters: params, 
+        success: function(data) {
+            callback.call(context || this, data);
+        }
+    })
+}

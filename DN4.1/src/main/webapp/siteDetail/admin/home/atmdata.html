@@ -47,7 +47,89 @@
 
 </div>
 <script type="text/javascript">
-    function initAtmData(){
-        console.log(" ddd ")
+ 
+function research_atmData(siteId,cursor, limit) {
+
+        // $("#site_list_overlay").show();
+        var params = {
+            cursor: cursor, 
+            limit: limit, 
+            siteId:siteId,
+            verbose: 100
+        };
+          
+        getAtmData(params,function(data){
+            if (data.total != undefined) {
+                $("#atmdata_table").empty();
+                $("#tableHead_checkbok").prop("checked", false);
+                if (data.total > 0) {
+                    fill_atmdata_table(data.result)
+                    //加载分页数据
+                    //绘制分页栏数据page-footer
+                    $("#atm-page-footer").pagination("data",data);
+//                    renderPagination(data, research_site);
+                } else {
+//                    clearPagination();
+                    $("#atm-page-footer").pagination("clear");
+                    $("#atmdata_table").empty();
+                    $("#atmdata_table").append('<tr><td colspan="5"  align="center" lang="text:no_data"></td></tr>');
+                    locale.render({element: "#init_body"});
+                }
+            }
+
+            // $("#site_list_overlay").hide();
+        }, this);
+    }
+    function initAtmData(siteId){ 
+        // 引入分页
+            $("#page-footer").pagination({
+                changePage:function (cursor,limit) {
+                    //分页内容改变的回调函数
+                    research_atmData(siteId,cursor,limit);
+                }
+            });
+            research_atmData(siteId,0, $("#page-footer .col-sm-5 select").val())
+              
+    }
+    //加载数据 填充列表
+    function fill_atmdata_table(result) {
+        $("#atmdata_table").empty();
+        var str = "";
+        for (var i = 0; i < result.length; i++) {
+             
+            var trafficType = "";
+            if(typeof(result[i].trafficType) != "undefined"){
+                if(result[i].trafficType==0){
+                    trafficType = locale.get("upstream")
+                }else if(result[i].trafficType==1){
+                    trafficType = locale.get("downstream")
+                }else{
+                    trafficType = locale.get("unknown")
+                }
+            }
+
+            str = '<tr id=' + result[i]._id + '>' + 
+                    "<td>" + (typeof(result[i].src) == "undefined" ? "" : result[i].src) + "</td>" +
+                    "<td>" + (typeof(result[i].dst) == "undefined" ? "" : result[i].dst) + "</td>" +  
+                    "<td>" + (typeof(result[i].size) == "undefined" ? "" : result[i].size) + "</td>" +
+                    "<td>" + (typeof(result[i].trafficType) == "undefined" ? "" : result[i].size) + "</td>" +
+                    "<td>" + schneider.util.dateFormat(result[i].timestamp, "yyyy-MM-dd hh:mm:ss") + "</td>" +
+                     
+                    "</tr>";
+            $("#atmdata_table").append(str);
+        }
+        // $("#tableHead_selectAll").prop("checked", false);
+        // $("tbody > tr > td > input").on("click", function () {
+        //     var selected_usersId = $("tbody tr td input[type='checkbox']:checked");
+        //     var allUsers_nowPage = $("tbody tr");
+        //     if (selected_usersId.length < allUsers_nowPage.length) {
+        //         $("#tableHead_selectAll").prop("checked", false);
+        //     }
+        //     if (selected_usersId.length == allUsers_nowPage.length) {
+        //         $("#tableHead_selectAll").prop("checked", true);
+        //     }
+        // });
+        
+        
     }
 </script>

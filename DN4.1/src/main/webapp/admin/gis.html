@@ -1,28 +1,28 @@
 
     <!--地图区域-->
-    <div class="row">
+    <div class="row" id="summary">
 
-        <div class="col-md-6">
-            <div class="box">
+        <div class="col-md-12">
+            <div class="box box-solid">
                 <!--加载数据等待-->
                 <div id="online_overlay" class="overlay" style="display: none;">
                     <i class="fa icon-refresh icon-spin"></i>
                 </div>
-                <div class="box-header with-border">
+                <div style="display: none;" class="box-header with-border">
                 <span><h3 class="box-title" lang="text:gateway_state"></h3></span>
                 <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                 <i class="icon-minus fa-minus"></i></button>
                 </div>
                 </div>
-                <div class="box-body" id="online_state" style="height:220px">
+                <div class="box-body" id="online_state" style="height:220px;display: none">
                 <div class="row">
                 <div class="col-md-12">
 
                 </div>
                 </div>
                 </div>
-                <div class="box-footer " style="display: none;">
+                <div class="box-footer " >
                     <div class="row">
                         <div class="col-xs-6 text-center border-right">
                             <div class="description-block">
@@ -43,27 +43,27 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="box">
+        <div class="col-md-6" style="display: none">
+            <div class="box box-solid">
                 <!--加载数据等待-->
                 <div id="bussiness_overlay" class="overlay" style="display: none;">
                     <i class="fa icon-refresh icon-spin"></i>
                 </div>
-                <div class="box-header with-border">
+                <div class="box-header with-border" style="display: none;">
                 <span><h3 class="box-title" lang="text:business_state"></h3></span>
                 <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                 <i class="icon-minus fa-minus"></i></button>
                 </div>
                 </div>
-                <div class="box-body" id="bussiness_state" style="height:220px">
+                <div class="box-body" id="bussiness_state" style="height:220px;display: none;">
                 <div class="row">
                 <div class="col-md-12">
 
                 </div>
                 </div>
                 </div>
-                <div class="box-footer " style="display: none;">
+                <div class="box-footer ">
                     <div class="row">
                         <div class="col-xs-3 text-center border-right">
                             <div class="description-block">
@@ -104,7 +104,20 @@
     </div>
 
 <script type="text/javascript" >
+    $(window).resize(function (event) {
+        var content_height=$(window).height()-140;
+        $("#allmap").height(content_height-$("#summary").height()-$("#homeTabs").height());
+    });
 
+
+    // leaflet地图
+    /*========================================================
+     *2016-09-21 Lee李杰
+     *调整地图区域的高度为自适应 第501-503行
+     *原值   <section class="content" style="height: 566px">
+     ==========================================================*/
+     var content_height=$(window).height()-140;
+     $("#allmap").height(content_height-$("#summary").height()-$("#homeTabs").height());
     //leaflet地图插件
     //Start
     var mymap = L.map("allmap");
