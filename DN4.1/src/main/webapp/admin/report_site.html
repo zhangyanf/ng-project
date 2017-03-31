@@ -58,7 +58,7 @@
     <!--现场图表-->
     <div class="row">
 
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="box box-solid">
                 <!--加载数据等待-->
                 <div id="online_overlay" class="overlay" style="display: none;">
@@ -99,7 +99,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" style="display: none;">
             <div class="box box-solid">
                 <!--加载数据等待-->
                 <div id="bussiness_overlay" class="overlay" style="display: none;">
@@ -201,12 +201,17 @@
                                     <input type="checkbox" id="tableHead_checkbok" data-toggle='tooltip' data-placement="bottom" lang="title:check_all">
                                 </th> -->
                                 <th style="width: 46px;text-align: center;" lang="text:state"></th>
-                                <th lang="text:site_name" style="width: 15%;"></th>
+                                <th lang="text:site_name" style="width: 10%;"></th>
                                 <th lang="text:address"></th>
-                                <th lang="text:business_state" style="width: 15%;"></th>
-                                <th lang="text:contact_name" style="width: 15%;"></th>
-                                <th lang="text:contact_phone" style="width: 15%;"></th>
-                                <th lang="text:email" style="width: 15%;"></th>
+                                <th lang="text:gateway_serial_number"></th>
+                                <th lang="text:gateway_type"></th>
+                                <th lang="text:gateway_create_date"></th>
+                                <th lang="text:gateway_purchase_date"></th>
+                                <th lang="text:gateway_activation_date"></th>
+                                <th lang="text:connection_status"></th>
+                                <th lang="text:atm_device"></th>
+                                <th lang="text:billing_plan_name"></th>
+                                <th lang="text:de_activation_date"></th>
                             </tr>
                             </thead>
                             <tbody id="siteInfo_table">
@@ -309,10 +314,15 @@
                     "<td style='text-align: center;'>" + (result[i].online == '1' ? "<i class='iconfont icon-guanji text-green'></i>" : "<i class='iconfont icon-guanji1 contacts-list-date'></i>") + "</td>" +
                     "<td>" + link + "</td>" +
                     "<td>" + ((typeof(result[i].address) == "undefined") ? "" : result[i].address) + "</td>" +
-                    "<td>" + fuc_businessState(result[i].businessState) + "</td>" +
-                    "<td>" + contactname + "</td>" +
-                    "<td>" + contactphone + "</td>" +
-                    "<td>" + contactemail + "</td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                　　"<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
                     "</tr>";
             $("#siteInfo_table").append(str);
         }
@@ -546,18 +556,18 @@
             limit: 1,
             business_state: 0
         };
-        loadBussnessDatas(parameters, function (data) {
-            var seriadata = (function () {
-                var d = [
-                    {name: locale.get("construction"), value: data.construction},
-                    {name: locale.get("commissioning"), value: data.commissioning},
-                    {name: locale.get("fault"), value: data.fault},
-                    {name: locale.get("overhaul"), value: data.overhaul}
-                ];
-                return d;
-            })();
-            updateChart("bussiness_state", seriadata);
-        });
+//        loadBussnessDatas(parameters, function (data) {
+//            var seriadata = (function () {
+//                var d = [
+//                    {name: locale.get("construction"), value: data.construction},
+//                    {name: locale.get("commissioning"), value: data.commissioning},
+//                    {name: locale.get("fault"), value: data.fault},
+//                    {name: locale.get("overhaul"), value: data.overhaul}
+//                ];
+//                return d;
+//            })();
+//            updateChart("bussiness_state", seriadata);
+//        });
     }
 
     //动态加载echart图表数据
@@ -596,7 +606,7 @@
                 business_state: 0
             }
             loadOnlineDatas(loadOnlineCallback);
-            loadBussnessDatas(parameters, loadBussnessCallback)
+            //loadBussnessDatas(parameters, loadBussnessCallback)
         });
         locale.render({element: "#init_body"});
     });
