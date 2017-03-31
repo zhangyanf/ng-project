@@ -27,6 +27,7 @@ function getSiteVars_list(siteId,params,isAsync,callback,context){
     });
 }
 
+//获取atm业务数据历史记录
 function getAtmData(params,callback,context) {
     schneider.Ajax.request({
         url: "api/atm/data",
@@ -36,4 +37,16 @@ function getAtmData(params,callback,context) {
             callback.call(context || this, data);
         }
     })
+}
+
+//获取atm业务数据  统计数据
+function getAtmDataSummary(params,callback,context) {
+    schneider.Ajax.request({
+        url: "api/atm/data/summary",
+        type: "GET",
+        parameters: params, 
+        success: function(data) {
+            callback.call(context || this, data);
+        }
+    });
 }
