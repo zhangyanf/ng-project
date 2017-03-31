@@ -533,10 +533,13 @@
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <img id="site_img_1" src="#" class="img-circle"  alt="Site Image">
+                            <!--<img id="site_img_1" src="#" class="img-circle"  alt="Site Image">-->
+                            <span style="color: #aaa;" id="site_img_1"><i class="iconfont icon-atm" style="font-size: 60px;"></i></span>
                         </div>
                         <div class="pull-left info">
-                           <p><i id="siteState"></i>&nbsp;<span id="siteInfo_siteName" style="max-width: 100px;overflow: hidden;text-overflow:ellipsis;"></span></p>
+                            <p><i id="siteState"></i>&nbsp;
+                               <p id="siteInfo_siteName" style="max-width: 100px;overflow: hidden;text-overflow:ellipsis;position: absolute;top: 7px;left: 35px;"></p>
+                            </p>
                             <p id="siteInfo_address" style="max-width: 100px;overflow: hidden;text-overflow:ellipsis;font-weight: 400;"></p>
                             <p id="site_comment" style="max-width: 100px;overflow: hidden;text-overflow:ellipsis;font-weight: normal;"></p>
                         </div>
@@ -972,10 +975,12 @@
 
                 var online = result.online;
                 if(online==0) {
-                    $("#site_img_1").prop("src","../images/site-info-offline.png");
+//                    $("#site_img_1").prop("src","../images/site-info-offline.png");
+                    $("#site_img_1").css("color","#aaa");
                     $("#siteState").removeClass().addClass("iconfont icon-guanji contacts-list-date");
                 }else if(online==1) {
-                    $("#site_img_1").prop("src","../images/site-info-online.png");
+//                    $("#site_img_1").prop("src","../images/site-info-online.png");
+                    $("#site_img_1").css("color","green");
                     $("#siteState").removeClass().addClass("iconfont icon-guanji text-green");
                     $("#siteInfo_siteName").addClass("text-green");
                 }
