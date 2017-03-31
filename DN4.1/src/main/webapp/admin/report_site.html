@@ -201,16 +201,14 @@
                                     <input type="checkbox" id="tableHead_checkbok" data-toggle='tooltip' data-placement="bottom" lang="title:check_all">
                                 </th> -->
                                 <th style="width: 46px;text-align: center;" lang="text:state"></th>
+                                <th lang="text:connection_status"></th>
                                 <th lang="text:site_name" style="width: 10%;"></th>
-                                <th lang="text:address"></th>
+                                <th lang="text:atm_device"></th>
                                 <th lang="text:gateway_serial_number"></th>
                                 <th lang="text:gateway_type"></th>
-                                <th lang="text:gateway_create_date"></th>
-                                <th lang="text:gateway_purchase_date"></th>
-                                <th lang="text:gateway_activation_date"></th>
-                                <th lang="text:connection_status"></th>
-                                <th lang="text:atm_device"></th>
+                                <th lang="text:address"></th>
                                 <th lang="text:billing_plan_name"></th>
+                                <th lang="text:gateway_activation_date"></th>
                                 <th lang="text:de_activation_date"></th>
                             </tr>
                             </thead>
@@ -269,11 +267,11 @@
         params.online=online;
 
         $("#site_name").val(name);
-        loadAllSite(params, function (data) {
+        loadAllSite_listAll(params, function (data) {
             if (data.total != undefined) {
                 $("#siteInfo_table").empty();
                 $("#tableHead_checkbok").prop("checked", false);
-                if (data.total > 0) {
+                if (data.total && data.total > 0) {
                     load_siteInfo(data.result);
                     //加载分页数据
                     //绘制分页栏数据page-footer
@@ -297,30 +295,25 @@
     function load_siteInfo(result) {
         $("#siteInfo_table").empty();
         var str;
-        var contactname;
-        var contactphone;
-        var contactemail;
         for (var i = 0; i < result.length; i++) {
-            contactname = "";
-            contactphone = "";
-            contactemail = "";
-            if (result[i].contact) {
-                contactname = typeof(result[i].contact.name) == "undefined" ? "" : result[i].contact.name;
-                contactphone = typeof(result[i].contact.phone) == "undefined" ? "" : result[i].contact.phone;
-                contactemail = typeof(result[i].contact.email) == "undefined" ? "" : result[i].contact.email;
+            var atm_ids="";
+            for(var j=0;j<result[i].asset.length;j++){
+                if(atm_ids == ""){
+                    atm_ids=atm_ids+result[i].asset[j]._id;
+                }else{
+                    atm_ids=atm_ids+"</br>"+result[i].asset[j]._id;
+                }
             }
-            var link = "<a href='javascript:void(0)' onclick='detail_popUp(\"" + result[i]._id + "\")'>"+((typeof(result[i].name) == "undefined") ? "" : result[i].name) +"</a>";
-            str = "<tr "+(result[i].online == '1' ? "class='text-green'":"")+">" +
-                    "<td style='text-align: center;'>" + (result[i].online == '1' ? "<i class='iconfont icon-guanji text-green'></i>" : "<i class='iconfont icon-guanji1 contacts-list-date'></i>") + "</td>" +
+            var link = "<a href='javascript:void(0)' onclick='detail_popUp(\"" + result[i].site._id + "\")'>"+((typeof(result[i].site.name) == "undefined") ? "" : result[i].site.name) +"</a>";
+            str = "<tr "+(result[i].site.online == '1' ? "class='text-green'":"")+">" +
+                    "<td style='text-align: center;'>" + (result[i].site.online == '1' ? "<i class='iconfont icon-guanji text-green'></i>" : "<i class='iconfont icon-guanji1 contacts-list-date'></i>") + "</td>" +
+                    "<td></td>" +
                     "<td>" + link + "</td>" +
-                    "<td>" + ((typeof(result[i].address) == "undefined") ? "" : result[i].address) + "</td>" +
-                    "<td></td>" +
-                    "<td></td>" +
-                    "<td></td>" +
+                    "<td>"+atm_ids+"</td>" +
+                    "<td>"+result[i].device.serialNumber+"</td>" +
+                    "<td>"+result[i].device.model+"</td>" +
+                    "<td>" + ((typeof(result[i].site.address) == "undefined") ? "" : result[i].site.address) + "</td>" +
                 　　"<td></td>" +
-                    "<td></td>" +
-                    "<td></td>" +
-                    "<td></td>" +
                     "<td></td>" +
                     "<td></td>" +
                    "</tr>";

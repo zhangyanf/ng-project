@@ -64,6 +64,17 @@ function loadAllSite(params, callback, context) {
         }
     });
 }
+function loadAllSite_listAll(params, callback, context) {
+    schneider.Ajax.request({
+        url: "/api/sites/listAll",
+        type: "GET",
+        parameters: params,
+        success: function(data) {
+            callback.call(context || this, data);
+        }
+    });
+}
+
 
 /**
  * 搜索现场（支持同步异步的控制）
