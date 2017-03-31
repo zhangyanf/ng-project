@@ -9,7 +9,7 @@
                             <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text" lang="text:communication_times"></span>
-                                <span class="info-box-number">1,410</span>
+                                <span class="info-box-number" id="communication_times"></span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
@@ -19,8 +19,8 @@
                         <div class="info-box">
                             <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">Messages</span>
-                                <span class="info-box-number">1,410</span>
+                                <span class="info-box-text" lang="text:traffic_statistics"></span>
+                                <span class="info-box-number" id="traffic_statistics"></span>
                             </div>
                         </div>
                     </div>
@@ -28,8 +28,8 @@
                         <div class="info-box">
                             <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">Messages</span>
-                                <span class="info-box-number">1,410</span>
+                                <span class="info-box-text" lang="text:communication_package"></span>
+                                <span class="info-box-number" id="communication_package"></span>
                             </div>
                         </div>
                     </div>
@@ -42,6 +42,9 @@
         <div class="box box-default">
             <div class="box-header">
                 <h3 class="box-title">Alarms</h3>
+                <span class="box-tools pull-right" data-toggle="tooltip" title="" lang="title:more_info" id="more_alarm_info">
+                     <i class="iconfont icon-icon"></i>
+                </span>
             </div>
             <div class="box-body">
                 <div id="atm_alarm">
@@ -86,9 +89,13 @@
             permissionFilter_overview(siteId);
             var self = this;
             getAtmDataSummary({siteId:siteId},function (data) {
-                console.log(data);
-
+                $("#communication_times").text(data.total);
+                $("#traffic_statistics").text(data.result[0].count+"/"+data.result[1].count);
+                $("#communication_package").text(data.result[0].size+"/"+data.result[1].size);
             },self);
+            $("#more_alarm_info").off().on("click",function () {
+                $("#p_alarm > a").click();
+            });
         });
     }
 

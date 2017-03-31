@@ -630,7 +630,8 @@ var lang = {
         upstream:"上行流量",
         downstrean:"下行流量",
         communication_times:"通讯次数",
-
+        communication_package:"通讯包",
+        more_info:"更多信息",
 
         /********************************  维修模块 *********************************/
         repair_manage: "维修管理",

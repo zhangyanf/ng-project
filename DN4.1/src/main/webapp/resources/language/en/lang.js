@@ -629,8 +629,8 @@ var lang = {
         upstream:"upstream",
         downstrean:"downstream",
         communication_times:"Communication times",
-
-
+        communication_package:"Communication package",
+        more_info:"more information",
 
         /********************************  维修模块 *********************************/
         repair_manage: "Maintenance Management",
