@@ -4,30 +4,36 @@
 
             <div class="box-body">
                 <div id="business_data_div" class="col-md-12 col-xs-12">
-                    <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="col-md-3 col-sm-3 col-xs-12">
                         <div class="info-box">
                             <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
-
                             <div class="info-box-content">
-                                <span class="info-box-text">Messages</span>
+                                <span class="info-box-text" lang="text:communication_times"></span>
                                 <span class="info-box-number">1,410</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
                         <!-- /.info-box -->
                     </div>
-                    <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="col-md-3 col-sm-3 col-xs-12">
                         <div class="info-box">
                             <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
-
                             <div class="info-box-content">
                                 <span class="info-box-text">Messages</span>
                                 <span class="info-box-number">1,410</span>
                             </div>
-                            <!-- /.info-box-content -->
                         </div>
-                        <!-- /.info-box -->
                     </div>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Messages</span>
+                                <span class="info-box-number">1,410</span>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -79,6 +85,10 @@
             // console.log("siteId", siteId)
             permissionFilter_overview(siteId);
             var self = this;
+            getAtmDataSummary({siteId:siteId},function (data) {
+                console.log(data);
+
+            },self);
         });
     }
 

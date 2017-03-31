@@ -628,6 +628,7 @@ var lang = {
         unknow:"unknow",
         upstream:"upstream",
         downstrean:"downstream",
+        communication_times:"Communication times",
 
 
 
