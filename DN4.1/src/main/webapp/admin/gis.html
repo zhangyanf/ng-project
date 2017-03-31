@@ -545,7 +545,7 @@
             "       </div>"+
             "       <input id='searchInput' lang='placeholder:site_name' type='text' class='form-control '>"+
             "       <div class='input-group-btn'>"+
-            "           <button type='button' class='btn btn-primary pull-left btn-flat' onclick='searchSite();'><i class='icon-search'></i></button>" +
+            "           <button type='button' class='btn btn-primary pull-left btn-flat' onclick='searchSite();'><i class='glyphicon glyphicon-search'></i></button>" +
             "       </div>"+
             "   </div>"+
             "</div>" +
@@ -735,7 +735,7 @@
         })();
 
         option.legend.show=false;
-        drawChart("online_state", option);
+        // drawChart("online_state", option);
     }
     //获取现场业务状态数据
     function loadBussnessDatas(parameters, callback) {
@@ -812,7 +812,7 @@
         })();
 //        bussOption.legend.data = legendData;
         bussOption.legend.show=false;
-        drawChart("bussiness_state", bussOption);
+        // drawChart("bussiness_state", bussOption);
     }
     //定时刷新加载图表
     function chartReload() {
