@@ -24,7 +24,7 @@
                     <div class="alert alert-warning alert-dismissible">
                         <h4>
                             <i class="icon fa fa-info"></i>
-                            <span lang="text:alarm_total"> 告警总数 </span>
+                            <span lang="text:alarm_total">  </span>
                             <span id="site_alarm_total" class="pull-right"></span>
                         </h4>
                     </div>
@@ -33,7 +33,7 @@
                     <div class="alert alert-danger alert-dismissible">
                         <h4>
                             <i class="icon fa fa-info"></i>
-                            <span lang="text:alarm_unconfirmed_total"> 未确认告警 </span>
+                            <span lang="text:alarm_unconfirmed_total">  </span>
                             <span id="site_alarm_unconfirmed_total" class="pull-right"></span>
                         </h4>
                     </div>
@@ -80,27 +80,25 @@
                                     <input type="text" class="form-control form-control-left input-sm" id="searchDate" readonly="readonly">
                                     <span class="glyphicon glyphicon-calendar form-control-feedback" style="left: 0;"></span>
                                 </div>
-                                <div class="form-group " style="padding: 5px 0px;">
-                                    <label for="level" class="control-label" lang="text:alarm_level"></label>
+                                <div class="form-group " style="padding: 5px 0px;"> 
                                     <select id="level" class="form-control input-sm">
-                                        <option value="" selected="selected" lang="text:---+all+---">
+                                        <option value="" selected="selected" lang="text:---+alarm_level+---">
                                         </option>
-                                        <option value="5" lang="text:severe_alarm">严重警告
+                                        <option value="5" lang="text:severe_alarm"> 
                                         </option>
-                                        <option value="4" lang="text:important_alarm">重要警告
+                                        <option value="4" lang="text:important_alarm"> 
                                         </option>
-                                        <option value="3" lang="text:minor_alarm">次要警告
+                                        <option value="3" lang="text:minor_alarm"> 
                                         </option>
-                                        <option value="2" lang="text:warn">警告
+                                        <option value="2" lang="text:warn"> 
                                         </option>
-                                        <option value="1" lang="text:remind">提醒
+                                        <option value="1" lang="text:remind"> 
                                         </option>
                                     </select>
                                 </div>
-                                <div class="form-group" style="padding: 5px 0px;">
-                                    <label for="alarm_state" class="control-label" lang="text:alarm_state"></label>
+                                <div class="form-group" style="padding: 5px 0px;"> 
                                     <select id="alarm_state" class="form-control input-sm">
-                                        <option value="" lang="text:---+all+---">
+                                        <option value="" lang="text:---+alarm_state+---">
                                         </option>
                                         <option value="1" selected="selected" class="unconfirmed" lang="text:alarm_occur">
                                         </option>
@@ -109,20 +107,18 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div class="form-group" style="padding: 5px 0px;">
-                                    <label for="confirm_states" class="control-label" lang="text:sure_state"></label>
+                                <div class="form-group" style="padding: 5px 0px;"> 
                                     <select id="confirm_states" class="form-control input-sm">
-                                        <option value="" selected="selected" lang="text:---+all+---">
+                                        <option value="" selected="selected" lang="text:---+sure_state+---">
                                         </option>
-                                        <option value="1" class="unconfirmed" lang="text:unconfirmed">未确认
+                                        <option value="1" class="unconfirmed" lang="text:unconfirmed"> 
                                         </option>
                                         <option value="0" class="confirmed" lang="text:confirmed">
-                                            已确认
+                                             
                                         </option>
                                     </select>
                                 </div>
-                                <div class="form-group" style="padding: 5px 0px;">
-                                    <label lang="text:type"></label>
+                                <div class="form-group" style="padding: 5px 0px;"> 
                                     <input type="text" id="type" class="form-control input-sm" lang="placeholder:type" >
                                 </div>
                                 <div class="form-group" style="padding: 5px 0px;">
