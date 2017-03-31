@@ -1,112 +1,115 @@
 
     <!--地图区域-->
-    <div class="row" id="summary">
 
-        <div class="col-md-12">
-            <div class="box box-solid">
-                <!--加载数据等待-->
-                <div id="online_overlay" class="overlay" style="display: none;">
-                    <i class="fa icon-refresh icon-spin"></i>
-                </div>
-                <div style="display: none;" class="box-header with-border">
-                <span><h3 class="box-title" lang="text:gateway_state"></h3></span>
-                <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-                <i class="icon-minus fa-minus"></i></button>
-                </div>
-                </div>
-                <div class="box-body" id="online_state" style="height:220px;display: none">
-                <div class="row">
-                <div class="col-md-12">
+    <!--<div class="row" id="summary">-->
 
-                </div>
-                </div>
-                </div>
-                <div class="box-footer " >
-                    <div class="row">
-                        <div class="col-xs-6 text-center border-right">
-                            <div class="description-block">
-                                <h5 id="sparkline-online" class="description-header"></h5>
-                            </div>
-                            <div class="knob-label" lang="text:online"></div>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-xs-6 text-center">
-                            <div class="description-block">
-                                <h5 id="sparkline-offline" class="description-header"></h5>
-                            </div>
-                            <div class="knob-label" lang="text:offline"></div>
-                        </div>
-                        <!-- ./col -->
-                    </div>
-                    <!-- /.row -->
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6" style="display: none">
-            <div class="box box-solid">
-                <!--加载数据等待-->
-                <div id="bussiness_overlay" class="overlay" style="display: none;">
-                    <i class="fa icon-refresh icon-spin"></i>
-                </div>
-                <div class="box-header with-border" style="display: none;">
-                <span><h3 class="box-title" lang="text:business_state"></h3></span>
-                <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-                <i class="icon-minus fa-minus"></i></button>
-                </div>
-                </div>
-                <div class="box-body" id="bussiness_state" style="height:220px;display: none;">
-                <div class="row">
-                <div class="col-md-12">
+        <!--<div class="col-md-12">-->
+            <!--<div class="box box-solid">-->
+                <!--&lt;!&ndash;加载数据等待&ndash;&gt;-->
+                <!--<div id="online_overlay" class="overlay" style="display: none;">-->
+                    <!--<i class="fa icon-refresh icon-spin"></i>-->
+                <!--</div>-->
+                <!--<div style="display: none;" class="box-header with-border">-->
+                <!--<span><h3 class="box-title" lang="text:gateway_state"></h3></span>-->
+                <!--<div class="box-tools pull-right">-->
+                <!--<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">-->
+                <!--<i class="icon-minus fa-minus"></i></button>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="box-body" id="online_state" style="height:220px;display: none">-->
+                <!--<div class="row">-->
+                <!--<div class="col-md-12">-->
 
-                </div>
-                </div>
-                </div>
-                <div class="box-footer ">
-                    <div class="row">
-                        <div class="col-xs-3 text-center border-right">
-                            <div class="description-block">
-                                <h5 id="sparkline-construction" class="description-header"></h5>
-                            </div>
-                            <div class="knob-label" lang="text:construction"></div>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-xs-3 text-center border-right">
-                            <div class="description-block">
-                                <h5 id="sparkline-commissioning" class="description-header"></h5>
-                            </div>
-                            <div class="knob-label" lang="text:commissioning"></div>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-xs-3 text-center border-right">
-                            <div class="description-block">
-                                <h5 id="sparkline-fault" class="description-header"></h5>
-                            </div>
-                            <div class="knob-label" lang="text:fault"></div>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-xs-3 text-center">
-                            <div class="description-block">
-                                <h5 id="sparkline-overhaul" class="description-header"></h5>
-                            </div>
-                            <div class="knob-label" lang="text:overhaul"></div>
-                        </div>
-                        <!-- ./col -->
-                    </div>
-                    <!-- /.row -->
-                </div>
-            </div>
-        </div>
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="box-footer " >-->
+                    <!--<div class="row">-->
+                        <!--<div class="col-xs-6 text-center border-right">-->
+                            <!--<div class="description-block">-->
+                                <!--<h5 id="sparkline-online" class="description-header"></h5>-->
+                            <!--</div>-->
+                            <!--<div class="knob-label" lang="text:online"></div>-->
+                        <!--</div>-->
+                        <!--&lt;!&ndash; ./col &ndash;&gt;-->
+                        <!--<div class="col-xs-6 text-center">-->
+                            <!--<div class="description-block">-->
+                                <!--<h5 id="sparkline-offline" class="description-header"></h5>-->
+                            <!--</div>-->
+                            <!--<div class="knob-label" lang="text:offline"></div>-->
+                        <!--</div>-->
+                        <!--&lt;!&ndash; ./col &ndash;&gt;-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash; /.row &ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col-md-6" style="display: none">-->
+            <!--<div class="box box-solid">-->
+                <!--&lt;!&ndash;加载数据等待&ndash;&gt;-->
+                <!--<div id="bussiness_overlay" class="overlay" style="display: none;">-->
+                    <!--<i class="fa icon-refresh icon-spin"></i>-->
+                <!--</div>-->
+                <!--<div class="box-header with-border" style="display: none;">-->
+                <!--<span><h3 class="box-title" lang="text:business_state"></h3></span>-->
+                <!--<div class="box-tools pull-right">-->
+                <!--<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">-->
+                <!--<i class="icon-minus fa-minus"></i></button>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="box-body" id="bussiness_state" style="height:220px;display: none;">-->
+                <!--<div class="row">-->
+                <!--<div class="col-md-12">-->
 
-    </div>
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="box-footer ">-->
+                    <!--<div class="row">-->
+                        <!--<div class="col-xs-3 text-center border-right">-->
+                            <!--<div class="description-block">-->
+                                <!--<h5 id="sparkline-construction" class="description-header"></h5>-->
+                            <!--</div>-->
+                            <!--<div class="knob-label" lang="text:construction"></div>-->
+                        <!--</div>-->
+                        <!--&lt;!&ndash; ./col &ndash;&gt;-->
+                        <!--<div class="col-xs-3 text-center border-right">-->
+                            <!--<div class="description-block">-->
+                                <!--<h5 id="sparkline-commissioning" class="description-header"></h5>-->
+                            <!--</div>-->
+                            <!--<div class="knob-label" lang="text:commissioning"></div>-->
+                        <!--</div>-->
+                        <!--&lt;!&ndash; ./col &ndash;&gt;-->
+                        <!--<div class="col-xs-3 text-center border-right">-->
+                            <!--<div class="description-block">-->
+                                <!--<h5 id="sparkline-fault" class="description-header"></h5>-->
+                            <!--</div>-->
+                            <!--<div class="knob-label" lang="text:fault"></div>-->
+                        <!--</div>-->
+                        <!--&lt;!&ndash; ./col &ndash;&gt;-->
+                        <!--<div class="col-xs-3 text-center">-->
+                            <!--<div class="description-block">-->
+                                <!--<h5 id="sparkline-overhaul" class="description-header"></h5>-->
+                            <!--</div>-->
+                            <!--<div class="knob-label" lang="text:overhaul"></div>-->
+                        <!--</div>-->
+                        <!--&lt;!&ndash; ./col &ndash;&gt;-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash; /.row &ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+    <!--</div>-->
+
+
     <div id="allmap" class="box box-solid" style="width: 100%;height: 100%;overflow: hidden;margin:0;font-family:'微软雅黑';">
     </div>
 
 <script type="text/javascript" >
     $(window).resize(function (event) {
         var content_height=$(window).height()-140;
-        $("#allmap").height(content_height-$("#summary").height()-$("#homeTabs").height());
+        $("#allmap").height(content_height-$("#summary").height());
     });
 
 
@@ -117,7 +120,7 @@
      *原值   <section class="content" style="height: 566px">
      ==========================================================*/
      var content_height=$(window).height()-140;
-     $("#allmap").height(content_height-$("#summary").height()-$("#homeTabs").height());
+     $("#allmap").height(content_height-$("#summary").height());
     //leaflet地图插件
     //Start
     var mymap = L.map("allmap");
@@ -575,6 +578,21 @@
             "</div>" +
             "</div>" +
             "</div>");
+
+    var online_sta='<div style="z-index: 3; width: 100px;height: 60px; position: absolute; right: 5px; top: 15px;background-color:rgba(246, 246, 246, 0.6);;">' +
+        '    <div style="display: flex;flex-direction: row;width: 100px;height: 30px;">' +
+        '        <div style="width: 15px;height: 15px;margin-top: 3px; background-color: lawngreen;"></div>'+
+        '        <div style="width: 60px;height: 25px;text-align: center" lang="text:online"></div>'+
+        '        <div style="width: 25px;height: 25px; text-align: center" id="sparkline-online"></div>'+
+        '    </div>'+
+        '    <div style="display: flex;flex-direction: row;width: 100px;height: 30px;">' +
+        '        <div style="width: 15px;height: 15px;margin-top: 3px; background-color: #aaa;"></div>'+
+        '        <div style="width: 60px;height: 25px;text-align: center" lang="text:offline"></div>'+
+        '        <div style="width: 25px;height: 25px; text-align: center" id="sparkline-offline"></div>'+
+        '    </div>'+
+        '</div>';
+    $("#allmap").append(online_sta);
+
     $("#allmap").append('<div class="overlay" style="display:none">'+
             '<i class="fa icon-refresh icon-spin"></i>'+
             '</div>');
@@ -585,7 +603,8 @@
             '<a id="layer_site" href="javascript:void(0)" class="glyphicon glyphicon-th-list" onclick="changeLayer(this)" title=" " lang="title:list_view"> </a>'+
 //            '<a id="layer_map" class="iconfont icon-home" onclick="changeLayer(this)"  title=" " lang="title:site"> </a>'+
             '</div></div></div>';
-    $("#allmap").append(layer)
+    $("#allmap").append(layer);
+    loadOnlineDatas(loadOnlineCallback);
     locale.render({element: "#init_body"});
 
     /**
