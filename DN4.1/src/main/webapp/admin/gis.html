@@ -579,16 +579,16 @@
             "</div>" +
             "</div>");
 
-    var online_sta='<div style="z-index: 3; width: 100px;height: 60px; position: absolute; right: 5px; top: 15px;background-color:rgba(246, 246, 246, 0.6);;">' +
-        '    <div style="display: flex;flex-direction: row;width: 100px;height: 30px;">' +
-        '        <div style="width: 15px;height: 15px;margin-top: 3px; background-color: lawngreen;"></div>'+
-        '        <div style="width: 60px;height: 25px;text-align: center" lang="text:online"></div>'+
-        '        <div style="width: 25px;height: 25px; text-align: center" id="sparkline-online"></div>'+
+    var online_sta='<div style="z-index: 3;position: absolute; right: 5px; top: 15px;background: #fff;opacity: 0.8;padding: 5px 10px;">' +
+        '    <div style="display: flex;flex-direction: row;padding: 5px 0px;">' +
+        '        <div style="width: 15px;height: 15px;margin-top: 3px; " class="bg-green"></div>'+
+        '        <div align="center" style="padding: 0 10px;" lang="text:online"></div>'+
+        '        <div align="center" id="sparkline-online"></div>'+
         '    </div>'+
-        '    <div style="display: flex;flex-direction: row;width: 100px;height: 30px;">' +
-        '        <div style="width: 15px;height: 15px;margin-top: 3px; background-color: #aaa;"></div>'+
-        '        <div style="width: 60px;height: 25px;text-align: center" lang="text:offline"></div>'+
-        '        <div style="width: 25px;height: 25px; text-align: center" id="sparkline-offline"></div>'+
+        '    <div style="display: flex;flex-direction: row;padding: 5px 0px;">' +
+        '        <div style="width: 15px;height: 15px;margin-top: 3px; " class="bg-gray"></div>'+
+        '        <div align="center" style="padding: 0 10px;" lang="text:offline"></div>'+
+        '        <div align="center" id="sparkline-offline"></div>'+
         '    </div>'+
         '</div>';
     $("#allmap").append(online_sta);
