@@ -1,21 +1,3 @@
-Skip to content
-This repository
-Search
-Pull requests
-Issues
-Gist
- @zhangyanf
- Sign out
- Unwatch 1
-  Star 0
- Fork 0 zhangyanf/ng-project
- Code  Issues 0  Pull requests 0  Projects 0  Wiki  Pulse  Graphs  Settings
-Tree: f86ec09f03 Find file Copy pathng-project/DN4.1/src/main/webapp/resources/language/en/lang.js
-f86ec09  a day ago
-@zhangyanf zhangyanf Function Or Bug: update
-1 contributor
-RawBlameHistory     
-756 lines (736 sloc)  31.7 KB
 var lang = {
     en: {
         10001: "System error",
@@ -368,7 +350,6 @@ var lang = {
         "delete": "Delete",
         "export": "Export",
         view: "View",
-        prompt: "Confirm Action",
         ok: "Ok",
         yes: "Yes",
         no: "No",
@@ -501,12 +482,6 @@ var lang = {
         daily_tx: "Daily Sending",
         detailed_monthly_report: "Detailed Monthly Report",
         signal_window: "Signal Chart",
-        reports_d: "d",
-        reports_h: "h",
-        reports_min: "min",
-        reports_s: "s",
-        currentMonth: "Current month",
-        month: "Month",
         /********************************  ATM报表 *********************************/
         "atm-report":"ATM报表",
         /******** 配置 *******/
@@ -532,7 +507,7 @@ var lang = {
 
         unbound: "Unbound",
         gateway_name: "Gateway Name",
-        device_config: "ATM",
+        device_config: "Machines",
         gateway:"Gateway",
         ip: "IP",
         signal_strength: "Signal Strength",
@@ -547,7 +522,6 @@ var lang = {
         Please_enter_email: "Please enter correct mailbox",
         mailbox_tip: "Type email addresses here (separated by ';')",
         warnhours: "24 Hours Early Warning",
-        the_gateway_has_been_binding:"The gatewayhas been binding",
 
         machine: "Machine",
         site_devices: "Site Machines",
@@ -634,9 +608,6 @@ var lang = {
         package_size:"Package size",
         communication_time:"Communication time",
         traffic_type:"Traffic Type",
-        unknow:"unknow",
-        upstream:"upstream",
-        downstrean:"downstream",
 
 
 
@@ -772,5 +743,3 @@ var lang = {
 
     }
 };
-Contact GitHub API Training Shop Blog About
-© 2017 GitHub, Inc. Terms Privacy Security Status Help

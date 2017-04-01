@@ -263,6 +263,8 @@ var lang = {
         save_failed: "Saved failed",
         submit_success: "Submitted successfully",
         submit_failed: "Submitted failed",
+        modify_success: "Modified successfully",
+        modify_failed: "Modified successfully",
         case_insensitive: "Case Insensitive",
         case_sensitive: "Case Sensitive",
         smart_atm:"Smart ATM",
@@ -367,7 +369,24 @@ var lang = {
         empty_is_all: "Search all",
         date: "Date",
         year: "Year",
-        munit: "$",
+        munit: "$", 
+        /********************************  注册页面 *********************************/
+        organization_name: "Organization",
+        security_code: "Security Code",
+        captcha: "Captcha",
+        security_question: "Security Question",
+        answer: "Answer",
+        is_must_fill: "is required",
+        please_input_email: "Please input email",
+        please_input_username: "Please input username",
+        please_input_organization: "Please input organization",
+        please_input_answer: "Please input answer",
+        finish_register: "Congratulations,registration completed! Please click",
+        resend_email_pre: "If you coundn't receive the email, Please click",
+        send: "send",
+        resend_email: "Resend the email",
+        password_has_been_sent_to_the_email: "A password has been sent to your email",
+
         /********************************  底部信息 *********************************/
         group_address: "3900 Jermantown Rd., Suite 150, Fairfax, VA 22030, USA ",
         company_website_href:"http://www.inhandnetworks.com",
@@ -404,6 +423,13 @@ var lang = {
         online_state: "Connection",
         online: "Online",
         offline: "Offline",
+
+        /********************************  账号信息修改 *********************************/
+        old_pwd: "Old Password",
+        new_pwd: "New Password",
+        repeat_pwd: "Repeat Password",
+        old_password_error: "Old password error",
+        save: "Save",
 
 
 
@@ -761,6 +787,7 @@ var lang = {
         create_update_schedule: "create update schedule",
         repair_processing: "repair processing",
         repair_state: "repair state",
+        execute_time: "Execute time"
 
     }
 };

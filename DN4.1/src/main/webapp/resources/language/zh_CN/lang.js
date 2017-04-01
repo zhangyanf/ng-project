@@ -263,6 +263,8 @@ var lang = {
         save_failed: "保存失败",
         submit_success: "提交成功",
         submit_failed: "提交失败",
+        modify_success: "修改成功",
+        modify_failed: "修改失败",
         case_insensitive: "不区分大小写",
         case_sensitive: "区分大小写",
         
@@ -370,6 +372,23 @@ var lang = {
         date: "日期", 
         year: "年",
         munit: "元",
+        /********************************  注册页面 *********************************/
+        organization_name: "机构名称",
+        security_code: "验证码",
+        captcha: "验证码",
+        security_question: "安全提问",
+        answer: "答案",
+        is_must_fill: "为必填的内容",
+        please_input_email: "请输入邮箱",
+        please_input_username: "请输入用户名",
+        please_input_organization: "请输入机构名称",
+        please_input_answer: "请输入答案",
+        finish_register: "恭喜您已完成注册，请点击",
+        resend_email_pre: "如果您没有收到邮件，请点击",
+        send: "发送",
+        resend_email: "再次发送邮件",
+        password_has_been_sent_to_the_email: "密码已经发送到邮箱",
+        
         /********************************  底部信息 *********************************/
         group_address: "北京市朝阳区望京利泽中园101号启明国际大厦11层西南侧",
         company_website_href:"http://www.inhand.com.cn",
@@ -382,14 +401,14 @@ var lang = {
 
 
 
-        /******** echart ********/
+        /******************************** echart ****************************************/
         line_switch: "折线图切换",
         bar_switch: "柱状图切换",
         restore: "还原",
         save_as_image: "保存为图片",
         the_chart_data_are_trying_to_load: "图表数据正在努力加载",
         ge: "个",
-        /******** 首页 ********/
+        /********************************* 首页 ****************************************/
         "home":"首页",
         dashboard: "现场详情",
         "gis":"GIS",
@@ -407,7 +426,13 @@ var lang = {
         online: "在线",
         offline: "离线",
 
-
+        /********************************  修改密码 *********************************/
+        old_pwd: "旧密码",
+        new_pwd: "新密码",
+        repeat_pwd: "重复密码",
+        old_password_error: "旧密码错误",
+        save: "保存",
+        
 
         /******** 通知 *******/
         "notice":"通知",
@@ -790,6 +815,7 @@ var lang = {
         create_update_schedule: "预防性计划创建、更改",
         repair_processing: "维修处理",
         repair_state: "维修状态",
+        execute_time: "执行时间"
 
 
     }
