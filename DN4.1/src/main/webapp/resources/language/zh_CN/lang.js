@@ -390,6 +390,7 @@ var lang = {
         password_has_been_sent_to_the_email: "密码已经发送到邮箱",
         
         /********************************  底部信息 *********************************/
+        about_us: "关于我们",
         group_address: "北京市朝阳区望京利泽中园101号启明国际大厦11层西南侧",
         company_website_href:"http://www.inhand.com.cn",
         company_website:"www.inhand.com.cn",
@@ -599,6 +600,30 @@ var lang = {
         more_device_info: "更多设备信息",
         more_part_info: "更多部件信息",
         change_time_recently: "最近更换时间",
+
+
+        add_site_success: "添加现场成功",
+        add_site_failed: "添加现场失败",
+        add_gateway_success: "添加网关成功",
+        add_gateway_failed: "添加网关失败",
+        jump_gateway_config: "跳过网关配置",
+        add_device_success: "添加设备成功",
+        add_device_failed: "添加设备失败",
+        jump_device_config: "跳过设备配置",
+        update_site_success: "编辑现场成功",
+        update_site_failed: "编辑现场失败",
+        update_gateway_success: "编辑网关成功",
+        update_gateway_failed: "编辑网关失败",
+        update_device_success: "编辑设备成功",
+        update_device_failed: "编辑设备失败",
+        update_part_failed: "编辑部件失败",
+        update_part_success: "编辑部件成功",
+        jump_part_config: "跳过部件配置",
+        add_part_failed: "添加部件失败",
+        add_part_success: "添加部件成功",
+        part_config: "部件配置",
+        the_gateway_has_been_binding:"该网关已被绑定",
+        the_site_has_been_deleted:"该现场已被删除",
 
 
         /******** 系统 *******/

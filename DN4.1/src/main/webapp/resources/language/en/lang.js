@@ -388,6 +388,7 @@ var lang = {
         password_has_been_sent_to_the_email: "A password has been sent to your email",
 
         /********************************  底部信息 *********************************/
+        about_us: "About us",
         group_address: "3900 Jermantown Rd., Suite 150, Fairfax, VA 22030, USA ",
         company_website_href:"http://www.inhandnetworks.com",
         company_website:"www.inhandnetworks.com",
@@ -597,6 +598,28 @@ var lang = {
         more_device_info: "More Machine Info",
         more_part_info: "More Component Info",
         change_time_recently: "Recent Replacement Time",
+
+        add_site_success: "Site added successfully",
+        add_site_failed: "Adding site failed",
+        add_gateway_success: "Gateway added successfully",
+        add_gateway_failed: "Adding gateway failed",
+        jump_gateway_config: "Skip gateway configuration",
+        add_device_success: "Machine added successfully",
+        add_device_failed: "Adding machine failed",
+        jump_device_config: "Skip machine configuration",
+        update_site_success: "Site edited successfully",
+        update_site_failed: "Editing site failed",
+        update_gateway_success: "Gateway edited successfully",
+        update_gateway_failed: "Editing gateway failed",
+        update_device_success: "Machine edited successfully",
+        update_device_failed: "Editing machine failed",
+        update_part_failed: "Component modifyid failed",
+        update_part_success: "Component modifyid successfully",
+        jump_part_config: "Skip Component Config",
+        add_part_failed: "Add Component Failed",
+        add_part_success: "Add Component Success",
+        the_gateway_has_been_binding:"The gateway has been binding",
+        the_site_has_been_deleted:"The site has been deleted",
 
 
 

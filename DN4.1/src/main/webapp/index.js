@@ -97,15 +97,15 @@ var packages = {
 };
 var locale = {
     browserLang: "",
-    userLang: "",
-    localLang: "",
-    storageLang: "",
+    userLang: "en",
+    localLang: "en",
+    storageLang: "en",
     langArr: ["en", "zh_CN"],
     langPacks: {},
     packUrl: "",
     element: "*",
     pos: packages["default"],
-    lang: "",
+    lang: "en",
     _setBrowserLang: function () {
         var browser = navigator.language || navigator.browserLanguage;
         var browserLang = browser.toLowerCase().substring(0, 2);
