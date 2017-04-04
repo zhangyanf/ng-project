@@ -36,9 +36,9 @@
         });
     }
 </script>
-<section class="content-header">
+<section class="content-header" style="display:none;">
     <h1 lang="text:site">
-        现场
+        
         <small>Version 2.0</small>
     </h1>
     <div class="leaflet-control-container">
@@ -58,8 +58,8 @@
     <!--现场图表-->
     <div class="row">
 
-        <div class="col-md-6">
-            <div class="box">
+        <div class="col-md-12">
+            <div class="box box-solid">
                 <!--加载数据等待-->
                 <div id="online_overlay" class="overlay" style="display: none;">
                     <i class="fa icon-refresh icon-spin"></i>
@@ -99,8 +99,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="box">
+        <div class="col-md-6" style="display: none;">
+            <div class="box box-solid">
                 <!--加载数据等待-->
                 <div id="bussiness_overlay" class="overlay" style="display: none;">
                     <i class="fa icon-refresh icon-spin"></i>
@@ -180,23 +180,13 @@
                                     <button type="button" class="btn btn-primary btn-sm" value="-1" lang="text:all_site">全部现场</button>
                                     <button type="button" class="btn btn-default btn-sm" value="1" lang="text:online_site">在线现场</button>
                                     <button type="button" class="btn btn-default btn-sm" value="0" lang="text:offline_site">离线现场</button>
-                                </div>
-                                <script type="text/javascript">
-                                     $.each($("#online_group > button"),function (i,btn) {
-                                         $(btn).on("click",function () {
-                                             $("#online_group > .btn-primary").removeClass("btn-primary").addClass("btn-default");
-                                             $(this).removeClass("btn-default").addClass("btn-primary");
-                                             searchSite();
-                                         });
-                                     });
-                                </script>
+                                </div> 
                                 <div class="form-group">
-                                    <input type="text" class="form-control" id="site_name"
-                                           lang="placeholder:enter_the_site_name" style="height:30px;">
+                                    <input type="text" class="form-control input-sm" id="site_name" lang="placeholder:site_name" >
                                 </div>
                                 <div class="form-group">
                                     <button type="button" onclick="searchSite()" class="btn btn-default btn-sm"
-                                            data-toggle="tooltip" title="查找" lang="title:query">
+                                            data-toggle="tooltip" lang="title:query">
                                         <span class="glyphicon glyphicon-search"></span>
                                     </button>
                                 </div>
@@ -210,13 +200,16 @@
                                 <!-- <th style="width: 30px;" id="tableHead_selectAll">
                                     <input type="checkbox" id="tableHead_checkbok" data-toggle='tooltip' data-placement="bottom" lang="title:check_all">
                                 </th> -->
-                                <th style="width: 46px;text-align: center;" lang="text:state">状态</th>
-                                <th lang="text:site_name" style="width: 15%;">现场名称</th>
-                                <th lang="text:address2">安装地址</th>
-                                <th lang="text:business_state" style="width: 15%;">业务状态</th>
-                                <th lang="text:contact_name" style="width: 15%;">联系人姓名</th>
-                                <th lang="text:contact_phone" style="width: 15%;">联系人电话</th>
-                                <th lang="text:email" style="width: 15%;">邮箱</th>
+                                <th style="text-align: center;width:40px" lang="text:state"></th>
+                                <th lang="text:connection_status" style="width: 15%;"></th>
+                                <th lang="text:site" style="width: 15%;"></th>
+                                <th lang="text:atm_device" style="width: 15%;"></th>
+                                <th lang="text:gateway_serial_number" style="width: 15%;"></th>
+                                <th lang="text:gateway_type" style="width: 10%;"></th>
+                                <th lang="text:address" ></th>
+                                <th lang="text:billing_plan_name" style="width: 10%;"></th>
+                                <th lang="text:gateway_activation_date" style="width: 10%;"></th>
+                                <th lang="text:de_activation_date" style="width: 10%;"></th>
                             </tr>
                             </thead>
                             <tbody id="siteInfo_table">
@@ -236,6 +229,14 @@
 </section>
 
 <script type="text/javascript">
+    $.each($("#online_group > button"), function (i, btn) {
+        $(btn).on("click", function () {
+        $("#online_group > .btn-primary").removeClass("btn-primary").addClass("btn-default");
+        $(this).removeClass("btn-default").addClass("btn-primary");
+            searchSite();
+        });
+    });
+                                     
     /**
      * 查询现场方法
      * @param {type} limit
@@ -266,16 +267,19 @@
         params.online=online;
 
         $("#site_name").val(name);
-        loadAllSite(params, function (data) {
+        loadAllSite_listAll(params, function (data) {
             if (data.total != undefined) {
                 $("#siteInfo_table").empty();
                 $("#tableHead_checkbok").prop("checked", false);
-                if (data.total > 0) {
+                if (data.total && data.total > 0) {
                     load_siteInfo(data.result);
                     //加载分页数据
-                    renderPagination(data, research_site);
+                    //绘制分页栏数据page-footer
+                    $("#page-footer").pagination("data",data);
+//                    renderPagination(data, research_site);
                 } else {
-                    clearPagination();
+//                    clearPagination();
+                    $("#page-footer").pagination("clear");
                     $("#siteInfo_table").empty();
                     $("#siteInfo_table").append('<tr><td colspan="9"  align="center" lang="text:no_data"></td></tr>');
                     locale.render({element: "#init_body"});
@@ -291,28 +295,28 @@
     function load_siteInfo(result) {
         $("#siteInfo_table").empty();
         var str;
-        var contactname;
-        var contactphone;
-        var contactemail;
         for (var i = 0; i < result.length; i++) {
-            contactname = "";
-            contactphone = "";
-            contactemail = "";
-            if (result[i].contact) {
-                contactname = typeof(result[i].contact.name) == "undefined" ? "" : result[i].contact.name;
-                contactphone = typeof(result[i].contact.phone) == "undefined" ? "" : result[i].contact.phone;
-                contactemail = typeof(result[i].contact.email) == "undefined" ? "" : result[i].contact.email;
+            var atm_ids="";
+            for(var j=0;j<result[i].asset.length;j++){
+                if(atm_ids == ""){
+                    atm_ids=atm_ids+result[i].asset[j]._id;
+                }else{
+                    atm_ids=atm_ids+"</br>"+result[i].asset[j]._id;
+                }
             }
-            var link = "<a href='javascript:void(0)' onclick='detail_popUp(\"" + result[i]._id + "\")'>"+((typeof(result[i].name) == "undefined") ? "" : result[i].name) +"</a>";
-            str = "<tr "+(result[i].online == '1' ? "class='text-green'":"")+">" +
-                    "<td style='text-align: center;'>" + (result[i].online == '1' ? "<i class='iconfont icon-guanji text-green'></i>" : "<i class='iconfont icon-guanji1 contacts-list-date'></i>") + "</td>" +
+            var link = "<a href='javascript:void(0)' onclick='detail_popUp(\"" + result[i].site._id + "\")'>"+((typeof(result[i].site.name) == "undefined") ? "" : result[i].site.name) +"</a>";
+            str = "<tr "+(result[i].site.online == '1' ? "class='text-green'":"")+">" +
+                    "<td style='text-align: center;'>" + (result[i].site.online == '1' ? "<i class='iconfont icon-guanji text-green'></i>" : "<i class='iconfont icon-guanji1 contacts-list-date'></i>") + "</td>" +
+                    "<td></td>" +
                     "<td>" + link + "</td>" +
-                    "<td>" + ((typeof(result[i].address) == "undefined") ? "" : result[i].address) + "</td>" +
-                    "<td>" + fuc_businessState(result[i].businessState) + "</td>" +
-                    "<td>" + contactname + "</td>" +
-                    "<td>" + contactphone + "</td>" +
-                    "<td>" + contactemail + "</td>" +
-                    "</tr>";
+                    "<td>"+atm_ids+"</td>" +
+                    "<td>"+result[i].device.serialNumber+"</td>" +
+                    "<td>"+result[i].device.model+"</td>" +
+                    "<td>" + ((typeof(result[i].site.address) == "undefined") ? "" : result[i].site.address) + "</td>" +
+                　　"<td></td>" +
+                    "<td></td>" +
+                    "<td></td>" +
+                   "</tr>";
             $("#siteInfo_table").append(str);
         }
         $("tbody > tr > td > input").on("click", function () {
@@ -330,13 +334,13 @@
 
 
     //每页显示条数切换
-    function changePageNumber(limit) {
-        research_site(0, limit);
-    }
-    //跳转到指定页  回调函数
-    function jumpTopage(cursor) {
-        research_site(cursor, $("#pageNumberSelect").val());
-    }
+//    function changePageNumber(limit) {
+//        research_site(0, limit);
+//    }
+//    //跳转到指定页  回调函数
+//    function jumpTopage(cursor) {
+//        research_site(cursor, $("#pageNumberSelect").val());
+//    }
 
     //数据转换
     function fuc_businessState(businessState) {
@@ -545,18 +549,18 @@
             limit: 1,
             business_state: 0
         };
-        loadBussnessDatas(parameters, function (data) {
-            var seriadata = (function () {
-                var d = [
-                    {name: locale.get("construction"), value: data.construction},
-                    {name: locale.get("commissioning"), value: data.commissioning},
-                    {name: locale.get("fault"), value: data.fault},
-                    {name: locale.get("overhaul"), value: data.overhaul}
-                ];
-                return d;
-            })();
-            updateChart("bussiness_state", seriadata);
-        });
+//        loadBussnessDatas(parameters, function (data) {
+//            var seriadata = (function () {
+//                var d = [
+//                    {name: locale.get("construction"), value: data.construction},
+//                    {name: locale.get("commissioning"), value: data.commissioning},
+//                    {name: locale.get("fault"), value: data.fault},
+//                    {name: locale.get("overhaul"), value: data.overhaul}
+//                ];
+//                return d;
+//            })();
+//            updateChart("bussiness_state", seriadata);
+//        });
     }
 
     //动态加载echart图表数据
@@ -582,15 +586,20 @@
         permissionFilter_pageFunc();
         //初始化
         require(['siteService', 'echarts'], function (siteService) {
-            $("#page-footer").load("admin/pagination.html", function () {
-                research_site(0, $("#pageNumberSelect").val());
+            // 引入分页
+            $("#page-footer").pagination({
+                changePage:function (cursor,limit) {
+                    //分页内容改变的回调函数
+                    research_site(cursor,limit);
+                }
             });
+            research_site(0, $("#page-footer .col-sm-5 select").val());
             var parameters = {
                 limit: 1,
                 business_state: 0
             }
             loadOnlineDatas(loadOnlineCallback);
-            loadBussnessDatas(parameters, loadBussnessCallback)
+            //loadBussnessDatas(parameters, loadBussnessCallback)
         });
         locale.render({element: "#init_body"});
     });

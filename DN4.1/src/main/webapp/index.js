@@ -97,15 +97,15 @@ var packages = {
 };
 var locale = {
     browserLang: "",
-    userLang: "",
-    localLang: "",
-    storageLang: "",
+    userLang: "en",
+    localLang: "en",
+    storageLang: "en",
     langArr: ["en", "zh_CN"],
     langPacks: {},
     packUrl: "",
     element: "*",
     pos: packages["default"],
-    lang: "",
+    lang: "en",
     _setBrowserLang: function () {
         var browser = navigator.language || navigator.browserLanguage;
         var browserLang = browser.toLowerCase().substring(0, 2);
@@ -777,10 +777,8 @@ function save_self() {
             contentType: 'application/json; charset=utf-8',
             traditional: true,
             data: JSON.stringify(requestData),
-            success: function (result) {
-                dialog.render({
-                    lang: "modify_successful"
-                });
+            success: function (result) { 
+                errorTipDis("modify_success");
                 $("#user_name").empty().text(userName);
                 $("#user_phone").empty().text(userPhone);
                 $("#edit_self").show();
@@ -979,12 +977,12 @@ function submit_changePassword_self() {
                             default:
                                 break;
                         }
-                    } else { 
+                    } else {  
                         // errorTipDis("modify_password_successful");
                         dialog.render({
-                                    lang: "modify_password_successful",
+                                    lang: "modify_success",
                                     buttons: [{
-                                        lang: "yes", click: function () {
+                                        lang: "yes", click: function () { 
                                             dialog.close();
                                             $('#model_changePWd').modal('hide');
                                         }

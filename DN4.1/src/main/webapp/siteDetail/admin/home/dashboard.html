@@ -1,0 +1,127 @@
+<div class=" tab-pane row active">
+    <div class="col-md-12 no-padding">
+        <div id="business_data_div" >
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text" lang="text:communication_times"></span>
+                                <span class="info-box-number" id="communication_times"></span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text" lang="text:traffic_statistics"></span>
+                                <span class="info-box-number" id="traffic_statistics"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text" lang="text:communication_package"></span>
+                                <span class="info-box-number" id="communication_package"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+    </div>
+    <div class="col-sm-7">
+        <div class="box box-default">
+            <div class="box-header">
+                <h3 class="box-title">Alarms</h3>
+                <span class="box-tools pull-right" data-toggle="tooltip" title="" lang="title:more_info" id="more_alarm_info">
+                     <i class="iconfont icon-icon"></i>
+                </span>
+            </div>
+            <div class="box-body no-padding">
+                <div id="atm_alarm">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-5">
+        <div class="box box-default">
+            <div class="box-header">
+                <h3 class="box-title">Flow Statistic</h3>
+            </div>
+            <div class="box-body">
+                <div id="atm_data_flow">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="box box-default">
+            <div class="box-header">
+                <h3 class="box-title">Communication Info</h3>
+            </div>
+            <div class="box-body">
+                <div id="atm_data_detail" style="max-height:300px;overflow-y:auto;overflow-x:hidden; ">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function initOverview(siteId) {
+        require(['siteService', 'warningService', 'orderService', 'dataService', 'echarts'], function () {
+            //本页面功能权限过滤
+            var siteId = sessionStorage.getItem("_id");
+            // console.log("siteId", siteId)
+            permissionFilter_overview(siteId);
+            var self = this;
+            getAtmDataSummary({siteId:siteId},function (data) {
+                $("#communication_times").text(data.total);
+                $("#traffic_statistics").text(data.result[0].count+"/"+data.result[1].count);
+                $("#communication_package").text(data.result[0].size+"/"+data.result[1].size);
+            },self);
+            $("#more_alarm_info").off().on("click",function () {
+                $("#p_alarm > a").click();
+            });
+        });
+    }
+
+    /*
+    * 根据权限，选择是否加载相应的模块
+    **/
+    function permissionFilter_overview(siteId) {
+        //帐号的权限集合
+        var accept = sessionStorage.getItem('accept');
+        var def = sessionStorage.getItem('default');
+        var deny = sessionStorage.getItem('deny');
+        //显示模块的权限集合
+        var p_webscada = [91, 95, 97, 92, 96, 98];
+        var p_alarm = [49];
+        if (tool_page_permission(p_alarm, accept, def, deny) == 0) {
+            $("#atm_alarm").hide();
+        } else {
+            $("#atm_alarm").load("admin/home/overview_alarm.html", function () {
+                locale.render({ element: "#init_body" });
+            });
+        }
+        $("#atm_data_detail").load("admin/home/atmdata.html", function () {
+            initAtmData(siteId);
+            locale.render({ element: "#init_body" });
+        });
+        $("#atm_data_flow").load("admin/home/atmdata_flow.html", function () {
+            initAtmDataFlow(siteId);
+            locale.render({ element: "#init_body" });
+        });
+
+
+    }
+
+</script>

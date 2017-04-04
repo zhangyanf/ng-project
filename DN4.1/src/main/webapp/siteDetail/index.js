@@ -680,5 +680,5 @@ function set_$tcontentHeight() {
     var h2=$("#content-header2").innerHeight();
     var content_height=$(window).height()-50-h1-h2;
     $("#pcontent > .content").height(content_height);
-    $(".nav-tabs-custom #tab_content").height(content_height-85);
+    $(".nav-tabs-custom #tab_content").height(content_height-$(".nav-tabs").innerHeight());
 }

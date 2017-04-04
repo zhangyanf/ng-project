@@ -1,9 +1,10 @@
 
-<section class="content" id="tcontent" style="overflow-y: hidden;!important;">
+<section class="content" id="tcontent" style="overflow-y: hidden;!important;padding-top: 15px;">
     <div class="nav-tabs-custom">
-        <ul class="nav nav-tabs" role="tablist" id="homeTabs">
-            <li id="tab1" data-permissionFilter='[91,95,97]' role="presentation" class="active" ><a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:gis" aria-expanded="true"></a></li>
+        <ul class="nav nav-tabs pull-right" role="tablist" id="homeTabs">
             <li id="tab2" data-permissionFilter='[49]' role="presentation"  class="" ><a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:site_list;" aria-expanded="false"></a></li>
+            <li id="tab1" data-permissionFilter='[91,95,97]' role="presentation" class="active"><a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:gis" aria-expanded="true"></a></li>
+            <li class="pull-left header" lang="text:home"></li>
         </ul>
         <div class="tab-content" id="tab_content" style="overflow-y:auto;overflow-x:hidden;">
             <!--表格数据区-->
@@ -18,6 +19,11 @@
     function changeTab(index,_id){
         clearAndDestory();
         switch (index){
+            case "tab1":
+                $("#tab_content").load("admin/gis.html",function () {
+                    initGis();
+                });
+                break;
             case "tab2":
                 $("#tab_content").load("admin/report_site.html");
                 break;
@@ -41,10 +47,9 @@
                 var $obj = $(this);
                 changeTab($obj.attr("id"));
             })
-        });
+        }); 
         locale.render({element: "#init_body"});
-        if($("#homeTabs li:first").attr("id")!="undefined"){
-            $("#homeTabs li:first").click();
-        }
+
+        $("#tab1").click();
     });
 </script>

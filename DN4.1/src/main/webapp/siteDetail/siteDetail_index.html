@@ -413,9 +413,9 @@
                 <!-- Logo -->
                 <a href="javascript:void(0)" class="logo">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
-                    <span class="logo-mini"><b>D</b>N</span>
+                    <span class="logo-mini"><b>ATM</b></span>
                     <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg"><b>Device</b>Networks</span>
+                    <span class="logo-lg"><b>Smart</b>ATM</span>
                 </a>
 
                 <!-- Header Navbar: style can be found in header.less -->
@@ -533,10 +533,13 @@
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <img id="site_img_1" src="#" class="img-circle"  alt="Site Image">
+                            <!--<img id="site_img_1" src="#" class="img-circle"  alt="Site Image">-->
+                            <span style="color: #aaa;" id="site_img_1"><i class="iconfont icon-atm" style="font-size: 60px;"></i></span>
                         </div>
                         <div class="pull-left info">
-                           <p><i id="siteState"></i>&nbsp;<span id="siteInfo_siteName" style="max-width: 100px;overflow: hidden;text-overflow:ellipsis;"></span></p>
+                            <p><i id="siteState"></i>&nbsp;
+                               <p id="siteInfo_siteName" style="max-width: 100px;overflow: hidden;text-overflow:ellipsis;position: absolute;top: 7px;left: 35px;"></p>
+                            </p>
                             <p id="siteInfo_address" style="max-width: 100px;overflow: hidden;text-overflow:ellipsis;font-weight: 400;"></p>
                             <p id="site_comment" style="max-width: 100px;overflow: hidden;text-overflow:ellipsis;font-weight: normal;"></p>
                         </div>
@@ -555,7 +558,7 @@
                             <div class="col-xs-4 text-center">
                                 <div class="square-box bg-red"></div>
                                 <span class="number-content" id="site_alarm_unconfirmed_total2">0</span>
-                                <div class="item-title text-red" lang="text:unknown"></div>
+                                <div class="item-title text-red" lang="text:unconfirmed"></div>
                             </div>
                         </div>
                     </div>
@@ -563,32 +566,18 @@
                         <li class="active treeview" id="operation_monitoring">
                             <a href="javascript:void(0)">
                                 <i class="iconfont icon-dashboard"></i>
-                                <span lang="text:operation_monitoring">运行监控</span>
+                                <span lang="text:operation_monitoring"></span>
                             </a>
                             <ul id="p_home" class="treeview-menu">
-                                <li id="p_site" class="active"><a href="javascript:void(0)" onclick="click2url('siteDetail_home',this)" ><span lang="text:overall_monitoring">整体监控</span></a></li>
+                                <li id="p_site" class="active"><a href="javascript:void(0)" onclick="click2url('siteDetail_home',this)" ><span lang="text:dashboard"></span></a></li>
                                 <!--<li id="p_webscada"><a href="javascript:void(0)" onclick="click2url('webscada')" ><span lang="text:web_scada">webscada</span></a></li>-->
-                                <li id="p_reltime"><a href="javascript:void(0)" onclick="click2url('real_time_data',this)" ><span lang="text:real_time_data">实时数据</span></a></li>
-                                <li id="p_alarm"><a href="javascript:void(0)" onclick="click2url('historical_alarm',this)" ><span lang="text:historical_events">历史事件</span></a></li>
-                                <li id="p_history"><a href="javascript:void(0)" onclick="click2url('historical_trend',this)" ><span lang="text:historical_trend">历史趋势</span></a></li>
+                                <li id="p_reltime" style="display:none;"><a href="javascript:void(0)" onclick="click2url('real_time_data',this)" ><span lang="text:real_time_data"></span></a></li>
+                                <li id="p_alarm"><a href="javascript:void(0)" onclick="click2url('historical_alarm',this)" ><span lang="text:historical_events"></span></a></li>
+                                <li id="p_history" style="display:none;"><a href="javascript:void(0)" onclick="click2url('historical_trend',this)" ><span lang="text:historical_trend"></span></a></li>
                             </ul>
                         </li>
-
-                        <li class="treeview" style="display:none;">
-                            <a href="#">
-                                <i class="icon-sitemap"></i>
-                                <span lang="text:operation_monitoring">运行监控</span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="javascript:void(0)" onclick="click2url(1,this)" lang="text:overall_monitoring">整体监控</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url('hardware_topology',this)" lang="text:hardware_topology">硬件拓扑</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url(3,this)" lang="text:plucker">抓棉机</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url(4,this)" lang="text:blending_machine">混棉机</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url(5,this)" lang="text:cotton_cleaning_machine">清棉机</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url(6,this)" lang="text:carding_machine">梳棉机</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview" id="device_manage">
+ 
+                        <li class="treeview"  style="display:none;">
                             <a href="#">
                                 <i class="iconfont icon-device-desktop"></i>
                                 <span lang="text:device_manage">设备管理</span> 
@@ -600,7 +589,7 @@
                                     <li style="display:none;"><a href="javascript:void(0)" onclick="click2url(11,this)" lang="text:carding_machine">梳棉机</a></li>
                                 </ul>
                         </li>
-                        <li class="treeview" id="repair"  >
+                        <li class="treeview" id="repair" style="display:none">
                             <a href="#">
                                 <i class="iconfont icon-weixiu"></i>
                                 <span lang="text:repair_manage">维修管理</span>
@@ -613,50 +602,16 @@
 
                             </ul>
                         </li>
-                        <li class="treeview" id="data_allocation">
-                <a href="#">
-                    <i class="iconfont icon-data-dictionary-config "></i>
-                    <span lang="text:data_allocation">数据配置</span>
-                </a>
-                <ul class="treeview-menu">
-                    <li id="data_dictionary"><a href="javascript:void(0)" onclick="click2url('data_allocation',this)" lang="text:data_dictionary">数据字典</a></li>
-                    <li id="trend_chart_set"><a href="javascript:void(0)" onclick="click2url('trend_chart_set',this)" lang="text:trend_chart_set">趋势图设置</a></li>
-                </ul>
-                </li>
-                <li class="treeview" style="display:none;">
-                    <a href="#">
-                        <i class="icon-bar-chart"></i>
-                        <span lang="text:data_query">数据查询</span>
-                        <ul class="treeview-menu">
-                            <li><a href="javascript:void(0)" onclick="click2url(12,this)" lang="text:production_line_statistics">产线统计</a></li>
-                            <li><a href="javascript:void(0)" onclick="click2url(13,this)" lang="text:plucker">抓棉机</a></li>
-                            <li><a href="javascript:void(0)" onclick="click2url(14,this)" lang="text:blending_machine">混棉机</a></li>
-                            <li><a href="javascript:void(0)" onclick="click2url(15,this)" lang="text:cotton_cleaning_machine">清棉机</a></li>
-                            <li><a href="javascript:void(0)" onclick="click2url(16,this)" lang="text:carding_machine">梳棉机</a></li>
-                        </ul>
-                    </a>
-                </li>
-                <li class="treeview" style="display:none;">
-                    <a href="#">
-                        <i class="icon-tint"></i>
-                        <span lang="text:energy_manage">能效管理</span>
-                        <ul class="treeview-menu">
-                            <li><a href="javascript:void(0)" onclick="click2url(17,this)" lang="text:output_statistics">产量统计</a></li>
-                            <li><a href="javascript:void(0)" onclick="click2url(18,this)" lang="text:energy_consumption_analysis">能耗分析</a></li>
-                            <li><a href="javascript:void(0)" onclick="click2url(19,this)" lang="text:data_analysis">数据分析</a></li>
-                        </ul>
-                    </a>
-                </li>
-                <li class="treeview" style="display: none;">
-                    <a href="javascript:void(0)">
-                        <i class="iconfont icon-system-settings"></i>
-                        <span lang="text:site_maintain"></span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li ><a href="javascript:void(0)" onclick="click2url('informOfficer',this)" ><span lang="text:inform_officer"></span></a></li>
-                    </ul>
-                </li>
-
+                        <li class="treeview" style="display: none;">
+                            <a href="#">
+                                <i class="iconfont icon-data-dictionary-config "></i>
+                                <span lang="text:data_allocation">数据配置</span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li id="data_dictionary"><a href="javascript:void(0)" onclick="click2url('data_allocation',this)" lang="text:data_dictionary">数据字典</a></li>
+                                <li id="trend_chart_set"><a href="javascript:void(0)" onclick="click2url('trend_chart_set',this)" lang="text:trend_chart_set">趋势图设置</a></li>
+                            </ul>
+                        </li> 
                 </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -959,19 +914,19 @@
                                 var levelCss = "";
                                 var levelIcon = "";
                                 if (value.level == 5) {
-                                    levels = locale.get({lang: "serious_warning"});
+                                    levels = locale.get({lang: "severe_alarm"});
                                     levelCss = "serious_warning";
                                     levelIcon = "iconfont icon-alarm-serious"
                                 } else if (value.level == 4) {
-                                    levels = locale.get("important_warning");
+                                    levels = locale.get("important_alarm");
                                     levelCss = "important_warning";
                                     levelIcon = "iconfont icon-alarm"
                                 } else if (value.level == 3) {
-                                    levels = locale.get("minor_warning");
+                                    levels = locale.get("minor_alarm");
                                     levelCss = "minor_warning";
                                     levelIcon = "iconfont icon-alarm"
                                 } else if (value.level == 2) {
-                                    levels = locale.get("caution");
+                                    levels = locale.get("warn");
                                     levelCss = "caution";
                                     levelIcon = "iconfont icon-alarm"
                                 } else if (value.level == 1) {
@@ -1020,10 +975,12 @@
 
                 var online = result.online;
                 if(online==0) {
-                    $("#site_img_1").prop("src","../images/site-info-offline.png");
+//                    $("#site_img_1").prop("src","../images/site-info-offline.png");
+                    $("#site_img_1").css("color","#aaa");
                     $("#siteState").removeClass().addClass("iconfont icon-guanji contacts-list-date");
                 }else if(online==1) {
-                    $("#site_img_1").prop("src","../images/site-info-online.png");
+//                    $("#site_img_1").prop("src","../images/site-info-online.png");
+                    $("#site_img_1").css("color","green");
                     $("#siteState").removeClass().addClass("iconfont icon-guanji text-green");
                     $("#siteInfo_siteName").addClass("text-green");
                 }
@@ -1076,7 +1033,7 @@
                     }
                 }
                 if( marker == 1) {
-                    schneider.Global.init();
+                    // schneider.Global.init();
                 }
                 /*var test = 0;
                 setTimeout( function() {

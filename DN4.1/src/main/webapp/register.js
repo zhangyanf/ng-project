@@ -6,12 +6,15 @@
 *本地化页面
 **/
 if( locale.current() == 1) {
+     $("#home-nav-aboutus").children("a").attr("href", "http://www.inhandnetworks.com/");
     $("#chineseLanguage").hide();
     $("#englishLanguage").show();
 } else {
+    $("#home-nav-aboutus").children("a").attr("href", "http://www.inhand.com.cn/");
     $("#englishLanguage").hide();
     $("#chineseLanguage").show();
 }
+ 
 locale.render({element: "body"});
 /*============================
 *表单验证
@@ -49,6 +52,7 @@ function FnHeader() {
             $("#lang-en").css("color", "#555");
         }
     };
+
     this.zh.bind("click", function() {
         locale.set({lang: "en"});
         $(".language").hide();
@@ -64,6 +68,7 @@ function FnHeader() {
         $("#englishLanguage").hide();
         $("#chineseLanguage").show();
         $("#home-nav-aboutus").children("a").attr("href", "http://www.inhand.com.cn/");
+ 
         validator.render(validator.element, validator.paramObj);
         header._promptCurrentLang();
     });

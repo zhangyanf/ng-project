@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title lang="text:device_cloud+-+home"></title>
+        <title lang="text:smart_atm+-+home"></title>
         <!--icon for networks-->
         <link rel="shortcut icon" href="favicon.ico" >
         <!-- Tell the browser to be responsive to screen width -->
@@ -301,19 +301,19 @@
                                 var levelCss = "";
                                 var levelIcon = "";
                                 if (value.level == 5) {
-                                    levels = locale.get({lang: "serious_warning"});
+                                    levels = locale.get({lang: "severe_alarm"});
                                     levelCss = "serious_warning";
                                     levelIcon = "iconfont icon-alarm-serious"
                                 } else if (value.level == 4) {
-                                    levels = locale.get("important_warning");
+                                    levels = locale.get("important_alarm");
                                     levelCss = "important_warning";
                                     levelIcon = "iconfont icon-alarm"
                                 } else if (value.level == 3) {
-                                    levels = locale.get("minor_warning");
+                                    levels = locale.get("minor_alarm");
                                     levelCss = "minor_warning";
                                     levelIcon = "iconfont icon-alarm"
                                 } else if (value.level == 2) {
-                                    levels = locale.get("caution");
+                                    levels = locale.get("warn");
                                     levelCss = "caution";
                                     levelIcon = "iconfont icon-alarm"
                                 } else if (value.level == 1) {
@@ -498,9 +498,9 @@
                 <!-- Logo -->
                 <a href="index.html" class="logo">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
-                    <span class="logo-mini"><b>D</b>N</span>
+                    <span class="logo-mini"><b>ATM</b></span>
                     <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg"><b>Device</b>Networks</span>
+                    <span class="logo-lg"><b>Smart</b>ATM</span>
                 </a>
 
                 <!-- Header Navbar: style can be found in header.less -->
@@ -519,7 +519,7 @@
                                     <span class="label label-success" id="msg_total">4</span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li class="header" id="msg_overview">您有四个消息</li>
+                                    <li class="header" id="msg_overview"></li>
                                     <li>
                                         <!-- inner menu: contains the actual data -->
                                         <ul class="menu" id="msg_detail">
@@ -537,7 +537,7 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <li class="footer"><a href="javscript:void(0)" onclick="click2url(2)">查看</a></li>
+                                    <li class="footer"><a href="javscript:void(0)" onclick="click2url(2)"></a></li>
                                 </ul>
                             </li>
                             <!-- Notifications: style can be found in dropdown.less   notifications-menu -->
@@ -554,7 +554,7 @@
 
                                         </ul>
                                     </li>
-                                    <li  name="notify_li" class="footer"><a href="javscript:void(0)" lang="text:view"  id="check_alarm" >查看</a></li>
+                                    <li  name="notify_li" class="footer"><a href="javscript:void(0)" lang="text:view"  id="check_alarm" ></a></li>
                                 </ul>
                             </li>
                             <!-- Tasks: style can be found in dropdown.less -->
@@ -564,7 +564,7 @@
                                     <span class="label label-danger" id="task_total">9</span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li class="header" id="task_overview">您有9个任务</li>
+                                    <li class="header" id="task_overview"></li>
                                     <li>
                                         <!-- inner menu: contains the actual data -->
                                         <ul class="menu">
@@ -624,7 +624,7 @@
                                             </div>
                                             <div class="col-xs-12 text-center">
                                                 <div class="col-xs-6 text-right">
-                                                    <small lang="text:phone+：">电话：</small>
+                                                    <small lang="text:phone+："></small>
                                                 </div>
                                                 <div class="col-xs-6 text-left" style=" padding: 0px;">
                                                     <input type="hidden" id="user_phone_hidden">
@@ -633,7 +633,7 @@
                                             </div>
                                             <div class="col-xs-12 text-center">
                                                 <div class="col-xs-6 text-right">
-                                                    <small lang="text:last_login+：">上次登录时间：</small>
+                                                    <small lang="text:last_login+："></small>
                                                 </div>
                                                 <div class="text-left">
                                                     <small id="last_login_ts"></small>
@@ -641,7 +641,7 @@
                                             </div>
                                             <div class="col-xs-12 text-center">
                                                 <div class="col-xs-6 text-right">
-                                                    <small lang="text:last_logout+：">上次登出时间：</small>
+                                                    <small lang="text:last_logout+："></small>
                                                 </div>
                                                 <div class="text-left">
                                                     <small id="last_logout_ts"></small>
@@ -649,7 +649,7 @@
                                             </div>
                                             <div class="col-xs-12 text-center">
                                                 <div class="col-xs-6 text-right">
-                                                    <small lang="text:last_login_ip+：">上次登录IP：</small>
+                                                    <small lang="text:last_login_ip+："></small>
                                                 </div>
                                                 <div class="text-left">
                                                     <small id="last_login_ip"></small>
@@ -705,7 +705,7 @@
                     <ul class="sidebar-menu">
                         <li class="active treeview" id="firstpage">
                             <a href="javascript:void(0)" onclick="click2url('home',this)"  id="firstpage_map" >
-                                <i class="iconfont icon-home"></i> <span lang="text:home">首页</span>
+                                <i class="iconfont icon-home"></i> <span lang="text:home"></span>
                                 <span class="label label-primary pull-right" id="sites_total"></span>
                             </a>
                             <!--<ul class="treeview-menu">-->
@@ -713,70 +713,16 @@
                                 <!--<li id="firstpage_site"><a href="javascript:void(0)" onclick="click2url('report_site',this)" lang="text:site"></a></li>-->
                             <!--</ul>-->
                         </li>
-                        <li class="treeview" style="display:none;">
-                            <a href="javascript:void(0)">
-                                <i class="icon-sitemap"></i>
-                                <span lang="text:operation_monitoring">运行监控</span>
-                                <span class="label label-primary pull-right" id="host_state"></span>
-                            </a>
-
-                            <ul class="treeview-menu">
-                                <li><a href="javascript:void(0)" onclick="click2url('overall_monitoring',this)" ><i class="icon-cogs"></i><span lang="text:overall_monitoring">整体监控</span></a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url('hardware_topology',this)" lang="text:hardware_topology"><i class="icon-circle"></i>硬件拓扑</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url('monitor_plucker',this)" lang="text:plucker"><i class="icon-circle"></i>抓棉机</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url('monitor_blending',this)" lang="text:blending_machine"><i class="icon-circle"></i>混棉机</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url('monitor_cotton_cleaning',this)" lang="text:cotton_cleaning_machine"><i class="icon-circle"></i>清棉机</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url('monitor_carding',this)" lang="text:carding_machine"><i class="icon-circle"></i>梳棉机</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview"  style="display:none;">
-                            <a href="javascript:void(0)">
-                                <i class="icon-desktop"></i>
-                                <span lang="text:device_manage">设备管理</span>
-                                <span class="label label-primary pull-right" id="devices_total"></span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="javascript:void(0)" onclick="click2url(7,this)" lang="text:equipment_information"><i class="icon-circle"></i>设备信息</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url(8,this)" lang="text:plucker"><i class="icon-circle"></i>抓棉机</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url(9,this)" lang="text:blending_machine"><i class="icon-circle"></i>混棉机</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url(10,this)" lang="text:cotton_cleaning_machine"><i class="icon-circle"></i>清棉机</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url(11,this)" lang="text:carding_machine"><i class="icon-circle"></i>梳棉机</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview"  style="display:none;">
-                            <a href="javascript:void(0)">
-                                <i class="icon-bar-chart"></i>
-                                <span lang="text:data_query">数据查询</span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="javascript:void(0)" onclick="click2url(12,this)" lang="text:production_line_statistics"><i class="icon-circle"></i>产线统计</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url(13,this)" lang="text:plucker"><i class="icon-circle"></i>抓棉机</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url(14,this)" lang="text:blending_machine"><i class="icon-circle"></i>混棉机</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url(15,this)" lang="text:cotton_cleaning_machine"><i class="icon-circle"></i>清棉机</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url(16,this)" lang="text:carding_machine"><i class="icon-circle"></i>梳棉机</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="treeview"  style="display:none;">
-                            <a href="javascript:void(0)">
-                                <i class="icon-tint"></i>
-                                <span lang="text:energy_manage">能效管理</span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="javascript:void(0)" onclick="click2url(17,this)" lang="text:output_statistics"><i class="icon-circle"></i>产量统计</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url(18,this)" lang="text:energy_consumption_analysis"><i class="icon-circle"></i>能耗分析</a></li>
-                                <li><a href="javascript:void(0)" onclick="click2url(19,this)" lang="text:data_analysis"><i class="icon-circle"></i>数据分析</a></li>
-                            </ul>
-                        </li>
+                         
 
                         <li class="treeview" id="alarmList" style="display:none;">
                             <a href="#">
                                 <i class="iconfont icon-notice"></i>
-                                <span lang="text:notice">通知</span>
+                                <span lang="text:notice"></span>
                                 <span style="display:none;" class="label label-warning pull-right" id="alert_count"></span>
                             </a>
                             <ul class="treeview-menu">
-                                <li  style="display:none;"><a href="javascript:void(0)" onclick="click2url(20,this)" lang="text:failure_and_safety_alarm"><i class="icon-circle"></i>故障及安全告警</a></li>
+                                <li  style="display:none;"><a href="javascript:void(0)" onclick="click2url(20,this)" lang="text:failure_and_safety_alarm"><i class="icon-circle"></i></a></li>
                                 <li id="alarmList_alarmManage"><a href="javascript:void(0)"  onclick="click2url('alarm_list',this)" lang="text:alarm"></a></li>
                                 <li id="notice_logManage"><a href="javascript:void(0)"  onclick="click2url('log_list',this)" lang="text:log"></a></li>
                             </ul>
@@ -784,12 +730,12 @@
                         <li class="treeview" id="repair" style="display:none;">
                             <a href="#">
                                 <i class="iconfont icon-weixiu"></i>
-                                <span lang="text:repair_manage">维修管理</span>
+                                <span lang="text:repair_manage"> </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li id="repair_order" style="display:none;"><a href="javascript:void(0)"  onclick="click2url('repair_order',this)" lang="text:my_order">我的工单</a></li>
-                                <li id="repair_orderlist"><a href="javascript:void(0)"  onclick="click2url('repair_orderlist',this)" lang="text:orderlist">工单列表</a></li>
-                                <li id="repair_schedule"><a href="javascript:void(0)"  onclick="click2url('repair_schedule',this)" lang="text:repair_schedule">预防性计划</a></li>
+                                <li id="repair_order" style="display:none;"><a href="javascript:void(0)"  onclick="click2url('repair_order',this)" lang="text:my_order"> </a></li>
+                                <li id="repair_orderlist"><a href="javascript:void(0)"  onclick="click2url('repair_orderlist',this)" lang="text:orderlist"> </a></li>
+                                <li id="repair_schedule"><a href="javascript:void(0)"  onclick="click2url('repair_schedule',this)" lang="text:repair_schedule"> </a></li>
                                 <!--<li id="repair_log"><a href="javascript:void(0)"  onclick="click2url('repair_log',this)" lang="text:repair_log"></a></li>-->
 
                             </ul>
@@ -797,13 +743,13 @@
                         <li class="treeview" id="reportList"  style="display:none;">
                             <a href="#">
                                 <i class="iconfont icon-report"></i>
-                                <span lang="text:report">报表</span>
+                                <span lang="text:report"> </span>
                                 <!--span class="label label-primary pull-right" id="alert_count">12</span-->
                             </a>
                             <ul class="treeview-menu">
-                                <li id="repair_report_performance" ><a href="javascript:void(0)"  onclick="click2url('repair_report_performance',this)" lang="text:repair_report_performance">绩效统计</a></li>
-                                <li id="repair_report_workload" ><a href="javascript:void(0)"  onclick="click2url('repair_report_workload',this)" lang="text:repair_report_workload">工作量统计</a></li>
-                                <li id="grageway_report"><a href="javascript:void(0)"  onclick="click2url('report_gateway',this)" lang="text:report_gateway">网关报表</a></li>
+                                <li id="repair_report_performance" style="display: none;"><a href="javascript:void(0)"  onclick="click2url('repair_report_performance',this)" lang="text:repair_report_performance"> </a></li>
+                                <li id="repair_report_workload" style="display: none;"><a href="javascript:void(0)"  onclick="click2url('repair_report_workload',this)" lang="text:repair_report_workload"> </a></li>
+                                <li id="grageway_report"><a href="javascript:void(0)"  onclick="click2url('report_gateway',this)" lang="text:report_gateway"> </a></li>
                                 <li id="reportList_traff" style="display: none;"><a href="javascript:void(0)" onclick="click2url('report_traffic_statistics',this)" lang="text:traffic_statistics"></a></li>
                                 <li id="reportList_online"  style="display: none;"><a href="javascript:void(0)" onclick="click2url('report_online_statistics',this)" lang="text:online_statistics"></a></li>
                             </ul>
@@ -811,12 +757,12 @@
                         <li class="treeview" id="configList"  style="display:none;">
                             <a href="#">
                                 <i class="iconfont icon-config"></i>
-                                <span lang="text:config">配置</span>
+                                <span lang="text:config">  </span>
                                 <!--span class="label label-primary pull-right" id="alert_count">12</span-->
                             </a>
                             <ul class="treeview-menu">
                                 <li id="configList_site"><a href="javascript:void(0)" onclick="click2url('config_siteList',this)" lang="text:site"></a></li>
-                                <li id="configList_gateway"><a href="javascript:void(0)" onclick="click2url('config_gateway',this)" lang="text:gateway"></a></li>
+                                <li id="configList_gateway" style="display: none;"><a href="javascript:void(0)" onclick="click2url('config_gateway',this)" lang="text:gateway"></a></li>
                                 <!--<li id="configList_controller"><a href="javascript:void(0)" onclick="click2url('config_controller',this)" lang="text:controller"><i class="icon-circle"></i>控制器</a></li>-->
 
                                 <!--<li><a href="javascript:void(0)" onclick="click2url(29)" lang="text:organ_info"><i class="icon-circle"></i>机构信息</a></li>-->
@@ -826,13 +772,13 @@
                         <li class="treeview" id="systemList"  style="display:none;">
                             <a href="#">
                                 <i class="iconfont icon-system-settings"></i>
-                                <span lang="text:system">系统</span>
+                                <span lang="text:system"> </span>
                                 <!--span class="label label-primary pull-right" id="alert_count">12</span-->
                             </a>
                             <ul class="treeview-menu">
                                 <li id="systemList_user"><a href="javascript:void(0)" onclick="click2url('system_user',this)" lang="text:user"></a></li>
                                 <li id="systemList_role"><a href="javascript:void(0)" onclick="click2url('system_role',this)" lang="text:role"></a></li>
-                                <li id="systemList_field_maintenance"><a href="javascript:void(0)" onclick="click2url('system_field_maintenance',this)" lang="text:field_maintenance">字段维护</a></li>
+                                <li id="systemList_field_maintenance"><a href="javascript:void(0)" onclick="click2url('system_field_maintenance',this)" lang="text:field_maintenance"> </a></li>
                                 <!--<li><a href="javascript:void(0)" onclick="click2url(29)" lang="text:organ_info"><i class="icon-circle"></i>机构信息</a></li>-->
                                 <!--<li><a href="javascript:void(0)" onclick="click2url(25)" lang="text:visit_statistics"><i class="icon-circle"></i>访问统计</a></li>-->
                             </ul>
@@ -841,7 +787,7 @@
                         <li class="treeview" id="dowloadList"  style="display:none;">
                             <a href="#">
                                 <i class="iconfont icon-cloud-download"></i>
-                                <span lang="text:download">下载</span>
+                                <span lang="text:download"> </span>
                                 <!--span class="label label-primary pull-right" id="alert_count">12</span-->
                             </a>
                             <ul class="treeview-menu">
@@ -1110,14 +1056,14 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <input type="password" class="form-control validate[required,custom[password],minSize[6],maxSize[16],equals[model_changePWd_newPwd],funcCall[cloudInput]]"
-                                           name="repeat_pwd" id="model_changePWd_repeat_pwd" placeholder="重复密码" lang="placeholder:repeat_pwd">
+                                           name="repeat_pwd" id="model_changePWd_repeat_pwd"  lang="placeholder:repeat_pwd">
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" lang="text:close">关闭</button>
-                        <button type="button" class="btn btn-primary" onclick="submit_changePassword_self()" lang="text:submit">修改</button>
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" lang="text:close"> </button>
+                        <button type="button" class="btn btn-primary" onclick="submit_changePassword_self()" lang="text:submit"> </button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -1312,7 +1258,7 @@
                     }
                 }
                 if( marker == 1) {
-                    schneider.Global.init();
+                    // schneider.Global.init();
                 }
             };
 
