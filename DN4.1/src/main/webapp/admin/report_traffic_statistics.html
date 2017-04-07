@@ -6,22 +6,16 @@
 </style>
 <script type="text/javascript">
 
-    //查询按钮方法
-    function searchFun() {
-        reset_statistics(0, $("#pageNumberSelect").val());
-    }
-    //获取参数
-    function reset_statistics(cursorstart, lim) {
+
+    /**
+     * 获取设备查询参数
+     * @param params
+     */
+    function getDeviceParam(params) {
+
         var online;     //联网状态
-        var showMonth;  //月份
-        var name;       //网关名称
-        var verbose = 100;//信息详细级别
-        var cursor;  //表示从结果的第几条开始
-        var limit = lim;  //每次请求返回的条目数量。
-        showMonth = $("#showMonth").val().replace(/\-/g, "");
-        cursor = cursorstart;
-        var params = {verbose: verbose, cursor: cursor, limit: limit};
-        name = $.trim($("#gateway_name").val());
+
+        var name = $.trim($("#gateway_name").val());//网关名称
         if (name !== "") {
             name = name.match(pattern);
             params.name = name;
@@ -35,11 +29,29 @@
             } else if ($("#onlineCheckbox0").is(":checked")) {
                 online = 0;
             } else {
-                online = -1;
+                errorTipDis("networking_state_cannot_be_empty")
+                return false;
             }
             params.online = online;
         }
-        getData(params, showMonth);
+
+        return true;
+    }
+    //查询按钮方法
+    function searchFun() {
+        reset_statistics(0, $("#page-footer .col-sm-5 select").val());
+    }
+    //获取参数
+    function reset_statistics(cursor, limit) { 
+        var name;       //网关名称
+        var verbose = 100;//信息详细级别
+        var showMonth = $("#showMonth").val().replace(/\-/g, "");
+        var params = {verbose: verbose, cursor: cursor, limit: limit};
+        var isValid = this.getDeviceParam(params);
+        if(isValid){
+            getData(params, showMonth);
+        }
+
     }
 
     //根据参数获取数据
@@ -56,10 +68,12 @@
                 postAPI_traffic_month_list(params2, sendData, function(result) {
                     $("#statistics_data_table").empty();
                     builtDataForTable(data, result, month);
-                    renderPagination(data, reset_statistics);
+                    $("#page-footer").pagination("data",data);
+//                    renderPagination(data, reset_statistics);
                 }, this);
             } else {
-                clearPagination();
+//                clearPagination();
+                $("#page-footer").pagination("clear");
                 $("#statistics_data_table").empty();
                 $("#statistics_data_table").append('<tr><td colspan="8"  align="center" lang="text:no_data"></td></tr>');
                 locale.render({element: "#init_body"});
@@ -102,8 +116,8 @@
                     "<td>" + calculateFlow(objTems[i].total) + "</td>" +
                     "<td>" + calculateFlow(objTems[i].max) + "</td>" +
                     "<td style='text-align:center'>" +
-                    "<span data-toggle='tooltip' title='查看' lang='title:view' style='padding: 3px 6px;' onclick='builtDataForModal(\"" + objTems[i].deviceId + "\",\"" + month + "\",\"" + objTems[i].name + "\")'><span class='glyphicon glyphicon-zoom-in link-black' aria-hidden='true' style=' cursor: pointer;'></span>&nbsp;</span>" +
-                    "<span data-toggle='tooltip' title='统计图' lang='title:charts' style='padding: 3px 6px;' onclick='builtDataMonth(\"" + objTems[i].deviceId + "\",\"" + month + "\",\"" + objTems[i].name + "\")'><span class='glyphicon glyphicon-stats link-black' aria-hidden='true' style=' cursor: pointer;'></span></span>" +
+                    "<span data-toggle='tooltip'  lang='title:view' style='padding: 3px 6px;' onclick='builtDataForModal(\"" + objTems[i].deviceId + "\",\"" + month + "\",\"" + objTems[i].name + "\")'><span class='glyphicon glyphicon-zoom-in link-black' aria-hidden='true' style=' cursor: pointer;'></span>&nbsp;</span>" +
+                    "<span data-toggle='tooltip' lang='title:charts' style='padding: 3px 6px;' onclick='builtDataMonth(\"" + objTems[i].deviceId + "\",\"" + month + "\",\"" + objTems[i].name + "\")'><span class='glyphicon glyphicon-stats link-black' aria-hidden='true' style=' cursor: pointer;'></span></span>" +
                     "</td>" +
                     "</tr>";
             $("#statistics_data_table").append(str);
@@ -111,15 +125,6 @@
 
 
         locale.render({element: "#init_body"});
-    }
-
-    //每页显示条数切换
-    function changePageNumber(limit) {
-        reset_statistics(0, limit);
-    }
-    //跳转到指定页  回调函数
-    function jumpTopage(cursor) {
-        reset_statistics(cursor, $("#pageNumberSelect").val());
     }
 
 
@@ -210,10 +215,31 @@
             timeout: deleteTime,
             type: "2"
         };
+        var name = $.trim($("#gateway_name").val());//网关名称
+        if (name !== "") {
+            name = name.match(pattern);
+            sendData.gatewayName = name;
+        }
+        $("#gateway_name").val(name);
+        if ($("#onlineCheckbox1").is(":checked") && $("#onlineCheckbox0").is(":checked")) {
+            //online可忽略
+        } else {
+            if ($("#onlineCheckbox1").is(":checked")) {
+                online = 1;
+            } else if ($("#onlineCheckbox0").is(":checked")) {
+                online = 0;
+            } else {
+                errorTipDis("networking_state_cannot_be_empty")
+                return false;
+            }
+            sendData.online = online;
+        }
+
         getAPI_reports_forms(sendData, function(data) {
             if (data.result) {
                 var urlExport = "/api/file/" + data.result._id + "?access_token=" + sessionStorage.getItem("accessToken");
-                window.open(urlExport);
+              //  window.open(urlExport);
+                $.fileDownload(urlExport);
             }
         }, this);
         locale.render({element: "body"});
@@ -422,6 +448,7 @@
                             text: date.slice(0, 4) + '/' + (date.slice(4, 6)) + '/' + date.slice(6, 8)
                         },
                         legend: {
+                            show:false,
                             data: ['使用流量']
                         },
                         toolbox: {
@@ -463,7 +490,7 @@
                         ],
                         series: [
                             {
-                                name: '使用流量',
+                                name: locale.get("flow"),
                                 type: 'line',
                                 step: 'end',
                                 showSymbol: true,
@@ -499,11 +526,11 @@
                                 <div class="form-group">
                                     <label class="checkbox-inline">
                                         <input type="checkbox" id="onlineCheckbox1" checked="checked" value="1">
-                                        <span lang="text:online">在线</span>
+                                        <span lang="text:online"></span>
                                     </label>
                                     <label class="checkbox-inline">
                                         <input type="checkbox" id="onlineCheckbox0" checked="checked" value="0">
-                                        <span  lang="text:offline">离线</span>
+                                        <span  lang="text:offline"></span>
                                     </label>
                                 </div>
                                 <div class="form-group has-feedback" style="margin-left: 20px;">
@@ -515,18 +542,18 @@
                                 <!--<input type="text" id="showMonth" class="form-control" readonly="readonly" style="height: 30px;width: 140px;">-->
                                 <!--</div>-->
                                 <div class="form-group" style="margin-left: 20px;">
-                                    <label lang="text:gateway_name" style="position: relative;top: 2px;">网关名称:</label>
-                                    <input type="text" class="form-control" id="gateway_name" placeholder="为空将查询所有"
+                                    <label lang="text:gateway_name" style="position: relative;top: 2px;"></label>
+                                    <input type="text" class="form-control" id="gateway_name"
                                            lang="placeholder:empty_is_all" style="height: 30px;width: 170px;">
                                 </div>
                                 <div class="form-group">
-                                    <button type="button" class="btn btn-default btn-sm" id="btn_research" data-permissionFilter="[73]" data-toggle="tooltip" title="查询"
+                                    <button type="button" class="btn btn-default btn-sm" id="btn_research" data-permissionFilter="[73]" data-toggle="tooltip"
                                             onclick="searchFun()" lang="title:query" >
                                         <span class="glyphicon glyphicon-search"></span>
                                     </button>
                                 </div>
                                 <div class="form-group box-tools pull-right">
-                                    <button type="button" class="btn btn-default btn-sm" id="btn_export" data-permissionFilter="[73]" data-toggle="tooltip" title="导出"
+                                    <button type="button" class="btn btn-default btn-sm" id="btn_export" data-permissionFilter="[73]" data-toggle="tooltip"
                                             onclick="exportData()" lang="title:export">
                                         <span class="icon-upload-alt"></span>
                                     </button>
@@ -541,10 +568,10 @@
                                 <!--<th style=""></th>-->
                                 <th lang="text:site" style="width: 17%;"></th>
                                 <th lang="text:gateway" style="width: 14%;"></th>
-                                <th lang="text:monthly_tx" style="width: 14%;">月发送流量</th>
-                                <th lang="text:monthly_rx" style="width: 14%;">月接收流量</th>
-                                <th lang="text:monthly_total" style="width: 14%;">月总流量</th>
-                                <th lang="text:daily_max" style="width: 14%;">日最大流量</th>
+                                <th lang="text:monthly_tx" style="width: 14%;"></th>
+                                <th lang="text:monthly_rx" style="width: 14%;"></th>
+                                <th lang="text:monthly_total" style="width: 14%;"></th>
+                                <th lang="text:daily_max" style="width: 14%;"></th>
                                 <th style="width:60px; text-align:center;" lang="text:operate"></th>
                             </tr>
                             </thead>
@@ -571,16 +598,16 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><span lang="text:detailed_monthly_report">月流量明细</span>(<span id="myModalLabe_name"></span>)</h4>
+                <h4 class="modal-title"><span lang="text:detailed_monthly_report"></span>(<span id="myModalLabe_name"></span>)</h4>
             </div>
             <div class="modal-body" style="max-height:600px;overflow:auto;">
                 <table class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th lang="text:date">日期</th>
-                        <th lang="text:daily_tx">日发送流量</th>
-                        <th lang="text:daily_rx">日接收流量</th>
-                        <th lang="text:daily_total">日总流量</th>
+                        <th lang="text:date"></th>
+                        <th lang="text:daily_tx"></th>
+                        <th lang="text:daily_rx"></th>
+                        <th lang="text:daily_total"></th>
                     </tr>
                     </thead>
                     <tbody id="statistics_data_modal">
@@ -589,7 +616,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" lang="text:close">关闭</button>
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" lang="text:close"></button>
             </div>
         </div>
     </div>
@@ -608,7 +635,7 @@
                     <span aria-hidden="true">×</span></button>
                 <h4 class="modal-title"  >
                     <span></span>
-                    <span lang="text:month+traffic_statistics">月流量统计</span>(<span id="chartsName_month"></span>)
+                    <span lang="text:month+traffic_statistics"></span>(<span id="chartsName_month"></span>)
                 </h4>
             </div>
             <div class="modal-body">
@@ -616,7 +643,7 @@
                     <div class="col-xs-3">
                         <select id="selectDate_charts" onchange="changeCharts(this.value);" class="form-control"
                                 style="border-radius:3px;">
-                            <option value="0" lang="text:currentMonth" >本月</option>
+                            <option value="0" lang="text:currentMonth" ></option>
                         </select>
                     </div>
                 </div>
@@ -628,7 +655,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" lang="text:close">关闭</button>
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" lang="text:close"></button>
             </div>
         </div>
     </div>
@@ -674,9 +701,18 @@
     $(document).ready(function() {
         permissionFilter_pageFunc();
         require(['dataflowStatisticsService', 'onlineStatisticsService'], function(dataflowStatisticsService) {
-            $("#page-footer").load("admin/pagination.html", function() {
-                reset_statistics(0, $("#pageNumberSelect").val());
+            // 引入分页
+            $("#page-footer").pagination({
+                changePage:function (cursor,limit) {
+                    //分页内容改变的回调函数
+                    reset_statistics(cursor,limit);
+                }
             });
+            reset_statistics(0, $("#page-footer .col-sm-5 select").val());
+
+//            $("#page-footer").load("admin/pagination.html", function() {
+//                reset_statistics(0, $("#pageNumberSelect").val());
+//            });
         });
         locale.render({element: "#init_body"});
     });

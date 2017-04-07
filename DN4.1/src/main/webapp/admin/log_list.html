@@ -283,7 +283,7 @@
       getAPI_log(null, query, function (data) {
           if (data.result) {
               var urlExport = "/api/file/" + data.result._id + "?access_token=" + sessionStorage.getItem("accessToken");
-              window.open(urlExport);
+              $.fileDownload(urlExport);
           }
       }, this);
     }
@@ -305,7 +305,7 @@
       getAPI_log_com(params, query, function (data) {
           if (data.result) {
               var urlExport = "/api/file/" + data.result._id + "?access_token=" + sessionStorage.getItem("accessToken");
-              window.open(urlExport);
+              $.fileDownload(urlExport);
           }
       }, this);
     }

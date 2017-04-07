@@ -508,7 +508,7 @@
         reportsAlarmForms(null, query, function (data) {
             if (data.result) {
                 var urlExport = "/api/file/" + data.result._id + "?access_token=" + sessionStorage.getItem("accessToken");
-                window.open(urlExport);
+                $.fileDownload(urlExport);
             }
         }, this);
 

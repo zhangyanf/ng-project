@@ -275,8 +275,7 @@ var lang = {
         sign_in: "登录",
         forgot_pwd: "忘记密码",
         rempwd: "记住我",
-        login: "登录",
-        security_code: "验证码",
+        login: "登录", 
         change_pwd: "修改密码",
         inhand: "映翰通",
         welcome_to_inhand: "欢迎使用映翰通设备云",
@@ -372,9 +371,9 @@ var lang = {
         date: "日期", 
         year: "年",
         munit: "元",
+        click_to_change: "点击更换",
         /********************************  注册页面 *********************************/
-        organization_name: "机构名称",
-        security_code: "验证码",
+        organization_name: "机构名称", 
         captcha: "验证码",
         security_question: "安全提问",
         answer: "答案",
@@ -388,6 +387,8 @@ var lang = {
         send: "发送",
         resend_email: "再次发送邮件",
         password_has_been_sent_to_the_email: "密码已经发送到邮箱",
+        email_already_exists: "邮箱已经存在",
+        organization_already_exists: "机构已经存在",
         
         /********************************  底部信息 *********************************/
         about_us: "关于我们",
@@ -426,6 +427,7 @@ var lang = {
         online_state: "在线状态",
         online: "在线",
         offline: "离线",
+        site_point: "现场无定位",
 
         /********************************  修改密码 *********************************/
         old_pwd: "旧密码",
@@ -678,7 +680,7 @@ var lang = {
         traffic_type:"流量类型",
         unknow:"未知",
         upstream:"上行流量",
-        downstrean:"下行流量",
+        downstream:"下行流量",
         communication_times:"通讯次数",
         communication_package:"通讯包",
         more_info:"更多信息",

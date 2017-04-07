@@ -70,7 +70,7 @@ function research_atmData(siteId,cursor, limit) {
         var str = "";
         for (var i = 0; i < result.length; i++) {
              
-            var trafficType = "";
+            var trafficType = ""; 
             if(typeof(result[i].trafficType) != "undefined"){
                 if(result[i].trafficType==0){
                     trafficType = locale.get("upstream")
@@ -85,7 +85,7 @@ function research_atmData(siteId,cursor, limit) {
                     "<td>" + (typeof(result[i].src) == "undefined" ? "" : result[i].src) + "</td>" +
                     "<td>" + (typeof(result[i].dst) == "undefined" ? "" : result[i].dst) + "</td>" +  
                     "<td>" + (typeof(result[i].size) == "undefined" ? "" : result[i].size) + "</td>" +
-                    "<td>" + (typeof(result[i].trafficType) == "undefined" ? "" : result[i].size) + "</td>" +
+                    "<td>" + trafficType + "</td>" +
                     "<td>" + schneider.util.dateFormat(result[i].timestamp, "yyyy-MM-dd hh:mm:ss") + "</td>" +
                      
                     "</tr>";

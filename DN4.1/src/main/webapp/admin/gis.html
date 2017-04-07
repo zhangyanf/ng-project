@@ -404,10 +404,8 @@
                     latlng.lng = p_x;
                     target.latlng = latlng;
                     markerClick( target, siteId,data);
-                }else {
-                    dialog.render({
-                        lang: "site_point"
-                    });
+                }else { 
+                    errorTipDis("site_point");
                     locale.render({element: "#init_body"});
                 }
             }

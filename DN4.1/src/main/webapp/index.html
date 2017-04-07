@@ -70,6 +70,7 @@
         </style>
 
         <script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+        <script src="plugins/jQuery/jquery.fileDownload.js"></script>
 
         <!-- Bootstrap 3.3.6 -->
         <script src="bootstrap/js/bootstrap.min.js"></script>
@@ -1047,7 +1048,7 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <input type="password" class="form-control validate[required,custom[password],minSize[6],maxSize[16],funcCall[cloudInput]]" name="new_pwd" id="model_changePWd_newPwd"
-                                           placeholder="新密码" lang="placeholder:new_pwd">
+                                          lang="placeholder:new_pwd">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -1207,11 +1208,20 @@
             var win_Array = new Array();
             var win_num = -1;
             function detail_popUp(_id) {
+                
+                 var win = window.open("", "_blank");
                 getSiteById(_id,{verbose:1},function(data){
                     if(typeof(data.result)!="undefined") {
-                        var win = window.open("siteDetail/siteDetail_index.html?id=" + _id);
-                        win_Array.push(win);
+
+                        function loc(){
+                            var loc = "siteDetail/siteDetail_index.html?id=" + _id;
+                            win.location = loc;
+                            win_Array.push(win);
+                        }
+
+                        setTimeout(loc(),800);//这个等待很重要，如果不等待的话将无法实现
                     }else {
+                        win.close();
                         errorTipDis("the_site_has_been_deleted");
                     }
                 },this);

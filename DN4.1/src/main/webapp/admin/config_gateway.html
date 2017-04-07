@@ -432,11 +432,10 @@
         });
         import_gateway(ids, function(data) {
             if (data.result._id) {
-                window.open("/api/file/" + data.result._id + "?access_token=" + sessionStorage.getItem("accessToken"));
-            } else {
-                dialog.render({
-                    lang: "export_failed"
-                });
+                var urlExport = "/api/file/" + data.result._id + "?access_token=" + sessionStorage.getItem("accessToken");
+                $.fileDownload(urlExport); 
+            } else { 
+                errorTipDis("export_failed");
             }
         }, this);
     }

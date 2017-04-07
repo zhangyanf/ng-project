@@ -36,10 +36,11 @@
     <div class="col-sm-7">
         <div class="box box-default">
             <div class="box-header">
-                <h3 class="box-title">Alarms</h3>
-                <span class="box-tools pull-right" data-toggle="tooltip" title="" lang="title:more_info" id="more_alarm_info">
-                     <i class="iconfont icon-icon"></i>
-                </span>
+                <h3 class="box-title">Alarms</h3> 
+                <div class="pull-right box-tools">
+                    <button id="more_alarm_info" type="button" class="btn btn-default btn-sm"  lang="title:more_info" >
+                    <i class="iconfont icon-more"></i></button>
+                </div>
             </div>
             <div class="box-body no-padding">
                 <div id="atm_alarm">
@@ -64,8 +65,13 @@
     </div>
     <div class="col-sm-12">
         <div class="box box-default">
+            
             <div class="box-header">
                 <h3 class="box-title">Communication Info</h3>
+                <div class="pull-right box-tools">
+                    <button id="atmdata_refresh_btn" type="button" class="btn btn-default btn-sm"  lang="title:refresh" >
+                    <i class="glyphicon glyphicon-refresh"></i></button>
+                </div>
             </div>
             <div class="box-body">
                 <div id="atm_data_detail" style="max-height:300px;overflow-y:auto;overflow-x:hidden; ">
@@ -91,6 +97,8 @@
             $("#more_alarm_info").off().on("click",function () {
                 $("#p_alarm > a").click();
             });
+
+            
         });
     }
 
@@ -112,8 +120,11 @@
                 locale.render({ element: "#init_body" });
             });
         }
-        $("#atm_data_detail").load("admin/home/atmdata.html", function () {
+        $("#atm_data_detail").load("admin/home/atmdata.html", function () { 
             initAtmData(siteId);
+            $("#atmdata_refresh_btn").off().on("click",function(){
+                initAtmData(siteId);
+            })
             locale.render({ element: "#init_body" });
         });
         $("#atm_data_flow").load("admin/home/atmdata_flow.html", function () {

@@ -957,14 +957,14 @@ function FnIndex() {
                 "<div class='form-group'>" +
                 "<lable for='forget-input-email' lang='text:email' class='forget-row-title control-label col-sm-3'></lable>" +
                 "<div class='col-sm-9'><input autocomplete='off' id='forget-input-email' class='validate[required,custom[email]s] forget-row-input-email form-control' name='' type='text' /></div></div>" +
-                "<div class='form-group'><lable for='forget-input-vcode-custom' lang='text:security_code' class='forget-row-title control-label col-sm-3'>验证码</lable>" +
+                "<div class='form-group'><lable for='forget-input-vcode-custom' lang='text:captcha' class='forget-row-title control-label col-sm-3'> </lable>" +
                 '<div class="col-sm-9">'+
                 '<div class="row"> <div class="col-sm-6">'+
                 '<input id="forget-input-vcode-custom" lang="placeholder:case_insensitive" class="validate[required,funcCall[cloudInput]] forget-row-input-vcode-custom form-control" type="text" placeholder="不区分大小写"> </div>'+
-                '<div class="col-sm-6"> <img style="border:1px solid #ddd" id="imgVcode" lang="title:click_to_change" title="点击更换" src=""> </div>'+
+                '<div class="col-sm-6"> <img style="border:1px solid #ddd" id="imgVcode" lang="title:click_to_change" src=""> </div>'+
                 '<p style="display:none;margin-left:10px"> <a lang="text:vague" id="refreshImgVcode" class="refreshImgVcode"></a> </p> </div> </div>'+
                 "</div>" +
-                '<div> <button id="forget-button-sure" lang="{text:reset_password}" class="forget-button-sure btn btn-success btn-sm"></button> </div>'+
+                '<div> <button id="forget-button-sure" lang="{text:reset_password,title:reset_password}" class="forget-button-sure btn btn-success btn-sm"></button> </div>'+
 
                 //"<span id='tishi' style='color:red;display:inline-block;padding-left:105px;margin-top:10px;' class='forgetpwd-tips'></span>" +
                 "</form>" +
