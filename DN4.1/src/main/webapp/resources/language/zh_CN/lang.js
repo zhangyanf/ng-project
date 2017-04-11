@@ -372,6 +372,8 @@ var lang = {
         year: "年",
         munit: "元",
         click_to_change: "点击更换",
+        reset_password: "重置密码",
+        forget_pwd_prompt: "请输入您注册时使用的Email地址，我们将给您发送重置密码邮件",
         /********************************  注册页面 *********************************/
         organization_name: "机构名称", 
         captcha: "验证码",
@@ -400,6 +402,7 @@ var lang = {
         company_phone:" (8610) 8417 0010/6439 1099 - 8022",
         all_rights_reserved: "保留所有权利",
         website: "网址",
+        copyright: "版权申明",
 
 
 
@@ -526,6 +529,7 @@ var lang = {
         "config":"配置",
         /********************************  现场管理 *********************************/
         "site":"现场",
+        site_management: "现场管理",
         all_site: "全部现场",
         online_site: "在线现场",
         offline_site: "离线现场",

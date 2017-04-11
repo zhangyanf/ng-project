@@ -370,6 +370,8 @@ var lang = {
         year: "Year",
         munit: "$", 
         click_to_change: "Click to change",
+        reset_password: "Reset Password",
+        forget_pwd_prompt: "Enter your email address to receive a new password.",
         /********************************  注册页面 *********************************/
         organization_name: "Organization", 
         captcha: "Captcha",
@@ -398,6 +400,7 @@ var lang = {
         company_phone:"+1 (703) 348-2988",
         all_rights_reserved: "All rights reserved.",
         website: "Website",
+        copyright: "Copyright",
 
 
 
@@ -524,6 +527,7 @@ var lang = {
         "config":"Config",
         /********************************  现场管理 *********************************/
         "site":"Site",
+        site_management: "Site Management",
         all_site: "All",
         online_site: "Online",
         offline_site: "Offline",

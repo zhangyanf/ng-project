@@ -125,7 +125,6 @@ function creatSubmit() {
     var questionId = parseInt($("#reSecurityQuestions").val());
     //console.log( questionId);
     var question = $("#reSecurityQuestions").find("option:selected").text();
-    console.log(question);
     var answer = $("#reSecurityAnswer").val();
     //加入判断
     if( registerEmail != "" && registerUserName != "" && registerOrganization != "" && registerSecure != "" && answer != "" ) {
@@ -148,15 +147,14 @@ function creatSubmit() {
         self.option = option;
         //错误信息
         option.error = function(){
-            console.log(ERROR);
-            alert( ERROR);
+            //console.log(ERROR);
+            //alert( ERROR);
         };
         //成功信息
         option.success = function( data) {
             //返回的错误信息
             if( data.error) {
                 showAuthCode();
-                console.log("error messages, ", data.error);
                 if( data.error_code == 20007) {
                     if (data.error.indexOf("@") > -1) {
                         $(".existEmail").remove();
@@ -177,6 +175,10 @@ function creatSubmit() {
                 $("#finishHeader").addClass("btn-primary");
                 $("#writeInformation").css("display","none");
                 $("#finishRegister").css("display","block");
+                t = setInterval( function() {
+                    resendTime();
+                }, 1000);
+                // resendTime();
             }
         };
         $.ajax(option);
