@@ -299,9 +299,9 @@
             var atm_ids="";
             for(var j=0;j<result[i].asset.length;j++){
                 if(atm_ids == ""){
-                    atm_ids=atm_ids+result[i].asset[j]._id;
+                    atm_ids=atm_ids+result[i].asset[j].asset_no;
                 }else{
-                    atm_ids=atm_ids+"</br>"+result[i].asset[j]._id;
+                    atm_ids=atm_ids+"</br>"+result[i].asset[j].asset_no;
                 }
             }
             var link = "<a href='javascript:void(0)' onclick='detail_popUp(\"" + result[i].site._id + "\")'>"+((typeof(result[i].site.name) == "undefined") ? "" : result[i].site.name) +"</a>";

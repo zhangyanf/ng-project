@@ -220,12 +220,12 @@
                                                 </div>
                                             </th>
                                             <th style="width:5%;text-align:center;" lang="{text:state}"></th>
-                                            <th style="width:15%;" lang="text:site_name"></th>
+                                            <th style="width:15%;" lang="text:site"></th>
                                             <th lang="text:address"></th>
-                                            <th style="width:140px" lang="{text:business_state}"></th>
+                                            <th style="display:none;" lang="{text:business_state}"></th>
                                             <th style="width:12%;" lang="text:contact_name"></th>
                                             <th style="width:13%;" lang="text:contact_phone"></th>
-                                            <th style="width:17%;" lang="text:contactor_email"></th>
+                                            <th style="width:17%;" lang="text:email"></th>
                                             <th data-permissionfilter="[30,91]" style="width:80px;text-align: center" lang="text:operate"></th>
                                         </tr>
                                     </thead>
@@ -608,7 +608,7 @@
 
                 $tr += '<td style="word-break: break-all;" id="infoName' + clogs[i]._id + '" ></td>' +
                     '<td style="word-break: break-all;" id="infoAddress' + clogs[i]._id + '"></td>' +
-                    '<td style="word-break: break-all;" id="infoState' + clogs[i]._id + '"></td>' +
+                    '<td style="word-break: break-all; display:none;" id="infoState' + clogs[i]._id + '"></td>' +
                     '<td style="word-break: break-all;" id="infoConName' + clogs[i]._id + '"></td>' +
                     '<td style="word-break: break-all;" id="infoConPho' + clogs[i]._id + '"></td>' +
                     '<td style="word-break: break-all;" id="infoConEmail' + clogs[i]._id + '"></td>' +
