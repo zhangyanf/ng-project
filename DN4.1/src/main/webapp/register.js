@@ -11,10 +11,10 @@ if( locale.current() == 1) {
     $("#englishLanguage").show();
 } else {
     $("#home-nav-aboutus").children("a").attr("href", "http://www.inhand.com.cn/");
-    $("#englishLanguage").hide();
-    $("#chineseLanguage").show();
+    $("#englishLanguage").show();
+    //$("#chineseLanguage").show();
+	
 }
- 
 locale.render({element: "body"});
 /*============================
 *表单验证
@@ -52,7 +52,6 @@ function FnHeader() {
             $("#lang-en").css("color", "#555");
         }
     };
-
     this.zh.bind("click", function() {
         locale.set({lang: "en"});
         $(".language").hide();
@@ -68,7 +67,6 @@ function FnHeader() {
         $("#englishLanguage").hide();
         $("#chineseLanguage").show();
         $("#home-nav-aboutus").children("a").attr("href", "http://www.inhand.com.cn/");
- 
         validator.render(validator.element, validator.paramObj);
         header._promptCurrentLang();
     });
@@ -182,12 +180,36 @@ function creatSubmit() {
             }
         };
         $.ajax(option);
-        $("#resendEmail").click(function(event) {
+        $("#resendEmail").unbind( "click").click(function(event) {
             $.ajax(option);
+            t = setInterval( function() {
+                resendTime();
+            }, 1000);
+            // resendTime();
         });
+        function resendTime() {
+            $("#resendEmail").attr("disabled","disabled");
+            var time = $("#resendEmailTime").html();
+            time = time.substring( 1, time.indexOf("s"));
+            if( time && time >= 0) {
+                time = parseFloat( time);
+                // console.log( "time,", time);
+                if( time === 0) {
+                    clearTimeout(t);
+                    // console.log( "clear");
+                    $("#resendEmail").removeAttr('disabled');
+                    //console.log( locale._get("send"));
+                    $("#resendEmailTime").text( "");
+                    clearTimeout( t);
+                } else {
+                    $("#resendEmailTime").html( "("+( time - 1) + "s"+")");
+                }
+            }else {
+                $("#resendEmailTime").html("(120s)");
+            }
+        }
     }
 }
-
 //验证码函数
 //验证码获取并显示
 function showAuthCode() {
@@ -214,7 +236,7 @@ function emailConAuto() {
     var regTest = new RegExp("[w!#$%&'*+/=?^_`{|}~-]+(?:.[w!#$%&'*+/=?^_`{|}~-]+)*@(?:[w](?:[w-]*[w])?.)+[w](?:[w-]*[w])?");
     if( !regTest.test( email)) {
         $("#codeEmailDiff").remove();
-        $("#registerEmail").after('<div id="codeEmailDiff"><span style="color:red">*&nbsp;</span><span lang="text:entered_passwords_differ" style="color:red">邮箱格式不正确</span></div>')
+        $("#registerEmail").after('<div id="codeEmailDiff"><span style="color:red">*&nbsp;</span><span lang="text:entered_passwords_differ" style="color:red"></span></div>')
     }
 }
 //自定义安全问题
@@ -227,6 +249,7 @@ $("#reSecurityQuestions").click( function(event) {
     }
 });
 //再次发送时间限制
+/*
 $("#resendEmail").click(function(event) {
     function resendTime() {
         $("#resendEmail").attr("disabled","disabled");
@@ -234,14 +257,13 @@ $("#resendEmail").click(function(event) {
         time = time.substring( 1, time.indexOf("s"));
         if( time) {
             time = parseFloat( time);
-            console.log( time);
             if( time === 0) {
                 clearInterval(t);
                 $("#resendEmail").removeAttr('disabled');
                 //console.log( locale._get("send"));
                 $("#resendEmailTime").text("");
             } else {
-                $("#resendEmailTime").html("("+(time - 1) + "s"+")");
+                $("#resendEmailTime").html( "("+( time - 1) + "s"+")");
             }
         }else {
             $("#resendEmailTime").html("(120s)");
@@ -251,7 +273,7 @@ $("#resendEmail").click(function(event) {
         resendTime();
     }, 1000);
     resendTime();
-});
+});*/
 
 //首页、注册、映翰通
 var nav = new FnNav();
