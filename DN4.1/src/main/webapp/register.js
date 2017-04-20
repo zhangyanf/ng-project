@@ -1,12 +1,12 @@
 /*============================
-*2016-09-05 Lee李杰
-*注册页面
-*/
+ *2016-09-05 Lee李杰
+ *注册页面
+ */
 /*============================
-*本地化页面
-**/
+ *本地化页面
+ **/
 if( locale.current() == 1) {
-     $("#home-nav-aboutus").children("a").attr("href", "http://www.inhandnetworks.com/");
+    $("#home-nav-aboutus").children("a").attr("href", "http://www.inhandnetworks.com/");
     $("#chineseLanguage").hide();
     $("#englishLanguage").show();
 } else {
@@ -14,13 +14,12 @@ if( locale.current() == 1) {
     $("#englishLanguage").hide();
     $("#chineseLanguage").show();
 }
- 
 locale.render({element: "body"});
 /*============================
-*表单验证
-**/
+ *表单验证
+ **/
 validator.render("#registerInfoBox", {
-    promptPosition: "inline",
+    promptPosition: "inline"
 });
 //nav对象 为“首页|注册|映翰通”中的"首页"添加选中效果
 function FnNav() {
@@ -52,23 +51,21 @@ function FnHeader() {
             $("#lang-en").css("color", "#555");
         }
     };
-
     this.zh.bind("click", function() {
         locale.set({lang: "en"});
         $(".language").hide();
         $("#chineseLanguage").hide();
-        $("#englishLanguage").show(); 
+        $("#englishLanguage").show();
         $("#home-nav-aboutus").children("a").attr("href", "http://www.inhandnetworks.com/");
         validator.render(validator.element, validator.paramObj);
         header._promptCurrentLang();
     });
     this.en.bind("click", function() {
         locale.set({lang: "zh_CN"});
-        $(".language").hide(); 
+        $(".language").hide();
         $("#englishLanguage").hide();
         $("#chineseLanguage").show();
         $("#home-nav-aboutus").children("a").attr("href", "http://www.inhand.com.cn/");
- 
         validator.render(validator.element, validator.paramObj);
         header._promptCurrentLang();
     });
@@ -80,8 +77,8 @@ $("#agreeA").click(function(event){
     $("#readItems").css("display","none");
     $("#writeInformation").css("display","block");
 
-     //加载验证码函数
-     showAuthCode();
+    //加载验证码函数
+    showAuthCode();
 });
 //点击条款
 $("#itemHeader").click(function(event) {
@@ -178,16 +175,35 @@ function creatSubmit() {
                 t = setInterval( function() {
                     resendTime();
                 }, 1000);
-                // resendTime();
             }
         };
         $.ajax(option);
-        $("#resendEmail").click(function(event) {
+        $("#resendEmail").unbind( "click").click(function(event) {
             $.ajax(option);
+            t = setInterval( function() {
+                resendTime();
+            }, 1000);
         });
+        function resendTime() {
+            $("#resendEmail").attr("disabled","disabled");
+            var time = $("#resendEmailTime").html();
+            time = time.substring( 1, time.indexOf("s"));
+            if( time && time >= 0) {
+                time = parseFloat( time);
+                if( time === 0) {
+                    clearTimeout(t);
+                    $("#resendEmail").removeAttr('disabled');
+                    $("#resendEmailTime").text( "");
+                    clearTimeout( t);
+                } else {
+                    $("#resendEmailTime").html( "("+( time - 1) + "s"+")");
+                }
+            }else {
+                $("#resendEmailTime").html("(120s)");
+            }
+        }
     }
 }
-
 //验证码函数
 //验证码获取并显示
 function showAuthCode() {
@@ -214,7 +230,7 @@ function emailConAuto() {
     var regTest = new RegExp("[w!#$%&'*+/=?^_`{|}~-]+(?:.[w!#$%&'*+/=?^_`{|}~-]+)*@(?:[w](?:[w-]*[w])?.)+[w](?:[w-]*[w])?");
     if( !regTest.test( email)) {
         $("#codeEmailDiff").remove();
-        $("#registerEmail").after('<div id="codeEmailDiff"><span style="color:red">*&nbsp;</span><span lang="text:entered_passwords_differ" style="color:red">邮箱格式不正确</span></div>')
+        $("#registerEmail").after('<div id="codeEmailDiff"><span style="color:red">*&nbsp;</span><span lang="text:entered_passwords_differ" style="color:red"></span></div>')
     }
 }
 //自定义安全问题
@@ -226,32 +242,6 @@ $("#reSecurityQuestions").click( function(event) {
         $(".reSecuritySelfQuestionBox").css("display","none");
     }
 });
-//再次发送时间限制
-$("#resendEmail").click(function(event) {
-    function resendTime() {
-        $("#resendEmail").attr("disabled","disabled");
-        var time = $("#resendEmailTime").html();
-        time = time.substring( 1, time.indexOf("s"));
-        if( time) {
-            time = parseFloat( time);
-            console.log( time);
-            if( time === 0) {
-                clearInterval(t);
-                $("#resendEmail").removeAttr('disabled');
-                //console.log( locale._get("send"));
-                $("#resendEmailTime").text("");
-            } else {
-                $("#resendEmailTime").html("("+(time - 1) + "s"+")");
-            }
-        }else {
-            $("#resendEmailTime").html("(120s)");
-        }
-    }
-    t = setInterval( function() {
-        resendTime();
-    }, 1000);
-    resendTime();
-});
 
 //首页、注册、映翰通
 var nav = new FnNav();
@@ -259,17 +249,17 @@ nav.setCurrent();
 
 // login page's width
 $( window).resize(function(event) {
-  /* Act on the event */
-  change_width();
+    /* Act on the event */
+    change_width();
 });
 // judge width
 function change_width() {
-  var window_width = $(window).width();
-  var header_width = $("#common-header").width();
-  if( window_width < header_width) {
-    $("body").width("" + header_width + "").css( "overflow", "auto");
-  } else {
-    $("body").width("100%").css( "overflow-y", "auto");
-  }
+    var window_width = $(window).width();
+    var header_width = $("#common-header").width();
+    if( window_width < header_width) {
+        $("body").width("" + header_width + "").css( "overflow", "auto");
+    } else {
+        $("body").width("100%").css( "overflow-y", "auto");
+    }
 }
 change_width();
