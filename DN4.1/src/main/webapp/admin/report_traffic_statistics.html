@@ -5,7 +5,15 @@
     }
 </style>
 <script type="text/javascript">
-
+    /**
+     * 设置流量查询表单验证
+     */
+    validator.render("#trafficSearchForm", {
+        //  promptPosition: "inline",
+        scroll: false,
+        // showOneMessage:true, // 只显示一条提示信息
+        showPrompts:false //不显示提示信息
+    });
 
     /**
      * 获取设备查询参数
@@ -39,10 +47,12 @@
     }
     //查询按钮方法
     function searchFun() {
-        reset_statistics(0, $("#page-footer .col-sm-5 select").val());
+        if ($('#trafficSearchForm').validationEngine('validate')) {
+            reset_statistics(0, $("#page-footer .col-sm-5 select").val());
+        }
     }
     //获取参数
-    function reset_statistics(cursor, limit) { 
+    function reset_statistics(cursor, limit) {
         var name;       //网关名称
         var verbose = 100;//信息详细级别
         var showMonth = $("#showMonth").val().replace(/\-/g, "");
@@ -69,10 +79,8 @@
                     $("#statistics_data_table").empty();
                     builtDataForTable(data, result, month);
                     $("#page-footer").pagination("data",data);
-//                    renderPagination(data, reset_statistics);
                 }, this);
             } else {
-//                clearPagination();
                 $("#page-footer").pagination("clear");
                 $("#statistics_data_table").empty();
                 $("#statistics_data_table").append('<tr><td colspan="8"  align="center" lang="text:no_data"></td></tr>');
@@ -109,17 +117,17 @@
             j = i + 1;
             str = "<tr>" +
 //                    "<td>" + j + "</td>" +
-                    "<td>" + objTems[i].siteName + "</td>" +
-                    "<td>" + objTems[i].name + "</td>" +
-                    "<td>" + calculateFlow(objTems[i].send) + "</td>" +
-                    "<td>" + calculateFlow(objTems[i].receive) + "</td>" +
-                    "<td>" + calculateFlow(objTems[i].total) + "</td>" +
-                    "<td>" + calculateFlow(objTems[i].max) + "</td>" +
-                    "<td style='text-align:center'>" +
-                    "<span data-toggle='tooltip'  lang='title:view' style='padding: 3px 6px;' onclick='builtDataForModal(\"" + objTems[i].deviceId + "\",\"" + month + "\",\"" + objTems[i].name + "\")'><span class='glyphicon glyphicon-zoom-in link-black' aria-hidden='true' style=' cursor: pointer;'></span>&nbsp;</span>" +
-                    "<span data-toggle='tooltip' lang='title:charts' style='padding: 3px 6px;' onclick='builtDataMonth(\"" + objTems[i].deviceId + "\",\"" + month + "\",\"" + objTems[i].name + "\")'><span class='glyphicon glyphicon-stats link-black' aria-hidden='true' style=' cursor: pointer;'></span></span>" +
-                    "</td>" +
-                    "</tr>";
+                "<td>" + objTems[i].siteName + "</td>" +
+                "<td>" + objTems[i].name + "</td>" +
+                "<td>" + calculateFlow(objTems[i].send) + "</td>" +
+                "<td>" + calculateFlow(objTems[i].receive) + "</td>" +
+                "<td>" + calculateFlow(objTems[i].total) + "</td>" +
+                "<td>" + calculateFlow(objTems[i].max) + "</td>" +
+                "<td style='text-align:center'>" +
+                "<span data-toggle='tooltip'  lang='title:view' style='padding: 3px 6px;' onclick='builtDataForModal(\"" + objTems[i].deviceId + "\",\"" + month + "\",\"" + objTems[i].name + "\")'><span class='glyphicon glyphicon-zoom-in link-black' aria-hidden='true' style=' cursor: pointer;'></span>&nbsp;</span>" +
+                "<span data-toggle='tooltip' lang='title:charts' style='padding: 3px 6px;' onclick='builtDataMonth(\"" + objTems[i].deviceId + "\",\"" + month + "\",\"" + objTems[i].name + "\")'><span class='glyphicon glyphicon-stats link-black' aria-hidden='true' style=' cursor: pointer;'></span></span>" +
+                "</td>" +
+                "</tr>";
             $("#statistics_data_table").append(str);
         }
 
@@ -151,11 +159,11 @@
         for (var i = 0; i < data.result.length; i++) {
             var str;
             str = "<tr>" +
-                    "<td>" + foematDate(data.result[i].date) + "</td>" +
-                    "<td>" + calculateFlow(data.result[i].send) + "</td>" +
-                    "<td>" + calculateFlow(data.result[i].receive) + "</td>" +
-                    "<td>" + calculateFlow(data.result[i].total) + "</td>" +
-                    "</tr>";
+                "<td>" + foematDate(data.result[i].date) + "</td>" +
+                "<td>" + calculateFlow(data.result[i].send) + "</td>" +
+                "<td>" + calculateFlow(data.result[i].receive) + "</td>" +
+                "<td>" + calculateFlow(data.result[i].total) + "</td>" +
+                "</tr>";
             $("#statistics_data_modal").append(str);
         }
     }
@@ -218,7 +226,12 @@
         var name = $.trim($("#gateway_name").val());//网关名称
         if (name !== "") {
             name = name.match(pattern);
-            sendData.gatewayName = name;
+            if(name && name.length>0){
+                sendData.gatewayName = name[0];
+            }else{
+                errorTipDis("charater_message");
+                return;
+            }
         }
         $("#gateway_name").val(name);
         if ($("#onlineCheckbox1").is(":checked") && $("#onlineCheckbox0").is(":checked")) {
@@ -238,7 +251,6 @@
         getAPI_reports_forms(sendData, function(data) {
             if (data.result) {
                 var urlExport = "/api/file/" + data.result._id + "?access_token=" + sessionStorage.getItem("accessToken");
-              //  window.open(urlExport);
                 $.fileDownload(urlExport);
             }
         }, this);
@@ -317,7 +329,6 @@
         var total = locale.get("daily_total");
         var data1 = [];//日发送
         var data2 = [];//日接收
-        var data3 = [];//日总
         var day;
         var data_everyDay = [];
 
@@ -327,268 +338,286 @@
             data1.push((dataMonth.result[j].send).toFixed(3));
             data2.push((dataMonth.result[j].receive).toFixed(3));
         }
-        require(
-                [
-                    'echarts',
-                    'echarts/chart/line',
-                    'echarts/chart/bar',
-                    'echarts/chart/pie'
+        require(['echarts/chart/echarts_3'],function (ec) {
+            var myChart = ec.init(document.getElementById('flow_charts_showMonth'));
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function(a) {
+                        var relVal = "";
+                        var total_number=0;
+                        for(var k=0;k<a.length;k++){
+                            relVal=relVal+a[k].seriesName + ':' + calculateFlow(a[k].value) + '<br />';
+                            total_number=total_number+parseInt(a[k].value);
+                        }
+                        if(a.length>1){
+                            relVal=relVal+total + ':' + calculateFlow(total_number);
+                        }
+                        return relVal;
+                    },
+                    axisPointer : {
+                        type : 'shadow'
+                    }
+                },
+                title: {
+                    left: 'left',
+                    text: day.slice(0, 4) + '/' + (day.slice(4, 6))
+                },
+                legend: {
+                    data: [send, receive]
+                },
+                grid: {
+                    left: '2%',
+                    right: '3%',
+                    top: 40,
+                    bottom: 40,
+                    containLabel: true
+                },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        start: 0,
+                        end: 100,
+                        filterMode: 'empty'
+                    },
+                    {
+                        type: 'inside',
+                        start: 0,
+                        end: 100,
+                        filterMode: 'empty'
+                    }
                 ],
-                function(ec) {
-                    var myChart = ec.init(document.getElementById("flow_charts_showMonth"));
-                    var option = {
-                        tooltip: {
-                            trigger: 'axis',
-                            formatter: function(a) {
-                                var relVal = receive + ':' + calculateFlow(a[0][2]) + '<br />'
-                                        + send + ':' + calculateFlow(a[1][2]) + '<br />'
-                                        + total + ':' + calculateFlow(parseInt(a[0][2]) + parseInt(a[1][2]));
-                                return relVal;
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: data_everyDay
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: function(value) {
+                                var relval;
+                                relval = calculateFlow(value);
+                                return relval;
                             }
-                        },
-                        title: {
-                            left: 'center',
-                            text: day.slice(0, 4) + '/' + (day.slice(4, 6))
-                        },
-                        legend: {
-                            data: [send, receive]
-                        },
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                mark: {show: true},
-                                magicType: {show: true, type: []},
-                                restore: {show: true}
-                            }
-                        },
-                        dataZoom: {
-                            show: true,
-                            type: 'slider',
-                            start: 0,
-                            end: 100
-                        },
-                        xAxis: [
-                            {
-                                type: 'category',
-                                data: data_everyDay
-                            }
-                        ],
-                        yAxis: [
-                            {
-                                type: 'value',
-                                axisLabel: {
-                                    formatter: function(value) {
-                                        var relval;
-                                        relval = calculateFlow(value);
-                                        return relval;
-                                    }
-                                }
-                            }
-                        ],
-                        series: [
-                            {
-                                name: send,
-                                type: 'bar',
-                                stack: 'group1',
-                                barMaxWidth: 20,
-                                data: data1
-                            },
-                            {
-                                name: receive,
-                                type: 'bar',
-                                stack: 'group1',
-                                barMaxWidth: 20,
-                                data: data2
-                            }
-                        ]
-                    };
-                    myChart.setOption(option);
-                }
-        );
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: send,
+                        type: 'bar',
+                        stack: 'group1',
+                        barMaxWidth: 20,
+                        data: data1,
+                        itemStyle:{
+                            normal:{color:"rgb(255, 127, 80)"}
+                        }
+                    },
+                    {
+                        name: receive,
+                        type: 'bar',
+                        stack: 'group1',
+                        barMaxWidth: 20,
+                        data: data2,
+                        itemStyle:{
+                            normal:{color:"rgb(135, 206, 250)"}
+                        }
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        });
         locale.render({element: "#init_body"});
     }
+
     //加载统计图-天
     function loadChartsDay(result, date) {
-        var min_x = new Date(date.slice(0, 4), (parseInt(date.slice(4, 6)) - 1), date.slice(6, 8), 0, 0, 0);
-        var max_x = new Date(date.slice(0, 4), (parseInt(date.slice(4, 6)) - 1), date.slice(6, 8), 23, 59, 59);
-        if (1000 * result[(result.length - 1)][2] > parseInt(max_x.getTime())) {
-            max_x = new Date(1000 * result[(result.length - 1)][2]);
+        var traffic_use = locale.get("traffic_statistics");
+        var data = [];
+        var data_x=[];
+        for (var i = 0; i < result.length; i++) {
+            data.push((result[i][0]).toFixed(3));
+            if((i+1)==result.length){
+                //最后一条数据
+                data_x.push(dateFormat_Hms(new Date(result[i][1] * 1000))+"-"+dateFormat_Hms(new Date(result[i][2] * 1000)));
+            }else{
+                //不是最后一条数据
+                data_x.push(dateFormat_Hms(new Date(result[i][1] * 1000))+"-"+dateFormat_Hms(new Date(result[i+1][1] * 1000)));
+            }
         }
 
-        var data = [];
-        for (var i = 0; i < result.length; i++) {
-            data.push([(new Date(result[i][1] * 1000)), (result[i][0]).toFixed(3)]);
-            data.push([(new Date(result[i][2] * 1000)), (result[i][0]).toFixed(3)]);
-        }
-        require(
-                [
-                    'echarts',
-                    'echarts/chart/line', // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
-                    'echarts/chart/bar',
-                    'echarts/chart/pie'
+        require(['echarts/chart/echarts_3'],function (ec) {
+            var myChart = ec.init(document.getElementById("flow_charts_showMonth"));
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function(a) {
+                        var relVal = "";
+                        for(var k=0;k<a.length;k++){
+                            relVal=relVal+a[k].name + '<br />' + calculateFlow(a[k].value) ;
+                        }
+                        return relVal;
+                    },
+                    axisPointer : {
+                        type : 'shadow'
+                    }
+                },
+                title: {
+                    left: 'left',
+                    text: date.slice(0, 4) + '/' + (date.slice(4, 6)) + '/' + date.slice(6, 8)
+                },
+                legend: {
+                    data: [traffic_use]
+                },
+                grid: {
+                    left: '2%',
+                    right: '3%',
+                    top: 40,
+                    bottom: 40,
+                    containLabel: true
+                },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        start: 0,
+                        end: 100,
+                        filterMode: 'empty',
+                        bottom:-10
+                    },
+                    {
+                        type: 'inside',
+                        start: 0,
+                        end: 100,
+                        filterMode: 'empty'
+                    }
                 ],
-                function(ec) {
-                    var myChart = ec.init(document.getElementById("flow_charts_showMonth"));
-                    var option = {
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: function(a) {
-                                var date = new Date(a[1]);
-                                var relVal = (parseInt(date.getMonth()) + 1) + '/'
-                                        + (parseInt(date.getDate()) < 10 ? ("0" + date.getDate()) : (date.getDate())) + '  '
-                                        + (parseInt(date.getHours()) < 10 ? ("0" + date.getHours()) : (date.getHours())) + ':'
-                                        + (parseInt(date.getMinutes()) < 10 ? ("0" + date.getMinutes()) : (date.getMinutes())) + ':'
-                                        + (parseInt(date.getSeconds()) < 10 ? ("0" + date.getSeconds()) : (date.getSeconds())) + '<br />';
-                                relVal += calculateFlow(a[2][1]);
-                                return relVal;
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: data_x,
+                        axisLabel:{
+                            rotate:30
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: function(value) {
+                                var relval;
+                                relval = calculateFlow(value);
+                                return relval;
                             }
-                        },
-                        title: {
-                            left: 'center',
-                            text: date.slice(0, 4) + '/' + (date.slice(4, 6)) + '/' + date.slice(6, 8)
-                        },
-                        legend: {
-                            show:false,
-                            data: ['使用流量']
-                        },
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                restore: {show: true},
-                                saveAsImage: {
-                                    show: true,
-                                    title: locale.get("save_as_image"),
-                                    lang: ['']
-                                }
-                            }
-                        },
-                        dataZoom: {
-                            show: true,
-                            type: 'slider',
-                            start: 0,
-                            end: 100
-                        },
-                        xAxis: [
-                            {
-                                type: 'time',
-                                splitNumber: 10,
-                                min: min_x,
-                                max: max_x
-                            }
-                        ],
-                        yAxis: [
-                            {
-                                type: 'value',
-                                axisLabel: {
-                                    formatter: function(value) {
-                                        var relval;
-                                        relval = calculateFlow(value);
-                                        return relval;
-                                    }
-                                }
-                            }
-                        ],
-                        series: [
-                            {
-                                name: locale.get("flow"),
-                                type: 'line',
-                                step: 'end',
-                                showSymbol: true,
-                                showAllSymbol: true,
-                                hoverAnimation: true,
-                                symbol: 'droplet',
-                                symbolSize: 4,
-                                data: data
-                            }
-                        ]
-                    };
-                    myChart.setOption(option);
-                }
-        );
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: traffic_use,
+                        type: 'line',
+                        barMaxWidth: 20,
+                        data: data,
+                        sampling: 'average',
+                        areaStyle: {normal: {}},
+                        itemStyle:{
+                            normal:{color:"#6495ed"}
+                        }
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        });
         locale.render({element: "#init_body"});
     }
-
+    /**根据日期返回日期格式 HH:mm:ss*/
+    function dateFormat_Hms(date) {
+        return date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+    }
 </script>
 
-    <!--表格统计-->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="box box-solid"  style="margin-bottom: 0px;box-shadow: 0px 0px;">
-                <!--加载数据等待-->
-                <div class="overlay" style="display: none;" id="overlay1">
-                    <i class="fa icon-refresh icon-spin"></i>
-                </div>
-                <!--查询条件-->
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-sm-12" style="padding-bottom: 10px;">
-                            <form class="form-inline">
-                                <div class="form-group">
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" id="onlineCheckbox1" checked="checked" value="1">
-                                        <span lang="text:online"></span>
-                                    </label>
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" id="onlineCheckbox0" checked="checked" value="0">
-                                        <span  lang="text:offline"></span>
-                                    </label>
-                                </div>
-                                <div class="form-group has-feedback" style="margin-left: 20px;">
-                                    <input type="text" class="form-control form-control-left input-sm" id="showMonth" readonly="readonly">
-                                    <span class="glyphicon glyphicon-calendar form-control-feedback" style="left: 0;"></span>
-                                </div>
-                                <!--<div class="form-group" style="margin-left: 20px;">-->
-                                <!--<label lang="text:_month" style="position: relative;top: 2px;">月份:</label>-->
-                                <!--<input type="text" id="showMonth" class="form-control" readonly="readonly" style="height: 30px;width: 140px;">-->
-                                <!--</div>-->
-                                <div class="form-group" style="margin-left: 20px;">
-                                    <label lang="text:gateway_name" style="position: relative;top: 2px;"></label>
-                                    <input type="text" class="form-control" id="gateway_name"
-                                           lang="placeholder:empty_is_all" style="height: 30px;width: 170px;">
-                                </div>
-                                <div class="form-group">
-                                    <button type="button" class="btn btn-default btn-sm" id="btn_research" data-permissionFilter="[73]" data-toggle="tooltip"
-                                            onclick="searchFun()" lang="title:query" >
-                                        <span class="glyphicon glyphicon-search"></span>
-                                    </button>
-                                </div>
-                                <div class="form-group box-tools pull-right">
-                                    <button type="button" class="btn btn-default btn-sm" id="btn_export" data-permissionFilter="[73]" data-toggle="tooltip"
-                                            onclick="exportData()" lang="title:export">
-                                        <span class="icon-upload-alt"></span>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+<!--表格统计-->
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid"  style="margin-bottom: 0px;box-shadow: 0px 0px;">
+            <!--加载数据等待-->
+            <div class="overlay" style="display: none;" id="overlay1">
+                <i class="fa icon-refresh icon-spin"></i>
+            </div>
+            <!--查询条件-->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-12" style="padding-bottom: 10px;">
+                        <form class="form-inline" id="trafficSearchForm">
+                            <div class="form-group">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="onlineCheckbox1" checked="checked" value="1">
+                                    <span lang="text:online"></span>
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="onlineCheckbox0" checked="checked" value="0">
+                                    <span  lang="text:offline"></span>
+                                </label>
+                            </div>
+                            <div class="form-group has-feedback" style="margin-left: 20px;">
+                                <input type="text" class="form-control form-control-left input-sm" id="showMonth" readonly="readonly">
+                                <span class="glyphicon glyphicon-calendar form-control-feedback" style="left: 0;"></span>
+                            </div>
+                            <!--<div class="form-group" style="margin-left: 20px;">-->
+                            <!--<label lang="text:_month" style="position: relative;top: 2px;">月份:</label>-->
+                            <!--<input type="text" id="showMonth" class="form-control" readonly="readonly" style="height: 30px;width: 140px;">-->
+                            <!--</div>-->
+                            <div class="form-group" style="margin-left: 20px;">
+                                <label lang="text:gateway_name" style="position: relative;top: 2px;"></label>
+                                <input type="text" class="form-control validate[custom[stopSpecialCharacters]]" id="gateway_name"
+                                       lang="placeholder:empty_is_all" style="height: 30px;width: 170px;">
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-default btn-sm" id="btn_research" data-permissionFilter="[73]" data-toggle="tooltip"
+                                        onclick="searchFun()" lang="title:query" >
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </div>
+                            <div class="form-group box-tools pull-right">
+                                <button type="button" class="btn btn-default btn-sm" id="btn_export" data-permissionFilter="[73]" data-toggle="tooltip"
+                                        onclick="exportData()" lang="title:export">
+                                    <span class="icon-upload-alt"></span>
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <div id="topo_chart8">
-                        <table class="table table-bordered table-striped" id="tableFirst">
-                            <thead>
-                            <tr>
-                                <!--<th style=""></th>-->
-                                <th lang="text:site" style="width: 17%;"></th>
-                                <th lang="text:gateway" style="width: 14%;"></th>
-                                <th lang="text:monthly_tx" style="width: 14%;"></th>
-                                <th lang="text:monthly_rx" style="width: 14%;"></th>
-                                <th lang="text:monthly_total" style="width: 14%;"></th>
-                                <th lang="text:daily_max" style="width: 14%;"></th>
-                                <th style="width:60px; text-align:center;" lang="text:operate"></th>
-                            </tr>
-                            </thead>
-                            <tbody id="statistics_data_table">
-                            <!--动态载入数据-->
-                            </tbody>
-                        </table>
-                    </div>
-                </div><!--box-body-->
-                <div id="page-footer">
-
-
                 </div>
+                <div id="topo_chart8">
+                    <table class="table table-bordered table-striped" id="tableFirst">
+                        <thead>
+                        <tr>
+                            <!--<th style=""></th>-->
+                            <th lang="text:site" style="width: 17%;"></th>
+                            <th lang="text:gateway" style="width: 14%;"></th>
+                            <th lang="text:monthly_tx" style="width: 14%;"></th>
+                            <th lang="text:monthly_rx" style="width: 14%;"></th>
+                            <th lang="text:monthly_total" style="width: 14%;"></th>
+                            <th lang="text:daily_max" style="width: 14%;"></th>
+                            <th style="width:60px; text-align:center;" lang="text:operate"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="statistics_data_table">
+                        <!--动态载入数据-->
+                        </tbody>
+                    </table>
+                </div>
+            </div><!--box-body-->
+            <div id="page-footer">
+
 
             </div>
+
         </div>
     </div>
+</div>
 
 
 <!--Modal_dataflow_day-->
@@ -710,9 +739,6 @@
             });
             reset_statistics(0, $("#page-footer .col-sm-5 select").val());
 
-//            $("#page-footer").load("admin/pagination.html", function() {
-//                reset_statistics(0, $("#pageNumberSelect").val());
-//            });
         });
         locale.render({element: "#init_body"});
     });
