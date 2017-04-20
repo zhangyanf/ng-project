@@ -5,7 +5,7 @@
                         <div class="info-box">
                             <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text" lang="text:communication_times"></span>
+                                <span class="info-box-text" lang="{text:communication_times,title:communication_times}" style="cursor: text;"></span>
                                 <span class="info-box-number" id="communication_times"></span>
                             </div>
                             <!-- /.info-box-content -->
@@ -16,7 +16,7 @@
                         <div class="info-box">
                             <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text" lang="text:traffic_statistics"></span>
+                                <span class="info-box-text" lang="{text:traffic_statistics,title:traffic_statistics}" style="cursor: text;"></span>
                                 <span class="info-box-number" id="traffic_statistics"></span>
                             </div>
                         </div>
@@ -25,7 +25,7 @@
                         <div class="info-box">
                             <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text" lang="text:communication_package"></span>
+                                <span class="info-box-text" lang="{text:communication_package,title:communication_package}" style="cursor: text;"></span>
                                 <span class="info-box-number" id="communication_package"></span>
                             </div>
                         </div>
@@ -140,7 +140,6 @@
             initAtmDataFlow(siteId);
             locale.render({ element: "#init_body" });
         });
-
 
     }
 
