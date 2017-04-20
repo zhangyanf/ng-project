@@ -13,7 +13,7 @@ if( locale.current() == 1) {
     $("#home-nav-aboutus").children("a").attr("href", "http://www.inhand.com.cn/");
     $("#englishLanguage").show();
     //$("#chineseLanguage").show();
-	
+
 }
 locale.render({element: "body"});
 /*============================
@@ -176,6 +176,7 @@ function creatSubmit() {
                 t = setInterval( function() {
                     resendTime();
                 }, 1000);
+                // resendTime();
             }
         };
         $.ajax(option);
@@ -184,10 +185,7 @@ function creatSubmit() {
             t = setInterval( function() {
                 resendTime();
             }, 1000);
-<<<<<<< HEAD
-=======
             // resendTime();
->>>>>>> cb2a02083894d0183afd62f0315cb9865deecc65
         });
         function resendTime() {
             $("#resendEmail").attr("disabled","disabled");
@@ -195,18 +193,12 @@ function creatSubmit() {
             time = time.substring( 1, time.indexOf("s"));
             if( time && time >= 0) {
                 time = parseFloat( time);
-<<<<<<< HEAD
-                if( time === 0) {
-                    clearTimeout(t);
-                    $("#resendEmail").removeAttr('disabled');
-=======
                 // console.log( "time,", time);
                 if( time === 0) {
                     clearTimeout(t);
                     // console.log( "clear");
                     $("#resendEmail").removeAttr('disabled');
                     //console.log( locale._get("send"));
->>>>>>> cb2a02083894d0183afd62f0315cb9865deecc65
                     $("#resendEmailTime").text( "");
                     clearTimeout( t);
                 } else {
@@ -256,35 +248,32 @@ $("#reSecurityQuestions").click( function(event) {
         $(".reSecuritySelfQuestionBox").css("display","none");
     }
 });
-<<<<<<< HEAD
-=======
 //再次发送时间限制
 /*
-$("#resendEmail").click(function(event) {
-    function resendTime() {
-        $("#resendEmail").attr("disabled","disabled");
-        var time = $("#resendEmailTime").html();
-        time = time.substring( 1, time.indexOf("s"));
-        if( time) {
-            time = parseFloat( time);
-            if( time === 0) {
-                clearInterval(t);
-                $("#resendEmail").removeAttr('disabled');
-                //console.log( locale._get("send"));
-                $("#resendEmailTime").text("");
-            } else {
-                $("#resendEmailTime").html( "("+( time - 1) + "s"+")");
-            }
-        }else {
-            $("#resendEmailTime").html("(120s)");
-        }
-    }
-    t = setInterval( function() {
-        resendTime();
-    }, 1000);
-    resendTime();
-});*/
->>>>>>> cb2a02083894d0183afd62f0315cb9865deecc65
+ $("#resendEmail").click(function(event) {
+ function resendTime() {
+ $("#resendEmail").attr("disabled","disabled");
+ var time = $("#resendEmailTime").html();
+ time = time.substring( 1, time.indexOf("s"));
+ if( time) {
+ time = parseFloat( time);
+ if( time === 0) {
+ clearInterval(t);
+ $("#resendEmail").removeAttr('disabled');
+ //console.log( locale._get("send"));
+ $("#resendEmailTime").text("");
+ } else {
+ $("#resendEmailTime").html( "("+( time - 1) + "s"+")");
+ }
+ }else {
+ $("#resendEmailTime").html("(120s)");
+ }
+ }
+ t = setInterval( function() {
+ resendTime();
+ }, 1000);
+ resendTime();
+ });*/
 
 //首页、注册、映翰通
 var nav = new FnNav();
