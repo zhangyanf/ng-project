@@ -91,8 +91,17 @@
             var self = this;
             getAtmDataSummary({siteId:siteId},function (data) {
                 $("#communication_times").text(data.total);
-                $("#traffic_statistics").text(data.result[0].count+"/"+data.result[1].count);
-                $("#communication_package").text(data.result[0].size+"/"+data.result[1].size);
+                var count="";
+                var size="";
+                if(data.result.length>0){
+                    count +=data.result[0].count+"/"+data.result[1].count;
+                    size += data.result[0].size+"/"+data.result[1].size;
+                }else{
+                    count +=0+"/"+0;
+                    size +=0+"/"+0;
+                }
+                $("#traffic_statistics").text(count);
+                $("#communication_package").text(size);
             },self);
             $("#more_alarm_info").off().on("click",function () {
                 $("#p_alarm > a").click();
