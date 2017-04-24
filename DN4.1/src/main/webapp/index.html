@@ -67,6 +67,13 @@
             #pcontent .content{
                 overflow-y: auto;
             }
+            .navbar-static-top .nav-time{
+                height: 50px;
+                display: -webkit-flex;
+                display: flex;
+                -webkit-align-items: center;
+                align-items: center;
+            }
         </style>
 
         <script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
@@ -477,7 +484,32 @@
 
                 setInterval(loadOverview, 5000);
                 scada_perr();
+                var date=new Date();
+                var offset_ts=date.getTimezoneOffset();
+                var offset_zone=-1*(offset_ts/60);
+                $("#nav_utc_time_select > option[value='"+offset_zone+"']").prop("selected",true);
+                window.nav_utc_time=setInterval(function () {
+                    nav_utctime(offset_zone);
+                },1000);
+                //切换时区是改变时区时间的时钟
+                $("#nav_utc_time_select").off().on('change',function (ent) {
+                    clearInterval(window.nav_utc_time);
+                    $("#nav_utc_time_text").fadeOut(1000);
+                    $("#nav_utc_time_text").text("");
+                    $("#nav_utc_time_text").fadeIn("slow","linear");
+                    var nav_zone=$("#nav_utc_time_select").val();
+                    window.nav_utc_time=setInterval(function () {
+                        nav_utctime(nav_zone);
+                    },1000);
+                });
             }
+            //根据不同时区显示时钟
+            function nav_utctime(zone) {
+                var date=new Date();
+                var utcTime = parseInt(date.getTime()) + parseInt(date.getTimezoneOffset() * 60000);
+                $("#nav_utc_time_text").text(schneider.util.dateFormat(utcTime + 3600000 * zone, "yyyy-MM-dd hh:mm:ss"));
+            }
+
             //自定义修改密码表单验证
             validator.render("#model_changePWd_form", {
                 promptPosition: "inline",
@@ -510,6 +542,40 @@
                     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
                         <span class="sr-only">Toggle navigation</span>
                     </a>
+                    <!--timer-->
+                    <div class="navbar-nav nav-time">
+                        <div class="form-inline">
+                            <select id="nav_utc_time_select" class="form-control" style="border-radius: 5px;">
+                                <option value="0">UTC</option>
+                                <option value="1">UTC+1</option>
+                                <option value="2">UTC+2</option>
+                                <option value="3">UTC+3</option>
+                                <option value="4">UTC+4</option>
+                                <option value="5">UTC+5</option>
+                                <option value="6">UTC+6</option>
+                                <option value="7">UTC+7</option>
+                                <option value="8">UTC+8</option>
+                                <option value="9">UTC+9</option>
+                                <option value="10">UTC+10</option>
+                                <option value="11">UTC+11</option>
+                                <option value="12">UTC+12</option>
+                                <option value="-12">UTC-12</option>
+                                <option value="-11">UTC-11</option>
+                                <option value="-10">UTC-10</option>
+                                <option value="-9">UTC-9</option>
+                                <option value="-8">UTC-8</option>
+                                <option value="-7">UTC-7</option>
+                                <option value="-6">UTC-6</option>
+                                <option value="-5">UTC-5</option>
+                                <option value="-4">UTC-4</option>
+                                <option value="-3">UTC-3</option>
+                                <option value="-2">UTC-2</option>
+                                <option value="-1">UTC-1</option>
+                            </select>
+                            <span id="nav_utc_time_text" style="font-size: 120%;color: #666;"></span>
+                        </div>
+                    </div>
+                    <!--timer-->
                     <!-- Navbar Right Menu -->
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
