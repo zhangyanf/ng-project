@@ -362,7 +362,7 @@
             if (dataInfo_mcc != "" && dataInfo_mnc != "" && dataInfo_lac != "" && dataInfo_cid != "") {
                 base_station = dataInfo_mcc + "." + dataInfo_mnc + "." + dataInfo_lac + "." + dataInfo_cid;
                 $div += '<div id="div_base">' +
-                    '<label class="col-sm-4" lang="text:base_station" style="text-align: right;margin-bottom: 15px;">基站</label>' +
+                    '<label class="col-sm-4" lang="text:base_station" style="text-align: right;margin-bottom: 15px;"></label>' +
                     '<div class="col-sm-6" style="padding-left: 8px;padding-right: 1px;margin-bottom: 15px;">' +
                     '<span id="info-device-basestation" style="width:90px" readonly="readonly">' + base_station + '</span>' +
                     '</div>' +
@@ -371,7 +371,7 @@
             var rssi = (typeof(data.info.rssi) == "undefined" || data.info.rssi == "") ? 0 : data.info.rssi;
             var signal = -113 + 2 * parseInt(rssi);
             $div += '<div id="div_signal">' +
-                '<label class="col-sm-4" lang="text:signal_strength" style="text-align: right;margin-top:4px;">信号强度</label>' +
+                '<label class="col-sm-4" lang="text:signal_strength" style="text-align: right;margin-top:4px;"></label>' +
                 '<div class="col-sm-6" style="padding-left: 7px;padding-right: 1px;">' +
                 '<span id="info-device-signal-num" style="width:90px" readonly="readonly">' + signal + ' dBm</span>';
 
