@@ -119,7 +119,7 @@
                      "<div class='col-sm-8'>" +
                         "<div class='modal-footer col-sm-10' style='padding-right: 0px'>" +
                            "<button type='button' class='btn btn-default' data-dismiss='modal' lang='text:close' onclick='remove_tab(\""+nav_id+"\",\""+panes_id+"\")'></button>"+
-                           "<button type='button' class='btn btn-primary' onclick='create_update_schedule(\""+type+"\",\""+form1_id+"\")' lang='text:submit'></button>"+
+                           "<button type='button' id='submit_"+form1_id+"' class='btn btn-primary' onclick='create_update_schedule(\""+type+"\",\""+form1_id+"\")' lang='text:submit'></button>"+
                         "</div>"+
                      "</div>"+
                 "</div>"+
