@@ -509,9 +509,9 @@
          alert(myObject);//具体地理位置
          }); */
         var thisIp=data.result.thisIp;
-        if(thisIp == '127.0.0.1'){
-            thisIp="182.150.21.232";
-        }
+//        if(thisIp == '127.0.0.1'){
+//            thisIp="182.150.21.232";
+//        }
         var params={ak:setting.baidu.ak,ip:thisIp,language:locale.current()};
         get_location_ip(params,function (data) {
             if(data.result){
