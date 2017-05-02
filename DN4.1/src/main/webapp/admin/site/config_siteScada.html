@@ -50,65 +50,22 @@
                     var permission_val_deny = sessionStorage.getItem("deny");
                     //accpet 有值，有权限 无需进入下一步default，无值进入default判断
                     var permission_val_accept = sessionStorage.getItem("accept");
-                    permission_val_accept = ("" + permission_val_accept + "").split(",");
                     //none 无权限， all,有权限， readonly， 奇数有权限，偶数无权限
                     var permission_val_default = sessionStorage.getItem("default");
-                    if (permission_val_deny) {
-                        dialog.render({
-                            lang: "no_privilege"
+
+                    var permission = [92];
+                    var scadapermission = tool_nav_permission(permission, permission_val_accept, permission_val_default, permission_val_deny);
+                    if(scadapermission == 0){
+                        errorTipDis("no_privilege");
+                    }else{
+                        $('#createBox').hide();
+                        $(".modal-backdrop").remove();
+                        $("#scadaview-template").hide();
+                        $("#agentcanvas").show();
+                        $("#toolbar-scada-edit-button-all").attr("flag", "edit");
+                        $("#pcontent").load("admin/scadaviewEdit.html", function() {
+                            loadSiteInfo(siteId, select_site_name);
                         });
-                    } else if (permission_val_accept[0] != "" && permission_val_accept) {
-                        var permission_result;
-                        for (var i = 0; i < permission_val_accept.length; i++) {
-                            if (permission_val_accept[i] == "92") {
-                                permission_result == 92
-                            }
-                        }
-                        if (permission_result == 92) {
-                            $('#createBox').hide();
-                            $(".modal-backdrop").remove();
-                            $("#scadaview-template").hide();
-                            $("#agentcanvas").show();
-                            $("#toolbar-scada-edit-button-all").attr("flag", "edit");
-                            $("#pcontent").load("admin/scadaviewEdit.html", function() {
-                                loadSiteInfo(siteId, select_site_name);
-                            });
-                        } else {
-                            dialog.render({
-                                lang: "no_privilege"
-                            });
-                        }
-                    } else if (permission_val_default) {
-                        if (permission_val_default == "none") {
-                            dialog.render({
-                                lang: "no_privilege"
-                            });
-                        } else if (permission_val_default == "all") {
-                            $('#createBox').hide();
-                            $(".modal-backdrop").remove();
-                            $("#scadaview-template").hide();
-                            $("#agentcanvas").show();
-                            $("#toolbar-scada-edit-button-all").attr("flag", "edit");
-                            $("#pcontent").load("admin/scadaviewEdit.html", function() {
-                                loadSiteInfo(siteId, select_site_name);
-                            });
-                        } else {
-                            //permission_val_default == "readOnly"
-                            if (permission_val_default / 2 == 0) {
-                                dialog.render({
-                                    lang: "no_privilege"
-                                });
-                            } else {
-                                $('#createBox').hide();
-                                $(".modal-backdrop").remove();
-                                $("#scadaview-template").hide();
-                                $("#agentcanvas").show();
-                                $("#toolbar-scada-edit-button-all").attr("flag", "edit");
-                                $("#pcontent").load("admin/scadaviewEdit.html", function() {
-                                    loadSiteInfo(siteId, select_site_name);
-                                });
-                            }
-                        }
                     }
                 });
             } else {

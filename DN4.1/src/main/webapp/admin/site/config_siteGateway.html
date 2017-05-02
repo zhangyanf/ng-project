@@ -10,17 +10,16 @@
             </div>
             <br />
             <div class="form-group">
-
-                <div class="text-center">
-                    <span lang="text:serial_number_none_tip" class="color: darkgray;"> </span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-4 control-label"><span  lang="text:serial_number"></span ><span class="text-red">*</span></label>
+                <label class="col-sm-4 control-label"><span  lang="text:serial_number"></span ><span class="text-red" id="serial_number_index">*</span></label>
                 <div class="col-sm-6" style="padding-left: 7px;padding-right: 1px;">
-                    <input type="text" onblur="match＿model();" class="form-control validate[required,custom[serialNumber2],funcCall[cloudInput]]" value="" id="info-serial-number" lang="placeholder:serial_number_15">
-                    <div id="gatewaySerialtest" style="display:none;opacity: 0.87; position: relative; top: 0px; left: 0px; margin-top: 0px;border-radius: 3px;background: #ffebeb;color: #df1a08; border: 1px solid #df1a08;">
+                    <!--validate[required,custom[stopSpecialCharacters],custom[serialNumber2],funcCall[cloudInput]]-->
+                    <input type="text" class="form-control" value="" id="info-serial-number">
+                    <div id="gatewaySerialtest" class="error_text" style="display:none;opacity: 0.87; position: relative; top: 0px; left: 0px; margin-top: 0px;border-radius: 3px;background: #ffebeb;color: #df1a08; border: 1px solid #df1a08;">
                         <span lang="text:the_gateway_has_been_binding"></span>
+                        <br />
+                    </div>
+                    <div id="gatewaySerialtest_unill" class="error_text" style="display:none;opacity: 0.87; position: relative; top: 0px; left: 0px; margin-top: 0px;border-radius: 3px;background: #ffebeb;color: #df1a08; border: 1px solid #df1a08;">
+                        <span lang="text:input_15_gate_number"></span>
                         <br />
                     </div>
                 </div>
@@ -29,7 +28,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span lang="text:gateway_name"></span><span class="text-red">*</span></label>
                     <div class="col-sm-6" style="padding-left: 7px;padding-right: 1px;" id="gatewayNameDiv">
-                        <input type="text" class="form-control validate[required,minSize[0],custom[giveName],maxSize[30],funcCall[cloudInput]]" value="" id="name" gId="" optionDataType="">
+                        <input type="text" class="form-control validate[required,minSize[0],custom[stopSpecialCharacters],maxSize[30],funcCall[cloudInput]]" value="" id="name" gId="" optionDataType="">
                         <div id="gatewayNametest" style="display:none;opacity: 0.87; position: relative; top: 0px; left: 0px; margin-top: 0px;border-radius: 3px;background: #ffebeb;color: #df1a08; border: 1px solid #df1a08;">
                             <span lang="text:gateway_already_exists"></span>
                             <br />
@@ -54,7 +53,7 @@
                 <div class="form-group" id="div_model">
                     <label class="col-sm-4 control-label" lang="text:model"></label>
                     <div class="col-sm-6" style="padding-left: 7px;padding-right: 1px;">
-                        <select id="info-model" class="form-control">
+                        <select id="info-model" class="form-control validate[required]">
 
                         </select>
                     </div>
@@ -85,7 +84,6 @@
                                     <input type="text" class="form-control validate[custom[number]],funcCall[alaRule]" value="" id="info-device-warning" style="height: 26px;">
                                 </div>
                                 <div class="col-sm-1" style="padding-left: 1px;padding-right: 1px;padding-top: 7px;" lang="text:mega">
-                                    M
                                 </div>
                             </div>
                             <div class="form-group" style="font-size: 12px;margin-bottom: 5px;margin-right: 1px;margin-left: 1px;">
@@ -94,7 +92,6 @@
                                     <input type="text" class="form-control validate[custom[number],funcCall[alaRule]]" value="" id="info-warn-alarm" style="height: 26px;">
                                 </div>
                                 <div class="col-sm-1" style="padding-left: 1px;padding-right: 1px;padding-top: 7px;" lang="text:mega">
-                                    M
                                 </div>
                             </div>
                             <div class="form-group" style="font-size: 12px;margin-bottom: 5px;margin-right: 1px;margin-left: 1px;">
@@ -103,7 +100,6 @@
                                     <input type="text" class="form-control validate[custom[number],funcCall[alaRule]]" value="" id="info-device-serious" style="height: 26px;">
                                 </div>
                                 <div class="col-sm-1" style="padding-left: 1px;padding-right: 1px;padding-top: 7px;" lang="text:mega">
-                                    M
                                 </div>
                             </div>
                             <div class="form-group" style="font-size: 12px;margin-bottom: 5px;margin-right: 1px;margin-left: 1px;">
@@ -112,7 +108,6 @@
                                     <input type="text" class="form-control validate[custom[number],funcCall[alaRule]]" value="" id="info-device-hours" style="height: 26px;">
                                 </div>
                                 <div class="col-sm-1" style="padding-left: 1px;padding-right: 1px;padding-top: 7px;" lang="text:mega">
-                                    M
                                 </div>
                             </div>
                             <div class="col-sm-10" id="warningseTips11" style="margin: 13px auto;display:none;">
@@ -223,21 +218,28 @@
     //根据序列号触发是否回填网关信息
 
     $("#info-serial-number").blur(function() {
-        search();
+        $("#gatewaySerialtest").hide();
+        $("#gatewaySerialtest_unill").hide();
+        var current_gate_number = $(this).val();
+        var reg_gate_number = new RegExp("^[a-zA-Z]{2}[0-9]{13}$");
+        if( reg_gate_number.test( current_gate_number)) {
+            $("#gatewaySerialtest_unill").hide();
+            search();
+        } else {
+            $("#gatewaySerialtest_unill").show();
+        }
     });
 
     //校验网关名是否存在
     $("#name").blur(function() {
-        if($("#gatewayNameDiv .formErrorContent").length<=0) {
-            testName();
-        }
+        testName();
     });
 
     //校验网关是否存在
     function testName() {
         var name = $.trim($("#name").val());
         var oldGatewayName = $("#oldGateName").val();
-        if (name != "" && name != oldGatewayName) {
+        if (name != "" && name != oldGatewayName && /^[a-zA-Z0-9_\-\u4e00-\u9fa5]+$/i.test(name)) {
             var flag = false;
             var params = {
                 "verbose": 100,
@@ -265,6 +267,9 @@
     // 根据网关序列号查询网关数据
     function search() {
         var serialNumber = $("#info-serial-number").val();
+        if(!(/^[a-zA-Z0-9_\-\u4e00-\u9fa5]+$/i.test(serialNumber))) {
+            return;
+        }
         var oldSerialNumber = $("#oldinfo-serial-number").val();
         if (serialNumber == "") {
             $(".gateway_div").hide();
@@ -286,6 +291,8 @@
                         $("#oldinfo-serial-number").val("");
                         $("#info-model").prop("disabled", "");
                         $("#info-serial-number").val(serialNumber);
+                        $("#oldinfo-serial-number").val(serialNumber);
+                        match＿model(serialNumber); // 匹配机型
                         $(".gateway_div").show();
                     } else {
                         if (data.result[0].siteName) {
@@ -330,15 +337,16 @@
     //网关数据回填
     function fillGatewayInfo(data, data2, flag) {
         loading1();
+        $("#serial_number_index").show();
         $("#name").val(data.name);
         $("#gatewayId").val(data._id);
-       // $("#info-device-advanced-timeout").val(data.config.timeout);
-       // $("#info-device-advanced-acktimeout").val(data.config.ackTimeout);
-       // $("#info-device-advanced-ackretries").val(data.config.ackRetries);
-      //  $("#info-device-advanced-maxheartbeatlost").val(data.deviceConfig.maxHeartbeatLost);
-         // $("#info-device-advanced-heartbeatinterval").val(data.deviceConfig.heartbeatInterval);
-       // $("#info-device-advanced-heartbeattimeout").val(data.deviceConfig.heartbeatTimeout);
-       // $("#info-device-advanced-resendlogin").val(data.deviceConfig.resendLogin);
+        // $("#info-device-advanced-timeout").val(data.config.timeout);
+        // $("#info-device-advanced-acktimeout").val(data.config.ackTimeout);
+        // $("#info-device-advanced-ackretries").val(data.config.ackRetries);
+        //  $("#info-device-advanced-maxheartbeatlost").val(data.deviceConfig.maxHeartbeatLost);
+        // $("#info-device-advanced-heartbeatinterval").val(data.deviceConfig.heartbeatInterval);
+        // $("#info-device-advanced-heartbeattimeout").val(data.deviceConfig.heartbeatTimeout);
+        // $("#info-device-advanced-resendlogin").val(data.deviceConfig.resendLogin);
         $("#info-mobilenumber").val(data.mobileNumber);
         $("#info-serial-number").val(data.serialNumber);
         $("#oldinfo-serial-number").val(data.serialNumber);
@@ -368,7 +376,7 @@
             if (dataInfo_mcc != "" && dataInfo_mnc != "" && dataInfo_lac != "" && dataInfo_cid != "") {
                 base_station = dataInfo_mcc + "." + dataInfo_mnc + "." + dataInfo_lac + "." + dataInfo_cid;
                 $div += '<div id="div_base">' +
-                    '<label class="col-sm-4" lang="text:base_station" style="text-align: right;margin-bottom: 15px;">基站</label>' +
+                    '<label class="col-sm-4" lang="text:base_station" style="text-align: right;margin-bottom: 15px;"></label>' +
                     '<div class="col-sm-6" style="padding-left: 8px;padding-right: 1px;margin-bottom: 15px;">' +
                     '<span id="info-device-basestation" style="width:90px" readonly="readonly">' + base_station + '</span>' +
                     '</div>' +
@@ -377,7 +385,7 @@
             var rssi = (typeof(data.info.rssi) == "undefined" || data.info.rssi == "") ? 0 : data.info.rssi;
             var signal = -113 + 2 * parseInt(rssi);
             $div += '<div id="div_signal">' +
-                '<label class="col-sm-4" lang="text:signal_strength" style="text-align: right;margin-top:4px;">信号强度</label>' +
+                '<label class="col-sm-4" lang="text:signal_strength" style="text-align: right;margin-top:4px;"></label>' +
                 '<div class="col-sm-6" style="padding-left: 7px;padding-right: 1px;">' +
                 '<span id="info-device-signal-num" style="width:90px" readonly="readonly">' + signal + ' dBm</span>';
 
@@ -484,8 +492,7 @@
     }
 
     // 根据序列号匹配机型
-    function match＿model() {
-        var serialNumber = $("#info-serial-number").val();
+    function match＿model(serialNumber) {
         if (serialNumber.length == 15) {
             // $(".gateway_div").show();
             var p1 = serialNumber.substring(0, 1); //判断是Router还是DTU
@@ -555,6 +562,7 @@
                 }
             }
         }
+
     }
     // 设置机型
     function selectModel(mid, modelArray) {
@@ -767,6 +775,7 @@
                                 $("#isBindGatewayFlag").val("");
                                 $("#isboundDiv").hide();
                                 $("#info-serial-number").val("");
+                                $("#serial_number_index").hide();
                             }
                         }
                         locale.render({

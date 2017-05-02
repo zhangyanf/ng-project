@@ -5,7 +5,7 @@
         <input type="reset" style="display:none;" id="form_reset2" />
         <input type="hidden" id="oldSiteName" value="" />
         <input type="hidden" id="isExistLocation" value="" />
-        <input type="hidden" id="isBindGatewayFlag" value=""/>
+        <input type="hidden" id="isBindGatewayFlag" value="" />
         <div class="form-group">
             <label class="col-sm-3 control-label" style="padding-left: 0px;"><span lang="text:site_name"></span ><span class="text-red">*</span></label>
             <div class="col-sm-9" style="padding: 0px;">
@@ -83,6 +83,8 @@
     //现场保存最最重要的为地图的经纬度信息，可将作为全局变量作为存储 经纬度 变量为 lat, lng
     //如若可以直接将标记点作为全局变量，如果这样可以，设置为可拖动
 
+    var oldLocation = {}; // 地理位置信息
+
     //初始化现场配置表单验证配置
     validator.render("#addLiveSiteForm", {
         promptPosition: "inline",
@@ -94,6 +96,7 @@
         $("#siteId").val("");
         $("#isBindGatewayFlag").val("");
         $("#isExistLocation").val("");
+        oldLocation = {};
         devices = [];
         edit_device_id = "";
         old_asset_no = "";
@@ -117,6 +120,7 @@
         $(".addDeviceContentBox").hide();
         $(".addPartContentBox").hide();
         $(".addFinishContentBox").hide();
+        $(".error_text").hide();
         $(".box-site-header").removeClass('label');
         $("#first_div").find("label span:eq(1)").removeClass("label");
         $("#three_div").find("label span:eq(1)").removeClass("label");
@@ -139,10 +143,11 @@
         $("#addLiveSiteConName").val("");
         $("#addLiveSiteConPho").val("");
         $("#addLiveSiteConEmail").val("");
-        $("#addLiveSiteState").val( "1");
+        $("#addLiveSiteState").val("1");
         $("#addLiveSiteForm ul li input").val("");
         $("#add_edit_form").find("input,select").val("");
         $("#siteNametest").hide();
+        $("#siteAddtest").hide();
         $(".formErrorContent").remove();
         $("#message1_div").empty();
         $("#message2_div").empty();
@@ -150,6 +155,7 @@
         //隐藏网关信息
         $(".gateway_div").hide();
         $("#siteNametest").hide();
+        $("#serial_number_index").hide();
         //清空设备数据
         devices = [];
         message_se = []; // 初始化提示信息变量
@@ -159,7 +165,7 @@
         $("#part_form_reset").click();
         $("#deviceinfo_div").addClass("hidden");
         $("#parts_div").addClass("hidden");
-        $("#partinfo_div").addClass("hidden");
+        $("#partinfo_div").removeClass("show").removeClass("hidden").addClass("hidden");
         //地图初始化问题：再次加载地图出错的解决方案：直接移除地图
         var map = window.map;
         if (map) {
@@ -178,7 +184,7 @@
 
     function loadAddMap(targetMap, mapAddress) {
         var targetMap = "editMap" //targetMap.id;
-        //解决地图中心在目标区域的左上角
+            //解决地图中心在目标区域的左上角
         $("#addBox").show();
         if (mapAddress) {
             var longitude = mapAddress.longitude;
@@ -197,12 +203,12 @@
         window.lng = marker._latlng.lng;
         //根据选择语言来进行地图显示语言
         window.languageType = locale.current();
-        if ( window.languageType == 1) {
+        if (window.languageType == 1) {
             window.mapLanguage = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}";
         } else {
             window.mapLanguage = "https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer/tile/{z}/{y}/{x}";
         }
-        L.tileLayer( window.mapLanguage).addTo(map);// + ".png?{foo}", {  foo: "bar" }
+        L.tileLayer(window.mapLanguage).addTo(map); // + ".png?{foo}", {  foo: "bar" }
         //根据输入地址得到标记
         /*$("#addLiveSiteAddress").bind('input propertychange', function () {
          addressMap = $("#addLiveSiteAddress").val();
@@ -241,6 +247,25 @@
                  }
                  });*/
             });
+            /*
+            $("#addLiveSiteAddress").blur(function() {
+                $("#siteAddtest").hide();
+                var langua = locale.current();
+                var address_test = $(this).val();
+                if (langua == 1) {
+                    // English
+                    var reg_add = new RegExp("^[a-zA-Z0-9,]+$", "i");
+                } else {
+                    var reg_add = new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5]+$", "i");
+                }
+                console.log( "test,", reg_add.test(address_test));
+                if (reg_add.test(address_test)) {
+                    $("#siteAddtest").hide();
+                } else {
+                    $("#siteAddtest").show();
+                }
+            });
+            */
         }
         // loading suggestion address, base on google map's place lib
         var autocomplete, places;
@@ -271,7 +296,24 @@
         }
         $("#addLiveSiteForm ul li div.col-sm-8").css("position", "relative");
     }
-
+    //address reg
+    $("#addLiveSiteAddress").blur(function() {
+        $("#siteAddtest").hide();
+        // var langua = locale.current();
+        var address_test = $(this).val();
+        // if (langua == 1) {
+            // English
+            // var reg_add = new RegExp("^[a-zA-Z0-9,]+$", "i");
+        // } else {
+            var reg_add = new RegExp("^[\s,a-zA-Z0-9_\u4e00-\u9fa5]+$", "i");
+        // }
+        // ccconsole.log( "test,", reg_add.test(address_test));
+        if (reg_add.test(address_test) || address_test == "" || address_test == " " || address_test == "   " || address_test == "  " ) {
+            $("#siteAddtest").hide();
+        } else {
+            $("#siteAddtest").show();
+        }
+    });
     //显示建议地址以及标记地图
     function suggestionAndMarker(map, marker, targetMap, addressMap) {
         $("#suggestionAdd").empty().show();
@@ -341,7 +383,7 @@
         window.map = map;
         map.setView([lat, lng], 8);
         marker = L.marker([lat, lng]).addTo(map);
-        L.tileLayer(mapLanguage).addTo(map);// + ".png?{foo}", { foo: "bar"  }
+        L.tileLayer(mapLanguage).addTo(map); // + ".png?{foo}", { foo: "bar"  }
         window.lat = marker._latlng.lat;
         window.lng = marker._latlng.lng;
     }
@@ -351,10 +393,11 @@
     });
     //显示编辑现场模态框
     function editSite(targetIds, targetInfo) {
-        // console.log( "targetIds,", targetIds, ", targetInfo,", targetInfo);
+        $(".error_text").hide();
         $("#siteId").val("");
         $("#isBindGatewayFlag").val("");
         $("#isExistLocation").val("");
+        oldLocation = {};
         devices = [];
         edit_device_id = "";
         old_asset_no = "";
@@ -403,6 +446,7 @@
         $("#gatewayNametest").hide();
         $(".addLiveSiteNameformError").hide();
         $("#siteNametest").hide();
+        $("#siteAddtest").hide();
         $("#message1_div").empty();
         $("#message2_div").empty();
         $("#message3_div").empty();
@@ -418,7 +462,7 @@
         $("#part_form_reset").click();
         $("#deviceinfo_div").addClass("hidden");
         $("#parts_div").addClass("hidden");
-        $("#partinfo_div").addClass("hidden");
+        $("#partinfo_div").removeClass("show").removeClass("hidden").addClass("hidden");
         $(".formErrorContent").remove();
         //获取信息
         getSiteData(targetIds);
@@ -503,9 +547,9 @@
                     site_id: data.result._id
                 };
                 getGatewayBySiteId(paramSite, function(data2) {
-                        if(data2.total>0) {
-                           $("#isBindGatewayFlag").val(data2.result[0]._id);
-                        }
+                    if (data2.total > 0) {
+                        $("#isBindGatewayFlag").val(data2.result[0]._id);
+                    }
                 }, this);
             }
         }, this);
@@ -556,12 +600,15 @@
         if (typeof(data.location) != "undefined") {
             var longitude = data.location.longitude;
             var latitude = data.location.latitude;
-            if(data.location.source) {
+            if (data.location.source) {
                 $("#isExistLocation").val(1); // １表示该现场有经纬度
+                oldLocation = data.location;
             }
         }
         $("#addLiveSiteAddress").val(data.address);
-        locale.render({element: "#init_body"});
+        locale.render({
+            element: "#init_body"
+        });
     }
 
     // 校验/*网关名*/ 现场是否存在
@@ -569,7 +616,7 @@
         var flag = true;
         var oldSiteName = $("#oldSiteName").val();
         var name = $("#addLiveSiteName").val();
-        if (name != '' && name != oldSiteName) {
+        if (name != '' && name != oldSiteName && /^[a-zA-Z0-9_\-\u4e00-\u9fa5]+$/i.test(name)) {
             getByName(name, false, function(data) {
                 if (parseInt(data.total) > 0) {
                     var names = data.result;
@@ -669,23 +716,26 @@
                 email: addLiveSiteConEmail
             }
         };
-        if($("#addBox").attr("flag") == "add"&&addLiveSiteAddress != "") {
-            var  location = {
+        if ($("#addBox").attr("flag") == "add" && addLiveSiteAddress != "") {
+            var location = {
                 latitude: latitude,
                 longitude: longitude,
                 time: time
             };
             addDataObject.location = location;
         }
-        if($("#addBox").attr("flag") == "edit"&&addLiveSiteAddress != "") {
-            if(!$("#isExistLocation").val()) {
-                var  location = {
+        if ($("#addBox").attr("flag") == "edit" && addLiveSiteAddress != "") {
+            if (!$("#isExistLocation").val()) {
+                var location = {
                     latitude: latitude,
                     longitude: longitude,
                     time: time
                 };
                 addDataObject.location = location;
+            } else {
+                addDataObject.location = oldLocation;
             }
+
         }
         if ($("#addBox").attr("flag") == "edit") { //编辑现场
             //编辑现场调用函数

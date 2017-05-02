@@ -8,7 +8,7 @@
         <div class="col-lg-3" id="device_div">
             <!--设备列表-->
             <div class="panel panel-default" style="max-height: 382px;overflow: auto">
-                <div class="panel-heading"><span lang="text:site_devices"></span><button type="button" class="btn btn-primary btn-xs pull-right" id="add_device_bt" lang="title:add_device" title=""><span class="glyphicon glyphicon-plus"></span></button></div>
+                <div class="panel-heading"><span lang="text:site_devices"></span><button type="button" class="btn btn-primary btn-xs pull-right" id="add_device_bt" lang="title:add_device"><span class="glyphicon glyphicon-plus"></span></button></div>
                 <ul class="list-group" id="devices_list">
                     <li class="list-group-item" lang="text:no_data"></li>
                 </ul>
@@ -33,19 +33,19 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label><span lang="text:asset_number"></span ><span class="text-red">*</span></label>
-                                                    <input type="text"  class="form-control input-sm validate[required,maxSize[30]]" id="asset_no" lang="placeholder:asset_no">
+                                                    <input type="text"  class="form-control input-sm validate[required,maxSize[30],custom[stopSpecialCharacters]]" id="asset_no" lang="placeholder:asset_number">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label><span lang="text:name1" ></span ><span class="text-red">*</span></label>
-                                                    <input type="text" class="form-control input-sm validate[required,maxSize[30]]" id="device_name" lang="placeholder:name1">
+                                                    <input type="text" class="form-control input-sm validate[required,maxSize[30],custom[stopSpecialCharacters]]" id="device_name" lang="placeholder:name1">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label><span lang="text:type"></span ><span class="text-red">*</span></label>
-                                                    <input type="text" name="device_type_type" id="device_type_type" class="form-control input-sm validate[required,maxSize[30]]" lang="placeholder:type">
+                                                    <input type="text" name="device_type_type" id="device_type_type" class="form-control input-sm validate[required,maxSize[30],custom[stopSpecialCharacters]]" lang="placeholder:type">
                                                 </div>
                                             </div>
                                         </div>
@@ -151,13 +151,16 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label><span lang="text:serial_number"></span ></label>
-                                                    <input type="text" class="form-control input-sm validate[custom[onlyLetterNumber],maxSize[30]]" id="serial" lang="placeholder:serial_number" placeholder="">
+                                                    <input type="text" class="form-control input-sm validate[custom[onlyLetterNumber],maxSize[30],funcCall[isAssetSerialExist]]" id="serial" lang="placeholder:serial_number">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label lang="text:production_time"></label>
-                                                    <input type="text" class="form-control datePlugin input-sm" id="create_ts" lang="placeholder:production_time" placeholder="" readonly="readonly">
+                                                    <div class="has-feedback">
+                                                        <input type="text" class="form-control datePlugin input-sm" id="create_ts" name="create_ts" lang="placeholder:production_time" placeholder="" readonly="readonly" style="background-color: #fff">
+                                                        <span class="glyphicon glyphicon-calendar form-control-feedback" style="right: 0;"></span>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -166,13 +169,13 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label lang="text:device_part_model"></label>
-                                                    <input type="text" class="form-control input-sm validate[custom[onlyLetterNumber],maxSize[30]]" id="model" lang="placeholder:device_part_model" placeholder="">
+                                                    <input type="text" class="form-control input-sm validate[custom[stopSpecialCharacters],maxSize[30]]" id="model" lang="placeholder:device_part_model">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label lang="text:procurement_costs"></label>
-                                                    <input type="text" class="form-control input-sm validate[custom[number],min[0]" id="prix" lang="placeholder:procurement_costs" placeholder="">
+                                                    <input type="text" class="form-control input-sm validate[custom[onlyNumberSp],min[0]]" id="prix" lang="placeholder:procurement_costs">
                                                 </div>
                                             </div>
 
@@ -181,13 +184,13 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label lang="text:supplier"></label>
-                                                    <input type="text" class="form-control input-sm validate[custom[giveName],maxSize[30]]" id="vendor_name" lang="placeholder:supplier" placeholder="">
+                                                    <input type="text" class="form-control input-sm validate[maxSize[30],custom[stopSpecialCharacters]]" id="vendor_name" lang="placeholder:supplier">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label lang="text:use_site"></label>
-                                                    <input type="text" class="form-control input-sm validate[custom[giveName],maxSize[30]]" id="location" lang="placeholder:use_site" placeholder="">
+                                                    <input type="text" class="form-control input-sm validate[maxSize[30],custom[stopSpecialCharacters]]" id="location" lang="placeholder:use_site">
                                                 </div>
                                             </div>
 
@@ -196,13 +199,19 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label lang="text:purchasing_time"></label>
-                                                    <input type="text" class="form-control datePlugin input-sm" id="purchase_ts" lang="placeholder:purchasing_time" placeholder="" readonly="readonly">
+                                                    <div class="has-feedback">
+                                                        <input type="text" class="form-control validate[future[#create_ts]] datePlugin input-sm" id="purchase_ts" name="purchase_ts" lang="placeholder:purchasing_time"  readonly="readonly" style="background-color: #fff">
+                                                        <span class="glyphicon glyphicon-calendar form-control-feedback" style="right: 0;"></span>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label lang="text:change_time"></label>
-                                                    <input type="text" class="form-control datePlugin2 input-sm" id="replace_ts" lang="placeholder:change_time" placeholder="" readonly="readonly">
+                                                    <div class="has-feedback">
+                                                        <input type="text" class="form-control datePlugin2 input-sm validate[future[#create_ts],future[#purchase_ts]]" id="replace_ts" name="replace_ts" lang="placeholder:change_time"  readonly="readonly" style="background-color: #fff">
+                                                        <span class="glyphicon glyphicon-calendar form-control-feedback" style="right: 0;"></span>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -211,13 +220,16 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label lang="text:discard_time"></label>
-                                                    <input type="text" class="form-control datePlugin2 input-sm" id="refor_ts" lang="placeholder:discard_time" placeholder="" readonly="readonly">
+                                                    <div class="has-feedback">
+                                                        <input type="text" class="form-control datePlugin2 input-sm validate[future[#create_ts],future[#purchase_ts],future[#replace_ts]]" id="refor_ts" name="refor_ts" lang="placeholder:discard_time"  readonly="readonly" style="background-color: #fff">
+                                                        <span class="glyphicon glyphicon-calendar form-control-feedback" style="right: 0;"></span>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label lang="text:depreciation_fixed_number_of_year+(+year+)"></label>
-                                                    <input type="text" class="form-control input-sm validate[custom[integer],min[0]" id="depreciation_year" lang="placeholder:depreciation_fixed_number_of_year" placeholder="">
+                                                    <input type="text" class="form-control input-sm validate[custom[integer],min[0]" id="depreciation_year" lang="placeholder:depreciation_fixed_number_of_year">
                                                 </div>
                                             </div>
                                         </div>
@@ -288,11 +300,32 @@
         }
     })(jQuery);
 
+    //验证角色名是否存在
+    function isAssetSerialExist(field, rules, i, options) {
+        var serial = $.trim(field[0].value);
+        var flag = false;
+        if (serial != '') {
+            if(serial!=old_serial) {
+                for(var i=0; i<devices.length; i++) {
+                    if(devices[i].serial==serial) {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+
+            if (flag) {
+                var message = locale.get("serial_number_already_exists");
+                return message;
+            }
+            }
+        }
+
     //校验资产编号的唯一性 （先检查设备列表，再检查数据库数据）
     function isExistAssetNo(){
         var asset_no = $.trim($("#asset_no").val());
         var flag = false; // false 设备不存在 ture 设备存在
-        if(asset_no != "" && old_asset_no != asset_no){
+        if(asset_no != "" && old_asset_no != asset_no && /^[a-zA-Z0-9_\-\u4e00-\u9fa5]+$/i.test(asset_no)){
             if(devices.length>0) {
                 for(var i = 0; i < devices.length; i++) {
                     if(asset_no==devices[i].asset_no) {
@@ -390,7 +423,7 @@
     });
     $("#device_cancel").click(function(event) {
         // $("#add_device_bt").click();
-        $("#partinfo_div").removeClass( "show").addClass( "hide");
+        $("#partinfo_div").removeClass("show").removeClass("hidden").addClass( "hide");
         if($("#devices_list > .list-group-item-success").length > 0){
             checkDevice((($.trim($("#devices_list > .list-group-item-success > span:eq(1)").attr("onclick"))).match(/\'(.*)\'/))[1]);
         }else{
@@ -437,7 +470,7 @@
                     $("#devices_list").append('<li id="' + device_data.asset_no+ '" class="list-group-item">' +
                         '<span style="display:inline-block;width:76%;">' + device_data.device_name + '</span>' +
                         '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkDevice(\'' + device_data.asset_no + '\')"></span>' +
-                        '<span onclick="delDevice(this,\'' + device_data.asset_no + '\')" style="margin-top:1px;" class="glyphicon glyphicon-remove pull-right " lang="title:delete" title="删除"></span>' +
+                        '<span onclick="delDevice(this,\'' + device_data.asset_no + '\')" style="margin-top:1px;" class="glyphicon glyphicon-remove pull-right " lang="title:delete"></span>' +
                         '</li>');
                     // Port Controller
                     // Generic Ethernet
@@ -445,8 +478,8 @@
                     // edit_device_id = device_data._id;
                     $("#devices_list").append('<li id="' + device_data.asset_no + '" class="list-group-item">' +
                         '<span style="display:inline-block;width:76%;">' + device_data.device_name + '</span>' +
-                        '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkDevice(\'' + device_data.asset_no + '\')" title="编辑"></span>' +
-                        '<span onclick="delDevice(this,\'' + device_data.asset_no + '\')" style="margin-top:1px;" class="glyphicon glyphicon-remove pull-right " lang="title:delete" title="删除"></span>' +
+                        '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkDevice(\'' + device_data.asset_no + '\')"></span>' +
+                        '<span onclick="delDevice(this,\'' + device_data.asset_no + '\')" style="margin-top:1px;" class="glyphicon glyphicon-remove pull-right " lang="title:delete"></span>' +
                         '</li>');
                     // Generic Serial Port
                 }
@@ -455,8 +488,8 @@
                 // edit_device_id = device_data._id;
                 $("#devices_list").append('<li id="' + device_data.asset_no + '" class="list-group-item">' +
                     '<span style="display:inline-block;width:76%;">' + device_data.device_name + '</span>' +
-                    '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkDevice(\'' + device_data.asset_no + '\')" title="编辑"></span>' +
-                    '<span onclick="delDevice(this,\'' + device_data.asset_no + '\')" style="margin-top:1px;" class="glyphicon glyphicon-remove pull-right " lang="title:delete" title="删除"></span>' +
+                    '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkDevice(\'' + device_data.asset_no + '\')"></span>' +
+                    '<span onclick="delDevice(this,\'' + device_data.asset_no + '\')" style="margin-top:1px;" class="glyphicon glyphicon-remove pull-right " lang="title:delete"></span>' +
                     '</li>');
             }
             if (i == 0) { //显示第一条设备信息
@@ -483,7 +516,6 @@
 
     // 下一步
     $("#saveAssetNextStep").click(function(event) {
-
         $("#three_div").removeClass("finished").addClass("current");
         $("#three").empty().append('<span class="glyphicon glyphicon-ok"></span> ');
         $("#four_div").removeClass("todo").addClass("finished");
@@ -512,6 +544,7 @@
     // judge type of device
     $("#add_device_bt").click(function() {
         old_asset_no = "";
+        old_serial = "";
         $("#device_form input").removeAttr( "readonly");
         $("#device_form select").removeAttr( "disabled");
         $(".device_basic_content").hide();
@@ -521,11 +554,11 @@
         $(".formErrorContent").remove();
         $("#parts_div").removeClass("hidden").addClass("show");
         $("#device_parts_tbody").empty().append('<tr><td colspan="6"  align="center" lang="text:no_data"></td></tr>');
-        $("#partinfo_div").addClass("hidden");
+        $("#partinfo_div").removeClass("show").removeClass("hidden").addClass("hidden");
         $("#flag_edit").val("");
         $("#part_form_reset").click();
         $("#device_form_reset").click();
-        $("#device_serial").val("");
+        $("#device_assetNo").val("");
         $("#asset_no").prop("readonly", "");
         $("#devices_list").find("li").removeClass("list-group-item-success");
         edit_device_id = "";
@@ -543,7 +576,7 @@
 
 
     //提交设备信息
-    $("#submit_device").bind( "click", function() {
+    $("#submit_device").unbind( "click").bind( "click", function() {
         if( $('#device_form').validationEngine('validate')) {
             // judge type of device
             //采集数据
@@ -714,20 +747,20 @@
                                 if( device_parameter_type == "Ethernet" || device_parameter_type == "RS232" || device_parameter_type == "RS485" ) {
                                     $("#" + old_asset_no).empty().attr("id", old_asset_no).css("word-break", "break-all");
                                     $("#" + old_asset_no ).append('<span style="display:inline-block;width:76%;">' + device_name + '</span>' +
-                                        '<span class="glyphicon glyphicon-edit link-black"  onclick="checkDevice(\'' + devices[i].asset_no + '\')" lang="title:edit" style="cursor:pointer;" title="编辑"></span>');
+                                        '<span class="glyphicon glyphicon-edit link-black"  onclick="checkDevice(\'' + devices[i].asset_no + '\')" lang="title:edit" style="cursor:pointer;"></span>');
                                 } else {
                                     $("#" + old_asset_no).empty().attr("id", old_asset_no).css("word-break", "break-all");
                                     $("#" + old_asset_no ).append('<span style="display:inline-block;width:76%;">' + device_name + '</span>' +
-                                        '<span class="glyphicon glyphicon-edit link-black"  onclick="checkDevice(\'' + devices[i].asset_no + '\')" lang="title:edit" style="cursor:pointer;" title="编辑"></span>' +
-                                        '<span onclick="delDevice(this,\'' + asset_no + '\')" style="cursor:pointer; margin-top:1px;" class="glyphicon glyphicon-remove pull-right link-black" lang="title:delete" title="删除"></span>');
+                                        '<span class="glyphicon glyphicon-edit link-black"  onclick="checkDevice(\'' + devices[i].asset_no + '\')" lang="title:edit" style="cursor:pointer;"></span>' +
+                                        '<span onclick="delDevice(this,\'' + asset_no + '\')" style="cursor:pointer; margin-top:1px;" class="glyphicon glyphicon-remove pull-right link-black" lang="title:delete"></span>');
                                     $("#asset_no").prop("readonly", "");
                                 }
                             }
                         } else {
                             $("#" + old_asset_no).empty().attr("id", old_asset_no).css("word-break", "break-all");
                             $("#" + old_asset_no ).append('<span style="display:inline-block;width:76%;">' + device_name + '</span>' +
-                                '<span class="glyphicon glyphicon-edit link-black"  onclick="checkDevice(\'' + devices[i].asset_no + '\')" lang="title:edit" style="cursor:pointer;" title="编辑"></span>' +
-                                '<span onclick="delDevice(this,\'' + asset_no + '\')" style="cursor:pointer; margin-top:1px;" class="glyphicon glyphicon-remove pull-right link-black" lang="title:delete" title="删除"></span>');
+                                '<span class="glyphicon glyphicon-edit link-black"  onclick="checkDevice(\'' + devices[i].asset_no + '\')" lang="title:edit" style="cursor:pointer;"></span>' +
+                                '<span onclick="delDevice(this,\'' + asset_no + '\')" style="cursor:pointer; margin-top:1px;" class="glyphicon glyphicon-remove pull-right link-black" lang="title:delete"></span>');
                             $("#asset_no").prop("readonly", "");
                         }
                         break;
@@ -744,17 +777,21 @@
                 $("#devices_list").empty();
                 $("#devices_list").append('<li style="word-break: break-all;" id="' + asset_no + '" class="list-group-item list-group-item-success">' +
                     '<span style="display:inline-block;width:76%;" >' + device_name + '</span>' +
-                    '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkDevice(\'' + asset_no + '\')" style="cursor:pointer" title="编辑"></span>' +
-                    '<span onclick="delDevice(this,\'' + asset_no + '\')" class="glyphicon glyphicon-remove pull-right link-black" style="cursor:pointer; margin-top:1px;" lang="title:delete" title="删除"></span></li>');
+                    '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" onclick="checkDevice(\'' + asset_no + '\')" style="cursor:pointer"></span>' +
+                    '<span onclick="delDevice(this,\'' + asset_no + '\')" class="glyphicon glyphicon-remove pull-right link-black" style="cursor:pointer; margin-top:1px;" lang="title:delete"></span></li>');
                 $("#devices_list").append(perHtml);
-                $("#device_serial").val(asset_no);
+                $("#device_assetNo").val(asset_no);
                 devices.push( add_device_data);
             }
-            if( devices) { 
-                errorTipDis("submit_success")
+            if( devices) {
+                dialog.render({
+                    lang: "submit_success"
+                });
                 $("#add_device_bt").click();
-            } else { 
-                errorTipDis("submit_failed")
+            } else {
+                dialog.render({
+                    lang: "submit_failed"
+                });
             }
             $(".formErrorContent").remove();
             $("#flag_edit").val("");
@@ -773,6 +810,7 @@
                 var current_device = devices[i];
                 edit_device_id = devices[i]._id;
                 old_asset_no = devices[i].asset_no;
+                old_serial = devices[i].serial;
                 break;
             }
         }
@@ -918,9 +956,9 @@
         $("#devices_list").find("li").removeClass("list-group-item-success");
         $("#" + asset_no).addClass("list-group-item-success");
         $("#deviceinfo_div").removeClass("hidden").addClass("show");
-        $("#partinfo_div").addClass("hidden");
+        $("#partinfo_div").removeClass("show").removeClass("hidden").addClass("hidden");
         $("#parts_div").removeClass("hidden").addClass("show");
-        $("#device_serial").val(asset_no);
+        $("#device_assetNo").val(asset_no);
         $("#flag_edit").val("edit");
         if ($("#more_div_device").prop("class") == "show") {
             $("#more_div_device").removeClass("show").addClass("hidden");
@@ -934,7 +972,7 @@
     //删除设备
     function delDevice(del, asset_no) {
         dialog.render({
-            lang: "affirm_delete",
+            lang: "confirm_to_delete_device",
             buttons: [{
                 lang: "yes",
                 click: function() {
@@ -968,8 +1006,8 @@
                             break;
                         }
                     }
-                    if ($(del).parent().prop("id") == $("#device_serial").val()) {
-                        $("#device_serial").val("");
+                    if ($(del).parent().prop("id") == $("#device_assetNo").val()) {
+                        $("#device_assetNo").val("");
                         $("#asset_no").prop("readonly", "");
                         $("#device_parts_tbody").empty().append('<tr><td colspan="6"  align="center" lang="text:no_data"></td></tr>');
                         $("#part_form_reset").click();

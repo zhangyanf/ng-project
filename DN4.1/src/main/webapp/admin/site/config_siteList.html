@@ -154,6 +154,13 @@
     .device_basic_content {
         display: none;
     }
+    /*==============site information=================*/
+    .datePlugin, .datePlugin2 {
+        background-color: #fff;
+    }
+    #serial_number_index {
+        display: none;
+    }
 </style>
 <section class="content-header">
     <h1 lang="text:site">
@@ -161,7 +168,7 @@
     </h1>
     <ol class="breadcrumb">
         <li>
-            <a href="#" lang="text:config"></a>
+            <a href="#" lang="text:site_management"></a>
         </li>
         <li class="active" lang="text:site"></li>
     </ol>
@@ -190,20 +197,20 @@
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-sm-12" style="padding-bottom: 10px;">
-                                    <form class="form-inline">
+                                    <form class="form-inline" id="siteSearchForm">
                                         <div class="form-group">
-                                            <input style="cursor:auto;" type="text" name="search" class="form-control input-sm" id="liveSearch" placeholder lang="placeholder:site_name">
+                                            <input style="cursor:auto;" type="text" name="search" class="form-control input-sm validate[custom[stopSpecialCharacters]]" id="liveSearch" placeholder lang="placeholder:site_name">
                                             <button type="button" onclick="searchFun()" class="btn btn-default btn-sm" data-toggle="tooltip" title="" lang="title:query" id="btn_research">
                                                 <span class="glyphicon glyphicon-search"></span>
                                             </button>
                                         </div>
                                         <div class="form-group pull-right">
                                             <div class="btn-group">
-                                                <!--<button id="addLiveSite" type="button" class="btn btn-default btn-sm" title="" data-toggle="tooltip" data-placement="bottom" lang="title:add" data-permissionFilter="[30]">-->
-                                                    <!--<i class="glyphicon glyphicon-plus"></i>-->
-                                                <!--</button>-->
+                                                <button id="addLiveSite" type="button" class="btn btn-default btn-sm" title="" data-toggle="tooltip" data-placement="bottom" lang="title:add" data-permissionFilter="[30]">
+                                                    <i class="glyphicon glyphicon-plus"></i>
+                                                </button>
                                                 <button id="deleteLiveSite" type="button" class="btn btn-default btn-sm" title="" data-toggle="tooltip" data-placement="bottom" lang="title:deletesite" data-permissionFilter="[30]">
-                                                    <i class="iconfont icon-delete"></i>
+                                                    <i class="glyphicon glyphicon-minus"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -220,12 +227,12 @@
                                                 </div>
                                             </th>
                                             <th style="width:5%;text-align:center;" lang="{text:state}"></th>
-                                            <th style="width:15%;" lang="text:site"></th>
+                                            <th style="width:15%;" lang="text:site_name"></th>
                                             <th lang="text:address"></th>
-                                            <th style="display:none;" lang="{text:business_state}"></th>
+                                            <th style="width:140px" lang="{text:business_state}"></th>
                                             <th style="width:12%;" lang="text:contact_name"></th>
                                             <th style="width:13%;" lang="text:contact_phone"></th>
-                                            <th style="width:17%;" lang="text:email"></th>
+                                            <th style="width:17%;" lang="text:contactor_email"></th>
                                             <th data-permissionfilter="[30,91]" style="width:80px;text-align: center" lang="text:operate"></th>
                                         </tr>
                                     </thead>
@@ -287,7 +294,7 @@
                     </div>
                     <div class="wrap col-md-３">
                         <div class="todo" id="five_div">
-                            <label><span class="round" id="five">5</span><span class="box-site-header" lang="text:finish"></span></label>
+                            <label><span class="round" id="five">5</span><span class="box-site-header" lang="text:four_complete"></span></label>
                         </div>
                     </div>
                 </div>
@@ -360,6 +367,16 @@
 
 <!--页面初始化加载-->
 <script>
+    /**
+     * 设置现场查询表单验证
+     */
+    validator.render("#siteSearchForm", {
+        //  promptPosition: "inline",
+         scroll: false,
+        // showOneMessage:true, // 只显示一条提示信息
+        showPrompts:false //不显示提示信息
+    });
+
     //全局变量保存提交信息
     var siteMessage = false; //true 提交成功 false 提交失败
     var deviceMessage = "A"; //A提交失败 B提交成功 C跳过
@@ -427,15 +444,19 @@
             "gateway": true,
             "limit": 0
         };
+        $("#info-model").empty();
         // 获取机型的API 调用
         getModels(params, function(data) {
             if (data) {
                 var $options = "";
+                var re_ir9 = new RegExp(/^9.*/);
                 for (var i = 0; i < data.result.length; i++) {
-                    if (i == 0) {
-                        $options += "<option selected='selected' value='" + data.result[i]._id + "'>" + data.result[i].name + "</option>";
-                    } else {
-                        $options += "<option value='" + data.result[i]._id + "'>" + data.result[i].name + "</option>";
+                    if(re_ir9.test(data.result[i].name)){
+                        if (i == 0) {
+                            $options += "<option selected='selected' value='" + data.result[i]._id + "'>" + data.result[i].name + "</option>";
+                        } else {
+                            $options += "<option value='" + data.result[i]._id + "'>" + data.result[i].name + "</option>";
+                        }
                     }
                 }
                 $("#info-model").append($options);
@@ -526,8 +547,10 @@
 
     //搜索函数
     function searchFun() {
-        $("#selectAll").prop( "checked", false);
-        liveSiteList(0, $("#pageNumberSelect").val());
+        if ($('#siteSearchForm').validationEngine('validate')) {
+            $("#selectAll").prop( "checked", false);
+            liveSiteList(0, $("#pageNumberSelect").val());
+        }
     }
 
     //每页显示条目切换回调函数
@@ -608,12 +631,12 @@
 
                 $tr += '<td style="word-break: break-all;" id="infoName' + clogs[i]._id + '" ></td>' +
                     '<td style="word-break: break-all;" id="infoAddress' + clogs[i]._id + '"></td>' +
-                    '<td style="word-break: break-all; display:none;" id="infoState' + clogs[i]._id + '"></td>' +
+                    '<td style="word-break: break-all;" id="infoState' + clogs[i]._id + '"></td>' +
                     '<td style="word-break: break-all;" id="infoConName' + clogs[i]._id + '"></td>' +
                     '<td style="word-break: break-all;" id="infoConPho' + clogs[i]._id + '"></td>' +
                     '<td style="word-break: break-all;" id="infoConEmail' + clogs[i]._id + '"></td>' +
                     '<td data-permissionfilter="[30,91]" style="word-break: break-all;text-align:center;"><span class="glyphicon glyphicon-edit link-black" lang="title:edit" id="edit' + clogs[i]._id + '" data-permissionfilter="[30]" style="cursor:pointer"></span>' +
-//                    '<span class="iconfont icon-scada link-black" data-permissionfilter="[91]" lang="title:web_scada" id="scada' + clogs[i]._id + '" style="margin-left:10px;cursor:pointer"></span>' +
+                    '<span class="iconfont icon-scada link-black" data-permissionfilter="[91]" lang="title:web_scada" id="scada' + clogs[i]._id + '" style="margin-left:10px;cursor:pointer"></span>' +
                     '</td>';
 
                 $tr += '</tr>';
@@ -722,11 +745,40 @@
                     lang: "yes",
                     click: function() {
                         checkedSite.each(function() {
-                            deleteSite(param, $(this).attr("id"));
+                            var current_site_id = $(this).attr( "id");
+                            var devices_prama = {
+                                "site_id": current_site_id,
+                                "verbose": 100,
+                                "limit": 0
+                            };
+                            getDevicesOfSite( devices_prama, true, function(data) {
+                                if ( data.total > 0) {
+                                    dialog.close();
+                                    dialog.render( {
+                                        lang: "current_site_had_assets",
+                                        buttons: [{
+                                            lang: "yes",
+                                            click: function() {
+                                                $("#selectAll").prop("checked", false);
+                                                liveSiteList(0, $("#pageNumberSelect").val());
+                                                dialog.close();
+                                            }
+                                        }],
+                                        close: function() {
+                                            dialog.close();
+                                        }
+                                    });
+                                } else {
+                                    deleteSite( param, current_site_id /*$(this).attr("id")*/);
+                                    $("#selectAll").prop("checked", false);
+                                    liveSiteList(0, $("#pageNumberSelect").val());
+                                    dialog.close();
+                                }
+                            }, this);
                         });
-                        $("#selectAll").prop("checked", false);
+                        /*$("#selectAll").prop("checked", false);
                         liveSiteList(0, $("#pageNumberSelect").val());
-                        dialog.close();
+                        dialog.close();*/
                     }
                 }, {
                     lang: "no",
