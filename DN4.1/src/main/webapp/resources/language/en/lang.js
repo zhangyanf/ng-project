@@ -379,7 +379,7 @@ var lang = {
         answer: "Answer",
         is_must_fill: "is required",
         please_input_email: "Please enter email",
-        please_input_username: "Please enter username",
+        please_input_username: "Please enter name",
         please_input_organization: "Please enter organization",
         please_input_answer: "Please enter answer",
         finish_register: "Congratulations！Registration completed! Please click",

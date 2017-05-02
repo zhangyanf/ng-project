@@ -685,6 +685,19 @@
 				<strong><span lang="text:registration_prompt"></span><span class="glyphicon glyphicon-star" style="color:#337ab7;"></span><span lang="text:is_must_fill"></span></strong>
 			</b>
 			<form id="registerInfoBox" style="width: 450px;margin: 0 auto;">
+				<div class="reUserNameBox col-md-12 col-sm-12 col-xs-12">
+					<div class="col-sm-12 col-xs-12" style="height:1rem;"></div>
+					<div class="col-sm-1 col-xs-1">
+						<span class="glyphicon glyphicon-star" style="color:#337ab7;"></span>
+					</div>
+					<div class="col-sm-3 col-xs-3" style="text-align:right">
+						<span>name</span>
+					</div>
+					<div class="col-sm-8 col-xs-8">
+						<input type="text" name="registerUserName" id="registerUserName" class="form-control col-sm-12 validate[required,maxSize[30]]"
+							   lang="placeholder:please_input_username">
+					</div>
+				</div>
 				<div class="reEmailBox col-md-12 col-sm-12 col-xs-12">
 					<div style="height:1rem;"></div>
 					<div class="col-sm-1 col-xs-1">
@@ -697,19 +710,7 @@
 						<input type="text" name="registerEmail" id="registerEmail" class="form-control col-sm-12 validate[required,maxSize[50],custom[email]s]"
 							   lang="placeholder:please_input_email">
 					</div>
-				</div>
-				<div class="reUserNameBox col-md-12 col-sm-12 col-xs-12">
-					<div class="col-sm-12 col-xs-12" style="height:1rem;"></div>
-					<div class="col-sm-1 col-xs-1">
-						<span class="glyphicon glyphicon-star" style="color:#337ab7;"></span>
-					</div>
-					<div class="col-sm-3 col-xs-3" style="text-align:right">
-						<span lang="text:username"></span>
-					</div>
-					<div class="col-sm-8 col-xs-8">
-						<input type="text" name="registerUserName" id="registerUserName" class="form-control col-sm-12 validate[required,maxSize[30]]"
-							   lang="placeholder:please_input_username">
-					</div>
+					<div style="color:#00c0ef;position: absolute;top: 20px;" class="col-sm-5 col-sm-offset-11 col-xs-5 col-xs-offset-11">*Account for login</div>
 				</div>
 				<div class="reOrganizationBox col-md-12 col-sm-12 col-xs-12">
 					<div class="col-sm-12 col-xs-12" style="height:1rem;"></div>
@@ -806,6 +807,7 @@
 					<div class="col-sm-3 col-xs-3">
 						<span class="simg-holder cover-img-holder"><a><img id="imgVcode" src="" lang="title:click_to_change" /></a></span>
 					</div>
+					<div style="color:#00c0ef;position: absolute;top: 20px;" class="col-sm-5 col-sm-offset-11 col-xs-5 col-xs-offset-11">*Case insensitive</div>
 				</div>
 				<div class="reSubmitBox col-md-12 col-sm-12 col-xs-12">
 					<div class="col-sm-12 col-xs-12" style="height:1rem;"></div>

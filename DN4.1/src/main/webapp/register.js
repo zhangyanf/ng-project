@@ -20,7 +20,8 @@ locale.render({element: "body"});
  *表单验证
  **/
 validator.render("#registerInfoBox", {
-    promptPosition: "inline"
+    promptPosition: "inline",
+    showOneMessage:true
 });
 //nav对象 为“首页|注册|映翰通”中的"首页"添加选中效果
 function FnNav() {
