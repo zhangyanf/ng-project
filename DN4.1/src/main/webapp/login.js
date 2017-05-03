@@ -976,7 +976,7 @@ function FnIndex() {
             var self = this;
             //忘记密码框的模态框
             self.$motai = $('<div>').appendTo("#window-9").append(this.$forgetHtml)
-                    .css({"position": "absolute", "top": "0px", "left": "0px", "width": "100%"/*document.body.clientWidth||document.documentElement.clientWidth*/, "height": "5816px"/*document.body.clientHeight||document.documentElement.clientHeight*/, "background-color": "rgba(0,0,0,0.5)"})
+                    .css({"position": "absolute", "top": "0px", "left": "0px", "width": "100%"/*document.body.clientWidth||document.documentElement.clientWidth*/, "height": "806px"/*document.body.clientHeight||document.documentElement.clientHeight*/, "background-color": "rgba(0,0,0,0.5)"})
                     .bind("click", function(e) {
                 //当点击忘记密码框之外的地方，整个模态框消失
                 // if (e.target == $(this)[0]) {
@@ -1209,6 +1209,7 @@ function FnIndex() {
         }
     }
     ;
+
 /*==================
 *2016-09-05 Lee李杰
 *注释掉 参考后页面休息，重新编写
@@ -1498,6 +1499,18 @@ function FnIndex() {
             self.forgetPass = new ForgetPassword();
             self.forgetPass.showHtml();
             self.forgetPass.event();
+        });
+        $("#home-login-register").on("click",function () {
+            var wid=(window.innerWidth-600)/2;
+            var hei=(window.innerHeight-400)/2;
+            var width_block=document.body.clientWidth;
+            $("#rst-window").css({ "left": wid+"px", "top": hei+"px" });
+            $("#rst-window").parent().css({ "width": width_block+"px"});
+            $("#window_10_rst").show();
+            $("#rst-window-close").off().on('click',function () {
+                $("#window_10_rst").hide();
+            });
+            locale.render({element: "#rst-window"});
         });
         $("#home-nav-reg").bind("click", function() {
             if (self.register) {

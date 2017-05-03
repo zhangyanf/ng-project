@@ -108,7 +108,7 @@ $("#registerSecure").focus(function(event) {
     $(".secureErr").remove();
 });
 //点击切换验证码
-$("#imgVcode").click(function(event) {
+$("#reg_imgVcode").click(function(event) {
     showAuthCode();
 });
 //创建提交函数
@@ -120,7 +120,7 @@ function creatSubmit() {
     var registerUserName = $("#registerUserName").val();
     var registerOrganization = $("#registerOrganization").val();
     var registerSecure = $("#registerSecure").val();
-    var picId = $("#imgVcode").attr("picid");
+    var picId = $("#reg_imgVcode").attr("picid");
     var questionId = parseInt($("#reSecurityQuestions").val());
     //console.log( questionId);
     var question = $("#reSecurityQuestions").find("option:selected").text();
@@ -224,7 +224,7 @@ function showAuthCode() {
         success: function( data) {
             //picId = data.pictureId;
             var imgUrl = "/api/captchas/" + data._id;
-            $("#imgVcode").attr("src", imgUrl).attr("picId", data.pictureId);
+            $("#reg_imgVcode").attr("src", imgUrl).attr("picId", data.pictureId);
         }
     });
 }
