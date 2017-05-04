@@ -694,6 +694,8 @@
         if($("#"+form1_id+" input[name='select_schedule_type']:checked").val()){
             $("#"+form1_id+" input[name='schedule_type_2']").addClass("validate[required]");
         }
+        //点击按钮后，改按钮不可点击，即按钮只能点击一次
+        $("#submit_"+form1_id).attr("disabled",true);
         // 表单验证通过时执行
         if($("#"+form1_id).validationEngine('validate')){
             // 周期性，或则，截至日期型

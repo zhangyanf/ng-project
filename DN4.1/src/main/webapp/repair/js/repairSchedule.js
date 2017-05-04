@@ -20,7 +20,7 @@
         var container_panes_id=build_tab_param.container_panes_id;
         var nav_title='';
         if(type==='add'){
-            nav_title= '<a role="tab" lang="text:create_schedule_plan" data-toggle="tab" href="#'+panes_id+'">创建计划</a>';
+            nav_title= '<a role="tab" lang="text:create_schedule_plan" data-toggle="tab" href="#'+panes_id+'"></a>';
         }else if(type==='update'){
             nav_title='<a role="tab" data-toggle="tab" href="#'+panes_id+'">'+title_text+'</a>';
         }
@@ -69,17 +69,17 @@
         var group_siteName="<div class='form-group' name='group_siteName'>" +
                                    "<label class='col-sm-3 control-label'><span lang='text:site'></span><span class='text-red'>*</span></label>"+
                                    "<div class='col-sm-7'>" +
-                                       "<input type='text' class='form-control validate[required]' name='site_name' placeholder='现场名' readonly='readonly' lang='placeholder:site2'>"+
+                                       "<input type='text' class='form-control validate[required]' name='site_name' placeholder='site name' readonly='readonly' lang='placeholder:site2'>"+
                                    "</div>"+
                             "</div>";
         var group_schedule_typ="<div class='form-group' name='group_schedule_type'>" +
                                    "<label class='col-sm-3 control-label'><span lang='text:type'></span><span class='text-red'>*</span></label>"+
                                    "<div class='col-sm-9'>" +
                                         "<label class='radio-inline'>"+
-                                            "<input type='radio' name='select_schedule_type' value='1' checked><span lang='text:cyclicity'>周期性:</span>"+'&nbsp;&nbsp;&nbsp;'+
+                                            "<input type='radio' name='select_schedule_type' value='1' checked><span lang='text:cyclicity'></span>"+'&nbsp;&nbsp;&nbsp;'+
                                         "</label>"+
                                         "<label class='radio-inline'>"+
-                                            "<input type='radio' name='select_schedule_type' value='2'><span lang='text:deadline_type'>截至日期型:</span>"+
+                                            "<input type='radio' name='select_schedule_type' value='2'><span lang='text:deadline_type'></span>"+
                                         "</label>"+
                                     "</div>"+
                               "</div>";
@@ -118,8 +118,8 @@
                     "</div>"+
                      "<div class='col-sm-8'>" +
                         "<div class='modal-footer col-sm-10' style='padding-right: 0px'>" +
-                           "<button type='button' class='btn btn-default' data-dismiss='modal' lang='text:close' onclick='remove_tab(\""+nav_id+"\",\""+panes_id+"\")'>关闭</button>"+
-                           "<button type='button' class='btn btn-primary' onclick='create_update_schedule(\""+type+"\",\""+form1_id+"\")' lang='text:submit'>提交</button>"+
+                           "<button type='button' class='btn btn-default' data-dismiss='modal' lang='text:close' onclick='remove_tab(\""+nav_id+"\",\""+panes_id+"\")'></button>"+
+                           "<button type='button' id='submit_"+form1_id+"' class='btn btn-primary' onclick='create_update_schedule(\""+type+"\",\""+form1_id+"\")' lang='text:submit'></button>"+
                         "</div>"+
                      "</div>"+
                 "</div>"+
@@ -193,17 +193,17 @@
                  "   <div style='border: 1px solid #d2d6de; padding-bottom: 5px;padding-left: 15px;'>" +
                  "       <div style='width: 100%;'>" +
                  "          <span class='radio-inline'>"+
-                 "            <input type='radio' name='form_typeselect' value='day' checked><span lang='text:according_to_the_day'>按天</span>"+
+                 "            <input type='radio' name='form_typeselect' value='day' checked><span lang='text:according_to_the_day'></span>"+
                  "          </span>"+
                  "       </div>"+
                  "       <div style='width: 100%;'>" +
                  "           <span class='radio-inline'>"+
-                 "              <input type='radio' name='form_typeselect' value='week'><span lang='text:according_to_the_week'>按周</span>"+
+                 "              <input type='radio' name='form_typeselect' value='week'><span lang='text:according_to_the_week'></span>"+
                  "           </span>"+
                  "       </div>"+
                  "       <div>" +
                  "           <span class='radio-inline' style='width: 100%;'>"+
-                 "              <input type='radio' name='form_typeselect' value='month'><span lang='text:according_to_the_month'>按月</span>"+
+                 "              <input type='radio' name='form_typeselect' value='month'><span lang='text:according_to_the_month'></span>"+
                  "           </span>"+
                  "       </div>"+
                  "   </div>"+
@@ -269,7 +269,7 @@
             var addon= "<div style='width: 45%;' class='input-group'>" +
                        "<span class='inputgroup-addon-left'>每月第</span>"+
                          "<input type='text' name='cyclicity_month' class='form-control inputgroup-addon-input validate[required,custom[integer],min[1]]' style='padding-left:47px;min-width: 135px;'>"+
-                       "<span class='inputgroup-addon-right'><span lang='text:day'>天</span></span>"+
+                       "<span class='inputgroup-addon-right'><span lang='text:day'></span></span>"+
                        "</div>";
         }else if(language == 1){
             var addon="<div style='width: 210px;' class='input-group'>" +
@@ -288,7 +288,7 @@
                 "</div>";
         }else if(month_or_day=='week'){
             str="<div class='input-group' style='width: 45%;'>" +
-                "    <label class='input-group-addon' lang='text:_per_week'>每周</label>"+
+                "    <label class='input-group-addon' lang='text:_per_week'></label>"+
                 "    <select class='form-control input-sm' name='cyclicity_week'>" +
                 "       <option value='1' selected='selected' lang='text:monday'>一</option>"+
                 "       <option value='2' lang='text:tuesday'>二</option>"+
@@ -301,9 +301,9 @@
                 "</div>";
         }else if(month_or_day=='day'){
             str="<div class='input-group' style='width: 70%;'>" +
-                "    <span class='inputgroup-addon-left'><span lang='text:_per'>每</span></span>"+
+                "    <span class='inputgroup-addon-left'><span lang='text:_per'></span></span>"+
                 "    <input type='text' name='cyclicity_day' class='form-control inputgroup-addon-input validate[required,custom[integer],min[1]]'>"+
-                "    <span class='inputgroup-addon-right'><span lang='text:day'>天</span></span>"+
+                "    <span class='inputgroup-addon-right'><span lang='text:day'>day</span></span>"+
                 "</div>";
         }
         return str;

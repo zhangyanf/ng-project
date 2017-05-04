@@ -431,7 +431,8 @@
             }
             var order_no = "";
             if(result[i].order_no!=undefined && result[i].order_no!=""){
-                order_no =  "<a href='javascript:void(0)' onclick='searchOrder(\"" + result[i].order_id + "\")'>"+result[i].order_no +"</a>"; 
+//                order_no =  "<a href='javascript:void(0)' onclick='searchOrder(\"" + result[i].order_id + "\")'>"+result[i].order_no +"</a>";
+                order_no =  "<span onclick='searchOrder(\"" + result[i].order_id + "\")'>"+result[i].order_no +"</span>";
             }
 
             str = '<tr id=' + result[i]._id + '>' +

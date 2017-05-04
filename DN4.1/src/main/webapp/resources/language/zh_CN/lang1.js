@@ -1364,7 +1364,7 @@ var lang = {
         authority_manage: "权限管理",
         network_manage: "网络管理",
         scout: "监视",
-        create_update: "设备创建、更改",
+        create_update: "创建、更改",
         configure_upgrade: "配置、升级",
         console: "控制台",
         remote_maintenance: "远程维护",
