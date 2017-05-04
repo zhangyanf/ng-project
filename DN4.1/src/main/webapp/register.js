@@ -267,6 +267,7 @@ function creatSubmit() {
     if( registerEmail != "" && registerOrganization != "" && registerSecure != "" &&  pwd!="") {
         var option = {};
         option.data = {
+            username:registerEmail,
             email: registerEmail,
             //username: registerUserName,
             name: registerOrganization,
@@ -308,10 +309,10 @@ function creatSubmit() {
                 }
             } else {
                 //注册成功后页面显示
-                $("#infoHeader").removeClass("btn-primary");
-                $("#finishHeader").addClass("btn-primary");
-                $("#writeInformation").css("display","none");
-                $("#finishRegister").css("display","block");
+                // $("#infoHeader").removeClass("btn-primary");
+                // $("#finishHeader").addClass("btn-primary");
+                // $("#writeInformation").css("display","none");
+                // $("#finishRegister").css("display","block");
 
                 $("#registerInfoBox > input").first().click();
                 infoTipDis("registration+ success");

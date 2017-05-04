@@ -1501,8 +1501,8 @@ function FnIndex() {
             self.forgetPass.event();
         });
         $("#home-login-register").on("click",function () {
-            var wid=(window.innerWidth-600)/2;
-            var hei=(window.innerHeight-400)/2;
+            var wid=(window.innerWidth-700)/2;
+            var hei=(window.innerHeight-450)/2;
             var width_block=document.body.clientWidth;
             $("#rst-window").css({ "left": wid+"px", "top": hei+"px" });
             $("#rst-window").parent().css({ "min-width": width_block+"px"});
