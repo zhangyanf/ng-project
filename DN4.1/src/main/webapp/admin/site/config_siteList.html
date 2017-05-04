@@ -449,7 +449,7 @@
         getModels(params, function(data) {
             if (data) {
                 var $options = "";
-                var re_ir9 = new RegExp(/^9.*/);
+                var re_ir9 = new RegExp(/^6.*/);
                 for (var i = 0; i < data.result.length; i++) {
                     if(re_ir9.test(data.result[i].name)){
                         if (i == 0) {

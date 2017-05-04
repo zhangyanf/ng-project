@@ -619,7 +619,12 @@ var lang = {
         the_gateway_has_been_binding:"The gateway has been binding",
         the_site_has_been_deleted:"The site has been deleted",
         base_station: "Base Station",
-
+        four_complete: "Finished",
+        input_15_gate_number: "Please input the 15 letter serial number of the gateway",
+        baud_rate: "Baudrate",
+        data_bit: "Databits",
+        stop_bit: "Stopbit",
+        parity_check: "Parity",
 
         /******** 系统 *******/
         "system":"System",
