@@ -278,7 +278,7 @@ var lang = {
         login: "登录", 
         change_pwd: "修改密码",
         inhand: "映翰通",
-        welcome_to_inhand: "欢迎使用映翰通设备云",
+        welcome_to_inhand: "欢迎使用映翰通Smart ATM",
         donot_have_account: "没有帐号",
         
         login_again: "请重新登录",
