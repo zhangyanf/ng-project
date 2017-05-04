@@ -270,7 +270,7 @@
                                 </label>
                             </div>
                             <div class="form-group has-feedback" style="margin-left: 20px;">
-                                <input type="text" class="form-control form-control-left input-sm" id="searchDate" readonly="readonly" style="  width: 230px;">
+                                <input type="text" class="form-control form-control-left input-sm" id="searchDate" readonly="readonly">
                                 <span class="glyphicon glyphicon-calendar form-control-feedback" style="left: 0;"></span>
                             </div>
                             <div class="form-group" style="margin-left: 20px;">
@@ -373,8 +373,8 @@
     function getSearchParam(params) {
 
         var dateArray = ($("#searchDate").val()).split("-");
-        var start_time = new Date(dateArray[0]).getTime() / 1000;
-        var end_time = new Date(dateArray[1]).getTime() / 1000;
+        var start_time = new Date(dateArray[0]+" 00:00:00").getTime() / 1000;
+        var end_time = new Date(dateArray[1]+" 23:59:59").getTime() / 1000;
         var level = $("#level").val();
         if (start_time > end_time) {
             unload1();
@@ -530,8 +530,8 @@
         var nowtime = parseInt((new Date()).getTime());
         var deleteTime = (parseInt(nowtime / 1000) + 7 * 24 * 3600) + "";
 
-        var startTime = new Date(dateArray[0]).getTime() / 1000;
-        var endTime = new Date(dateArray[1]).getTime() / 1000;
+        var startTime = new Date(dateArray[0]+" 00:00:00").getTime() / 1000;
+        var endTime = new Date(dateArray[1]+" 23:59:59").getTime() / 1000;
         if (startTime > endTime) {
             unload1();
             errorTipDis("starttime_before_endtime");
@@ -604,17 +604,17 @@
             showDropdowns: false,
             showWeekNumbers: false,
             separator: '-',
-            timePicker: true,
-            timePicker24Hour: true,
+            timePicker: false,
+            timePicker24Hour: false,
             locale: {
-                format: 'YYYY/MM/DD HH:mm',
+                format: 'YYYY/MM/DD',
                 separator: '-',
                 applyLabel: locale.get("apply"),
                 cancelLabel: locale.get("cancel")
             }
         },
         function (start, end) {
-            $('#searchDate').val(start.format('YYYY/MM/DD HH:mm') + '-' + end.format('YYYY/MM/DD HH:mm'));
+            $('#searchDate').val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
         }
     );
     //页面功能权限过滤
