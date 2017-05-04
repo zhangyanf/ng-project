@@ -1505,7 +1505,7 @@ function FnIndex() {
             var hei=(window.innerHeight-400)/2;
             var width_block=document.body.clientWidth;
             $("#rst-window").css({ "left": wid+"px", "top": hei+"px" });
-            $("#rst-window").parent().css({ "width": width_block+"px"});
+            $("#rst-window").parent().css({ "min-width": width_block+"px"});
             $("#window_10_rst").show();
             $("#rst-window-close").off().on('click',function () {
                 $("#window_10_rst").hide();

@@ -53,6 +53,9 @@
         <script type="text/javascript" src="js/require.js" ></script>
         <script src="plugins/qrcode/excanvas.js"></script>
         <script src="plugins/qrcode/qrcode.js"></script>
+
+        <script src="js/ihtools.js"></script>
+
         <style  >
             .logo-title{
                 height: 50px;
@@ -335,7 +338,7 @@
                                <div class="home-content-login-title" style="text-align: center;">
                                    <div class="home-content-login-title-wrapper">
                                        <a href="javascript:void(0)" data-href="formID" class="content-link-login cloud-btn-link active" lang="text:login"></a>
-                                       <a href="javascript:void(0)" data-href="formID_register" class="content-link-register cloud-btn-link" lang="text:registration"></a>
+                                       <a href="javascript:void(0)" data-href="registerInfoBox" class="content-link-register cloud-btn-link" lang="text:registration"></a>
                                        <span class="login-title-slide-bar" style="margin: 0px 0.8em;"></span>
                                    </div>
                                </div>
@@ -393,33 +396,33 @@
                                    </div>
                             </form>
 
-                               <form id="formID_register" style="display: none;">
+                               <form id="registerInfoBox" style="display: none;">
                                    <input style="display: none;" type="reset">
                                    <div class="form-group has-feedback">
                                        <span class="icon-user form-control-feedback" style="left: 0;"></span>
                                        <input type="text" id="registerEmail" spellcheck="false" autocomplete="off"
                                               style="padding-left: 30px;padding-right: 0px;"
                                               placeholder="Please enter Email as login account"
-                                              class="form-control validate[required,custom[email],funcCall[cloudInput]] home-input-user"/>
+                                              class="form-control validate[required,custom[email],maxSize[50]] home-input-user"/>
                                    </div>
                                    <div class="form-group has-feedback">
                                        <span class="icon-key form-control-feedback" style="left: 0;"></span>
                                        <input type="password" id="register_password"
                                               style="padding-left: 30px;padding-right: 0px;"
-                                              placeholder="More than 8 munbers and letters"
-                                              class="form-control validate[required,funcCall[cloudInput]] home-input-pwd-password"/>
+                                              placeholder="More than 6 munbers and letters"
+                                              class="form-control validate[required,custom[password],minSize[6],maxSize[16],funcCall[cloudInput]] home-input-pwd-password"/>
                                    </div>
                                    <div class="form-group has-feedback">
                                        <span class="glyphicon glyphicon-globe form-control-feedback" style="left: 0;"></span>
                                        <input type="text" id="registerOrganization"
                                               style="padding-left: 30px;padding-right: 0px;"
                                               placeholder="organization"
-                                              class="form-control validate[required,custom[email],funcCall[cloudInput]] home-input-user"/>
+                                              class="form-control validate[required,maxSize[30]] home-input-user"/>
                                    </div>
                                    <div class="row">
                                        <div class="col-xs-6">
                                            <div class="form-group">
-                                               <input type="text" class="form-control" id="registerSecure" placeholder="captcha">
+                                               <input type="text" class="form-control validate[required,custom[systemAuthcode]]" id="registerSecure" placeholder="captcha">
                                            </div>
                                        </div>
                                        <div class="col-xs-6">
@@ -428,7 +431,7 @@
                                             </p>
                                        </div>
                                    </div>
-                                   <div clas="row">
+                                   <div>
                                        <div class="row" style="margin:0px;">
                                            <button id="creatAccout" lang="text:registration" type="button" class="btn btn-info btn-sm" style="display: block;width:100%;"></button>
                                        </div>
@@ -1224,7 +1227,7 @@
                      $("#"+$(this).attr("data-href")).children("input").click();
                  });
                  $("#"+$(this).attr("data-href")).show();
-                 if($(this).attr("data-href") == "formID_register"){
+                 if($(this).attr("data-href") == "registerInfoBox"){
                      showAuthCode();
                  }
              });
