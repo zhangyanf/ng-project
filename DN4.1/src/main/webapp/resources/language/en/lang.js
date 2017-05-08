@@ -432,7 +432,7 @@ var lang = {
 
 
         /******** 通知 *******/
-        "notice":"Event",
+        "notice":"Notifications",
         /********************************  告警管理 *********************************/
         "alarm":"Alarms",
         alarm_total: "Total Alarms",
