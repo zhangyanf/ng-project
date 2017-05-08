@@ -90,6 +90,7 @@
             },
             "password":{
 //                	"regex": /^[A-Za-z0-9_\!\@\#\$\%\^\&\*\.]+$/,
+ 
                 "regex": /^[A-Za-z0-9_\!\@\#\$\%\^\&\*\.\+\=\-\~\,\[\]\(\)]+$/,
                 "alertText": "* Contains illegal characters"
             },
@@ -122,6 +123,7 @@
             "phone1": {
                 // credit: jquery.h5validate.js / orefalo
                 "regex": /^(\+?[0-9]{2,4}\-?\s?)?([0-9]{3,4}\-?\s?)?([0-9]{7,8})(\-[0-9]+)?$/,
+
 //                	"regex": /^(\+[0-9]{2,4}\-?\s?)?([0-9]{3,4}\-?\s?)?([0-9]{7,8})(\-[0-9]+)?$/,
                 "alertText": "* Invalid phone number"
             },

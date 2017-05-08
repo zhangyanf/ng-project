@@ -518,11 +518,36 @@
     $("#saveAssetNextStep").click(function(event) {
         $("#three_div").removeClass("finished").addClass("current");
         $("#three").empty().append('<span class="glyphicon glyphicon-ok"></span> ');
-        $("#four_div").removeClass("todo").addClass("finished");
-        $("#four_div").find("label span:eq(1)").addClass("label");
+//        $("#four_div").removeClass("todo").addClass("finished");
+//        $("#four_div").find("label span:eq(1)").addClass("label");
        $(".addDeviceContentBox").hide();
-       $(".addPartContentBox").show();
+//       $(".addPartContentBox").show();
         fillDeviceList2(); //回填设备列表
+
+        /**临时去掉第四步后的操作*/
+        (function () {
+            if ($("#addBox").attr("flag") == "edit") {
+                targetInfo = window.targetInfo;
+            } else if ($("#addBox").attr("flag") == "add") {
+                targetInfo = "";
+            }
+            addSubmit(lat, lng, targetInfo); //提交现场
+            submitDate(globalSiteId, globalSiteName); //提交网关
+            submitDevice(globalSiteId); //提交设备
+            submiDeleteParts();//提交删除部件信息
+            message(); //填充提示信息
+            devices = []; //清空设备数据
+            delete_device_partIds=[];//清空要删除的部件
+            liveSiteList(0, $("#pageNumberSelect").val()); //刷新现场列表
+            //跳转到第五步 完成
+            $(".addPartContentBox").hide();
+            $(".addFinishContentBox").show();
+            $("#four_div").removeClass("finished").addClass("current");
+            $("#four").empty().append('<span class="glyphicon glyphicon-ok"></span> ');
+            $("#five_div").removeClass("todo").addClass("current");
+            $("#five_div").find("label span:eq(1)").addClass("label");
+            $("#five").empty().append('<span class="glyphicon glyphicon-ok"></span> ');
+        })();
 
     });
 
