@@ -102,8 +102,8 @@
                 strInput = "<td><input type='checkbox' value='" + obj[i]._id + "' class='tabs-checked'></td>";
             }
             str = "<tr>" + strInput +
-                "<td style='word-break: break-all;'>" + obj[i].name + "</td>" +
                 "<td style='word-break: break-all;'>" + obj[i].email + "</td>" +
+                "<td style='word-break: break-all;'>" + obj[i].name + "</td>" +
                 "<td>" + obj[i].state + "</td>" +
                 "<td>" + obj[i].roleName + "</td>" +
                 "<td>" + obj[i].createTime + "</td>" +
@@ -236,8 +236,8 @@
                                             <input type="checkbox" id="tableHead_checkbok" data-toggle='tooltip'
                                                    data-placement="bottom" lang="title:check_all">
                                         </th>
-                                        <th lang="text:username" style="width: 15%;"></th>
                                         <th lang="text:email" style="width: 20%;"></th>
+                                        <th style="width: 15%;">name</th>
                                         <th lang="text:state"></th>
                                         <th lang="text:role"></th>
                                         <th lang="text:creation_time"></th>
@@ -277,17 +277,6 @@
             <div class="modal-body">
                 <form class="form-horizontal" id="form_increseUser">
                     <div class="form-group">
-                        <label for="model_increseUser_userName" class="col-sm-2 control-label">
-                            <span lang="text:user_name"></span><span class="text-red">*</span>
-                        </label>
-                        <div class="col-sm-10">
-                            <input type="text"
-                                   class="form-control model_increseUser_userName validate[required,maxSize[30]]"
-                                   name="name" id="model_increseUser_userName"
-                                   lang="placeholder:user_name">
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label for="model_increseUser_email" class="col-sm-2 control-label">
                             <span lang="text:email"></span><span class="text-red">*</span>
                         </label>
@@ -297,6 +286,18 @@
                                    lang="placeholder:email">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="model_increseUser_userName" class="col-sm-2 control-label">
+                            <span>name</span><span class="text-red">*</span>
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text"
+                                   class="form-control model_increseUser_userName validate[required,maxSize[30]]"
+                                   name="name" id="model_increseUser_userName"
+                                   placeholder="name">
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="model_increseUser_phone" class="col-sm-2 control-label" lang="text:mobile_number">
                         </label>
@@ -349,21 +350,21 @@
                 <form class="form-horizontal" id="form_editeUser">
                     <input type="hidden" value="" name="_id" id="model_editeUser_id">
                     <div class="form-group">
-                        <label for="model_editeUser_userName" class="col-sm-2 control-label">
-                            <span lang="text:user_name"></span><span class="text-red">*</span>
-                        </label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control validate[required,maxSize[30]]" name="name"
-                                   id="model_editeUser_userName"
-                                   lang="placeholder:user_name">
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="col-sm-2 control-label" lang="text:email">
                         </label>
                         <div class="col-sm-10">
                             <input type="email" class="form-control" name="email" id="model_editeUser_email"
                                    disabled="true">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="model_editeUser_userName" class="col-sm-2 control-label">
+                            <span>name</span><span class="text-red">*</span>
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control validate[required,maxSize[30]]" name="name"
+                                   id="model_editeUser_userName"
+                                   placeholder="name">
                         </div>
                     </div>
                     <div class="form-group">
