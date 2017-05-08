@@ -643,6 +643,8 @@ var lang = {
         add_user: 'Add user',
         user_info: "User Info",
         please_input_captcha: "Please enter captcha",
+        deleteGatewayInfo: "Sure to delete?",
+        deleteUserInfo: "Delete the user？",
         /********************************  角色管理 *********************************/
         "role":"Role",
         role_info: "Role Info",

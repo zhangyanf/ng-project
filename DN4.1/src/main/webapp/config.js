@@ -16,7 +16,7 @@
  */
 var setting = {
     host: "/smartATM",
-    //host: "/DN4.1",
+    // host: "/DN4.1",
     debugMode: false,
     CLIENT_ID: "17953450251798098136",
     CLIENT_SECRET: "08E9EC6793345759456CB8BAE52615F3",

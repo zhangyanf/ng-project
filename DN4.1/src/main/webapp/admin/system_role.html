@@ -45,6 +45,10 @@
     //验证角色名是否存在
     function roleNameExist(field, rules, i, options) {
         var name = $.trim(field[0].value);
+        if(!/^[a-zA-Z0-9_\-\u4e00-\u9fa5]+$/i.test(name)) {
+            $("#searchInput").focus();
+            return;
+        }
         if (name != '') {
             var params = {verbose:1,name:name};
             var total;
@@ -56,11 +60,16 @@
                 return message;
             }
         }
+
     }
     //验证角色名是否存在
     function roleNameExist2(field, rules, i, options) {
         var oldName = $.trim($("#edit_oldRoleName").val());
         var name = $.trim(field[0].value);
+        if(!/^[a-zA-Z0-9_\-\u4e00-\u9fa5]+$/i.test(name)) {
+            $("#searchInput").focus();
+            return;
+        }
         if (name != '') {
             if(name!=oldName) {
                 var params = {verbose:1,name:name};
@@ -74,18 +83,8 @@
                 }
             }
         }
+
     }
-
-    //校验规则
-    (function($) {
-        $.validationEngineLanguage = {
-            "giveName": {
-                "regex": /^[a-zA-Z0-9_\-\u4e00-\u9fa5]+$/i,
-                "alertText": "* Invalid name"
-            }
-        }
-    })(jQuery);
-
     //初始化加载所有角色信息
     function init_load_roles(cursor,limit) {
         loading();
@@ -142,14 +141,14 @@
             }else {
                 str +=  "<td style='width:1%;'><input type='checkbox' value='" + data[i]._id + "' class='tabs-checked'></td>" ;
             }
-             str += "<td style='word-break: break-all;width:30%;'>" + name + "</td>" +
-                    "<td style='width:30%;'>" + transform_userCreateTime(data[i].createTime) + "</td>" +
-                    "<td style='width:30%;'>" + transform_userCreateTime(data[i].updateTime) + "</td>" +
-                    "<td style='text-align:center;width:9%;'>" +
-                    "<span data-toggle='tooltip' title='编辑' lang='title:edit' data-permissionFilter='[6]'" +
-                    "onclick='showModel_edit_role(\"" + data[i]._id + "\")' style='padding: 3px 6px;'><span class='glyphicon glyphicon-edit link-black' aria-hidden='true' style=' cursor: pointer;'></span>&nbsp;</span>" +
-                    "</td>" +
-                    "</tr>";
+            str += "<td style='word-break: break-all;width:30%;'>" + name + "</td>" +
+                "<td style='width:30%;'>" + transform_userCreateTime(data[i].createTime) + "</td>" +
+                "<td style='width:30%;'>" + transform_userCreateTime(data[i].updateTime) + "</td>" +
+                "<td style='text-align:center;width:9%;'>" +
+                "<span data-toggle='tooltip'  lang='title:edit' data-permissionFilter='[6]'" +
+                "onclick='showModel_edit_role(\"" + data[i]._id + "\")' style='padding: 3px 6px;'><span class='glyphicon glyphicon-edit link-black' aria-hidden='true' style=' cursor: pointer;'></span>&nbsp;</span>" +
+                "</td>" +
+                "</tr>";
             $("#panelContent").append(str);
         }
         //给input添加onclick事件
@@ -210,80 +209,79 @@
 
 <section class="content-header">
     <h1 lang="text:role">
-        角色
         <small>Version 2.0</small>
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#" lang="text:system"></a></li>
-      <li class="active" lang="text:role"> </li>
+        <li><a href="#" lang="text:system"></a></li>
+        <li class="active" lang="text:role"> </li>
     </ol>
 </section>
 
 <section class="content" id="tcontent">
     <!-- Tab panes -->
-        <div class="tab-content">
-            <!--表格数据区-->
-            <div class=" tab-pane row active">
-                <div class="col-md-12">
-                    <div class="box">
-                        <!--加载数据等待-->
-                        <div class="overlay" style="display: none;">
-                            <i class="fa icon-refresh icon-spin"></i>
+    <div class="tab-content">
+        <!--表格数据区-->
+        <div class=" tab-pane row active">
+            <div class="col-md-12">
+                <div class="box">
+                    <!--加载数据等待-->
+                    <div class="overlay" style="display: none;">
+                        <i class="fa icon-refresh icon-spin"></i>
+                    </div>
+                    <div class="box-header with-border">
+                        <span><h3 class="box-title" lang="text:role_info">&nbsp;</h3></span>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus fa-minus"></i></button>
                         </div>
-                        <div class="box-header with-border">
-                            <span><h3 class="box-title" lang="text:role_info">&nbsp;</h3></span>
-                            <div class="box-tools pull-right">
-                                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="icon-minus fa-minus"></i></button>
-                            </div>
-                        </div>
+                    </div>
 
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-sm-12" style="padding-bottom: 10px;"><!--查询条件-->
-                                    <form class="form-inline">
-                                        <div class="box-tools pull-right">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-default btn-sm" title='新增' data-permissionFilter="[8]"
-                                                        data-toggle='tooltip' data-placement="bottom" lang="title:add" onclick="showModel_increase_role();">
-                                                    <i class="glyphicon glyphicon-plus"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-default btn-sm" title='删除' data-permissionFilter="[8]"
-                                                        data-toggle='tooltip' data-placement="bottom" lang="title:delete" onclick="delete_roles();">
-                                                    <i class="glyphicon glyphicon-minus"></i>
-                                                </button>
-                                            </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-12" style="padding-bottom: 10px;"><!--查询条件-->
+                                <form class="form-inline">
+                                    <div class="box-tools pull-right">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default btn-sm"  data-permissionFilter="[8]"
+                                                    data-toggle='tooltip' data-placement="bottom" lang="title:add" onclick="showModel_increase_role();">
+                                                <i class="glyphicon glyphicon-plus"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-sm"  data-permissionFilter="[8]"
+                                                    data-toggle='tooltip' data-placement="bottom" lang="title:delete" onclick="delete_roles();">
+                                                <i class="glyphicon glyphicon-minus"></i>
+                                            </button>
                                         </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                </form>
                             </div>
-                            <div>
-                                <table class="table table-bordered table-hover table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th id="tableHead_selectAll" style="width:1%;">
-                                            <input type="checkbox" id="tableHead_checkbok" data-toggle='tooltip' data-placement="bottom" lang="title:check_all">
-                                        </th>
-                                        <th lang="text:role_name1" >角色名称</th>
-                                        <th lang="text:create_time" style="width:30%;">创建时间</th>
-                                        <th lang="text:update_time" style="width:30%;">更新时间</th>
-                                        <th lang="text:operate" style="text-align: center;width:60px;">操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="panelContent">
-
-                                    <!--动态载入数据-->
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div><!--box-body-->
-                        <div id="page-footer">
                         </div>
+                        <div>
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th id="tableHead_selectAll" style="width:1%;">
+                                        <input type="checkbox" id="tableHead_checkbok" data-toggle='tooltip' data-placement="bottom" lang="title:check_all">
+                                    </th>
+                                    <th lang="text:role_name1" ></th>
+                                    <th lang="text:create_time" style="width:30%;"></th>
+                                    <th lang="text:update_time" style="width:30%;"></th>
+                                    <th lang="text:operate" style="text-align: center;width:60px;"></th>
+                                </tr>
+                                </thead>
+                                <tbody id="panelContent">
+
+                                <!--动态载入数据-->
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!--box-body-->
+                    <div id="page-footer">
                     </div>
                 </div>
             </div>
-
         </div>
+
+    </div>
 </section>
 
 <!--新增角色模态框-->
@@ -299,20 +297,20 @@
                 <form class="form-horizontal" id="form_increseRole">
                     <input type="reset" id="reset_increse" style="display:none;"/>
                     <div class="form-group">
-                       <label class="col-sm-2 control-label" style="text-align:left;"><span lang="text:role_name1"></span ><span class="text-red">*</span></label>
+                        <label class="col-sm-2 control-label" style="text-align:left;"><span lang="text:role_name1"></span ><span class="text-red">*</span></label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control validate[required,custom[giveName],maxSize[30],funcCall[roleNameExist]" name="name" id="model_increseRole_roleName"
-                                   placeholder="角色名称" lang="placeholder:role_name1">
+                            <input type="text" class="form-control validate[required,custom[stopSpecialCharacters],maxSize[30],funcCall[roleNameExist]" name="name" id="model_increseRole_roleName"
+                                   lang="placeholder:role_name1">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" style="text-align:left;" lang="text:role_type">角色类型：</label>
+                        <label class="col-sm-2 control-label" style="text-align:left;" lang="text:role_type"></label>
                         <div class="col-sm-10">
-                            <span style="display: inline-block; margin-top: 7px;" id="model_increseRole_Type" class="module-info-role-type-value" xtype="52" lang="text:user_defined_role">用户自定义角色</span>
+                            <span style="display: inline-block; margin-top: 7px;" id="model_increseRole_Type" class="module-info-role-type-value" xtype="52" lang="text:user_defined_role"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" style="text-align:left;" lang="text:empower">操作权限：</label>
+                        <label class="col-sm-2 control-label" style="text-align:left;" lang="text:empower"></label>
                     </div>
                     <div class="row" id="privileges_select" style="width: 680px;">
                         <div class="form-group">
@@ -344,27 +342,27 @@
                                 <div class="module-info-role-items "><!--维修管理-->
                                     <div class="module-info-role-items-text">
                                         <input id="60" type="checkbox" group="6" number="0" >
-                                        <span for="60" lang="text:repair_manage" style="color: rgb(0, 0, 0);">维修管理</span>
+                                        <span for="60" lang="text:repair_manage" style="color: rgb(0, 0, 0);"></span>
                                     </div>
                                     <div class="module-info-role-item">
                                         <input id="61" type="checkbox" group="6" number="1" >
-                                        <span for="61" lang="text:watch_order" style="color: rgb(0, 0, 0);">查看工单</span>
+                                        <span for="61" lang="text:watch_order" style="color: rgb(0, 0, 0);"></span>
                                     </div>
                                     <div class="module-info-role-item">
                                         <input  type="checkbox" group="6" number="2" id="62">
-                                        <span for="62" lang="text:create_update_order" style="color: rgb(0, 0, 0);">工单创建、更改</span>
+                                        <span for="62" lang="text:create_update_order" style="color: rgb(0, 0, 0);"></span>
                                     </div>
                                     <div class="module-info-role-item">
                                         <input  type="checkbox" group="6" number="3" id="63">
-                                        <span for="63" lang="text:watch_schedule" style="color: rgb(0, 0, 0);">查看预防性计划</span>
+                                        <span for="63" lang="text:watch_schedule" style="color: rgb(0, 0, 0);"></span>
                                     </div>
                                     <div class="module-info-role-item">
                                         <input  type="checkbox" group="6" number="4" id="64">
-                                        <span for="64" lang="text:create_update_schedule" style="color: rgb(0, 0, 0);">预防性计划创建、更改</span>
+                                        <span for="64" lang="text:create_update_schedule" style="color: rgb(0, 0, 0);"></span>
                                     </div>
                                     <div class="module-info-role-item">
                                         <input  type="checkbox" group="6" number="5" id="65">
-                                        <span for="65" lang="text:repair_processing" style="color: rgb(0, 0, 0);">维修处理</span>
+                                        <span for="65" lang="text:repair_processing" style="color: rgb(0, 0, 0);"></span>
                                     </div>
                                 </div><!--维修管理-->
                             </div>
@@ -451,8 +449,8 @@
                 </form>
             </div>
             <div class="modal-footer" >
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="increase_close" lang="text:close" onclick="clear_validationInfo()">关闭</button>
-                <button type="button" class="btn btn-primary" onclick="increase_role();" lang="text:submit" data-permissionFilter="[8]">提交</button>
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="increase_close" lang="text:close" onclick="clear_validationInfo()"></button>
+                <button type="button" class="btn btn-primary" onclick="increase_role();" lang="text:submit" data-permissionFilter="[8]"></button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -470,13 +468,18 @@
                 }else{
                     (input.parent().siblings().find("input")).prop("checked",false);
                 }
+                if(id=="60") {
+                    if(input.prop("checked")==true){
+                        $("#50,#51,#54").prop("checked",true);
+                    }
+                }
             }else{
                 /* 关联选项操作 */
                 //网路管理块
                 if($.inArray(id,["13","14"])>=0){
-                     if(input.prop("checked")==true){
-                         $("#12").prop("checked",true);
-                     }
+                    if(input.prop("checked")==true){
+                        $("#12").prop("checked",true);
+                    }
                 }
                 if($.inArray(id,["12"])>=0){
                     if(input.prop("checked")==false){
@@ -528,25 +531,42 @@
                         $("#62,#65").prop("checked",false);
                     }
                 }
+                if($.inArray(id,["63"])>=0){
+                    if(input.prop("checked")==false){
+                        $("#64").prop("checked",false);
+                    }
+                }
                 if($.inArray(id,["65"])>=0){
                     if(input.prop("checked")==true){
-                       $("#61,#51,#54").prop("checked",true);
+                        $("#61,#62,#51,#54,#50").prop("checked",true);
                     }
                 }
                 if($.inArray(id,["62"])>=0){
                     if(input.prop("checked")==true){
-                        $("#61").prop("checked",true);
+                        $("#61,#51,#50").prop("checked",true);
+                    } else {
+                        $("#65").prop("checked",false);
                     }
                 }
                 if($.inArray(id,["64"])>=0){
                     if(input.prop("checked")==true){
-                        $("#63,#51").prop("checked",true);
+                        $("#63,#51,#50").prop("checked",true);
                     }
                 }
                 //设备管理块
                 if($.inArray(id,["52","53","54"])>=0){
                     if(input.prop("checked")==true){
                         $("#51").prop("checked",true);
+                    }
+                }
+                if($.inArray(id,["51"])>=0){
+                    if(input.prop("checked")==false){
+                        $("#52,#53,#54,#62,#64,#65").prop("checked",false);
+                    }
+                }
+                if($.inArray(id,["54"])>=0){
+                    if(input.prop("checked")==false){
+                        $("#65").prop("checked",false);
                     }
                 }
 
@@ -585,185 +605,185 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label" style="text-align:left;" ><span lang="text:role_name1"></span ><span class="text-red">*</span></label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control validate[required,custom[giveName],maxSize[30]],funcCall[roleNameExist2]" name="name" id="edit_roleName"
-                                   placeholder="角色名称" lang="placeholder:role_name1">
+                            <input type="text" class="form-control validate[required,custom[stopSpecialCharacters],maxSize[30]],funcCall[roleNameExist2]" name="name" id="edit_roleName"
+                                   lang="placeholder:role_name1">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" style="text-align:left;" lang="text:role_type">角色类型：</label>
+                        <label class="col-sm-2 control-label" style="text-align:left;" lang="text:role_type"></label>
                         <div class="col-sm-10">
                             <span style="display: inline-block; margin-top: 7px;" id="edit_roleType" class="module-info-role-type-value"></span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" style="text-align:left;" lang="text:empower">操作权限：</label>
+                        <label class="col-sm-2 control-label" style="text-align:left;" lang="text:empower"></label>
                     </div>
-                        <div  class="row" id="edit_privileges" style="width: 685px;">
-                            <div class="form-group" id="first_form_group">
-                                <div class="col-md-4"  id="system_manage_div">
-                                    <div  class="module-info-role-items " style="height: 117px;"><!--系统管理-->
-                                        <div class="module-info-role-items-text">
-                                            <input  type="checkbox" group="0" number="0" id="edit_00" disabled="disabled" checked="checked">
-                                            <span for="remote-maintenance-button" lang="text:system_manage"  style="color: rgb(0, 0, 0);">系统管理</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="0" number="1" id="edit_01" disabled="disabled" checked="checked">
-                                            <span for="remote-maintenance-button-1" lang="text:user_manage"  style="color: rgb(0, 0, 0);">用户管理</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="0" number="2" id="edit_02" disabled="disabled" checked="checked" >
-                                            <span for="remote-maintenance-button-1" lang="text:role_manage" style="color: rgb(0, 0, 0);">角色管理</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="0" number="3" id="edit_03" disabled="disabled" checked="checked">
-                                            <span for="remote-maintenance-button-1" lang="text:authority_manage"  style="color: rgb(0, 0, 0);">权限管理</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="0" number="4" id="edit_04" disabled="disabled" checked="checked">
-                                            <span for="remote-maintenance-button-1" lang="text:field_maintenance"  style="color: rgb(0, 0, 0);">字段维护</span>
-                                        </div>
-                                    </div><!--系统管理-->
-                                </div>
-                                <div class="col-md-4" >
-                                    <div class="module-info-role-items" style="height: 117px;"><!--设备管理-->
-                                        <div class="module-info-role-items-text">
-                                            <input id="edit_50" type="checkbox" group="5" number="0" >
-                                            <span for="edit_50" lang="text:device_manage" style="color: rgb(0, 0, 0);">设备管理</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input id="edit_51" type="checkbox" group="5" number="1" >
-                                            <span for="edit_51" lang="text:see_device" style="color: rgb(0, 0, 0);">查看</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="5" number="2" id="edit_52">
-                                            <span for="edit_52" lang="text:create_update" style="color: rgb(0, 0, 0);">设备创建、更改</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="5" number="3" id="edit_53">
-                                            <span for="edit_53" lang="text:part_create_update" style="color: rgb(0, 0, 0);">部件创建、更改</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="5" number="4" id="edit_54">
-                                            <span for="edit_54" lang="text:part_maintain" style="color: rgb(0, 0, 0);">部件维护</span>
-                                        </div>
+                    <div  class="row" id="edit_privileges" style="width: 685px;">
+                        <div class="form-group" id="first_form_group">
+                            <div class="col-md-4"  id="system_manage_div">
+                                <div  class="module-info-role-items " style="height: 117px;"><!--系统管理-->
+                                    <div class="module-info-role-items-text">
+                                        <input  type="checkbox" group="0" number="0" id="edit_00" disabled="disabled" checked="checked">
+                                        <span for="remote-maintenance-button" lang="text:system_manage"  style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="0" number="1" id="edit_01" disabled="disabled" checked="checked">
+                                        <span for="remote-maintenance-button-1" lang="text:user_manage"  style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="0" number="2" id="edit_02" disabled="disabled" checked="checked" >
+                                        <span for="remote-maintenance-button-1" lang="text:role_manage" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="0" number="3" id="edit_03" disabled="disabled" checked="checked">
+                                        <span for="remote-maintenance-button-1" lang="text:authority_manage"  style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="0" number="4" id="edit_04" disabled="disabled" checked="checked">
+                                        <span for="remote-maintenance-button-1" lang="text:config"  style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                </div><!--系统管理-->
+                            </div>
+                            <div class="col-md-4" >
+                                <div class="module-info-role-items" style="height: 117px;"><!--设备管理-->
+                                    <div class="module-info-role-items-text">
+                                        <input id="edit_50" type="checkbox" group="5" number="0" >
+                                        <span for="edit_50" lang="text:device_manage" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input id="edit_51" type="checkbox" group="5" number="1" >
+                                        <span for="edit_51" lang="text:see_device" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="5" number="2" id="edit_52">
+                                        <span for="edit_52" lang="text:create_update" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="5" number="3" id="edit_53">
+                                        <span for="edit_53" lang="text:part_create_update" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="5" number="4" id="edit_54">
+                                        <span for="edit_54" lang="text:part_maintain" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
 
-                                    </div><!--设备管理-->
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="module-info-role-items "><!--维修管理-->
-                                        <div class="module-info-role-items-text">
-                                            <input id="edit_60" type="checkbox" group="6" number="0" >
-                                            <span for="edit_60" lang="text:repair_manage" style="color: rgb(0, 0, 0);">维修管理</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input id="edit_61" type="checkbox" group="6" number="1" >
-                                            <span for="edit_61" lang="text:watch_order" style="color: rgb(0, 0, 0);">查看工单</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="6" number="2" id="edit_62">
-                                            <span for="edit_62" lang="text:create_update_order" style="color: rgb(0, 0, 0);">工单创建、更改</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="6" number="3" id="edit_63">
-                                            <span for="edit_63" lang="text:watch_schedule" style="color: rgb(0, 0, 0);">查看预防性计划</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="6" number="4" id="edit_64">
-                                            <span for="edit_64" lang="text:create_update_schedule" style="color: rgb(0, 0, 0);">预防性计划创建、更改</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="6" number="5" id="edit_65">
-                                            <span for="edit_65" lang="text:repair_processing" style="color: rgb(0, 0, 0);">维修处理</span>
-                                        </div>
-                                    </div><!--维修管理-->
-                                </div>
+                                </div><!--设备管理-->
                             </div>
-                            <div class="form-group" id="two_form_group">
-                                <div class="col-md-4" id="network_mangement_div">
-                                    <div class="module-info-role-items "><!--网络管理-->
-                                        <div class="module-info-role-items-text">
-                                            <input type="checkbox" group="1" number="0" id="edit_10" disabled="disabled" checked="checked">
-                                            <span for="network-manage-button" lang="text:network_manage" style="color: rgb(0, 0, 0);">网络管理</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="1" number="1" id="edit_11" disabled="disabled" checked="checked">
-                                            <span for="network-manage-button-1" lang="text:scout" style="color: rgb(0, 0, 0);">监视</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="1" number="2" id="edit_12">
-                                            <span for="network-manage-button-2" lang="text:create_update" style="color: rgb(0, 0, 0);">创建、更改</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="1" number="3" id="edit_13">
-                                            <span for="network-manage-button-3" lang="text:configure_upgrade" style="color: rgb(0, 0, 0);">配置、升级</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="1" number="4" id="edit_14">
-                                            <span for="network-manage-button-4" lang="text:console" style="color: rgb(0, 0, 0);">控制台</span>
-                                        </div>
-                                    </div><!--网络管理-->
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="module-info-role-items "><!--远程监控-->
-                                        <div class="module-info-role-items-text">
-                                            <input  type="checkbox" group="3" number="0" id="edit_30">
-                                            <span for="remote-control-button" lang="text:remote_monitoring" style="color: rgb(0, 0, 0);">远程监控</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="3" number="1" id="edit_31">
-                                            <span for="remote-control-button-1" lang="text:read_configuration_diagram" style="color: rgb(0, 0, 0);">组态图查看</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input type="checkbox" group="3" number="2" id="edit_32">
-                                            <span for="remote-control-button-2" lang="text:write_configuration_diagram" style="color: rgb(0, 0, 0);">组态图编辑</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="3" number="3" id="edit_33">
-                                            <span for="remote-control-button-3" lang="text:remote_control" style="color: rgb(0, 0, 0);">远程控制</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input type="checkbox" group="3" number="4" id="edit_34">
-                                            <span for="remote-control-button-4" lang="text:business_report" style="color: rgb(0, 0, 0);">查看业务报表</span>
-                                        </div>
-                                    </div><!--远程监控-->
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="module-info-role-items " style="height:97px;"><!--告警处理-->
-                                        <div class="module-info-role-items-text">
-                                            <input  type="checkbox" group="4" number="0" id="edit_40">
-                                            <span for="alarm-processing-button" lang="text:alarm_processing" style="color: rgb(0, 0, 0);">告警处理</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="4" number="1" id="edit_41">
-                                            <span for="alarm-processing-button-1" lang="text:see_alarm" style="color: rgb(0, 0, 0);">查看</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="4" number="2" id="edit_42">
-                                            <span for="alarm-processing-button-2" lang="text:affirm_clear" style="color: rgb(0, 0, 0);">确认、清除</span>
-                                        </div>
-                                    </div><!--告警处理-->
-                                </div>
-                            </div>
-                            <div class="form-group" id="three_form_group">
-                                <div class="col-md-4">
-                                    <div class="module-info-role-items"><!--远程维护-->
-                                        <div class="module-info-role-items-text">
-                                            <input  type="checkbox" group="2" number="0" id="edit_20">
-                                            <span for="remote-maintenance-button" lang="text:remote_maintenance" style="color: rgb(0, 0, 0);">远程维护</span>
-                                        </div>
-                                        <div class="module-info-role-item">
-                                            <input  type="checkbox" group="2" number="1" id="edit_21">
-                                            <span for="remote-maintenance-button-1" lang="text:allow" style="color: rgb(0, 0, 0);">允许</span>
-                                        </div>
-                                    </div><!--远程维护-->
-                                </div>
+                            <div class="col-md-4">
+                                <div class="module-info-role-items "><!--维修管理-->
+                                    <div class="module-info-role-items-text">
+                                        <input id="edit_60" type="checkbox" group="6" number="0" >
+                                        <span for="edit_60" lang="text:repair_manage" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input id="edit_61" type="checkbox" group="6" number="1" >
+                                        <span for="edit_61" lang="text:watch_order" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="6" number="2" id="edit_62">
+                                        <span for="edit_62" lang="text:create_update_order" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="6" number="3" id="edit_63">
+                                        <span for="edit_63" lang="text:watch_schedule" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="6" number="4" id="edit_64">
+                                        <span for="edit_64" lang="text:create_update_schedule" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="6" number="5" id="edit_65">
+                                        <span for="edit_65" lang="text:repair_processing" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                </div><!--维修管理-->
                             </div>
                         </div>
+                        <div class="form-group" id="two_form_group">
+                            <div class="col-md-4" id="network_mangement_div">
+                                <div class="module-info-role-items "><!--网络管理-->
+                                    <div class="module-info-role-items-text">
+                                        <input type="checkbox" group="1" number="0" id="edit_10" disabled="disabled" checked="checked">
+                                        <span for="network-manage-button" lang="text:network_manage" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="1" number="1" id="edit_11" disabled="disabled" checked="checked">
+                                        <span for="network-manage-button-1" lang="text:scout" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="1" number="2" id="edit_12">
+                                        <span for="network-manage-button-2" lang="text:create_update" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="1" number="3" id="edit_13">
+                                        <span for="network-manage-button-3" lang="text:configure_upgrade" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="1" number="4" id="edit_14">
+                                        <span for="network-manage-button-4" lang="text:console" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                </div><!--网络管理-->
+                            </div>
+                            <div class="col-md-4">
+                                <div class="module-info-role-items "><!--远程监控-->
+                                    <div class="module-info-role-items-text">
+                                        <input  type="checkbox" group="3" number="0" id="edit_30">
+                                        <span for="remote-control-button" lang="text:remote_monitoring" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="3" number="1" id="edit_31">
+                                        <span for="remote-control-button-1" lang="text:read_configuration_diagram" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input type="checkbox" group="3" number="2" id="edit_32">
+                                        <span for="remote-control-button-2" lang="text:write_configuration_diagram" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="3" number="3" id="edit_33">
+                                        <span for="remote-control-button-3" lang="text:remote_control" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input type="checkbox" group="3" number="4" id="edit_34">
+                                        <span for="remote-control-button-4" lang="text:business_report" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                </div><!--远程监控-->
+                            </div>
+                            <div class="col-md-4">
+                                <div class="module-info-role-items " style="height:97px;"><!--告警处理-->
+                                    <div class="module-info-role-items-text">
+                                        <input  type="checkbox" group="4" number="0" id="edit_40">
+                                        <span for="alarm-processing-button" lang="text:alarm_processing" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="4" number="1" id="edit_41">
+                                        <span for="alarm-processing-button-1" lang="text:see_alarm" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="4" number="2" id="edit_42">
+                                        <span for="alarm-processing-button-2" lang="text:affirm_clear" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                </div><!--告警处理-->
+                            </div>
+                        </div>
+                        <div class="form-group" id="three_form_group">
+                            <div class="col-md-4">
+                                <div class="module-info-role-items"><!--远程维护-->
+                                    <div class="module-info-role-items-text">
+                                        <input  type="checkbox" group="2" number="0" id="edit_20">
+                                        <span for="remote-maintenance-button" lang="text:remote_maintenance" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                    <div class="module-info-role-item">
+                                        <input  type="checkbox" group="2" number="1" id="edit_21">
+                                        <span for="remote-maintenance-button-1" lang="text:allow" style="color: rgb(0, 0, 0);"></span>
+                                    </div>
+                                </div><!--远程维护-->
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" id="edit_close" data-dismiss="modal" lang="text:close" onclick="clear_validationInfo()">关闭</button>
-                <button type="button" class="btn btn-primary" onclick="edit_role();" id="edit_submit" lang="text:submit" data-permissionFilter="[8]">提交</button>
+                <button type="button" class="btn btn-default pull-left" id="edit_close" data-dismiss="modal" lang="text:close" onclick="clear_validationInfo()"></button>
+                <button type="button" class="btn btn-primary" onclick="edit_role();" id="edit_submit" lang="text:submit" data-permissionFilter="[8]"></button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -780,6 +800,11 @@
                     }
                 }else{
                     (input.parent().siblings().find("input")).prop("checked",false);
+                }
+                if(id=="edit_60") {
+                    if(input.prop("checked")==true){
+                        $("#edit_50,#edit_51,#edit_54").prop("checked",true);
+                    }
                 }
             }else{
                 /* 关联选项操作 */
@@ -839,25 +864,43 @@
                         $("#edit_62,#edit_65").prop("checked",false);
                     }
                 }
+                if($.inArray(id,["edit_63"])>=0){
+                    if(input.prop("checked")==false){
+                        $("#edit_64").prop("checked",false);
+                    }
+                }
                 if($.inArray(id,["edit_65"])>=0){
                     if(input.prop("checked")==true){
-                        $("#edit_61,#edit_51,#edit_54").prop("checked",true);
+                        $("#edit_61,#edit_62,#edit_51,#edit_54,#edit_50").prop("checked",true);
                     }
                 }
                 if($.inArray(id,["edit_62"])>=0){
                     if(input.prop("checked")==true){
-                        $("#edit_61").prop("checked",true);
+                        $("#edit_61,#edit_51,#edit_50").prop("checked",true);
+                    }else {
+                        $("#edit_65").prop("checked",false);
                     }
                 }
                 if($.inArray(id,["edit_64"])>=0){
                     if(input.prop("checked")==true){
-                        $("#edit_63,#edit_51").prop("checked",true);
+                        $("#edit_63,#edit_51,#edit_50").prop("checked",true);
                     }
                 }
                 //设备管理块
                 if($.inArray(id,["edit_52","edit_53","edit_54"])>=0){
                     if(input.prop("checked")==true){
                         $("#edit_51").prop("checked",true);
+                    }
+                }
+
+                if($.inArray(id,["edit_51"])>=0){
+                    if(input.prop("checked")==false){
+                        $("#edit_52,#edit_53,#edit_54,#edit_62,#edit_64,#edit_65").prop("checked",false);
+                    }
+                }
+                if($.inArray(id,["edit_54"])>=0){
+                    if(input.prop("checked")==false){
+                        $("#edit_65").prop("checked",false);
                     }
                 }
 
@@ -1074,12 +1117,13 @@
     //添加角色
     function increase_role() {
         if ($('#form_increseRole').validationEngine('validate')) {
+            $("#model_increseRole").hide();
             var name = $.trim($("#model_increseRole_roleName").val());
             var type = parseInt($("#model_increseRole_Type").attr("xtype"));
             var accept =[3,5, 11, 13, 15, 16, 19, 25, 26, 29, 39, 40, 41, 83, 84, 87, 88, 89, 101,211,301,302];//默认权值
             if($("#12").prop("checked")==true) {
                 var arr = [12, 14, 28, 30, 38, 42,58,62 , 85, 90];
-                    accept = accept.concat(arr);
+                accept = accept.concat(arr);
             }
             if($("#13").prop("checked")==true){
                 var arr = [21, 22];
@@ -1154,8 +1198,16 @@
                 accept = accept.concat(arr);
             }
 
-            var privileges ={accept:accept,default:"none",deny:[]};
-            var sendData = {name:name,type:type,privileges:privileges};
+            var privileges = {
+                accept:accept,
+                default:"none",
+                deny:[]
+            };
+            var sendData = {
+                name:name,
+                type:type,
+                privileges:privileges
+            };
             createRole(sendData, function(data) {
                 if(typeof(data.result)!="undefined") {
                     dialog.render({
@@ -1180,21 +1232,21 @@
             dialog.render({
                 lang: "deleteGatewayInfo",
                 buttons: [{lang: "yes", click: function() {
-                            selected_roles.each(function() {
-                                deleteRole($(this).val(),function (data) {
-                                    if(data.error){
-                                        if(data.error_code == 20005){
-                                            errorTipDis("cannot_delete_a_user_role")
-                                            locale.render({element: "#init_body"});
-                                        }
-                                    }
-                                },this);
-                            });
-                            init_load_roles(0,parseInt($("#pageNumberSelect").val()));
-                            dialog.close();
-                        }}, {lang: "no", click: function() {
-                            dialog.close();
-                        }}],
+                    selected_roles.each(function() {
+                        deleteRole($(this).val(),function (data) {
+                            if(data.error){
+                                if(data.error_code == 20005){
+                                    errorTipDis("cannot_delete_a_user_role")
+                                    locale.render({element: "#init_body"});
+                                }
+                            }
+                        },this);
+                    });
+                    init_load_roles(0,parseInt($("#pageNumberSelect").val()));
+                    dialog.close();
+                }}, {lang: "no", click: function() {
+                    dialog.close();
+                }}],
                 close: function() {
                     dialog.close();
                 }
