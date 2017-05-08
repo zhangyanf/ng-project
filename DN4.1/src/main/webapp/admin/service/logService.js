@@ -58,3 +58,18 @@ function getAPI_log_com(params,query,callback,context) {
                 }
             });
         }
+/*
+ *3.导出报表
+ */
+function exportReportForm(params,query,callback,context) {
+    schneider.Ajax.request({
+        url: "/api/reports/forms",
+        type: "POST",
+        dataType: 'json',
+        parameters:params,
+        data: query,
+        success: function (data) {
+            callback.call(context || this,data);
+        }
+    });
+}
