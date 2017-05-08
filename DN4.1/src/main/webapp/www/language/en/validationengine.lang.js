@@ -99,7 +99,7 @@
                 },
                 "serialNumber":{
                 	"regex": /^[a-zA-Z0-9]+$/,
-                    "alertText": "* Only numbers and letters are allowed"
+                    "alertText": "* Only numbers and chars are allowed"
                 },
                 "phone": {
                     // credit: jquery.h5validate.js / orefalo
