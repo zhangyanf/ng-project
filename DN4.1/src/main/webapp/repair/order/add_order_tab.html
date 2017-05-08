@@ -1,7 +1,7 @@
 <!--创建工单页面-->
 
     <div class="panel panel-default" style="margin-bottom: 10px;"><!--故障设备信息-->
-        <div class="panel-heading" style="padding: 8px 15px;" lang="text:fault_device_info">故障设备信息</div>
+        <div class="panel-heading" style="padding: 8px 15px;" lang="text:fault_device_info"></div>
         <div class="panel-body" style="padding: 5px 15px 0px 15px;">
             <form class="form" id="c_form">
                 <input type="hidden" id="c_assetId" value=""/>
@@ -12,14 +12,21 @@
                             <label><span lang="text:asset_number"></span>
                                 <span class="text-red">*</span>
                             </label>
-                            <input type="text" class="form-control input-sm"
+                            <div class="has-feedback">
+                                <input type="text" class="form-control input-sm validate[required]" id="c_asset_number" readonly="readonly" lang="placeholder:asset_number">
+                                <div data-permissionFilter="[201,203,205]">
+                                    <span style="font-size:16px;line-height: 30px;"  class="form-control-feedback glyphicon glyphicon-search"></span>
+                                    <span style="border:1px solid #eee;width:30px;height:28px;position:absolute;right: 1px;cursor: pointer;" lang="title:query" class="glyphicon" onclick="showModal_asset_list('add')"></span>
+                                </div>
+                            </div>
+                           <!-- <input type="text" class="form-control input-sm validate[required]"
                                    id="c_asset_number" readonly="readonly" lang="placeholder:asset_number">
                             <button type="button" style="display: block;margin-top: -30px;height:30px;"
                                     onclick="showModal_asset_list('add')" data-permissionFilter="[201,203,205]"
                                     class="btn btn-default btn-sm pull-right"
                                     data-toggle="tooltip" title="查找" lang="title:query">
                                 <span class="glyphicon glyphicon-search"></span>
-                            </button>
+                            </button>-->
                         </div>
                     </div>
                     <div class="col-sm-3">
@@ -130,7 +137,7 @@
                                     <label><span lang="text:assigned_engineer"></span></label>
                                     <select type="text" class="form-control input-sm "
                                             id="c_assigned_engineer">
-                                        <option value="" lang="text:--+please_select_engineer+--">--请选择工程师--
+                                        <option value="" lang="text:--+please_select_engineer+--">
                                         </option>
                                     </select>
                                 </div>
@@ -169,10 +176,9 @@
     </section><!--保修信息 附件信息-->
     <div class="modal-footer" style="padding-top: 15px;padding-right: 0px;padding-bottom: 10px;">
         <button type="button" class="btn btn-default" onclick="closeCreateTab()" data-dismiss="modal"
-                lang="text:close">关闭
+                lang="text:close">
         </button>
         <button class="btn btn-primary" id="createOrder" onclick="createOrder();" lang="text:submit">
-            提交
         </button>
     </div>
 
@@ -185,82 +191,89 @@
             promptPosition: "inline",
             scroll: false
         });
+        validator.render("#c_form", {
+            promptPosition: "inline",
+            scroll: false
+        });
 
         //操作时间，绑定日期插件
         $("#c_repair_date").daterangepicker(picker2Option);
-        $("#c_repair_date").mouseover(function(){
+        $("#c_repair_date").mousedown(function(){
             setCurrentDate("c_repair_date");
         });
         /**
          * 创建工单
          */
         function createOrder() {
-            if ($('#c_repair_form').validationEngine('validate')) {
-                //采集故障设备信息
-                var assetId = $("#c_assetId").val();
-                if(!assetId) {
-                    errorTipDis("please_select_a_fault_device");
-                    return;
-                }
-                //采集维修信息
-                var repairDate =$("#c_repair_date").val(); //报修时间
-                if(typeof(repairDate)!="undefined"||repairDate!="") {
-                    repairDate = dateConvertUnixtime2(repairDate);
-                }
-                var repairMan = $("#c_repair_man").val(); //报修人
-                var repairPhone = $("#c_repair_phone").val(); //报修电话
-                var assignedEngineerId = $("#c_assigned_engineer :selected").val(); //指派工程师id
-                var assignedEngineer = $("#c_assigned_engineer :selected").text(); //指派工程师
-                var fault_phenomenon = $.trim($("#c_fault_phenomenon").val()); //故障现象
-                var fault_type = 1; // 非停机故障
-                var order_name = $("#c_order_name").val(); // 工单名称
-                if($("#c_fault_type").is(":checked")){
-                    fault_type = 2; //停机故障
-                }
-                var data = {
-                    wo:{
-                        asset_id:assetId,
-                        create_time:repairDate,
-                        creator:repairMan,
-                        order_type:1,
-                        fault_type:fault_type,
-                        state:"new",
-                        name:order_name
+            if ($('#c_form').validationEngine('validate')) {
+                if ($('#c_repair_form').validationEngine('validate')) {
+                    //采集故障设备信息
+                    var assetId = $("#c_assetId").val();
+                    if(!assetId) {
+                        errorTipDis("please_select_a_fault_device");
+                        return;
                     }
-                }
-                if($.trim(repairPhone)!="") {
-                    data.wo.repair_call = repairPhone;
-                }
-                if($.trim(fault_phenomenon)!="") {
-                    data.wo.comment = fault_phenomenon;
-                }
-                if($.trim(assignedEngineerId)!="") {
-                    data.wo.executor = assignedEngineer;
-                    data.wo.executor_id = assignedEngineerId;
-                }
-                addOrder(true,data,function(data){
-                    if(typeof(data.result)!="undefined") {
-                        dialog.render({
-                            lang:"submit_success",
-                        });
-                        closeCreateTab();
-                        research_site(0,parseInt($("#pageNumberSelect").val()));
-                        //渲染工单条数
-                        if(home_detail_flag == 'home'){
-                            getOrderTotal();
-                            getUnconfirmedOrderTotal();
-                        }else if(home_detail_flag == 'detail'){
-                            getOrderTotal(data.result.wo.site_id);
-                            getUnconfirmedOrderTotal(data.result.wo.site_id);
+                    //采集维修信息
+                    var repairDate =$("#c_repair_date").val(); //报修时间
+                    if(typeof(repairDate)!="undefined"||repairDate!="") {
+                        repairDate = dateConvertUnixtime2(repairDate);
+                    }
+                    var repairMan = $("#c_repair_man").val(); //报修人
+                    var repairPhone = $("#c_repair_phone").val(); //报修电话
+                    var assignedEngineerId = $("#c_assigned_engineer :selected").val(); //指派工程师id
+                    var assignedEngineer = $("#c_assigned_engineer :selected").text(); //指派工程师
+                    var fault_phenomenon = $.trim($("#c_fault_phenomenon").val()); //故障现象
+                    var fault_type = 1; // 非停机故障
+                    var order_name = $("#c_order_name").val(); // 工单名称
+                    if($("#c_fault_type").is(":checked")){
+                        fault_type = 2; //停机故障
+                    }
+                    var data = {
+                        wo:{
+                            asset_id:assetId,
+                            create_time:repairDate,
+                            creator:repairMan,
+                            order_type:1,
+                            fault_type:fault_type,
+                            state:"new",
+                            name:order_name
                         }
-                    }else {
-                        dialog.render({
-                            lang:"submit_failed",
-                        });
                     }
-                    locale.render({element: "#init_body"});
-                },this);
+                    if($.trim(repairPhone)!="") {
+                        data.wo.repair_call = repairPhone;
+                    }
+                    if($.trim(fault_phenomenon)!="") {
+                        data.wo.comment = fault_phenomenon;
+                    }
+                    if($.trim(assignedEngineerId)!="") {
+                        data.wo.executor = assignedEngineer;
+                        data.wo.executor_id = assignedEngineerId;
+                    }
+                    addOrder(true,data,function(data){
+                        if(typeof(data.result)!="undefined") {
+                            dialog.render({
+                                lang:"submit_success",
+                            });
+                            closeCreateTab();
+                            research_site(0,parseInt($("#pageNumberSelect").val()));
+                            //渲染工单条数
+                            if(home_detail_flag == 'home'){
+                                getOrderTotal();
+                                getUnconfirmedOrderTotal();
+                            }else if(home_detail_flag == 'detail'){
+                                getOrderTotal(data.result.wo.site_id);
+                                getUnconfirmedOrderTotal(data.result.wo.site_id);
+                            }
+                        }else {
+                            dialog.render({
+                                lang:"submit_failed",
+                            });
+                        }
+                        locale.render({element: "#init_body"});
+                    },this);
+                }
             }
+
         }
 
         /**
@@ -280,6 +293,7 @@
          */
         function showModal_asset_list(flag) {
             $("#modal_asset_list").modal("show");
+            loading_asset_list(0, $("#page-footer1 .col-sm-5 select").val());
             $("#reset_form_asset").click();
             $("#queryAssetForm").attr("assetFlag",flag);// 标记是添加工单还是编辑工单回填设备信息
         }

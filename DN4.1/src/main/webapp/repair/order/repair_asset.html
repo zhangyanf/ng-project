@@ -23,7 +23,7 @@
                                          <span>
                                             <label lang="text:device_name"></label>
                                                 <input type="text" style="width:110px;" value=""
-                                                       class="form-control input-sm " id="query_deviceName"
+                                                       class="form-control input-sm validate[custom[stopSpecialCharacters]]" id="query_deviceName"
                                                        lang="placeholder:enter_the_machine_name">
                                             </span>
                                 </div>
@@ -31,7 +31,7 @@
                                             <span>
                                                 <label lang="text:asset_number"></label>
                                                 <input type="text" style="width:110px;" value=""
-                                                       class="form-control input-sm " id="query_assetNo"
+                                                       class="form-control input-sm validate[custom[stopSpecialCharacters]]" id="query_assetNo"
                                                        lang="placeholder:please_enter_the_asset_number">
                                              </span>
                                 </div>
@@ -39,7 +39,7 @@
                                             <span>
                                                 <label lang="text:serial_number"></label>
                                                 <input type="text" style="width:110px;" value=""
-                                                       class="form-control input-sm " id="query_serial"
+                                                       class="form-control input-sm validate[custom[stopSpecialCharacters]]" id="query_serial"
                                                        lang="placeholder:enter_the_serial_number">
                                              </span>
                                 </div>
@@ -47,19 +47,19 @@
                                             <span>
                                                 <label lang="text:site"></label>
                                                 <input type="text" style="width:110px;" value=""
-                                                       class="form-control input-sm " id="query_siteName"
+                                                       class="form-control input-sm validate[custom[stopSpecialCharacters]]" id="query_siteName"
                                                        lang="placeholder:please_enter_a_site_name">
                                              </span>
                                 </div>
                                 <div class="form-group pull-right" style="padding: 5px 0px;">
                                     <button type="button" onclick="searchAsset()" data-permissionFilter="[ ]"
                                             class="btn btn-default btn-sm"
-                                            data-toggle="tooltip" title="查找" lang="title:query">
+                                            data-toggle="tooltip" lang="title:query">
                                         <span class="glyphicon glyphicon-search"></span>
                                     </button>
                                     <button type="button" onclick="resetAsset()" data-permissionFilter="[ ]"
                                             class="btn btn-default btn-sm"
-                                            data-toggle="tooltip" title="重新填写" lang="title:reset1">
+                                            data-toggle="tooltip"  lang="title:reset1">
                                         <span class="glyphicon glyphicon-refresh"></span>
                                     </button>
                                 </div>
@@ -70,16 +70,16 @@
                         <table class="table table-bordered table-hover table-striped scrolltable">
                             <thead style="display:block;overflow-y: auto;">
                             <tr>
-                                <th lang="text:device_name" style="width:125px;">设备名称</th>
-                                <th lang="text:asset_number" style="width:125px;">资产编号</th>
-                                <th lang="text:serial_number" style="width:125px;">序列号</th>
-                                <th lang="text:model2" style="width:130px;">型号</th>
-                                <th lang="text:state" style="width:120px;">状态</th>
+                                <th lang="text:device_name" style="width:125px;"></th>
+                                <th lang="text:asset_number" style="width:125px;"></th>
+                                <th lang="text:serial_number" style="width:125px;"></th>
+                                <th lang="text:model2" style="width:130px;"></th>
+                                <th lang="text:state" style="width:120px;"></th>
                                 <!--<th lang="text:model2" style="width:85px;">型号</th>
                                 <th lang="text:state" style="width:70px;">状态</th>
                                 <th lang="text:repair_state" style="width:95px;">维修状态</th>-->
                                 <th data-permissionFilter='[ ]' style="width:98px;text-align: center"
-                                    lang="text:operate">操作
+                                    lang="text:operate">
                                 </th>
                             </tr>
                             </thead>
@@ -97,13 +97,23 @@
 </div>
 <script>
     /**
+     * 设置设备查询表单验证
+     */
+    validator.render("#queryAssetForm", {
+        //  promptPosition: "inline",
+         scroll: false,
+        // showOneMessage:true, // 只显示一条提示信息
+        showPrompts:false //不显示提示信息
+    });
+
+    /**
      *  如果是详情现场下 就隐藏列表中的现场和现场搜索框
      */
     $(document).ready(function(){
         if(home_detail_flag=="home") {
             $("#queryAssetForm > div:eq(3)").show();
             var $ths =  $("#asset_table_div > table > thead > tr > th").detach();
-            $("#asset_table_div > table > thead > tr").append('<th lang="text:site" style="width:125px;">现场</th>').append($ths);
+            $("#asset_table_div > table > thead > tr").append('<th lang="text:site" style="width:125px;"></th>').append($ths);
         }else if(home_detail_flag=="detail") {
             $("#queryAssetForm > div:eq(3)").hide();
             /*$("#asset_table_div > table > thead > tr > th").css("width","125px");*/
@@ -116,7 +126,7 @@
                 loading_asset_list(cursor,limit);
             }
         });
-        loading_asset_list(0, $("#page-footer1 .col-sm-5 select").val());
+       // loading_asset_list(0, $("#page-footer1 .col-sm-5 select").val());
         locale.render({element: "#init_body"});
     });
 
@@ -263,7 +273,9 @@
      * 根据搜索条件查询设备
      */
     function searchAsset() {
-        loading_asset_list(0, $("#page-footer1 .col-sm-5 select").val());
+        if ($('#queryAssetForm').validationEngine('validate')) {
+            loading_asset_list(0, $("#page-footer1 .col-sm-5 select").val());
+        }
     }
 
 </script>
