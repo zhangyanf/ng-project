@@ -14,10 +14,6 @@
             <li role="presentation" class="active" onclick="showTabContent(1)">
                 <a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:operating_log"></a>
             </li>
-            </li>
-            <li role="presentation" onclick="showTabContent(3)" >
-                <a href="javascript:void(0)" role="tab" lang="text:gateway_log" data-toggle="tab" ></a>
-            </li>
         </ul>
 
         <!-- Tab panes -->
@@ -107,9 +103,6 @@
             case 1:
                 changeTabOne(cursor);
                 break;
-            case 3:
-                changeTabThree(cursor);
-                break;
             default:
                 break;
         }
@@ -178,45 +171,7 @@
     function searchLog(){
         if(tab==1){
             changeTabOne(0);
-        }else if(tab==2){
-            changeTabThree(0);
         }
-    }
-    //第三个标签方法调用
-    function changeTabThree(cursor) {
-        $("#commContent").show();
-        $("#operaContent").hide();
-        $("#refreshIcon").show();
-        var dateArray=($("#searchDate").val()).split("-");
-        var start_time = new Date(dateArray[0] + " 00:00:00").getTime() / 1000;
-        var end_time = new Date(dateArray[1] + " 23:59:59").getTime() / 1000;
-        var limit =  $("#page-footer .col-sm-5 select").val();
-        var language = locale.current();
-
-        var params = {
-            limit: limit,
-            cursor: cursor,
-            verbose:100,
-            start_time:start_time,
-            end_time:end_time,
-            language:language
-        };
-        tab=2;
-        searchLogCommunicationLog(params,false,function(data){
-            if(data.total && data.total>0){
-                commTableBuild(data.result);
-                //renderPagination(data,changeTabThree);
-                //加载分页数据
-                $("#page-footer").pagination("data",data);
-            }else{
-                // clearPagination();
-                $("#page-footer").pagination("clear");
-                $("#logContent").empty();
-                $("#logContent").append('<tr><td colspan="6"  align="center" lang="text:no_data"></td></tr>');
-                locale.render({element: "#init_body"});
-                $("#refreshIcon").hide();
-            }
-        },this);
     }
 
     function commTableBuild(result) {
@@ -241,8 +196,6 @@
     function changePageTool(cursor) {
         if(tab == 1){
             changeTabOne(cursor);
-        }else if(tab==2){
-            changeTabThree(cursor);
         }
     }
     //数据导出
@@ -323,7 +276,6 @@
     function onInit() {
         permissionFilter_pageFunc();
         require(['logService'], function (logService) {
-            // $("#page-footer").load("admin/pagination.html",function(){
             // 引入分页
             $("#page-footer").pagination({
                 changePage:function (cursor,limit) {
