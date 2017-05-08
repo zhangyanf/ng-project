@@ -1,25 +1,24 @@
 
 <section class="content-header">
     <h1 lang="text:log">
-      日志
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#" lang="text:notice"></a></li>
-      <li class="active" lang="text:log"></li>
+        <li><a href="#" lang="text:notice"></a></li>
+        <li class="active" lang="text:log"></li>
     </ol>
 </section>
 <section class="content" id="tcontent">
     <div class="nav-tabs-custom">
 
         <ul class="nav nav-tabs" role="tablist" id="myNavTabs">
-        <li role="presentation" class="active" onclick="showTabContent(1)">
-            <a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:operating_log"></a>
-        </li>
-        </li>
-        <li role="presentation" onclick="showTabContent(3)" >
-            <a href="javascript:void(0)" role="tab" lang="text:gateway_log" data-toggle="tab" ></a>
-        </li>
-    </ul>
+            <li role="presentation" class="active" onclick="showTabContent(1)">
+                <a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:operating_log"></a>
+            </li>
+            </li>
+            <li role="presentation" onclick="showTabContent(3)" >
+                <a href="javascript:void(0)" role="tab" lang="text:gateway_log" data-toggle="tab" ></a>
+            </li>
+        </ul>
 
         <!-- Tab panes -->
         <div class="tab-content" style="padding-bottom: 0px;">
@@ -34,24 +33,24 @@
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-sm-12" style="padding-bottom: 10px;"><!--查询条件-->
-                                  <form class="form-inline">
-                                      <div class="form-group has-feedback">
-                                          <input type="text" class="form-control form-control-left input-sm" id="searchDate" readonly="readonly" style="width: 180px;">
-                                          <span class="glyphicon glyphicon-calendar form-control-feedback" style="left: 0;"></span>
-                                      </div>
-                                      <div class="form-group" >
-                                          <button type="button" onclick="searchLog()"  class="btn btn-default btn-sm"
-                                                  data-toggle="tooltip" title="查找" lang="title:query">
-                                              <span class="glyphicon glyphicon-search"></span>
-                                          </button>
-                                      </div>
-                                      <div class="form-group pull-right" >
-                                          <button type="button" id="btn_export" onclick="exportData()"
-                                                  class="btn btn-default btn-sm" data-toggle="tooltip" lang="title:export">
-                                              <span class="icon-upload-alt"></span>
-                                          </button>
-                                      </div>
-                                  </form>
+                                    <form class="form-inline">
+                                        <div class="form-group has-feedback">
+                                            <input type="text" class="form-control form-control-left input-sm" id="searchDate" readonly="readonly" style="width: 180px;">
+                                            <span class="glyphicon glyphicon-calendar form-control-feedback" style="left: 0;"></span>
+                                        </div>
+                                        <div class="form-group" >
+                                            <button type="button" onclick="searchLog()"  class="btn btn-default btn-sm"
+                                                    data-toggle="tooltip"  lang="title:query">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                            </button>
+                                        </div>
+                                        <div class="form-group pull-right" >
+                                            <button type="button" id="btn_export" onclick="exportData()"
+                                                    class="btn btn-default btn-sm" data-toggle="tooltip" lang="title:export">
+                                                <span class="icon-upload-alt"></span>
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                             <div style="overflow:auto;display:none" id="operaContent">
@@ -104,22 +103,12 @@
 <script type="text/javascript">
     //nav-tabs选择项切换
     function showTabContent(tabPage) {
-        //加载级别下拉多选
-        $("#pageNumberSelect option").removeAttr("selected");
-        $("#pageNumberSelect option:first").attr('selected',true);
-        $("#panelContent").empty();
-        $("#tableHead_checkbok").prop("checked", false);
-        pageLoadCallback(0,tabPage);
-
-    }
-    //分页回调方法
-    function pageLoadCallback(index,tabPage){
         switch (tabPage) {
             case 1:
-                changeTabOne(index, tabPage);
+                changeTabOne(cursor);
                 break;
             case 3:
-                changeTabThree(index, tabPage);
+                changeTabThree(cursor);
                 break;
             default:
                 break;
@@ -127,11 +116,10 @@
     }
     //第一个标签方法调用
     var tab=1;
-    function changeTabOne(cursor, tabPage) {
-        var self = this;
-      $("#operaContent").show();
-      $("#commContent").hide();
-      $("#refreshIcon").show();
+    function changeTabOne(cursor) {
+        $("#operaContent").show();
+        $("#commContent").hide();
+        $("#refreshIcon").show();
         //tabPage 第几个导航标签
         // cursor 表示从结果的第几条开始
         // limit  查询多少条
@@ -139,29 +127,33 @@
         var start_time = new Date(dateArray[0] + " 00:00:00").getTime() / 1000;
         var end_time = new Date(dateArray[1] + " 23:59:59").getTime() / 1000;
 
-        var limit = $("#pageNumberSelect").find("option:selected").val();
+        var limit = $("#page-footer .col-sm-5 select").val();
         var language = locale.current();
         var params = {
-          limit: limit,
-          cursor: cursor,
-          verbose:100,
-          start_time:start_time,
-          end_time:end_time,
-          language:language
+            limit: limit,
+            cursor: cursor,
+            verbose:100,
+            start_time:start_time,
+            end_time:end_time,
+            language:language
         };
         tab=1;
-        searchOperationLog(params, true, function(data) {
+        searchOperationLog(params, false, function(data) {
+
             if(data.total && data.total>0){
                 tableBuild(data.result);
-                renderPagination(data,changeTabOne);
+                //renderPagination(data,changeTabOne);
+                //加载分页数据
+                $("#page-footer").pagination("data",data);
             }else{
-                clearPagination();
+                // clearPagination();
+                $("#page-footer").pagination("clear");
                 $("#panelContent").empty();
                 $("#panelContent").append('<tr><td colspan="5"  align="center" lang="text:no_data"></td></tr>');
                 locale.render({element: "#init_body"});
+                $("#refreshIcon").hide();
             }
-            $("#refreshIcon").hide();
-        }, self);
+        }, this);
     }
 
     //加载表格填充区域
@@ -170,100 +162,96 @@
         var str;
         for (var i = 0; i < obj.length; i++) {
             str = "<tr>" +
-                    "<td>" + String.format(locale.get(obj[i].code), obj[i].params[0]) + "</td>" +
-                    "<td>" + obj[i].ip + "</td>" +
-                    "<td>" + obj[i].username + "</td>" +
-                    "<td>" + schneider.util.dateFormat(obj[i].timestamp, "yyyy-MM-dd hh:mm:ss") + "</td>" +
-                    "</tr>";
+                "<td>" + String.format(locale.get(obj[i].code), obj[i].params[0]) + "</td>" +
+                "<td>" + obj[i].ip + "</td>" +
+                "<td>" + obj[i].username + "</td>" +
+                "<td>" + schneider.util.dateFormat(obj[i].timestamp, "yyyy-MM-dd hh:mm:ss") + "</td>" +
+                "</tr>";
             $("#panelContent").append(str);
         }
         permissionFilter_pageFunc();
         locale.render({element: "#init_body"});
+        $("#refreshIcon").hide();
     }
 
     //查询按钮
     function searchLog(){
         if(tab==1){
-          changeTabOne(0,$("#pageNumberSelect").val());
+            changeTabOne(0);
         }else if(tab==2){
-          changeTabThree(0,$("#pageNumberSelect").val());
+            changeTabThree(0);
         }
-      }
+    }
     //第三个标签方法调用
-    function changeTabThree(cursor, tabPage) {
+    function changeTabThree(cursor) {
         $("#commContent").show();
         $("#operaContent").hide();
         $("#refreshIcon").show();
         var dateArray=($("#searchDate").val()).split("-");
         var start_time = new Date(dateArray[0] + " 00:00:00").getTime() / 1000;
         var end_time = new Date(dateArray[1] + " 23:59:59").getTime() / 1000;
-        var limit = $("#pageNumberSelect").find("option:selected").val();
+        var limit =  $("#page-footer .col-sm-5 select").val();
         var language = locale.current();
 
         var params = {
-          limit: limit,
-          cursor: cursor,
-          verbose:100,
-          start_time:start_time,
-          end_time:end_time,
-          language:language
+            limit: limit,
+            cursor: cursor,
+            verbose:100,
+            start_time:start_time,
+            end_time:end_time,
+            language:language
         };
         tab=2;
         searchLogCommunicationLog(params,false,function(data){
-          if(data.total && data.total>0){
-              commTableBuild(data.result);
-              renderPagination(data,changeTabThree);
-          }else{
-              clearPagination();
-              $("#logContent").empty();
-              $("#logContent").append('<tr><td colspan="6"  align="center" lang="text:no_data"></td></tr>');
-              locale.render({element: "#init_body"});
-          }
-          $("#refreshIcon").hide();
+            if(data.total && data.total>0){
+                commTableBuild(data.result);
+                //renderPagination(data,changeTabThree);
+                //加载分页数据
+                $("#page-footer").pagination("data",data);
+            }else{
+                // clearPagination();
+                $("#page-footer").pagination("clear");
+                $("#logContent").empty();
+                $("#logContent").append('<tr><td colspan="6"  align="center" lang="text:no_data"></td></tr>');
+                locale.render({element: "#init_body"});
+                $("#refreshIcon").hide();
+            }
         },this);
     }
 
-        function commTableBuild(result) {
-            $("#logContent").empty();
-            var str;
-            for (var i = 0; i < result.length; i++) {
-                str = "<tr>" +
-                        "<td style='word-break: break-all;'>" + String.format(locale.get(result[i].code), result[i].params[0]) + "</td>" +
-                        "<td style='word-break: break-all;'>" + result[i].ip + "</td>" +
-                        "<td>" + result[i].deviceName + "</td>" +
-                        "<td>" + result[i].siteName + "</td>" +
-                        "<td>" + schneider.util.dateFormat(result[i].timestamp, "yyyy-MM-dd hh:mm:ss") + "</td>" +
-                        "</tr>";
-                $("#logContent").append(str);
-            }
-            permissionFilter_pageFunc();
-            locale.render({element: "#init_body"});
+    function commTableBuild(result) {
+        $("#logContent").empty();
+        var str;
+        for (var i = 0; i < result.length; i++) {
+            str = "<tr>" +
+                "<td style='word-break: break-all;'>" + String.format(locale.get(result[i].code), result[i].params[0]) + "</td>" +
+                "<td style='word-break: break-all;'>" + result[i].ip + "</td>" +
+                "<td>" + result[i].deviceName + "</td>" +
+                "<td>" + result[i].siteName + "</td>" +
+                "<td>" + schneider.util.dateFormat(result[i].timestamp, "yyyy-MM-dd hh:mm:ss") + "</td>" +
+                "</tr>";
+            $("#logContent").append(str);
         }
-    //跳转到指定页  回调函数
-        function jumpTopage(cursor){
-            if(tab ==1){
-              changeTabOne(cursor,$("#pageNumberSelect").val());
-            }else if(tab==2){
-              changeTabThree(cursor,$("#pageNumberSelect").val());
-            }
+        permissionFilter_pageFunc();
+        locale.render({element: "#init_body"});
+        $("#refreshIcon").hide();
+    }
 
-        }
-    //每页显示条目切换
-    function changePageNumber(limit) {
+    //分页工具内切换
+    function changePageTool(cursor) {
         if(tab == 1){
-          changeTabOne(0,limit);
+            changeTabOne(cursor);
         }else if(tab==2){
-          changeTabThree(0,limit);
+            changeTabThree(cursor);
         }
-
     }
     //数据导出
     function exportData(){
-      if(tab==1){
-        operationLog();
-      }else if(tab==2){
-        communicationLog();
-      }
+        if(tab==1){
+            operationLog();
+        }else if(tab==2){
+            communicationLog();
+        }
 
     }
     function operationLog(){
@@ -280,12 +268,12 @@
             timeout: deleteTime,
             type: '6'
         };
-      getAPI_log(null, query, function (data) {
-          if (data.result) {
-              var urlExport = "/api/file/" + data.result._id + "?access_token=" + sessionStorage.getItem("accessToken");
-              $.fileDownload(urlExport);
-          }
-      }, this);
+        exportReportForm(null, query, function (data) {
+            if (data.result) {
+                var urlExport = "/api/file/" + data.result._id + "?access_token=" + sessionStorage.getItem("accessToken");
+                $.fileDownload(urlExport);
+            }
+        }, this);
     }
     //通信日志数据导出
     function communicationLog(){
@@ -302,51 +290,51 @@
             timeout: deleteTime,
             type: '7'
         };
-      getAPI_log_com(params, query, function (data) {
-          if (data.result) {
-              var urlExport = "/api/file/" + data.result._id + "?access_token=" + sessionStorage.getItem("accessToken");
-              $.fileDownload(urlExport);
-          }
-      }, this);
+
+        exportReportForm(params, query, function (data) {
+            if (data.result) {
+                var urlExport = "/api/file/" + data.result._id + "?access_token=" + sessionStorage.getItem("accessToken");
+                $.fileDownload(urlExport);
+            }
+        }, this);
     }
     //日历插件显示日期初始化
     $("#searchDate").daterangepicker(
-            {
-                startDate:moment().subtract(6, 'days'),
-                endDate: moment(),
-                maxDate : moment(),
-                showDropdowns : false,
-                showWeekNumbers : false,
-                separator : '-',
-                locale : {
-                    format: 'YYYY/MM/DD',
-                    separator: '-',
-                    applyLabel : locale.get("apply"),
-                    cancelLabel : locale.get("cancel")
-                }
-            },
-                function (start, end) {
-                    $('#searchDate').val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
-                }
+        {
+            startDate:moment().subtract(6, 'days'),
+            endDate: moment(),
+            maxDate : moment(),
+            showDropdowns : false,
+            showWeekNumbers : false,
+            separator : '-',
+            locale : {
+                format: 'YYYY/MM/DD',
+                separator: '-',
+                applyLabel : locale.get("apply"),
+                cancelLabel : locale.get("cancel")
+            }
+        },
+        function (start, end) {
+            $('#searchDate').val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
+        }
     );
 
-    //页面功能权限过滤
-    $(document).ready(function() {
+    // 不能删除此函数
+    function onInit() {
         permissionFilter_pageFunc();
         require(['logService'], function (logService) {
+            // $("#page-footer").load("admin/pagination.html",function(){
             // 引入分页
-//            $("#page-footer").pagination({
-//                changePage:function (cursor,limit) {
-//                    //分页内容改变的回调函数
-//                    research_site(cursor,limit);
-//                }
-//            });
-//            research_site(0, $("#page-footer .col-sm-5 select").val());
-          $("#page-footer").load("admin/pagination.html",function(){
-              showTabContent(1);//初始化页面
-          });
+            $("#page-footer").pagination({
+                changePage:function (cursor,limit) {
+                    //分页内容改变的回调函数
+                    changePageTool(cursor);
+                }
+            });
+            showTabContent(1);//初始化页面
+            // });
         });
         locale.render({element: "#init_body"});
-    });
+    }
 
 </script>

@@ -381,6 +381,7 @@ var lang = {
         password_has_been_sent_to_the_email: "A password has been sent to your email",
         email_already_exists: "Email already exists",
         organization_already_exists: "Organization already exists",
+        user_name: "Username",
 
         /********************************  底部信息 *********************************/
         about_us: "Contact Us",
@@ -431,7 +432,7 @@ var lang = {
 
 
         /******** 通知 *******/
-        "notice":"Event",
+        "notice":"Notifications",
         /********************************  告警管理 *********************************/
         "alarm":"Alarms",
         alarm_total: "Total Alarms",
@@ -516,6 +517,41 @@ var lang = {
         "atm-report":"ATM报表",
         /******** 配置 *******/
         "config":"Config",
+        /******************************* 网关管理 ***************************************/
+        imsi_mobilenumber: "Import phone number",
+        batch_import: "Batch import",
+        export_devices: "Export Gateway",
+        gateway_management: "Gateway Management",
+        model_type: "Model",
+        installation_site: "Installation Site",
+        configuration_state: "Config Status",
+        current_version: "Current Version",
+        activation_date:"ActivationDate",
+        deactivation_date:"DeActivationDate",
+        device_name1: "Gateway Name",
+        select_del: "Please select one item",
+        version_now: "Version",
+        port: "Port",
+        import_upgrade_file: "Import Upgrade File",
+        import_mobilenumber: "Import file",
+        download_template_file: "Download Template",
+        select_file: "Select file",
+        import_sn_file: "Import serial number file",
+        vendor_name: "Manufacturer",
+        model: "Model",
+        auto_create_site: "Create New Site Automatically",
+        show_advanced_options: "Advanced",
+        heartbeat_timeout: "Heartbeat Timeout",
+        heartbeat_interval: "Heartbeat Interval",
+        max_heartbeat_lost: "Max Heartbeats Lost",
+        resend_login: "Re-login Interval",
+        connection_timeout: "Connection Timeout",
+        ack_timeout: "Response Timeout",
+        ack_retries: "Max Retries",
+        sync_config: "Sync Rule",
+        keep_device: "Gateway config take precedence",
+        keep_platform: "Cloud config take precedence",
+        ignore: "Ignore",
         /********************************  现场管理 *********************************/
         "site":"Site",
         site_management: "Site Management",
@@ -619,7 +655,12 @@ var lang = {
         the_gateway_has_been_binding:"The gateway has been binding",
         the_site_has_been_deleted:"The site has been deleted",
         base_station: "Base Station",
-
+        four_complete: "Finished",
+        input_15_gate_number: "Please input the 15 letter serial number of the gateway",
+        baud_rate: "Baudrate",
+        data_bit: "Databits",
+        stop_bit: "Stopbit",
+        parity_check: "Parity",
 
         /******** 系统 *******/
         "system":"System",
@@ -638,6 +679,8 @@ var lang = {
         add_user: 'Add user',
         user_info: "User Info",
         please_input_captcha: "Please enter captcha",
+        deleteGatewayInfo: "Sure to delete?",
+        deleteUserInfo: "Delete the user？",
         /********************************  角色管理 *********************************/
         "role":"Role",
         role_info: "Role Info",
@@ -823,6 +866,8 @@ var lang = {
         create_update_schedule: "create update schedule",
         repair_processing: "repair processing",
         repair_state: "repair state",
+        model2: "Model",
+        reset1: "Reset",
         execute_time: "Execute time"
 
     }

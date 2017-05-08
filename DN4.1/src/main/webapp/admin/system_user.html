@@ -102,19 +102,19 @@
                 strInput = "<td><input type='checkbox' value='" + obj[i]._id + "' class='tabs-checked'></td>";
             }
             str = "<tr>" + strInput +
-                    "<td style='word-break: break-all;'>" + obj[i].name + "</td>" +
-                    "<td style='word-break: break-all;'>" + obj[i].email + "</td>" +
-                    "<td>" + obj[i].state + "</td>" +
-                    "<td>" + obj[i].roleName + "</td>" +
-                    "<td>" + obj[i].createTime + "</td>" +
-                    "<td>" + obj[i].totalLogin + "</td>" +
-                    "<td style='text-align:center;'>" +
-                    "<span data-toggle='tooltip' title='编辑' lang='title:edit' data-permissionFilter='[6]'" +
-                    "onclick='showModel_edit_users(\"" + obj[i].name + "\",\"" + obj[i].email + "\",\"" + phone + "\",\"" + obj[i].state + "\",\"" + obj[i].roleName + "\",\"" + obj[i]._id + "\",\"" + obj[i].roleId + "\")' style='padding: 3px 6px;'><span class='glyphicon glyphicon-edit link-black' aria-hidden='true' style=' cursor: pointer;'></span>&nbsp;</span>" +
-                    "<span data-toggle='tooltip' title='重置密码' lang='title:reset_password' data-permissionFilter='[6]'" +
-                    "onclick='showModel_repeat_password(\"" + obj[i].name + "\",\"" + obj[i].email + "\",\"" + obj[i].phone + "\",\"" + obj[i].state + "\",\"" + obj[i].roleName + "\",\"" + obj[i]._id + "\")' style='padding: 3px 6px;'><span class='glyphicon glyphicon-repeat link-black' aria-hidden='true' style=' cursor: pointer;'></span>&nbsp;</span>" +
-                    "</td>" +
-                    "</tr>";
+                "<td style='word-break: break-all;'>" + obj[i].name + "</td>" +
+                "<td style='word-break: break-all;'>" + obj[i].email + "</td>" +
+                "<td>" + obj[i].state + "</td>" +
+                "<td>" + obj[i].roleName + "</td>" +
+                "<td>" + obj[i].createTime + "</td>" +
+                "<td>" + obj[i].totalLogin + "</td>" +
+                "<td style='text-align:center;'>" +
+                "<span data-toggle='tooltip' lang='title:edit' data-permissionFilter='[6]'" +
+                "onclick='showModel_edit_users(\"" + obj[i].name + "\",\"" + obj[i].email + "\",\"" + phone + "\",\"" + obj[i].state + "\",\"" + obj[i].roleName + "\",\"" + obj[i]._id + "\",\"" + obj[i].roleId + "\")' style='padding: 3px 6px;'><span class='glyphicon glyphicon-edit link-black' aria-hidden='true' style=' cursor: pointer;'></span>&nbsp;</span>" +
+                "<span data-toggle='tooltip'  lang='title:reset_password' data-permissionFilter='[6]'" +
+                "onclick='showModel_repeat_password(\"" + obj[i].name + "\",\"" + obj[i].email + "\",\"" + obj[i].phone + "\",\"" + obj[i].state + "\",\"" + obj[i].roleName + "\",\"" + obj[i]._id + "\")' style='padding: 3px 6px;'><span class='glyphicon glyphicon-repeat link-black' aria-hidden='true' style=' cursor: pointer;'></span>&nbsp;</span>" +
+                "</td>" +
+                "</tr>";
             $("#panelContent").append(str);
         }
         $("tbody > tr > td > input").on("click", function () {
@@ -168,7 +168,6 @@
 </script>
 <section class="content-header">
     <h1 lang="text:user">
-        用户
         <small>Version 2.0</small>
     </h1>
     <ol class="breadcrumb">
@@ -181,17 +180,17 @@
 
         <ul class="nav nav-tabs" role="tablist" id="myNavTabs">
             <li role="presentation" class="active" onclick="showTabContent(1)">
-                <a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:all_user" value="1">所有用户</a>
+                <a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:all_user" value="1"></a>
             </li>
             </li>
             <li role="presentation" onclick="showTabContent(3)">
-                <a href="javascript:void(0)" role="tab" lang="text:dn_admin" data-toggle="tab" value="3">系统管理员</a>
+                <a href="javascript:void(0)" role="tab" lang="text:dn_admin" data-toggle="tab" value="3"></a>
             </li>
             <li role="presentation" onclick="showTabContent(4)">
-                <a href="javascript:void(0)" role="tab" lang="text:device_manager" data-toggle="tab" value="4">设备管理员</a>
+                <a href="javascript:void(0)" role="tab" lang="text:device_manager" data-toggle="tab" value="4"></a>
             </li>
             <li role="presentation" onclick="showTabContent(5)">
-                <a href="javascript:void(0)" role="tab" lang="text:device_sense" data-toggle="tab" value="5">设备监视员</a>
+                <a href="javascript:void(0)" role="tab" lang="text:device_sense" data-toggle="tab" value="5"></a>
             </li>
         </ul>
 
@@ -212,17 +211,17 @@
                                     <form class="form-inline">
                                         <div class="box-tools pull-right">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-default btn-sm" title='新增'
+                                                <button type="button" class="btn btn-default btn-sm"
                                                         data-permissionFilter="[6]"
                                                         data-toggle='tooltip' data-placement="bottom" lang="title:add"
                                                         onclick="showModel_increase_users();">
                                                     <i class="glyphicon glyphicon-plus"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-default btn-sm" title='删除'
+                                                <button type="button" class="btn btn-default btn-sm"
                                                         data-permissionFilter="[6]"
                                                         data-toggle='tooltip' data-placement="bottom"
                                                         lang="title:delete" onclick="delete_users();">
-                                                    <i class="glyphicon glyphicon-minus"></i>
+                                                    <i class="iconfont icon-delete"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -237,12 +236,12 @@
                                             <input type="checkbox" id="tableHead_checkbok" data-toggle='tooltip'
                                                    data-placement="bottom" lang="title:check_all">
                                         </th>
-                                        <th lang="text:username" style="width: 15%;">用户名</th>
-                                        <th lang="text:email" style="width: 20%;">邮箱</th>
-                                        <th lang="text:state">状态</th>
-                                        <th lang="text:role">角色</th>
-                                        <th lang="text:create_time">创建时间</th>
-                                        <th lang="text:login_times">登录次数</th>
+                                        <th lang="text:username" style="width: 15%;"></th>
+                                        <th lang="text:email" style="width: 20%;"></th>
+                                        <th lang="text:state"></th>
+                                        <th lang="text:role"></th>
+                                        <th lang="text:creation_time"></th>
+                                        <th lang="text:login_times"></th>
                                         <th style="width:80px;text-align:center;" lang="text:operate"></th>
                                     </tr>
                                     </thead>
@@ -279,13 +278,13 @@
                 <form class="form-horizontal" id="form_increseUser">
                     <div class="form-group">
                         <label for="model_increseUser_userName" class="col-sm-2 control-label">
-                            <span lang="text:username"></span><span class="text-red">*</span>
+                            <span lang="text:user_name"></span><span class="text-red">*</span>
                         </label>
                         <div class="col-sm-10">
                             <input type="text"
                                    class="form-control model_increseUser_userName validate[required,maxSize[30]]"
                                    name="name" id="model_increseUser_userName"
-                                   placeholder="用户名" lang="placeholder:username">
+                                   lang="placeholder:user_name">
                         </div>
                     </div>
                     <div class="form-group">
@@ -295,7 +294,7 @@
                         <div class="col-sm-10">
                             <input type="email" class="form-control validate[required,custom[email]]" name="email"
                                    id="model_increseUser_email"
-                                   placeholder="email" lang="placeholder:email">
+                                   lang="placeholder:email">
                         </div>
                     </div>
                     <div class="form-group">
@@ -304,7 +303,7 @@
                         <div class="col-sm-10">
                             <input type="text" class="form-control validate[custom[mobile]]" name="phone"
                                    id="model_increseUser_phone"
-                                   placeholder="phone" lang="placeholder:mobile_number">
+                                   lang="placeholder:mobile_number">
                         </div>
                     </div>
                     <div class="form-group">
@@ -320,7 +319,7 @@
                     </div>
                     <div style="text-align:right;">
                         <button id="btn_resetForm" type="reset" style="outline: none;background: white;border: none;"
-                                data-toggle="tooltip" title="重新填写" lang="title:reset1">
+                                data-toggle="tooltip"  lang="title:reset1">
                             <span class='glyphicon glyphicon-refresh' aria-hidden='true'
                                   style='color:green;font-size:150%;cursor: pointer;'></span>
                         </button>
@@ -329,9 +328,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal" lang="text:close"
-                        onclick="clear_validationInfo()">关闭
+                        onclick="clear_validationInfo()">
                 </button>
-                <button type="button" class="btn btn-primary" onclick="increase_users();" lang="text:submit">提交</button>
+                <button type="button" class="btn btn-primary" onclick="increase_users();" lang="text:submit"></button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -351,16 +350,16 @@
                     <input type="hidden" value="" name="_id" id="model_editeUser_id">
                     <div class="form-group">
                         <label for="model_editeUser_userName" class="col-sm-2 control-label">
-                            <span lang="text:username"></span><span class="text-red">*</span>
+                            <span lang="text:user_name"></span><span class="text-red">*</span>
                         </label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control validate[required,maxSize[30]]" name="name"
-                                   id="model_editeUser_userName" lang="placeholder:username">
+                                   id="model_editeUser_userName"
+                                   lang="placeholder:user_name">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label" lang="text:email">
-                            邮箱
                         </label>
                         <div class="col-sm-10">
                             <input type="email" class="form-control" name="email" id="model_editeUser_email"
@@ -373,12 +372,11 @@
                         <div class="col-sm-10">
                             <input type="text" class="form-control validate[custom[mobile]]" name="phone"
                                    id="model_editeUser_phone"
-                                   placeholder="phone" lang="placeholder:mobile_number">
+                                   lang="placeholder:mobile_number">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label" lang="text:state">
-                            状态
                         </label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" name="state" id="model_editeUser_state"
@@ -387,11 +385,10 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label" lang="text:role">
-                            角色
                         </label>
                         <div class="col-sm-10">
                             <!--<input type="text" class="form-control" name="roleName" id="model_editeUser_roleName"-->
-                                   <!--disabled="true">-->
+                            <!--disabled="true">-->
                             <select id="model_editeUser_roleName" class="validate[required]" name="roleName"
                                     style="height:32px;" disabled="disabled">
                                 <!--角色-->
@@ -403,7 +400,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal" lang="text:close"
                         onclick="clear_validationInfo()"></button>
-                <button type="button" class="btn btn-primary" onclick="edit_users();" lang="text:submit">提交</button>
+                <button type="button" class="btn btn-primary" onclick="edit_users();" lang="text:submit"></button>
 
             </div>
         </div><!-- /.modal-content -->
@@ -418,7 +415,7 @@
                 <form class="form-horizontal">
                     <input type="hidden" value="" name="_id" id="model_repeatPwd_userId">
                     <input type="hidden" value="" name="pictureId" id="model_repeatPwd_pictureId">
-                    <label style="position: relative;top: 15px;" lang="text:please_input_captcha">请输入验证码:</label>
+                    <label style="position: relative;top: 15px;" lang="text:please_input_captcha"></label>
                     <img id="medel_repeatPwd_img" onclick="changePicture();" style="position: relative;left: 15px;"
                          src="">
                     <div class="form-group" style="position:relative;top:15px">
@@ -427,7 +424,7 @@
                         </div>
                         <div class="col-sm-5">
                             <button type="button" class="btn btn-primary" onclick="repeat_password();"
-                                    lang="text:affirm">确认
+                                    lang="text:affirm">
                             </button>
                         </div>
                     </div>
@@ -476,7 +473,7 @@
                 changeTabOne(index, tabPage);
                 break;
             case 2:
-               // changeTabTwo(index, tabPage);
+                // changeTabTwo(index, tabPage);
                 break;
             case 3:
                 changeTabThree(index, tabPage);
@@ -497,18 +494,15 @@
         //tabPage 第几个导航标签
         // cursor 表示从结果的第几条开始
         // limit  查询多少条
-        var limit = $("#pageNumberSelect").find("option:selected").val();
+        var limit = $("#page-footer .col-sm-5 select").val();
         var params = {limit: limit, cursor: cursor, verbose: 100};
         searchAPI2_users(params, false, function (data) {
 
             if (data.total && data.total > 0) {
                 refreshTableLogic(data, tabPage);
-                renderPagination(data, function (index, limit) {
-                    pageLoadCallback(index, tabPage);
-                });
-
+                $("#page-footer").pagination("data",data);
             } else {
-                clearPagination();
+                $("#page-footer").pagination("clear");
                 $("#panelContent").empty();
                 $("#panelContent").append('<tr><td colspan="8"  align="center" lang="text:no_data"></td></tr>');
                 locale.render({element: "#init_body"});
@@ -542,7 +536,7 @@
 
     //查询指定角色
     function researchroles_name(name, cursor, tabPage) {
-        var limit = $("#pageNumberSelect").find("option:selected").val();
+        var limit = $("#page-footer .col-sm-5 select").val();
         var params = {limit: limit, name: name};
         searchAPI2_roles(params, function (data) {
             var back = data;
@@ -560,11 +554,9 @@
                         //填充列表
                         refreshTableLogic(data1, tabPage);
                         //加载分页
-                        renderPagination(data1, function (index, limit) {
-                            pageLoadCallback(index, tabPage);
-                        });
+                        $("#page-footer").pagination("data",data);
                     } else {
-                        clearPagination();
+                        $("#page-footer").pagination("clear");
                         $("#panelContent").empty();
                         $("#panelContent").append('<tr><td colspan="8"  align="center" lang="text:no_data"></td></tr>');
                         locale.render({element: "#init_body"});
@@ -574,19 +566,14 @@
             }
         }, this);
     }
-    //跳转到指定页  回调函数
-    function jumpTopage(cursor) {
 
+    function changePageNumber(cursor) {
         var tabContent = $("#myNavTabs li").filter(".active").find("a").attr("value");
-        pageLoadCallback(cursor, parseInt(tabContent));
-    }
-
-    //每页显示条目切换
-    function changePageNumber(limit) {
-        var tabContent = $("#myNavTabs li").filter(".active").find("a").attr("value");
-
-        pageLoadCallback(0, parseInt(tabContent));
-
+        if(cursor == "undefined" || cursor == null || cursor==""){
+            pageLoadCallback(0, parseInt(tabContent));
+        }else{
+            pageLoadCallback(cursor, parseInt(tabContent));
+        }
     }
 
 
@@ -671,8 +658,15 @@
             var name = $("#model_increseUser_userName").val();
             var phone = $("#model_increseUser_phone").val();
             var roleId = $("#model_increseUser_roles").val();
-            var sendData = {email: email, name: name, phone: phone, roleId: roleId};
-
+            var sendData = {
+                email: email,
+                name: name,
+                phone: phone,
+                roleId: roleId
+            };
+            if( typeof( phone) == undefined || typeof( phone) == null || phone == "") {
+                delete sendData.phone;
+            }
             postAPI2_users(params, sendData, function (data) {
                 if (data.error_code) {
                     if (parseInt(data.error_code) == 20007) {
@@ -680,7 +674,7 @@
                     }
                 } else {
                     $('#model_increseUser').modal('hide');
-                    changePageNumber(30);//刷新当前标签页下的内容
+                    changePageNumber();//刷新当前标签页下的内容
                     var showText = locale.get("2110001", " ");
                     dialog.render({
                         text: showText
@@ -701,7 +695,7 @@
                         selected_users.each(function () {
                             deleteAPI2_users_$ID(null, $(this).val());
                         });
-                        changePageNumber(30);//刷新当前标签页下的内容
+                        changePageNumber();//刷新当前标签页下的内容
                         dialog.close();
                     }
                 }, {
@@ -730,6 +724,9 @@
                 email: $("#model_editeUser_email").val(),
                 phone: $("#model_editeUser_phone").val()
             };
+            //if( typeof( sendData.phone) == undefined || typeof( sendData.phone) == null || sendData.phone == "") {
+            //    delete sendData.phone;
+            //}
             putAPI2_users_$ID(paramsString, deleteUserId, sendData, function (data) {
                 var data_userId = data.result._id;
                 if (data_userId == current_account._id) {
@@ -737,7 +734,7 @@
                     $("#user_info_3").text(userName);
                 }
                 //刷新当前标签页下的内容
-                changePageNumber(30);
+                changePageNumber();
             }, this);
         }
     }
@@ -758,7 +755,7 @@
             } else {
                 switch (result.error_code) {
                     case 20013:
-                       errorTipDis("20013")
+                        errorTipDis("20013")
 
                         break;
                     default:
@@ -785,13 +782,23 @@
     //页面功能权限过滤
     $(document).ready(function () {
         permissionFilter_pageFunc();
-        $("#page-footer").load("admin/pagination.html", function () {
-            getAPI2_user_this({verbose: 100}, function (data) {
-                current_account._id = data.result._id;
-                showTabContent(1);//初始化页面
-                innit_allRoles();
-            }, this);
-        });
-    });
 
+        // 引入分页插件
+        $("#page-footer").pagination({
+            changePage:function (cursor,limit) {
+                //分页内容改变的回调函数
+                changePageNumber(cursor);
+            }
+        });
+        // 初始化数据
+        getAPI2_user_this({verbose: 100}, function (data) {
+            current_account._id = data.result._id;
+            showTabContent(1);//初始化页面
+            innit_allRoles();
+        }, this);
+
+    });
+    function onInit() {
+
+    }
 </script>

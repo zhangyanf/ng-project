@@ -248,3 +248,17 @@ function get_location_ip(params,callback,context) {
         }
     });
 }
+
+/*
+* 获取机构信息
+* */
+function get_api2_orgizations_this(params,callback,context) {
+    schneider.Ajax.request({
+        url: "/api2/organizations/this",
+        type: "GET",
+        parameters:params,
+        success: function (data) {
+            callback.call(context || this,data);
+        }
+    });
+}

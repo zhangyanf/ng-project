@@ -110,7 +110,7 @@
             <div class="alert alert-warning alert-dismissible">
                 <h4>
                     <i class="icon fa fa-info"></i>
-                    <span lang="text:order_total"> 工单总数 </span>
+                    <span lang="text:order_total"> </span>
                     <span id="order_total" class="pull-right"></span>
                 </h4>
             </div>
@@ -119,7 +119,7 @@
             <div class="alert alert-danger alert-dismissible">
                 <h4>
                     <i class="icon fa fa-info"></i>
-                    <span lang="text:order_unconfirmed_total"> 未处理工单 </span>
+                    <span lang="text:order_unconfirmed_total">  </span>
                     <span id="order_unconfirmed_total" class="pull-right"></span>
                 </h4>
             </div>
@@ -129,7 +129,7 @@
         <!--标签页 Nav tabs-->
         <ul class="nav nav-tabs" role="tablist" id="myNavTabs">
             <li role="presentation" class="active">
-                <a role="tab" data-toggle="tab" lang="text:order_info" href="#tab_list">工单列表</a>
+                <a role="tab" data-toggle="tab" lang="text:order_info" href="#tab_list"></a>
                 <input type="hidden" id="siteId">
             </li>
         </ul>
@@ -178,7 +178,7 @@
                                             </label>
                                         </div>
                                     </form>
-                                    <form class="form-inline">
+                                    <form class="form-inline" id="searchOrderForm">
                                         <div class="form-group has-feedback">
                                             <input type="text" class="form-control form-control-left input-sm" id="searchDate" readonly="readonly">
                                             <span class="glyphicon glyphicon-calendar form-control-feedback" style="left: 0;"></span>
@@ -186,8 +186,8 @@
                                          <div class="form-group home_detail_siteName" style="padding: 5px 0px;">
                                             <span>
                                                 <label lang="text:site"></label>
-                                                <input type="text" class="form-control input-sm autoRetrieve" id="site_name"
-                                                       lang="placeholder:site_name">
+                                                <input type="text" class="form-control input-sm validate[custom[stopSpecialCharacters]] autoRetrieve" id="site_name"
+                                                       lang="placeholder:please_enter_the_site_name">
                                             </span>
                                         </div>
                                         <div class="form-group" style="padding: 5px 0px;">
@@ -197,15 +197,15 @@
                                                         <span name="radio_select_assetid" data-val="2" lang="text:device_name"></span><span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="javascript:void(0)" lang="text:asset_number" onclick="select_assetId_content(1)">资产编号</a></li>
-                                                        <li><a href="javascript:void(0)" lang="text:device_name" onclick="select_assetId_content(2)">设备名称</a></li>
+                                                        <li><a href="javascript:void(0)" lang="text:asset_number" onclick="select_assetId_content(1)"></a></li>
+                                                        <li><a href="javascript:void(0)" lang="text:device_name" onclick="select_assetId_content(2)"></a></li>
                                                     </ul>
                                                 </div>
                                                 <div class="form-group">
                                                     <span>
-                                                        <input type="text" name="searchAssetValue" class="form-control input-sm autoRetrieve" id="asset_no"
+                                                        <input type="text" name="searchAssetValue" class="form-control input-sm validate[custom[stopSpecialCharacters]] autoRetrieve" id="asset_no"
                                                                lang="placeholder:please_enter_the_asset_number" style="display:none;">
-                                                    <input type="text" name="searchAssetValue" class="form-control input-sm autoRetrieve" id="device_name"
+                                                    <input type="text" name="searchAssetValue" class="form-control input-sm validate[custom[stopSpecialCharacters]] autoRetrieve" id="device_name"
                                                            lang="placeholder:enter_the_machine_name">
                                                     </span>
                                                 </div>
@@ -215,7 +215,7 @@
                                         <div class="form-group " style="padding: 5px 0px;">
                                             <span>
                                                 <label lang="text:repair_engineer"></label>
-                                                <input type="text" class="form-control input-sm" id="repair_engineer"
+                                                <input type="text" class="form-control input-sm validate[custom[stopSpecialCharacters]]" id="repair_engineer"
                                                        lang="placeholder:please_enter_the_repair_engineer">
                                             </span>
                                         </div>
@@ -255,23 +255,23 @@
                                         <div class="form-group" style="padding: 5px 0px;">
                                             <button type="button" onclick="searchOrder()" data-permissionFilter="[215,217 ]"
                                                     class="btn btn-default btn-sm"
-                                                    data-toggle="tooltip" title="查找" lang="title:query">
+                                                    data-toggle="tooltip" lang="title:query">
                                                 <span class="glyphicon glyphicon-search"></span>
                                             </button>
                                         </div>
                                         <div class="form-group box-tools pull-right" style="padding: 5px 0px;">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-default btn-sm" title='新增'
-                                                        data-permissionFilter="[ ]"
+                                                <button type="button" class="btn btn-default btn-sm"
+                                                        data-permissionFilter="[214]"
                                                         data-toggle='tooltip' data-placement="bottom" lang="title:add"
                                                         onclick="show_model_createOrder();" data-permissionFilter="[214]">
                                                     <i class="glyphicon glyphicon-plus"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-default btn-sm" title='删除'
+                                                <button type="button" class="btn btn-default btn-sm"
                                                         data-permissionFilter="[214]"
                                                         data-toggle='tooltip' data-placement="bottom"
                                                         lang="title:delete" onclick="delete_order()">
-                                                    <i class="glyphicon glyphicon-minus"></i>
+                                                    <i class="iconfont icon-delete"></i>
                                                 </button>
                                                 <!--<button type="button" id="btn_export" onclick="exportData()"
                                                         class="btn btn-default btn-sm" data-toggle="tooltip"
@@ -287,19 +287,19 @@
                                 <table class="table table-bordered table-hover table-striped">
                                     <thead>
                                     <tr>
-                                        <th id="tableHead_selectAll" style="width:30px;" class="text-center">
+                                        <th id="tableHead_selectAll" style="width:1%;" class="text-center">
                                             <input type="checkbox" id="tableHead_checkbok" data-toggle='tooltip'
                                                    data-placement="bottom" lang="title:check_all">
                                         </th>
-                                        <th lang="text:site" >现场</th>
-                                        <th lang="text:device_name" >设备名称</th>
-                                        <th lang="text:order_number" style="width:180px;">订单编号</th>
-                                        <th lang="text:repair_time" style="width:140px;"></th>
-                                       <!-- <th lang="text:asset_number" style="width:14%;">资产编号</th>-->
-                                        <th class="text-center" lang="text:order_status" style="width:110px;">工单状态</th>
-                                        <th class="text-center" lang="text:order_type" style="width:100px">工单类型</th>
-                                        <th data-permissionFilter='[ ]' class="text-center" style="width:80px"
-                                            lang="text:operate">操作
+                                        <th lang="text:site" style="width:13%"></th>
+                                        <th lang="text:order_number" style="width:17%;"></th>
+                                        <th lang="text:device_name" style="width:14%"></th>
+                                        <th lang="text:asset_number" style="width:15%;"></th>
+                                        <th lang="text:repair_time" style="width:13%;"></th>
+                                        <th class="text-center" lang="text:order_status" style="width:10%;"></th>
+                                        <th class="text-center" lang="text:order_type" style="width:9%"></th>
+                                        <th data-permissionFilter='[ ]' class="text-center" style="width:8%"
+                                            lang="text:operate">
                                         </th>
                                     </tr>
                                     </thead>
@@ -335,6 +335,15 @@
      */
     var home_detail_flag = 'home'; // 默认为home
 
+    /**
+     * 查询工单表单设置
+     */
+    validator.render("#searchOrderForm", {
+      //  promptPosition: "inline",
+        scroll: false,
+       // showOneMessage:true, // 只显示一条提示信息
+        showPrompts:false //不显示提示信息
+    });
     /**
      * 搜索日期插件
      */
@@ -406,8 +415,8 @@
      * 设置日期插件的startDate 为当前最新时间
      */
     function setCurrentDate(idStr) {
-        picker2Option.maxDate = new Date();
         var date = $("#"+idStr).val();
+        picker2Option.maxDate = new Date();
         $("#"+idStr).prop("cacheDate",date);
         picker2Option.startDate = new Date();
         $("#"+idStr).daterangepicker(picker2Option);
@@ -542,8 +551,8 @@
      * @returns {*}
      */
     function getSearchParam(params) {
-        var $input2 = $("#site_name");
-        var value2 = $.trim($input2.val());
+       /* var $input2 = $("#site_name");*/
+       /* var value2 = $.trim($input2.val());
         if(value2) {
             if(!$input2.attr("autovalue")) {
                 if($("#autoname > p").length>0) { //自动补全的现场
@@ -556,38 +565,39 @@
                             break;
                         }
                     }
-                  /*  if(flag) {
+                  /!*  if(flag) {
                         errorTipDis("this_site_nonexistence");
                         return false;
-                    }*/
+                    }*!/
                 }
             }
-        }
+        }*/
         //设备名称和设备编号失去焦点判断取值
         var assetId_type_select= $("#radio_select_assetid > button > span[name='radio_select_assetid']").attr("data-val");
-        if(assetId_type_select==1) { // 资产编号 asset_no
+       /* if(assetId_type_select==1) { // 资产编号 asset_no
             var $input = $("#asset_no");
             var value = $.trim($input.val());
             if(value) {
                 if(!$("#asset_no").attr("autovalue")) {
                     if($("#autoasset_no > p").length>0) { //自动补全的现场
                         var arrp = $("#autoasset_no > p");
-                        var flag = true;
+                       // var flag = true;
                         for(var i = 0; i < arrp.length; i++) {
                             if($(arrp[i]).text()==value){
                                 $input.attr("autovalue",$(arrp[i]).attr("id"));
-                                flag = false;
+                               // flag = false;
                                 break;
                             }
                         }
-                        if(flag) {
+                        /!*if(flag) {
                             errorTipDis("this_device_nonexistence");
                             return false;
-                        }
-                    }else { // 没有自动补全的现场
+                        }*!/
+                    }
+                    /!*else { // 没有自动补全的现场
                         errorTipDis("this_device_nonexistence");
                         return false;
-                    }
+                    }*!/
 
                 }
             }
@@ -598,35 +608,47 @@
                 if(!$("#device_name").attr("autovalue")) {
                     if($("#autodevice_name > p").length>0) { //自动补全的现场
                         var arrp = $("#autodevice_name > p");
-                        var flag = true;
+                       // var flag = true;
                         for(var i = 0; i < arrp.length; i++) {
                             if($(arrp[i]).text()==value){
                                 $input.attr("autovalue",$(arrp[i]).attr("id"));
-                                flag = false;
+                                //flag = false;
                                 break;
                             }
                         }
-                        if(flag) {
+                        /!*if(flag) {
                             errorTipDis("this_device_nonexistence");
                             return false;
-                        }
-                    }else { // 没有自动补全的现场
+                        }*!/
+                    }
+                   /!* else { // 没有自动补全的现场
                         errorTipDis("this_device_nonexistence");
                         return false;
-                    }
+                    }*!/
 
                 }
             }
-        }
+        }*/
         var dateArray = ($("#searchDate").val()).split("-");
         var start_time = new Date(dateArray[0] + " 00:00:00").getTime();
         var end_time = new Date(dateArray[1] + " 23:59:59").getTime();
         var siteId = $("#site_name").attr("autovalue");
         var assetId ;
-        if(assetId_type_select==1) {
+        if (assetId_type_select==1) {
             assetId = $("#asset_no").attr("autovalue");
-        }else {
+            if (assetId) {
+                params.asset_id = assetId;
+            } else {
+                params.asset_no = $.trim($("#asset_no").val());
+            }
+        } else {
             assetId = $("#device_name").attr("autovalue");
+            if (assetId) {
+                params.asset_id = assetId;
+            } else {
+                params.asset_name = $.trim($("#device_name").val());
+            }
+
         }
         var state = $("[name=order_status]:checked"); //工单状态
         var order_type = $("#order_type").val(); //工单类型
@@ -636,9 +658,7 @@
         }else {
             params.site_name=$.trim($("#site_name").val());
         }
-        if(assetId) {
-            params.asset_id = assetId;
-        }
+
         if(state.length>0) {
             var states = [];
             state.each(function(){
@@ -686,13 +706,15 @@
             if (data.total > 0) {
                 fill_order_list(data.result);
                 renderPagination(data, research_site);
-            }else if(data.error_code==10016){
+            }
+           /* else if(data.error_code==10016){
                 clearPagination();
                 $("#panelContent").empty();
                 $("#panelContent").append('<tr><td colspan="9"  align="center" lang="text:no_data"></td></tr>');
                 unload();
                 locale.render({element: "#init_body"});
-            } else {
+            }*/
+            else {
                 clearPagination();
                 $("#panelContent").empty();
                 $("#panelContent").append('<tr><td colspan="9"  align="center" lang="text:no_data"></td></tr>');
@@ -705,7 +727,9 @@
      * 查询按钮方法
      */
     function searchOrder() {
-        research_site(0, $("#pageNumberSelect").val());
+        if ($('#searchOrderForm').validationEngine('validate')) {
+            research_site(0, $("#pageNumberSelect").val());
+        }
     }
 
     /**
@@ -764,22 +788,22 @@
             }
             var order_no = (typeof(data[i].wo.order_no) == 'undefined' ? '' : data[i].wo.order_no);
            var name = (typeof(data[i].wo.device_name) == 'undefined' ? '' : data[i].wo.device_name);
-            str = "<tr><td><input type='checkbox'  value='" + data[i].wo._id + "'/></td>";
+            str = "<tr><td style='width:1%;'><input type='checkbox'  value='" + data[i].wo._id + "'/></td>";
                     if(home_detail_flag=="home") {
-             str += "<td style='word-break: break-all;'>" +
+             str += "<td style='word-break: break-all;width:13%;'>" +
                     "<a href='javascript:void(0)' onclick='detail_popUp(\"" +(typeof(data[i].wo.site_id) == 'undefined' ? '' : data[i].wo.site_id)+ "\")'>"+(typeof(data[i].wo.site_name) == 'undefined' ? '' : data[i].wo.site_name)+"</a></td>";
                     }else if(home_detail_flag=="detail") {
-             str += "<td style='word-break: break-all;'>"+(typeof(data[i].wo.site_name) == 'undefined' ? '' : data[i].wo.site_name)+"</td>";
+             str += "<td style='word-break: break-all;'width:13%;>"+(typeof(data[i].wo.site_name) == 'undefined' ? '' : data[i].wo.site_name)+"</td>";
                     }
 
-             str += "<td style='word-break: break-all;'>" + name + "</td>" +
-                    "<td style='word-break: break-all;'>" + order_no+ "</td>" +
-                    "<td style='word-break: break-all;'>" + (typeof(data[i].wo.create_time) == 'undefined' ? '' :schneider.util.dateFormat(data[i].wo.create_time,'yyyy-MM-dd hh:mm') ) + "</td>" +
-                    //"<td style='word-break: break-all;width:14%;'>" + (typeof(data[i].wo.asset_no) == 'undefined' ? '' : data[i].wo.asset_no) + "</td>" +
-                    "<td style='word-break: break-all;' class='text-center'><span class='label "+stateCss+"'>" + state + "</span></td>" +
-                    "<td style='word-break: break-all;' class='text-center "+orderTypeColor+"'><i style='font-size:20px;' title='"+title+"' class='iconfont "+orderTypeCss+"'></i></td>" +
-                    "<td class='text-center'>" +
-                    "<span data-toggle='tooltip' title='编辑' lang='title:edit' data-permissionFilter='[214]'" +
+             str += "<td style='word-break: break-all;width:17%;'>" + order_no+ "</td>" +
+                    "<td style='word-break: break-all;width:14%'>" + name + "</td>" +
+                    "<td style='word-break: break-all;width:15%;'>" + (typeof(data[i].wo.asset_no) == 'undefined' ? '' : data[i].wo.asset_no) + "</td>" +
+                    "<td style='word-break: break-all;width:13%;'>" + (typeof(data[i].wo.create_time) == 'undefined' ? '' :schneider.util.dateFormat(data[i].wo.create_time,'yyyy-MM-dd hh:mm') ) + "</td>" +
+                    "<td style='word-break: break-all;width:10%;' class='text-center'><span class='label "+stateCss+"'>" + state + "</span></td>" +
+                    "<td style='word-break: break-all;width:9%;' class='text-center "+orderTypeColor+"'><i style='font-size:20px;' title='"+title+"' class='iconfont "+orderTypeCss+"'></i></td>" +
+                    "<td class='text-center' style='width:8%;'>" +
+                    "<span data-toggle='tooltip'  lang='title:edit' data-permissionFilter='[214]'" +
                     "onclick='showModel_detail_order(\"" + data[i].wo._id + "\",\"" +order_no + "\")' style='padding: 3px 6px;'><span class='glyphicon glyphicon-edit link-black' aria-hidden='true' style=' cursor: pointer;'></span>&nbsp;</span>" +
                     "</td>" +
                     "</tr>";
@@ -887,7 +911,7 @@
 
         if ($("#tab_create_nav").length == 0) {
             $("#myNavTabs").append(' <li role="presentation" class="tab_position" id="tab_create_nav">' +
-                '<a role="tab" lang="text:create_order" data-toggle="tab" href="#tab_create_panes">创建工单</a>' +
+                '<a role="tab" lang="text:create_order" data-toggle="tab" href="#tab_create_panes"></a>' +
                 '<div class="pull-right tab_btn_close" data-toggle="tooltip" lang="title:close">' +
                 '<button class="btn btn-box-tool tab_btn_close_color" onclick="closeCreateTab()"><i class="glyphicon glyphicon-remove"></i></button>' +
                 '</div></li>');
@@ -905,7 +929,7 @@
         $("#c_repair_man").val(getUserInfo().userName);
         $("#c_repair_phone").val(getUserInfo().phone);
         //加载工程师下拉框数据
-        $("#c_assigned_engineer").empty().append('<option value="" lang="text:--+please_select_engineer+--">--请选择工程师--</option> ');
+        $("#c_assigned_engineer").empty().append('<option value="" lang="text:--+please_select_engineer+--"></option> ');
         searchAPI2_users2({verbose:50,roleName:"DeviceSense"},true,function(data){
             if(data.total>0) {
                 for(var i=0; i < data.result.length;i++) {
@@ -923,8 +947,8 @@
      */
     function showModel_detail_order(id,order_no) { 
         //加载工程师下拉框数据
-        $("#d_assigned_engineer").empty().append('<option value="" lang="text:--+please_select_engineer+--">--请选择工程师--</option> ');
-        searchAPI2_users2({verbose:50,roleName:"DeviceSense"},true,function(data){
+        $("#d_assigned_engineer").empty().append('<option value="" lang="text:--+please_select_engineer+--"></option> ');
+        searchAPI2_users2({verbose:50,roleName:"DeviceSense"},false,function(data){
             if(data.total>0) {
                 for(var i=0; i < data.result.length;i++) {
                     str = '<option value="'+data.result[i]._id+'">'+data.result[i].name+'</option> ';

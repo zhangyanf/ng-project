@@ -310,8 +310,8 @@
                     "<td></td>" +
                     "<td>" + link + "</td>" +
                     "<td>"+atm_ids+"</td>" +
-                    "<td>"+result[i].device.serialNumber+"</td>" +
-                    "<td>"+result[i].device.model+"</td>" +
+                    "<td>"+((typeof(result[i].device.serialNumber) == "undefined") ? "" : result[i].device.serialNumber)+"</td>" +
+                    "<td>"+ ((typeof(result[i].device.model) == "undefined") ? "" : result[i].device.model) +"</td>" +
                     "<td>" + ((typeof(result[i].site.address) == "undefined") ? "" : result[i].site.address) + "</td>" +
                 　　"<td></td>" +
                     "<td></td>" +

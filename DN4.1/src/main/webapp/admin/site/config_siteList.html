@@ -206,11 +206,11 @@
                                         </div>
                                         <div class="form-group pull-right">
                                             <div class="btn-group">
-                                                <button id="addLiveSite" type="button" class="btn btn-default btn-sm" title="" data-toggle="tooltip" data-placement="bottom" lang="title:add" data-permissionFilter="[30]">
-                                                    <i class="glyphicon glyphicon-plus"></i>
-                                                </button>
+                                                <!--<button id="addLiveSite" type="button" class="btn btn-default btn-sm" title="" data-toggle="tooltip" data-placement="bottom" lang="title:add" data-permissionFilter="[30]">-->
+                                                    <!--<i class="glyphicon glyphicon-plus"></i>-->
+                                                <!--</button>-->
                                                 <button id="deleteLiveSite" type="button" class="btn btn-default btn-sm" title="" data-toggle="tooltip" data-placement="bottom" lang="title:deletesite" data-permissionFilter="[30]">
-                                                    <i class="glyphicon glyphicon-minus"></i>
+                                                    <i class="iconfont icon-delete"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -232,7 +232,7 @@
                                             <th style="width:140px" lang="{text:business_state}"></th>
                                             <th style="width:12%;" lang="text:contact_name"></th>
                                             <th style="width:13%;" lang="text:contact_phone"></th>
-                                            <th style="width:17%;" lang="text:contactor_email"></th>
+                                            <th style="width:17%;" lang="text:email"></th>
                                             <th data-permissionfilter="[30,91]" style="width:80px;text-align: center" lang="text:operate"></th>
                                         </tr>
                                     </thead>
@@ -449,7 +449,7 @@
         getModels(params, function(data) {
             if (data) {
                 var $options = "";
-                var re_ir9 = new RegExp(/^9.*/);
+                var re_ir9 = new RegExp(/^6.*/);
                 for (var i = 0; i < data.result.length; i++) {
                     if(re_ir9.test(data.result[i].name)){
                         if (i == 0) {

@@ -277,16 +277,17 @@
           $("#model").val(result.model==undefined ? "":result.model);
           $("#price").val(result.price==undefined ? "":result.price);
           $("#vendor_name").val(result.vendor_name==undefined ? "":result.vendor_name);
+          $("#common").val(result.comment==undefined ? "":result.comment);
           $("#purchase_time").val(result.purchase_date==undefined ? "":schneider.util.dateFormat(result.purchase_date, "yyyy-MM-dd"));
       }
 
       /**
        * 设置日期插件的当前时间
        */
-      $("#part_start_time").mouseover(function(){
+      $("#part_start_time").mousedown(function(){
           setCurrentDate("part_start_time");
       });
-      $("#part_end_time").mouseover(function(){
+      $("#part_end_time").mousedown(function(){
           setCurrentDate("part_end_time");
       });
       /**

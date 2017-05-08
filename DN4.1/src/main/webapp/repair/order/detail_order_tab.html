@@ -1,7 +1,7 @@
 <!--工单详情tab页面-->
 
 <div class="panel panel-default" style="margin-bottom: 10px;"><!--故障设备信息-->
-    <div class="panel-heading" style="padding: 8px 15px;" lang="text:fault_device_info">故障设备信息</div>
+    <div class="panel-heading" style="padding: 8px 15px;" lang="text:fault_device_info"></div>
     <div class="panel-body" style="padding: 5px 15px 0px 15px;">
         <form class="form" id="d_order_form">
             <input type="reset" style="display: none;" id="d_asset_reset"/>
@@ -13,6 +13,14 @@
                         <label><span lang="text:asset_number"></span>
                             <span class="text-red">*</span>
                         </label>
+                        <div class="has-feedback">
+                            <input type="text" class="form-control input-sm" id="d_asset_number" readonly="readonly" lang="placeholder:asset_number" >
+                            <div data-permissionFilter="[201,203,205]" id="is_disabled">
+                                <span style="font-size:16px;line-height: 30px;"  class="form-control-feedback glyphicon glyphicon-search"></span>
+                                <span style="border:1px solid #eee;width:30px;height:28px;position:absolute;right: 1px;cursor: pointer;" lang="title:query" class="glyphicon" onclick="showModal_asset_list('edit')"></span>
+                            </div>
+                        </div>
+                        <!--
                         <input type="text" class="form-control input-sm"
                                id="d_asset_number" readonly="readonly" lang="placeholder:asset_number">
                         <button type="button" style="display: block;margin-top: -30px;height:30px;"　
@@ -20,7 +28,7 @@
                                 class="btn btn-default btn-sm pull-right" data-toggle="tooltip" title="查找" lang="title:query"
                                 id="is_disabled">
                             <span class="glyphicon glyphicon-search"></span>
-                        </button>
+                        </button>-->
                     </div>
                 </div>
                 <div class="col-sm-3">
@@ -74,7 +82,7 @@
 </div><!--故障设备信息-->
 
 <div class="panel panel-default" style="margin-bottom: 10px;"><!--报修信息-->
-    <div class="panel-heading" style="padding: 8px 15px;" lang="text:repair_status">报修情况</div>
+    <div class="panel-heading" style="padding: 8px 15px;" lang="text:repair_status"></div>
     <div class="panel-body" style="padding: 5px 15px 0px 15px;">
         <form id="d_repair_form">
             <input type="reset" style="display:none" id="d_repair_reset"/>
@@ -85,7 +93,7 @@
                     <div class="form-group">
                         <label><span lang="text:order_name"></span><span class="text-red">*</span></label>
                         <input type="text"
-                               class="form-control input-sm validate[required,specialCharacter,maxSize[30]]"
+                               class="form-control input-sm validate[required,specialCharacter,maxSize[30]] inputIsReadOnly"
                                id="d_order_name" lang="placeholder:order_name">
                     </div>
                 </div>
@@ -103,7 +111,7 @@
                     <div class="form-group">
                         <label><span lang="text:repair_man"></span></label>
                         <input type="text"
-                               class="form-control input-sm validate[specialCharacter,maxSize[30]]"
+                               class="form-control input-sm validate[specialCharacter,maxSize[30]] inputIsReadOnly"
                                id="d_repair_man" lang="placeholder:repair_man">
                     </div>
                 </div>
@@ -111,7 +119,7 @@
                     <div class="form-group">
                         <label><span lang="text:repair_phone"></span></label>
                         <input type="text"
-                               class="form-control input-sm validate[custom[phone]]"
+                               class="form-control input-sm validate[custom[phone]] inputIsReadOnly"
                                id="d_repair_phone" lang="placeholder:repair_phone">
                     </div>
                 </div>
@@ -120,9 +128,9 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label><span lang="text:assigned_engineer"></span></label>
-                        <select type="text" class="form-control input-sm "
+                        <select type="text" class="form-control input-sm inputIsDisabled"
                                 id="d_assigned_engineer">
-                            <option value="" lang="text:--+please_select_engineer+--">--请选择工程师--
+                            <option value="" lang="text:--+please_select_engineer+--">
                             </option>
                         </select>
                     </div>
@@ -136,7 +144,7 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label><span lang="text:fault_type"></span></label>
-                        <select type="text" class="form-control input-sm" id="d_fault_type" >
+                        <select type="text" class="form-control input-sm inputIs inputIsDisabled" id="d_fault_type" >
                             <option value="1" selected="selected" lang="text:no_halt_fault"></option>
                             <option value="2" lang="text:halt_fault"></option>
                         </select>
@@ -147,7 +155,7 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label><span lang="text:fault_phenomenon"></span></label>
-                        <textarea rows="4" class="form-control input-sm validate[maxSize[500]]" id="d_fault_phenomenon" style="resize:none;" lang="placeholder:fault_phenomenon"></textarea>
+                        <textarea rows="4" class="form-control input-sm validate[maxSize[500]] inputIsReadOnly" id="d_fault_phenomenon" style="resize:none;" lang="placeholder:fault_phenomenon"></textarea>
                     </div>
                 </div>
             </div>
@@ -156,7 +164,7 @@
 </div><!--报修信息-->
 
 <div class="panel panel-default" style="margin-bottom: 10px;"><!--工单信息-->
-    <div class="panel-heading" style="padding: 8px 15px;" lang="text:order_info">工单信息</div>
+    <div class="panel-heading" style="padding: 8px 15px;" lang="text:order_info"></div>
     <div class="panel-body" style="padding: 5px 15px 0px 15px;">
         <form id="d_orderInfo_form">
             <input type="reset" style="display: none;" id="d_order_reset"/>
@@ -167,64 +175,64 @@
                             <div class="sui-steps" style="display:none;" id="stepOne"><!--这一种状态条，人工报修对应的状态条（state！==rejected)-->
                                 <div class="wrap">
                                     <div class="todo">
-                                        <label><span lang="text:new2">创建</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                        <label><span lang="text:new2"></span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
                                     </div>
                                 </div>
                                 <div class="wrap">
                                     <div class="todo">
-                                        <label><span lang="text:accepted">接单</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                        <label><span lang="text:accepted"></span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
                                     </div>
                                 </div>
                                 <div class="wrap">
                                     <div class="todo">
-                                        <label><span lang="text:processing">进行中</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                        <label><span lang="text:processing"></span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
                                     </div>
                                 </div>
                                 <div class="wrap">
                                     <div class="todo">
-                                        <label><span lang="text:finished">完成</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                        <label><span lang="text:finished"></span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
                                     </div>
                                 </div>
                                 <div class="wrap">
                                     <div class="todo">
-                                        <label><span lang="text:closed">关闭</span></label>
+                                        <label><span lang="text:closed"></span></label>
                                     </div>
                                 </div>
                             </div><!--这一种状态条，人工报修对应的状态条（state！==rejected)-->
                             <div class="sui-steps" style="display:none;" id="stepTwo"><!--这一种状态条，人工报修对应的状态条（state=rejected)-->
                                 <div class="wrap">
                                     <div class="todo">
-                                        <label><span lang="text:new2">创建</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                        <label><span lang="text:new2"></span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
                                     </div>
                                 </div>
                                 <div class="wrap">
                                     <div class="todo">
-                                        <label><span lang="text:accepted">接单</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                        <label><span lang="text:accepted"></span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
                                     </div>
                                 </div>
                                 <div class="wrap">
                                     <div class="todo">
-                                        <label><span lang="text:rejected">退回</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                        <label><span lang="text:rejected"></span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
                                     </div>
                                 </div>
                                 <div class="wrap">
                                     <div class="todo">
-                                        <label><span lang="text:accepted">接单</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                        <label><span lang="text:accepted"></span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
                                     </div>
                                 </div>
                                 <div class="wrap">
                                     <div class="todo">
-                                        <label><span lang="text:processing">进行中</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                        <label><span lang="text:processing"></span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
                                     </div>
                                 </div>
                                 <div class="wrap">
                                     <div class="todo">
-                                        <label><span lang="text:finished">完成</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                        <label><span lang="text:finished"></span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
                                     </div>
                                 </div>
                                 <div class="wrap">
                                     <div class="todo">
-                                        <label><span lang="text:closed">关闭</span></label>
+                                        <label><span lang="text:closed"></span></label>
                                     </div>
                                 </div>
                             </div>
@@ -285,7 +293,7 @@
     <div class="nav-tabs-custom" >
         <ul class="nav nav-tabs" role="tablist" id="repairTabs" style="background-color: #f5f5f5;">
             <li role="presentation" class="active">
-                <a role="tab" data-toggle="tab" id="tab_repariInfo_a" lang="text:repair_record" href="#d_repair_info_div" style="border-left-color: #ddd;">维修记录</a>
+                <a role="tab" data-toggle="tab" id="tab_repariInfo_a" lang="text:repair_record" href="#d_repair_info_div" style="border-left-color: #ddd;"></a>
             </li>
         </ul>
         <!-- Tab panes  tab-content-->
@@ -294,7 +302,7 @@
             <div role="tabpanel" class="tab-pane active row" id="d_repair_info_div">
                 <div class="row worklogBtnbar" style="margin: 0px 15px;">
                     <div class="form-group pull-right" style="padding: 5px 0px;">
-                        <button type="button" class="btn btn-default btn-sm" title='新增'  onclick="show_repair_tab('add');"
+                        <button type="button" class="btn btn-default btn-sm"   onclick="show_repair_tab('add');"
                                 data-permissionFilter="[216]"
                                 data-toggle='tooltip' data-placement="bottom" lang="title:add"
                                 onclick="">
@@ -312,15 +320,15 @@
                     <table class="table table-bordered table-hover table-striped">
                         <thead >
                         <tr>
-                            <th id="r_tableHead_selectAll" class="text-center" style="width:30px">
+                            <!--<th id="r_tableHead_selectAll" class="text-center" style="width:30px">
                                 <input type="checkbox" id="r_tableHead_checkbok" data-toggle='tooltip'
                                        data-placement="bottom" lang="title:check_all">
-                            </th>
+                            </th>-->
                             <th  lang="text:device_sense" > </th>
                             <th lang="text:start_time" > </th>
                             <th lang="text:end_time" > </th>
                             <th lang="text:work_time" > </th>
-                            <th  lang="text:operate" class="text-center" style="width:80px;">操作</th>
+                            <th  lang="text:operate" class="text-center" style="width:80px;"></th>
                         </tr>
                         </thead>
                         <tbody id="logContent_tbl" >
@@ -375,7 +383,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label><span lang="text:comment"></span></label>
-                                <textarea rows="4" class="form-control validate[maxSize[500]]" id="d_repair_comment" style="resize: none; " lang="placeholder:comment" ></textarea>
+                                <textarea rows="4" class="form-control validate[maxSize[500]] inputIsReadOnly" id="d_repair_comment" style="resize: none; " lang="placeholder:comment" ></textarea>
                             </div>
                         </div>
                     </div>
@@ -386,7 +394,7 @@
                             <label><span lang="text:repair_part+:"></span></label>
                         </div>
                         <div class="worklogBtnbar form-group pull-right" style="padding: 5px 0px;">
-                            <button type="button" class="btn btn-default btn-sm" title='新增'  onclick="show_repair_part_modal('add')"
+                            <button type="button" class="btn btn-default btn-sm"   onclick="show_repair_part_modal('add')"
                                     data-permissionFilter="[206,201,203,205]"
                                     data-toggle='tooltip' data-placement="bottom" lang="title:add"
                                     onclick="">
@@ -405,20 +413,20 @@
                         <table class="table table-bordered table-hover table-striped scrolltable">
                             <thead>
                             <tr>
-                                <th id="rpart_tableHead_selectAll" style="width:46px;" class="text-center">
+                                <!--<th id="rpart_tableHead_selectAll" style="width:46px;" class="text-center">
                                     <input type="checkbox" id="rpart_tableHead_checkbok" data-toggle='tooltip'
                                            data-placement="bottom" lang="title:check_all">
-                                </th>
-                                <th lang="text:component_name">部件名称</th>
-                                <th lang="text:part_no">部件编号</th>
+                                </th>-->
+                                <th lang="text:component_name"></th>
+                                <th lang="text:part_no"></th>
                                 <th lang="text:serial_number"></th>
-                                <th lang="text:device_part_model">型号</th>
-                                <th lang="text:change_time_recently">最近更换日期</th>
+                                <th lang="text:device_part_model"></th>
+                                <th lang="text:change_time_recently"></th>
                                 <th lang="text:maintenance_time_recently"></th>
                                 <th lang="text:price"></th>
                                 <th lang="text:supplier"></th>
                                 <th lang="text:purchasing_time"></th>
-                                <th id="operateTH" lang="text:operate" class="text-center" style="width:80px"></th>
+                                <th id="operateTH" lang="text:operate" class="text-center worklogBtnbar" style="width:80px"></th>
 
                             </tr>
                             </thead>
@@ -429,10 +437,9 @@
                     </div>
                     <div class="modal-footer" style="padding-top: 15px;padding-right: 0px;padding-bottom: 10px;">
                         <button type="button" class="btn btn-default" onclick="closeRepairTab()" data-dismiss="modal"
-                                lang="text:close">关闭
+                                lang="text:close">
                         </button>
                         <button class="worklogBtnbar btn btn-primary" id="" onclick="submitRepair()" lang="text:submit">
-                            提交
                         </button>
                     </div>
                     <!--维修记录日志-->
@@ -444,13 +451,13 @@
                                     <thead>
                                     <tr>
                                         <th lang="text:machine"></th>
-                                        <th lang="text:component_name">部件名称</th>
-                                        <th lang="text:part_no">部件编号</th>
+                                        <th lang="text:component_name"></th>
+                                        <th lang="text:part_no"></th>
                                         <th lang="text:repair_type"></th>
                                         <th lang="text:change_time"></th>
                                         <th lang="text:maintenance_time"></th>
                                         <th lang="text:serial_number"></th>
-                                        <th lang="text:device_part_model">型号</th>
+                                        <th lang="text:device_part_model"></th>
                                         <th lang="text:price"></th>
                                         <th lang="text:supplier"></th>
                                         <th lang="text:purchasing_time"></th>
@@ -513,13 +520,13 @@
     $("#d_arrival_time").daterangepicker(picker2Option);
     $("#d_repair_date").daterangepicker(picker2Option);
 
-    $("#d_repair_date").mouseover(function(){
+    $("#d_repair_date").mousedown(function(){
         setCurrentDate("d_repair_date");
     });
-    $("#d_reply_time").mouseover(function(){
+    $("#d_reply_time").mousedown(function(){
         setCurrentDate("d_reply_time");
     });
-    $("#d_arrival_time").mouseover(function(){
+    $("#d_arrival_time").mousedown(function(){
         setCurrentDate("d_arrival_time");
     });
     /**
@@ -527,15 +534,15 @@
      */
     $("#d_repair_start_time").daterangepicker(picker2Option);
     $("#d_repair_end_time").daterangepicker(picker2Option);
-    $("#d_repair_start_time").mouseover(function(){
+    $("#d_repair_start_time").mousedown(function(){
         setCurrentDate("d_repair_start_time");
     });
-    $("#d_repair_end_time").mouseover(function(){
+    $("#d_repair_end_time").mousedown(function(){
         setCurrentDate("d_repair_end_time");
     });
 
     /**
-     * 渲染工单详情页面
+     * 根据orderId渲染工单详情页面
      */
     function renderOrderDetail(orderId){
         //清空故障设备信息
@@ -546,7 +553,7 @@
         $("#d_order_reset").click();
         //关闭创建和编辑维修记录的tab页面
         closeRepairTab();
-        getOrderDetail(true,orderId,function(data){
+        getOrderDetail(false,orderId,function(data){
             if(data.result) {
                 fillOrderDetailInfo(data.result);
                 if(data.result.logs!=undefined && data.result.logs.length>0){
@@ -567,12 +574,12 @@
         var str;
         $.each(logs, function (n, log) {
             str += "<tr id='"+log._id+"'>" +
-                "<td><input type='checkbox' value='" + log._id + "' class='tabs-checked text-center'></td>" +
+                /*"<td><input type='checkbox' value='" + log._id + "' class='tabs-checked text-center'></td>" +*/
                 "<td>" + (typeof(log.owner) == "undefined" ? "" : log.owner)+ "</td>" +
                 "<td>" + (typeof(log.start) == "undefined" ? "" : schneider.util.dateFormat(log.start, "yyyy-MM-dd hh:mm")) + "</td>" +
                 "<td>" + (typeof(log.end) == "undefined" ? "" : schneider.util.dateFormat(log.end, "yyyy-MM-dd hh:mm")) + "</td>" +
                 "<td>" + (typeof(log.working_time) == "undefined" ? "" : log.working_time) + "</td>" +
-                "<td class='text-center'>" +
+                "<td class='text-center worklogBtnbar'>" +
                 "<span data-toggle='tooltip' class='glyphicon glyphicon-edit link-black' style='cursor: pointer;' lang='title:edit' data-permissionFilter='[50]' onclick='editWorklog(this,\""+log._id+"\")'>" +
                 "</td>" +
 
@@ -621,6 +628,11 @@
      *编辑维修记录
      */
     function editWorklog(ele,logId){
+        //判断到场时间是否填写
+        if (!$("#d_arrival_time").val()) {
+            errorTipDis("reach_time_not_null");
+            return;
+        }
         var self = this;
         getOrderLogInfo(logId,function(data){
             if(data.result!=undefined && data.result.log){
@@ -639,8 +651,8 @@
 
                 if(data.result.parts!=undefined && data.result.parts.length>0){
                     renderParts(data.result.parts);
-                    if(data.result.wo.state=="closed"){
-                        $("#d_parts > tr > td:last > span").removeAttr("onclick");
+                    if(data.result.wo.state=="closed" || data.result.wo.state=="rejected"){
+                        $("#d_parts > tr > td:last").hide();
                     }
                 }else{
                     $("#d_parts").empty();
@@ -668,7 +680,7 @@
         $.each(parts, function (n, part) {
             var str =
                 '<tr id=' + part._id + '>'+
-                "<td class='text-center'><input type='checkbox' value='" + part._id + "' class='tabs-checked text-center'></td>" +
+                /*"<td class='text-center'><input type='checkbox' value='" + part._id + "' class='tabs-checked text-center'></td>" +*/
                 '<td>'+(typeof(part.part_name) == 'undefined'?'':part.part_name)+'</td>'+
                 '<td>'+(typeof(part.part_no) == 'undefined'?'':part.part_no)+'</td>'+
                 '<td>'+(typeof(part.serial) == 'undefined'?'':part.serial)+'</td>'+
@@ -678,7 +690,7 @@
                 '<td>'+(typeof(part.price) == 'undefined'?'':part.price)+'</td>'+
                 '<td>'+(typeof(part.vendor_name) == 'undefined'?'':part.vendor_name)+'</td>'+
                 '<td>'+ (typeof(part.purchase_date) == 'undefined'?'':schneider.util.dateFormat(part.purchase_date, "yyyy-MM-dd hh:mm"))+'</td>'+
-                '<td class="text-center">'+
+                '<td class="text-center worklogBtnbar">'+
                 '<span class="iconfont icon-config link-black" aria-hidden="true" id="changeModel" lang="title:part_maintain"  onclick="show_repair_part_modal(\'' + part._id + '\');" data-permissionFilter="[206,201,203,205]" style=" cursor: pointer;margin:0px 10px;"></span>'+
                 '</td>'+
                 '</tr>';
@@ -735,6 +747,7 @@
         $("#d_asset_number").val(data.asset.asset_no); //故障设备编号
         $("#d_device_name").val(data.asset.device_name); //设备名称
         $("#d_serial_number").val(data.asset.serial); //设备序列号
+        $("#d_assigned_engineer > option").removeAttr("selected");
         if(data.site) {
             $("#d_site").val(data.site.name); //现场名称
             $("#d_site_address").val(data.site.address); //现场地址
@@ -752,7 +765,7 @@
         var  arrOption = $("#d_assigned_engineer > option");
         for(var i = 0; i < arrOption.length; i++) {
             if($(arrOption[i]).val()==data.wo.executor_id) {
-                $(arrOption[i]).attr("selected","selected");
+                $(arrOption[i]).prop("selected","selected");
                 break;
             }
         }
@@ -799,14 +812,17 @@
         $("#d_order_name").val(data.wo.name); // 工单名称
         var state = data.wo.state;
         if(state=="new") {
+            $(".inputIsReadOnly").attr("readonly",false);
+            $(".inputIsDisabled").attr("disabled",false);
             if(order_type==1) { // 只有人工报修的工单才可以修改报修时间
                 $("#d_repair_date").attr("disabled",false);
+                $("#is_disabled").removeAttr("hidden");
             }else{
                 $("#d_repair_date").attr("disabled",true);
+                $("#is_disabled").attr("hidden","hidden");
             }
             $("#d_reply_time").attr("disabled",true);
             $("#d_arrival_time").attr("disabled",true);
-            $("#is_disabled").attr("disabled",false);
             $("#repairLog").hide();
             $(".worklogBtnbar").show();
             $("#stepOne").show();
@@ -814,23 +830,27 @@
             $("#stepOne > .wrap > div").removeClass().addClass("todo");
             $("#stepOne > .wrap:eq(0) > div").removeClass().addClass("current");
         }else if(state=="accepted") {
+            $(".inputIsReadOnly").attr("readonly",false);
+            $(".inputIsDisabled").attr("disabled",false);
             $("#d_arrival_time").attr("disabled",false);
             $("#d_reply_time").attr("disabled",false);
             $("#d_repair_date").attr("disabled",true);
             $("#d_arrival_time").attr("disabled",false);
-            $("#is_disabled").attr("disabled",true);
+            $("#is_disabled").attr("hidden","hidden");
             $("#repairLog").show();
-            $(".worklogBtnbar").show();
+            $(".worklogBtnbar").hide();
             $("#stepOne").show();
             $("#stepTwo").hide();
             $("#stepOne > .wrap > div").removeClass().addClass("todo");
             $("#stepOne > .wrap:eq(0) > div").removeClass().addClass("finished");
             $("#stepOne > .wrap:eq(1) > div").removeClass().addClass("current");
         }else if(state=="processing") {
+            $(".inputIsReadOnly").attr("readonly",false);
+            $(".inputIsDisabled").attr("disabled",false);
             $("#d_arrival_time").attr("disabled",true);
             $("#d_reply_time").attr("disabled",true);
             $("#d_repair_date").attr("disabled",true);
-            $("#is_disabled").attr("disabled",true);
+            $("#is_disabled").attr("hidden","hidden");
             $("#repairLog").show();
             $(".worklogBtnbar").show();
             $("#stepOne").show();
@@ -840,12 +860,14 @@
             $("#stepOne > .wrap:eq(1) > div").removeClass().addClass("finished");
             $("#stepOne > .wrap:eq(2) > div").removeClass().addClass("current");
         }else if(state=="finished") {
+            $(".inputIsReadOnly").attr("readonly",false);
+            $(".inputIsDisabled").attr("disabled",false);
             $("#d_arrival_time").attr("disabled",true);
             $("#d_reply_time").attr("disabled",true);
             $("#d_repair_date").attr("disabled",true);
-            $("#is_disabled").attr("disabled",true);
+            $("#is_disabled").attr("hidden","hidden");
             $("#repairLog").show();
-            $(".worklogBtnbar").show();
+            $(".worklogBtnbar").hide();
             $("#stepOne").show();
             $("#stepTwo").hide();
             $("#stepOne > .wrap > div").removeClass().addClass("todo");
@@ -854,10 +876,12 @@
             $("#stepOne > .wrap:eq(2) > div").removeClass().addClass("finished");
             $("#stepOne > .wrap:eq(3) > div").removeClass().addClass("current");
         }else if(state=="closed") {
+            $(".inputIsReadOnly").attr("readonly",true);
+            $(".inputIsDisabled").attr("disabled",true);
             $("#d_arrival_time").attr("disabled",true);
             $("#d_reply_time").attr("disabled",true);
             $("#d_repair_date").attr("disabled",true);
-            $("#is_disabled").attr("disabled",true);
+            $("#is_disabled").attr("hidden","hidden");
             $("#repairLog").show();
             $(".worklogBtnbar").hide();
             $("#stepOne").show();
@@ -869,12 +893,14 @@
             $("#stepOne > .wrap:eq(3) > div").removeClass().addClass("finished");
             $("#stepOne > .wrap:eq(4) > div").removeClass().addClass("current");
         }else if(state=="rejected") {
+            $(".inputIsReadOnly").attr("readonly",false);
+            $(".inputIsDisabled").attr("disabled",false);
             $("#d_arrival_time").attr("disabled",true);
             $("#d_reply_time").attr("disabled",true);
             $("#d_repair_date").attr("disabled",true);
-            $("#is_disabled").attr("disabled",true);
+            $("#is_disabled").attr("hidden","hidden");
             $("#repairLog").show();
-            $(".worklogBtnbar").show();
+            $(".worklogBtnbar").hide();
             $("#stepOne").hide();
             $("#stepTwo").show();
             $("#stepTwo > .wrap > div").removeClass().addClass("todo");
@@ -903,32 +929,32 @@
         $("#d_modal_footer").empty();
         if(order_type==3) { //预防性工单
             if(state=="new") {
-                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'accepted\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:accepted">接单</button>'+
-                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')"  data-permissionFilter="[216]" data-dismiss="modal" lang="text:save">保存</button>');
+                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'accepted\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:accepted"></button>'+
+                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')"  data-permissionFilter="[216]" data-dismiss="modal" lang="text:save"></button>');
             }else if(state=="accepted") {
-                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'closed\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:finished_order">完成</button>'+
-                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:save">保存</button>');
+                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'closed\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:finished_order"></button>'+
+                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:save"></button>');
             }else if(state=="processing") {
-                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'closed\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:finished_order">完成</button>'+
-                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:save">保存</button>');
+                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'closed\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:finished_order"></button>'+
+                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:save"></button>');
             }
         }else { // 人工报修 告警转故障
             if(state=="new") {
-                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'accepted\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:accepted">接单</button>'+
-                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:save">保存</button>');
+                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'accepted\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:accepted"></button>'+
+                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:save"></button>');
             }else if(state=="accepted") {
-                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'rejected\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:rejected_order">退回订单</button>'+
-                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:save">保存</button>');
+                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'rejected\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:rejected_order"></button>'+
+                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:save"></button>');
             }else if(state=="processing") {
-                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'rejected\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:rejected_order">退回订单</button>'+
-                    '<button type="button" class="btn btn-primary" onclick="submitOrder(\'finished\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:finished_order">完成</button>'+
-                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:save">保存</button>');
+                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'rejected\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:rejected_order"></button>'+
+                    '<button type="button" class="btn btn-primary" onclick="submitOrder(\'finished\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:finished_order"></button>'+
+                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:save"></button>');
             }else if(state=="finished") {
-                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'closed\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:closed_order">关闭</button>'+
-                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:save">保存</button>');
+                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'closed\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:closed_order"></button>'+
+                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:save"></button>');
             }else if(state=="rejected") {
-                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'accepted\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:accepted">accepted</button>'+
-                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:save">保存</button>');
+                $("#d_modal_footer").append('<button type="button" class="btn btn-primary" onclick="submitOrder(\'accepted\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:accepted"></button>'+
+                    '<button type="button" class="btn btn-primary" onclick="saveOrder(\''+state+'\')" data-permissionFilter="[216]" data-dismiss="modal" lang="text:save"></button>');
             }
         }
         locale.render({element: "#init_body"});
@@ -1012,28 +1038,32 @@
      * 计算时长（添加或编辑页面的工作时间和结束时间）
      */
     $("#d_repair_start_time").change(function(){
+        // 消除不能为空的提示
+        if($("#d_repair_start_time").val()) {
+            $(".formErrorContent").remove();
+        }
         if(!$("#d_repair_start_time").prop("cacheDate")) {
             //工作开始时间
             var statr_time = $("#d_repair_start_time").val(); //工作开始时间
-            var d_reply_time = $("#d_reply_time").val(); // 接单时间
+           // var d_reply_time = $("#d_reply_time").val(); // 接单时间
             var d_arrival_time = $("#d_arrival_time").val(); // 到场时间
             var end_time = $("#d_repair_end_time").val();  //工作结束时间
 
 
-            // 工作开始时间不能小于接单时间
+           /* // 工作开始时间不能小于接单时间
             if(statr_time&&d_reply_time) {
                 var date3 = new Date(d_reply_time).getTime() - new Date(statr_time).getTime();
                 if(date3>0) {
                     errorTipDis("start_time_nlt_reply_time");
-                    $("#d_repair_start_time").val("");
+                   // $("#d_repair_start_time").val("");
                 }
-            }
+            }*/
             //工作开始时间不能小于到场时间
             if(statr_time&&d_arrival_time) {
                 var date3 = new Date(d_arrival_time).getTime() - new Date(statr_time).getTime();
                 if(date3>0) {
                     errorTipDis("start_time_nlt_reach_time");
-                    $("#d_repair_start_time").val("");
+                  //  $("#d_repair_start_time").val("");
                 }
             }
 
@@ -1046,8 +1076,8 @@
                     $("#d_repair_work_time").val(hours);
                 }else {
                     errorTipDis("start_time_ngt_end_time");
-                    $("#d_repair_work_time").val("");
-                    $("#d_repair_start_time").val("");
+                  /*  $("#d_repair_work_time").val("");
+                    $("#d_repair_start_time").val("");*/
                 }
 
             }
@@ -1056,28 +1086,32 @@
         locale.render({element: "#init_body"});
     });
     $("#d_repair_end_time").change(function(){
+        // 消除不能为空的提示
+        if($("#d_repair_end_time").val()) {
+            $(".formErrorContent").remove();
+        }
         if(!$("#d_repair_end_time").prop("cacheDate")) {
             //工作开始时间
             var statr_time = $("#d_repair_start_time").val();
             //工作结束时间
             var end_time = $("#d_repair_end_time").val();
             var d_arrival_time = $("#d_arrival_time").val(); // 到场时间
-            var d_reply_time = $("#d_reply_time").val(); // 接单时间
+           // var d_reply_time = $("#d_reply_time").val(); // 接单时间
 
-            // 工作结束时间不能小于接单时间
+          /*  // 工作结束时间不能小于接单时间
             if(end_time&&d_reply_time) {
                 var date3 = new Date(d_reply_time).getTime() - new Date(end_time).getTime();
                 if(date3>0) {
                     errorTipDis("end_time_nlt_reply_time");
                     $("#d_repair_end_time").val("");
                 }
-            }
+            }*/
             //工作结束时间不能小于到场时间
             if(end_time&&d_arrival_time) {
                 var date3 = new Date(d_arrival_time).getTime() - new Date(end_time).getTime();
                 if(date3>0) {
                     errorTipDis("end_time_nlt_reach_time");
-                    $("#d_repair_end_time").val("");
+                  //  $("#d_repair_end_time").val("");
                 }
             }
             if(statr_time&&end_time) {
@@ -1089,8 +1123,8 @@
                     $("#d_repair_work_time").val(hours);
                 }else {
                     errorTipDis("end_time_nlt_start_time");
-                    $("#d_repair_work_time").val("");
-                    $("#d_repair_end_time").val("");
+                   /* $("#d_repair_work_time").val("");
+                    $("#d_repair_end_time").val("");*/
                 }
             }
         }
@@ -1103,7 +1137,6 @@
      * 收集工单数据
      */
     function getOrderData() {
-
         //故障设备信息
         var asset_id = $("#d_asset_Id").val(); //故障设备id
         var device_name = $("#d_device_name").val(); //设备名称
@@ -1116,7 +1149,7 @@
         var repair_man = $("#d_repair_man").val(); //报修人
         var repair_phone = $("#d_repair_phone").val(); //报修电话
         var fault_phenomenon = $("#d_fault_phenomenon").val(); //故障现象
-        var executor_id = $("#d_assigned_engineer > option:selected").val(); //指派工程师id
+        var executor_id = $("#d_assigned_engineer").val(); //指派工程师id
         var executor = '';
         if(executor_id) {
             executor = $("#d_assigned_engineer > option:selected").text();//指派工程师
@@ -1159,7 +1192,8 @@
             working_time:work_time,
             reply_time:reply_time,
             reach_time:reach_time
-
+           // executor:executor,
+           // executor_id:executor_id
         };
         if(executor_id) { // 如果指派工程师没有就不传值
             wo.executor = executor;
@@ -1267,7 +1301,12 @@
             var working_end = data.working_end;
             var reply_time = data.reply_time;
             var reach_time = data.reach_time;
-            if (state == "finished") { // 完成维修时，必须要有维修记录
+            if(state=="accepted") {
+                if(!$("#d_assigned_engineer").val()) {
+                    errorTipDis("please_assigned_engineer");
+                    return;
+                }
+            } else  if (state == "finished") { // 完成维修时，必须要有维修记录
                 if($("#logContent_tbl > tr:first > td").text()==locale.get("no_data")){
                     errorTipDis("please_create_repair_log");
                     return;
@@ -1280,13 +1319,16 @@
                     errorTipDis("reach_time_not_null");
                     return;
                 }
-            }
-            if (state == "closed") { //关单时工作结束时间不能为空
+            } else if (state == "closed") { //关单时工作结束时间不能为空
                 if (!working_end) {
                     errorTipDis("end_time_not_null");
                     return;
                 }
+            } else if (state == "rejected") { //退单 指派工程清空
+                $("#d_assigned_engineer > option").removeAttr("selected");
+
             }
+
             if (create_time && working_start) { // 报修时间不能大于所有时间
                 if ((create_time - working_start) > 0) {
                     errorTipDis("start_time_nlt_create_time");
@@ -1463,6 +1505,12 @@
      * 显示添加或编辑维修信息的tab页面
      */
     function show_repair_tab(flag) {
+        //判断到场时间是否填写
+        if(!$("#d_arrival_time").val()) {
+            errorTipDis("reach_time_not_null");
+            return;
+        }
+
         //判断是否也显示添加或编辑维修信息tab页面了，没有就显示。
         var title = locale.get("add_repair_record");
         this.showRepairLogTab(title);
@@ -1526,13 +1574,13 @@
                 $("#logContent_tbl").empty();
             }
             var str = "<tr id='"+log._id+"'>" +
-                "<td><input type='checkbox' value='" + log._id + "' class='tabs-checked text-center'></td>" +
+                /*"<td><input type='checkbox' value='" + log._id + "' class='tabs-checked text-center'></td>" +*/
                 "<td>" + (typeof(log.owner) == "undefined" ? "" : log.owner)+ "</td>" +
                 "<td>" + (typeof(log.start) == "undefined" ? "" : schneider.util.dateFormat(log.start, "yyyy-MM-dd hh:mm")) + "</td>" +
                 "<td>" + (typeof(log.end) == "undefined" ? "" : schneider.util.dateFormat(log.end, "yyyy-MM-dd hh:mm")) + "</td>" +
                 "<td>" + (typeof(log.working_time) == "undefined" ? "" : log.working_time) + "</td>" +
                 "<td class='text-center'>" +
-                "<span data-toggle='tooltip' class='glyphicon glyphicon-edit link-black' style='cursor: pointer;' lang='title:edit' data-permissionFilter='[50]' onclick='editWorklog(this,\""+log._id+"\")'>" +
+                "<span data-toggle='tooltip' class='glyphicon glyphicon-edit link-black' style='cursor: pointer;' lang='title:edit' data-permissionFilter='[50]' onclick='editWorklog(this,\""+log._id+"\",\""+log._id+"\")'>" +
                 "</td>" +
                 "</tr>";
             $("#logContent_tbl").append(str);
@@ -1554,7 +1602,6 @@
      * 提交创建维修记录
      */
     function submitRepair() {
-
         if ($('#repairForm').validationEngine('validate')) {
             //采集维修信息
             var repairMan = getUserInfo().userName;
@@ -1570,6 +1617,22 @@
             d_repair_date = d_repair_date!=""?new Date(d_repair_date).getTime() : "";
             var d_reply_time = $("#d_reply_time").val(); // 接单时间
             d_reply_time = d_reply_time!=""?new Date(d_reply_time).getTime() : "";
+            var d_arrival_time = $("#d_arrival_time").val(); // 到场时间
+            // 工作开始时间不能小于到场时间
+            if (workStartTime&&d_arrival_time) {
+                var date3 = new Date(d_arrival_time).getTime() - workStartTime;
+                if(date3>0) {
+                    errorTipDis("start_time_nlt_reach_time");
+                    return;
+                }
+            }
+            // 工作结束时间不能小于工作开始时间
+            if (workStartTime&&workEndTime) {
+                if (workStartTime-workEndTime>0) {
+                    errorTipDis("end_time_nlt_start_time");
+                    return;
+                }
+            }
             var worklog = {
                 log:{
                     order_id:order_id,

@@ -49,10 +49,10 @@
                             <div class="form-group">
                                 <span class="serious_warning"><i class="iconfont icon-alarm-serious"></i><span
                                         lang="text:severe_alarm"></span></span>&nbsp;&nbsp;&nbsp;
-                                <span class="important_warning"><i class="iconfont icon-alarm"></i><span
-                                        lang="text:important_alarm"></span></span>&nbsp;&nbsp;&nbsp;
-                                <span class="minor_warning"><i class="iconfont icon-alarm"></i><span
-                                        lang="text:minor_alarm"></span></span>&nbsp;&nbsp;&nbsp;
+                                <span class="important_warning" style="display: none;"><i class="iconfont icon-alarm"></i><span
+                                        lang="text:important_alarm"></span></span>
+                                <span class="minor_warning" style="display: none;"><i class="iconfont icon-alarm"></i><span
+                                        lang="text:minor_alarm"></span></span>
                                 <span class="caution"><i class="iconfont icon-alarm"></i><span
                                         lang="text:warn"></span></span>&nbsp;&nbsp;&nbsp;
                                 <span class="remind"><i class="iconfont icon-alarm-attention"></i><span
@@ -72,9 +72,9 @@
                                         </option>
                                         <option value="5"  lang="text:severe_alarm">严重警告
                                         </option>
-                                        <option value="4"  lang="text:important_alarm">重要警告
+                                        <option value="4"  lang="text:important_alarm" style="display: none;">重要警告
                                         </option>
-                                        <option value="3"  lang="text:minor_alarm">次要警告
+                                        <option value="3"  lang="text:minor_alarm" style="display: none;">次要警告
                                         </option>
                                         <option value="2"  lang="text:warn">警告
                                         </option>
@@ -320,6 +320,8 @@
 
         if (level != null && level != "") {
             params.levels = [level]
+        }else{
+            params.levels=[1,2,5]
         }
 
         if (alarm_state != null && alarm_state != "") {
@@ -776,4 +778,7 @@
             locale.render({element: "#init_body"});
         });
     });
+    function onInit() {
+        
+    }
 </script>
