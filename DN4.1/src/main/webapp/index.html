@@ -8,6 +8,7 @@
         <link rel="shortcut icon" href="favicon.ico" >
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="stylesheet" href="www/css/reset.css">
         <!-- Bootstrap 3.3.6 -->
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 
@@ -164,6 +165,10 @@
         <!--分页插件-->
         <script type="text/javascript" src="plugins/paging-tool/pagination.js"></script>
 
+        <!--S base64插件-->
+        <script type="text/javascript" src="js/jquery.base64.js"></script>
+        <!--E base64插件-->
+
         <script>
             (function() {
                 var languageType = locale.current();
@@ -285,6 +290,7 @@
                     if($dropdown.is(":visible")){
                         $this.parent().find(".dropdown-menu").hide();
                     }else{
+                        getUserInfo();
                         $this.parent().find(".dropdown-menu").show();
                     }
                 });
@@ -422,6 +428,7 @@
                 } else {
                     $("#pcontent").load("admin/" + index + ".html", function () {
                         set_$tcontentHeight();
+                        onInit();
                     });
                     htmlIndex = index;
                 }
