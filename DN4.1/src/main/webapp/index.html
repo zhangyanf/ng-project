@@ -709,6 +709,15 @@
                                             </div>
                                             <div class="col-xs-12 text-center">
                                                 <div class="col-xs-6 text-right">
+                                                    <small lang="text:organization_name+："></small>
+                                                </div>
+                                                <div class="col-xs-6 text-left" style=" padding: 0px;">
+                                                    <input type="hidden" id="user_organization_hidden">
+                                                    <small id="user_organization"></small>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 text-center">
+                                                <div class="col-xs-6 text-right">
                                                     <small lang="text:last_login+："></small>
                                                 </div>
                                                 <div class="text-left">
@@ -1214,7 +1223,9 @@
                         $("#user_img_2").attr("src", "/api/file/" + data.result.photoFileId + "?access_token=" + sessionStorage.getItem("accessToken"));
                         $("#user_img_3").attr("src", "/api/file/" + data.result.photoFileId + "?access_token=" + sessionStorage.getItem("accessToken"));
                     }
-
+                    get_api2_orgizations_this({verbose: 100},function (data) {
+                        $("#user_organization,#user_organization_hidden").text(typeof(data.result.name)=='undefined' ? "" :data.result.name);
+                    },this);
                 }, this);
 
             }

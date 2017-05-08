@@ -381,6 +381,7 @@ var lang = {
         password_has_been_sent_to_the_email: "A password has been sent to your email",
         email_already_exists: "Email already exists",
         organization_already_exists: "Organization already exists",
+        user_name: "Username",
 
         /********************************  底部信息 *********************************/
         about_us: "Contact Us",
