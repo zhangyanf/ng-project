@@ -59,9 +59,9 @@
         if(page == "home"){
             //加载css文件
             $("<link>").attr({ rel: "stylesheet",
-                        type: "text/css",
-                        href: "plugins/jquery-autocomplete/jquery.autocomplete.css"
-                    }).appendTo("head");
+                type: "text/css",
+                href: "plugins/jquery-autocomplete/jquery.autocomplete.css"
+            }).appendTo("head");
             //加载js文件
             $.getScript("plugins/jquery-autocomplete/jquery.autocomplete.min.js",function () {
                 init_schedule_select(page);
@@ -115,45 +115,45 @@
                 // 在列表项被选择之后的回调函数
                 $("#search_assetnumber").removeAttr("data-assetId").attr("data-assetId",data._id);
             },
-            'doseNotSelect_blur':function (date_list) {
-                // 没有选择列表值时，点击其他空白地方(失去焦点)，而导致列表消失时执行的函数方法
-                //date_list[0]:查询结果列表的name集合  date_list[1]:查询结果的id集合
-                var input_val=$("#search_assetnumber").val();
-                if(input_val != null && input_val != ''){
-                    var symbol=false;
-                    for(var i=0;i<date_list[0].length;i++){
-                        if(input_val == date_list[0][i]){
-                            $("#search_assetnumber").removeAttr("data-assetId").attr("data-assetId",date_list[1][i]);
-                            symbol=true;
-                            break;
-                        }
-                    }
-                    if(!symbol){
-                        $("#search_assetnumber").removeAttr("data-assetId")
-                    }
-                }else{
-                    $("#search_assetnumber").removeAttr("data-assetId");
-                }
-            },
+            /* 'doseNotSelect_blur':function (date_list) {
+             // 没有选择列表值时，点击其他空白地方(失去焦点)，而导致列表消失时执行的函数方法
+             //date_list[0]:查询结果列表的name集合  date_list[1]:查询结果的id集合
+             var input_val=$("#search_assetnumber").val();
+             if(input_val != null && input_val != ''){
+             var symbol=false;
+             for(var i=0;i<date_list[0].length;i++){
+             if(input_val == date_list[0][i]){
+             $("#search_assetnumber").removeAttr("data-assetId").attr("data-assetId",date_list[1][i]);
+             symbol=true;
+             break;
+             }
+             }
+             if(!symbol){
+             $("#search_assetnumber").removeAttr("data-assetId")
+             }
+             }else{
+             $("#search_assetnumber").removeAttr("data-assetId");
+             }
+             },*/
             'propertychange':function (array_name,array_id) {
                 //输入框值输入发生变化时
                 $("#search_assetnumber").removeAttr("data-assetId");
-                var input_val=$("#search_assetnumber").val();
-                if(input_val != null && input_val != ''){
-                    var symbol=false;
-                    for(var i=0;i<array_name.length;i++){
-                        if(input_val == array_name[i]){
-                            $("#search_assetnumber").removeAttr("data-assetId").attr("data-assetId",array_id[i]);
-                            symbol=true;
-                            break;
-                        }
-                    }
-                    if(!symbol){
-                        $("#search_assetnumber").removeAttr("data-assetId")
-                    }
-                }else{
-                    $("#search_assetnumber").removeAttr("data-assetId");
-                }
+                /* var input_val=$("#search_assetnumber").val();
+                 if(input_val != null && input_val != ''){
+                 var symbol=false;
+                 for(var i=0;i<array_name.length;i++){
+                 if(input_val == array_name[i]){
+                 $("#search_assetnumber").removeAttr("data-assetId").attr("data-assetId",array_id[i]);
+                 symbol=true;
+                 break;
+                 }
+                 }
+                 if(!symbol){
+                 $("#search_assetnumber").removeAttr("data-assetId")
+                 }
+                 }else{
+                 $("#search_assetnumber").removeAttr("data-assetId");
+                 }*/
             },
             'success':function (data) {
                 var t=[[],[]];
@@ -178,42 +178,42 @@
             'afterSelectedHandler': function(data){
                 $("#search_devicename").removeAttr("data-assetId").attr("data-assetId",data._id);
             },
-            'doseNotSelect_blur':function (date_list) {
-                var input_val=$("#search_devicename").val();
-                if(input_val != null && input_val != ''){
-                    var symbol=false;
-                    for(var i=0;i<date_list[0].length;i++){
-                        if(input_val == date_list[0][i]){
-                            $("#search_devicename").removeAttr("data-assetId").attr("data-assetId",date_list[1][i]);
-                            symbol=true;
-                            break;
-                        }
-                    }
-                    if(!symbol){
-                        $("#search_devicename").removeAttr("data-assetId");
-                    }
-                }else{
-                    $("#search_devicename").removeAttr("data-assetId");
-                }
-            },
+            /* 'doseNotSelect_blur':function (date_list) {
+             var input_val=$("#search_devicename").val();
+             if(input_val != null && input_val != ''){
+             var symbol=false;
+             for(var i=0;i<date_list[0].length;i++){
+             if(input_val == date_list[0][i]){
+             $("#search_devicename").removeAttr("data-assetId").attr("data-assetId",date_list[1][i]);
+             symbol=true;
+             break;
+             }
+             }
+             if(!symbol){
+             $("#search_devicename").removeAttr("data-assetId");
+             }
+             }else{
+             $("#search_devicename").removeAttr("data-assetId");
+             }
+             },*/
             'propertychange':function (array_name,array_id) {
                 $("#search_devicename").removeAttr("data-assetId");
-                var input_val=$("#search_devicename").val();
-                if(input_val != null && input_val != ''){
-                    var symbol=false;
-                    for(var i=0;i<array_name.length;i++){
-                        if(input_val == array_name[i]){
-                            $("#search_devicename").removeAttr("data-assetId").attr("data-assetId",array_id[i]);
-                            symbol=true;
-                            break;
-                        }
-                    }
-                    if(!symbol){
-                        $("#search_devicename").removeAttr("data-assetId")
-                    }
-                }else{
-                    $("#search_devicename").removeAttr("data-assetId");
-                }
+                /* var input_val=$("#search_devicename").val();
+                 if(input_val != null && input_val != ''){
+                 var symbol=false;
+                 for(var i=0;i<array_name.length;i++){
+                 if(input_val == array_name[i]){
+                 $("#search_devicename").removeAttr("data-assetId").attr("data-assetId",array_id[i]);
+                 symbol=true;
+                 break;
+                 }
+                 }
+                 if(!symbol){
+                 $("#search_devicename").removeAttr("data-assetId")
+                 }
+                 }else{
+                 $("#search_devicename").removeAttr("data-assetId");
+                 }*/
             },
             'success':function (data) {
                 var t=[[],[]];
@@ -239,42 +239,42 @@
                 'afterSelectedHandler': function(data){
                     $("#search_site").removeAttr("data-siteId").attr("data-siteId",data._id);
                 },
-                'doseNotSelect_blur':function (date_list) {
-                    var input_val=$("#search_site").val();
-                    if(input_val != null && input_val != ''){
-                        var symbol=false;
-                        for(var i=0;i<date_list[0].length;i++){
-                            if(input_val == date_list[0][i]){
-                                $("#search_site").removeAttr("data-siteId").attr("data-siteId",date_list[1][i]);
-                                symbol=true;
-                                break;
-                            }
-                        }
-                        if(!symbol){
-                            $("#search_site").removeAttr("data-siteId")
-                        }
-                    }else{
-                        $("#search_site").removeAttr("data-siteId");
-                    }
-                },
+                /*'doseNotSelect_blur':function (date_list) {
+                 var input_val=$("#search_site").val();
+                 if(input_val != null && input_val != ''){
+                 var symbol=false;
+                 for(var i=0;i<date_list[0].length;i++){
+                 if(input_val == date_list[0][i]){
+                 $("#search_site").removeAttr("data-siteId").attr("data-siteId",date_list[1][i]);
+                 symbol=true;
+                 break;
+                 }
+                 }
+                 if(!symbol){
+                 $("#search_site").removeAttr("data-siteId")
+                 }
+                 }else{
+                 $("#search_site").removeAttr("data-siteId");
+                 }
+                 },*/
                 'propertychange':function (array_name,array_id) {
                     $("#search_site").removeAttr("data-siteId");
-                    var input_val=$("#search_site").val();
-                    if(input_val != null && input_val != ''){
-                        var symbol=false;
-                        for(var i=0;i<array_name.length;i++){
-                            if(input_val == array_name[i]){
-                                $("#search_site").removeAttr("data-siteId").attr("data-siteId",array_id[i]);
-                                symbol=true;
-                                break;
-                            }
-                        }
-                        if(!symbol){
-                            $("#search_site").removeAttr("data-siteId")
-                        }
-                    }else{
-                        $("#search_site").removeAttr("data-siteId");
-                    }
+                    /*var input_val=$("#search_site").val();
+                     if(input_val != null && input_val != ''){
+                     var symbol=false;
+                     for(var i=0;i<array_name.length;i++){
+                     if(input_val == array_name[i]){
+                     $("#search_site").removeAttr("data-siteId").attr("data-siteId",array_id[i]);
+                     symbol=true;
+                     break;
+                     }
+                     }
+                     if(!symbol){
+                     $("#search_site").removeAttr("data-siteId")
+                     }
+                     }else{
+                     $("#search_site").removeAttr("data-siteId");
+                     }*/
                 },
                 'success':function (data) {
                     var t=[[],[]];
@@ -312,7 +312,6 @@
 
 <section class="content-header">
     <h1 lang="text:repair_schedule">
-        预防性计划
     </h1>
     <ol class="breadcrumb">
         <li><a href="#" lang="text:repair_manage"></a></li>
@@ -324,7 +323,7 @@
         <!--标签页 Nav tabs-->
         <ul class="nav nav-tabs" role="tablist" id="myNavTabs">
             <li role="presentation" class="active">
-                <a role="tab" data-toggle="tab" lang="text:plan_information" href="#tab_list">计划信息</a>
+                <a role="tab" data-toggle="tab" lang="text:plan_information" href="#tab_list"></a>
             </li>
         </ul>
         <!--标签页 Tab panes-->
@@ -340,62 +339,62 @@
                                 <div class="col-sm-12" style="padding-bottom: 10px;">
                                     <form class="form-inline" id="schedule_form_query">
                                         <div class="form-group" id="form_group_label_site">
-                                            <label lang="text:site">现场:</label>
+                                            <label lang="text:site"></label>
                                         </div>
                                         <div class="form-group" id="form_group_input_site">
-                                            <input type="text" class="form-control input-sm" id="search_site" placeholder="现场" lang="placeholder:site">
+                                            <input type="text" class="form-control input-sm validate[custom[stopSpecialCharacters]]" id="search_site"  lang="placeholder:site">
                                         </div>
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <div class="input-group-btn" id="radio_select_assetid">
                                                     <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <span name="radio_select_assetid" data-val="2" lang="text:device_name">资产编号</span><span class="caret"></span>
+                                                        <span name="radio_select_assetid" data-val="2" lang="text:device_name"></span><span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="javascript:void(0)" lang="text:asset_number" onclick="select_assetId_content(1)">资产编号</a></li>
-                                                        <li><a href="javascript:void(0)" lang="text:device_name" onclick="select_assetId_content(2)">设备名称</a></li>
+                                                        <li><a href="javascript:void(0)" lang="text:asset_number" onclick="select_assetId_content(1)"></a></li>
+                                                        <li><a href="javascript:void(0)" lang="text:device_name" onclick="select_assetId_content(2)"></a></li>
                                                     </ul>
                                                 </div>
                                                 <div class="form-group">
-                                                    <input type="text" class="form-control input-sm" id="search_assetnumber" placeholder="资产编号" lang="placeholder:asset_number" style="display: none;">
+                                                    <input type="text" class="form-control input-sm validate[custom[stopSpecialCharacters]]" id="search_assetnumber"  lang="placeholder:asset_number" style="display: none;">
                                                 </div>
                                                 <div class="form-group">
-                                                    <input type="text" class="form-control input-sm" id="search_devicename" placeholder="设备名称" lang="placeholder:device_name">
+                                                    <input type="text" class="form-control input-sm validate[custom[stopSpecialCharacters]]" id="search_devicename"  lang="placeholder:device_name">
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group">
-                                            <label lang="text:plan_name">计划名称:</label>
-                                            <input type="text" class="form-control input-sm" id="search_planname" placeholder="计划名称" lang="placeholder:plan_name">
+                                            <label lang="text:plan_name"></label>
+                                            <input type="text" class="form-control input-sm validate[custom[stopSpecialCharacters]]" id="search_planname"  lang="placeholder:plan_name">
                                         </div>
                                         <div class="form-group">
-                                            <label for="search_type" class="control-label" lang="text:type">类型</label>
+                                            <label for="search_type" class="control-label" lang="text:type"></label>
                                             <select id="search_type" class="form-control input-sm">
-                                                <option value="" selected="selected" lang="text:---+all+---">全部</option>
+                                                <option value="" selected="selected" lang="text:---+all+---"></option>
                                                 <option value="1"  lang="text:periodic_plan"></option>
                                                 <option value="2"  lang="text:according_to_the_deadline"></option>
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <button type="button" class="btn btn-default btn-sm" id="btn_research" data-permissionFilter="[29]" data-toggle="tooltip"
-                                                    title="查询" lang="title:query">
+                                            <button type="button" class="btn btn-default btn-sm" id="btn_research" data-permissionFilter="[213]" data-toggle="tooltip"
+                                                    lang="title:query">
                                                 <span class="glyphicon glyphicon-search"></span>
                                             </button>
                                         </div>
                                         <!--右侧-->
                                         <div class="form-group box-tools pull-right">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-default btn-sm" title='新增'
-                                                        data-toggle='tooltip' data-placement="bottom" lang="title:add" onclick="option_schedule('add',null,null);" data-permissionFilter="[29]">
+                                                <button type="button" class="btn btn-default btn-sm"
+                                                        data-toggle='tooltip' data-placement="bottom" lang="title:add" onclick="option_schedule('add',null,null);" data-permissionFilter="[212]">
                                                     <i class="glyphicon glyphicon-plus"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-default btn-sm" title='删除'
-                                                        data-toggle='tooltip' data-placement="bottom" lang="title:delete" onclick="delete_schedule();" data-permissionFilter="[29]">
+                                                <button type="button" class="btn btn-default btn-sm"
+                                                        data-toggle='tooltip' data-placement="bottom" lang="title:delete" onclick="delete_schedule();" data-permissionFilter="[212]">
                                                     <i class="glyphicon glyphicon-minus"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-default btn-sm" title='导出' style="display: none;"
-                                                        data-toggle='tooltip' data-placement="bottom" lang="title:export" onclick="" data-permissionFilter="[29]">
+                                                <button type="button" class="btn btn-default btn-sm"  style="display: none;"
+                                                        data-toggle='tooltip' data-placement="bottom" lang="title:export" onclick="" data-permissionFilter="[212]">
                                                     <i class="icon-upload-alt"></i>
                                                 </button>
                                             </div>
@@ -407,14 +406,15 @@
                                 <table class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
-                                        <th id="tableHead_selectAll" style="width: 30px;cursor: pointer;">
+                                        <th id="tableHead_selectAll" style="width:1%;cursor: pointer;">
                                             <input type="checkbox" data-toggle='tooltip' data-placement="bottom" lang="title:check_all">
                                         </th>
-                                        <th lang="text:site" style="width: 17%;">现场</th>
-                                        <th lang="text:device_name" style="width: 18%;">设备名称</th>
-                                        <th lang="text:plan_name" style="width: 18%;">计划名称</th>
-                                        <th lang="text:type" style="width: 16%;">类型</th>
-                                        <th lang="text:execute_time" style="width: 17%;">执行时间</th>
+                                        <th lang="text:site" style="width: 17%;"></th>
+                                        <th lang="text:plan_name" style="width: 16%;"></th>
+                                        <th lang="text:device_name" style="width: 16%;"></th>
+                                        <th lang="text:asset_number" style="width:16%;"></th>
+                                        <th lang="text:type" style="width: 12%;"></th>
+                                        <th lang="text:execute_time" style="width: 12%;"></th>
                                         <th style="width:10%; text-align:center;" lang="text:operate"></th>
                                     </tr>
                                     </thead>
@@ -438,6 +438,15 @@
 </section>
 
 <script type="application/javascript">
+    /**
+     * 预防性查询表单设置验证
+     */
+    validator.render("#schedule_form_query", {
+        //  promptPosition: "inline",
+        scroll: false,
+        // showOneMessage:true, // 只显示一条提示信息
+        showPrompts:false //不显示提示信息
+    });
     // 资产编号，设备名称  切换事件
     function select_assetId_content(val) {
         if(val == 1){
@@ -513,16 +522,17 @@
                 var site_click=data[i].schedule.site_name;
             }
             str = "<tr>"
-                    +"<td><input type='checkbox' value='" + data[i].schedule._id + "' class='tabs-checked'></td>"
-                    +"<td>"+site_click+"</td>"
-                    +"<td>" + data[i].schedule.device_name + "</td>"
-                    +"<td>" + data[i].schedule.name + "</td>"
-                    +"<td>" + schedule_type + "</td>"
-                    +"<td>" + execute_ts+ "</td>"
-                    +"<td style='text-align:center;'>" +
-                    "<span data-toggle='tooltip' class='glyphicon glyphicon-edit link-black' style='cursor: pointer;' lang='title:modify' data-permissionFilter='[29]' onclick='option_schedule(\"update\",\"" + data[i].schedule._id + "\",\""+data[i].schedule.name+"\");'></span>"
-                    + "</td>"
-                    +"</tr>";
+                +"<td><input type='checkbox' value='" + data[i].schedule._id + "' class='tabs-checked'></td>"
+                +"<td>"+site_click+"</td>"
+                +"<td>" + data[i].schedule.name + "</td>"
+                +"<td>" + data[i].schedule.device_name + "</td>"
+                +"<td>" + data[i].schedule.asset_no + "</td>"
+                +"<td>" + schedule_type + "</td>"
+                +"<td>" + execute_ts+ "</td>"
+                +"<td style='text-align:center;'>" +
+                "<span data-toggle='tooltip' class='glyphicon glyphicon-edit link-black' style='cursor: pointer;' lang='title:modify' data-permissionFilter='[212]' onclick='option_schedule(\"update\",\"" + data[i].schedule._id + "\",\""+data[i].schedule.name+"\");'></span>"
+                + "</td>"
+                +"</tr>";
             $("#table_data").append(str);
             execute_ts="";
         }
@@ -581,7 +591,7 @@
         // 资产id条件
         var asset_id='';
         var assetId_type_select= $("#radio_select_assetid > button > span[name='radio_select_assetid']").attr("data-val");
-        if(assetId_type_select == 1){
+        if(assetId_type_select == 1){ // 资产编号
             if($("#search_assetnumber").val() != null && $("#search_assetnumber").val() != ''){
                 if('undefined'!=typeof($("#search_assetnumber").attr('data-assetId')) && $("#search_assetnumber").attr('data-assetId')!=''){
                     asset_id=$.trim($("#search_assetnumber").attr('data-assetId'));
@@ -589,15 +599,21 @@
                 if(asset_id != ''){
                     params.asset_id=asset_id;
                 }else{
-                    $("#page_footer").pagination("clear");
-                    $("#table_data").empty();
-                    errorTipDis("this_device_nonexistence");
-                    $("#table_data").append('<tr><td colspan="7"  align="center" lang="text:no_data"></td></tr>');
-                    locale.render({element: "#init_body"});
-                    return '';
+                    //  $("#page_footer").pagination("clear");
+                    //  $("#table_data").empty();
+                    //   errorTipDis("this_device_nonexistence");
+                    //   $("#table_data").append('<tr><td colspan="7"  align="center" lang="text:no_data"></td></tr>');
+                    var asset_no=$.trim($("#search_assetnumber").val());
+                    if (asset_no !== "") {
+                        asset_no = asset_no.match(pattern);
+                        params.asset_no=asset_no;
+                        $("#search_assetnumber").val(asset_no);
+                    }
+                    //  locale.render({element: "#init_body"});
+                    //   return '';
                 }
             }
-        }else if(assetId_type_select == 2){
+        }else if(assetId_type_select == 2){ // 资产名称
             if($("#search_devicename").val() != null && $("#search_devicename").val() != ''){
                 if('undefined'!=typeof($("#search_devicename").attr('data-assetId')) && $("#search_devicename").attr('data-assetId')!=''){
                     asset_id=$.trim($("#search_devicename").attr('data-assetId'));
@@ -605,12 +621,18 @@
                 if(asset_id != ''){
                     params.asset_id=asset_id;
                 }else{
-                    $("#page_footer").pagination("clear");
-                    $("#table_data").empty();
-                    errorTipDis("this_device_nonexistence");
-                    $("#table_data").append('<tr><td colspan="7"  align="center" lang="text:no_data"></td></tr>');
-                    locale.render({element: "#init_body"});
-                    return '';
+                    var asset_name=$.trim($("#search_devicename").val());
+                    if (asset_name !== "") {
+                        asset_name = asset_name.match(pattern);
+                        params.asset_name=asset_name;
+                        $("#search_devicename").val(asset_name);
+                    }
+                    /* $("#page_footer").pagination("clear");
+                     $("#table_data").empty();
+                     errorTipDis("this_device_nonexistence");
+                     $("#table_data").append('<tr><td colspan="7"  align="center" lang="text:no_data"></td></tr>');
+                     locale.render({element: "#init_body"});
+                     return '';*/
                 }
             }
         }
@@ -647,7 +669,7 @@
                 //清除分页栏数据
                 $("#page_footer").pagination("clear");
                 $("#table_data").empty();
-                $("#table_data").append('<tr><td colspan="7"  align="center" lang="text:no_data"></td></tr>');
+                $("#table_data").append('<tr><td colspan="8"  align="center" lang="text:no_data"></td></tr>');
             }
             locale.render({element: "#init_body"});
             $("#overlay1").hide();
@@ -666,6 +688,7 @@
                     selected_users.each(function() {
                         delete_api_schedule($(this).val(),null);
                     });
+                    $("#tableHead_selectAll > input").attr("checked",false);
                     $("#overlay1").hide();
                     getlist_schedule(0,$("#page_footer .col-sm-5 select").val());
                     dialog.close();
@@ -694,10 +717,10 @@
         if($("#"+form1_id+" input[name='select_schedule_type']:checked").val()){
             $("#"+form1_id+" input[name='schedule_type_2']").addClass("validate[required]");
         }
-        //点击按钮后，改按钮不可点击，即按钮只能点击一次
-        $("#submit_"+form1_id).attr("disabled",true);
         // 表单验证通过时执行
         if($("#"+form1_id).validationEngine('validate')){
+            //点击按钮后，改按钮不可点击，即按钮只能点击一次
+            $("#submit_"+form1_id).attr("disabled",true);
             // 周期性，或则，截至日期型
             var schedule_type=$("#"+form1_id+" input[name='select_schedule_type']:radio:checked").val();
             var schedule={};
@@ -716,8 +739,8 @@
                 }
             }else if(schedule_type=='2'){
                 var deadline=$("#"+form1_id+" input[name='schedule_type_2").val();
-                setting.deadline=(new Date(deadline)).getTime();
-                schedule.validation_time=(new Date()).getTime();
+                setting.deadline=(new Date(deadline+" 00:00:00")).getTime();
+                // schedule.validation_time=(new Date()).getTime();
             }
             // 设置参数
             setting.schedule_type=schedule_type;
@@ -730,11 +753,11 @@
             schedule.device_name=$("#"+form1_id+" input[name='device_name']").val();
             schedule.site_id=$("#"+form1_id+" > input[name='site_id']").val();
             schedule.site_name=$("#"+form1_id+" > input[name='site_name']").val();
-            schedule.validation_time=(new Date($("#"+form1_id+" input[name='validation_time_"+form1_id+"']").val())).getTime();
+            schedule.validation_time=(new Date($("#"+form1_id+" input[name='validation_time_"+form1_id+"']").val()+" 00:00:00")).getTime();
             schedule.asset_id=$("#"+form1_id+" > input[name='asset_id']").val();
             var failure_time=$("#"+form1_id+" input[name='failure_time_"+form1_id+"']").val();
             if(failure_time != null && failure_time!=''){
-                schedule.failure_time=(new Date(failure_time)).getTime();
+                schedule.failure_time=(new Date(failure_time+" 00:00:00")).getTime();
             }
             var sendData={schedule:schedule};
             if(type==='add'){
@@ -743,9 +766,9 @@
                     var showText;
                     if(result.result){
                         showText =  String.format(locale.get("create_schedule_success"),"—"+result.result.schedule.name+"—");
-                     }else{
+                    }else{
                         showText = locale.get("create_schedule_failed", "");
-                     }
+                    }
                     dialog.render({
                         text: showText
                     });
@@ -808,7 +831,7 @@
                 container_panes_id:"myPanesTabs"
             };
             if($("#tab_nav_create").length==0){
-                 // 生成tab
+                // 生成tab
                 create_tab_schedule(build_tab_param);
                 // 通过执行函数在tab_panes里加入 创建或更新 计划内容
                 create_content_schedule(action,form1_id,nav_id,panes_id,"");
@@ -883,7 +906,9 @@
      * 查询按钮绑定事件
      * */
     $("#btn_research").on('click',function () {
-        getlist_schedule(0,$("#page_footer .col-sm-5 select").val());
+        if ($('#schedule_form_query').validationEngine('validate')) {
+            getlist_schedule(0,$("#page_footer .col-sm-5 select").val());
+        }
     });
 
 

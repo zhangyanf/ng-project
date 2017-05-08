@@ -828,6 +828,8 @@ var lang = {
         create_update_schedule: "create update schedule",
         repair_processing: "repair processing",
         repair_state: "repair state",
+        model2: "Model",
+        reset1: "Reset",
         execute_time: "Execute time"
 
     }
