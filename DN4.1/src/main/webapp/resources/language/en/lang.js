@@ -139,7 +139,7 @@ var lang = {
         "22003": "File content error",
         "23001": "Creating channel failed",
         "23002": "Channel already created",
-        "24001": "Device appoint model error", //"Device appoint model error, see doc for more info",
+        "24001": "Device appoint model error",
         "24002": "Model variable file format error",
         "25001": "Device upper limit: call web admin for more info",
         "2500001": "Added {0} to {1} Favorites.",
@@ -221,7 +221,6 @@ var lang = {
         "32002": "The alias ({0}) contain illegal characters",
         "32001": "The alias ({0}) already exists",
         "40001": "The number of API Keys reached upper limit",
-        /*batch_add*/
         "30007": "The length of the name ({0}) exceeds the limit of 30 characters",
         "30008": "The name ({0}) contains illegal characters",
         "200077": "Serial number ({0}) already exists",
