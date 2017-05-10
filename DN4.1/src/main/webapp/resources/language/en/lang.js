@@ -481,9 +481,11 @@ var lang = {
         "content": "Content",
         "ip_address": "IP address",
         "operator": "Operator",
-        
 
-        "report": "Report", 
+        "json_comment":"********************************* 导出 ****************************************",
+        "report": "Report",
+        "count": "Number",
+
         "json_comment":"********************************* 网关报表 ****************************************",
         "report_gateway": "Gateway report",
         "online_statistics": "Connection Report",

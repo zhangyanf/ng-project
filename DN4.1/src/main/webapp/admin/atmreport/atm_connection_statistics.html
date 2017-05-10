@@ -1,1 +1,86 @@
-Connection Statistics
+<div class="row">
+    <div class="col-sm-12" style="padding-bottom: 10px;">
+        <form class="form-inline" id="performanceSearchForm">
+            <!--左侧-->
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control form-control-left input-sm" id="statisticsDate" style="background-color: white;cursor: pointer;" readonly="readonly">
+                <span class="glyphicon glyphicon-calendar form-control-feedback" style="left: 0;"></span>
+            </div>
+            <div class="form-group" style="padding: 5px 0px;">
+                <span>
+                     <label lang="text:site"></label>
+                     <input type="text" id="statisticsSite" class="form-control input-sm validate[custom[stopSpecialCharacters]]" lang="placeholder:site">
+                </span>
+            </div>
+            <div class="form-group just-btn">
+                <button type="button" class="btn btn-default btn-sm"
+                        onclick="loadReportData()" data-toggle="tooltip"
+                        lang="title:query"><span
+                        class="glyphicon glyphicon-search"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="faultCauseReport" class="row no-margin">
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title" lang="text:"></h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse">
+                    <i class="glyphicon glyphicon-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="chart" style="height:400px;width:100%;" id="causeChart">
+                无数据
+            </div>
+        </div><!-- /.box-body -->
+    </div><!-- /.box -->
+</div>
+
+<script>
+    function loadReportData() {
+        var sitename=$.trim($("#statisticsSite").val());
+        var statisticsDate=($("#statisticsDate").val()).split("-");
+        //获取atm故障统计
+        var params={};
+        params.start = new Date(statisticsDate[0] + " 00:00:00").getTime();
+        params.end = new Date(statisticsDate[1] + " 23:59:59").getTime();
+        if (sitename !== "") {
+            sitename = sitename.match(pattern);
+            params.site_name = sitename;
+        }
+
+        //模拟显示
+
+    }
+
+   function init_start() {
+       //初始化日期
+       $('#statisticsDate').daterangepicker(
+           {
+               startDate: moment().subtract(6, 'days'),
+               endDate: moment(),
+               maxDate: moment(),
+               showDropdowns: false,
+               showWeekNumbers: false,
+               separator: '-',
+               locale: {
+                   format: 'YYYY/MM/DD',
+                   separator: '-',
+                   applyLabel: locale.get("apply"),
+                   cancelLabel: locale.get("cancel")
+               }
+           },
+           function (start, end) {
+               $('#statisticsDate').val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
+           }
+       );
+
+       //初始化显示
+       loadReportData();
+       locale.render({element: "#init_body"});
+   }
+</script>

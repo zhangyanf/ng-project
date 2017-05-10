@@ -29,17 +29,17 @@
         switch (index){
             case "tab1":
                 $("#atm_content").load("admin/atmreport/atm_connection_statistics.html",function () {
-
+                    init_start();
                 });
                 break;
             case "tab2":
                 $("#atm_content").load("admin/atmreport/atm_fault_statistics.html",function () {
-
+                    init_start();
                 });
                 break;
             default:
                 $("#atm_content").load("admin/atmreport/atm_connection_statistics.html",function () {
-
+                    init_start();
                 });
                 break;
         }
