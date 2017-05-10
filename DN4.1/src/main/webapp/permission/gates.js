@@ -18,8 +18,7 @@ function getPermission() {
             monitor: [49,50,51,52,5]
         },
         report: {
-            online_statistics: [11,29,81,5],
-            traffic_statistics: [11,29,73,81,5],
+            atm_report: [11],
             gateway_statistics:[11,29,81,5,73,81]
         },
         config: {

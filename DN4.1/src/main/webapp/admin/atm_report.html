@@ -1,0 +1,62 @@
+<section class="content-header">
+    <h1 lang="text:atm-report">
+
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#" lang="text:report"></a></li>
+        <li class="active" lang="text:atm-report"></li>
+    </ol>
+</section>
+<section class="content" id="tcontent">
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs" role="tablist" id="myNavTabs">
+            <li id="tab1" role="presentation">
+                <a href="javascript:void(0)" role="tab" data-toggle="tab" lang="text:atm_connection_static" value="1"></a>
+            </li>
+            <li id="tab2" role="presentation">
+                <a href="javascript:void(0)" role="tab" lang="text:atm_fault_static" data-toggle="tab" value="2"></a>
+            </li>
+        </ul>
+        <div id="atm_content" class="tab-content" style="padding-bottom: 0px;">
+
+        </div>
+    </div>
+</section>
+
+<script>
+    function changeTab(index,_id){
+        clearAndDestory();
+        switch (index){
+            case "tab1":
+                $("#atm_content").load("admin/atmreport/atm_connection_statistics.html",function () {
+
+                });
+                break;
+            case "tab2":
+                $("#atm_content").load("admin/atmreport/atm_fault_statistics.html",function () {
+
+                });
+                break;
+            default:
+                $("#atm_content").load("admin/atmreport/atm_connection_statistics.html",function () {
+
+                });
+                break;
+        }
+    }
+
+    function onInit() {
+        permissionFilter_pageFunc();
+        if($("#myNavTabs li:first").attr("id")!="undefined"){
+            $("#myNavTabs li:first").addClass("active");
+            changeTab($("#myNavTabs li:first").attr("id"));
+        }
+        $("#myNavTabs li").each(function(){
+            $(this).bind("click",function () {
+                var $obj = $(this);
+                changeTab($obj.attr("id"))
+            })
+        });
+        locale.render({element: "#init_body"});
+    }
+</script>

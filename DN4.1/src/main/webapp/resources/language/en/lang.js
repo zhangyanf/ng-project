@@ -511,8 +511,9 @@ var lang = {
         "currentMonth": "Current month",
         "month": "Month",
         
-
-        "atm-report": "ATM Report", 
+        "atm_connection_static":"ATM Connection Statistics",
+        "atm_fault_static":"ATM Fault Statistics",
+        "atm-report": "ATM Report",
 
         "config":"Config",
         "json_comment":"******************************* 网关管理 ***************************************",

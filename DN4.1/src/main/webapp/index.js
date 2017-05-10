@@ -645,23 +645,17 @@ function nav_permission() {
     }
     /***************************************************/
     //报表导航过滤
-    var online = tool_nav_permission(permission.report.online_statistics, accept, def, deny);
-    var traffic = tool_nav_permission(permission.report.traffic_statistics, accept, def, deny);
+    var atm_report = tool_nav_permission(permission.report.atm_report, accept, def, deny);
     var gatewayReport = tool_nav_permission(permission.report.gateway_statistics, accept, def, deny);
-    if (gatewayReport != 0) {
+    if(gatewayReport!=0 || atm_report!=0){
         $("#reportList").show();
-    } else {
+        if(gatewayReport==0)
+            $("#grageway_report").remove();
+        if(atm_report==0)
+            $("#atm_report").remove();
+    }else{
         $("#reportList").remove();
     }
-    // if(online!=0 || traffic!=0){
-    //     $("#reportList").show();
-    //     if(online==0)
-    //         $("#reportList_online").remove();
-    //     if(traffic==0)
-    //         $("#reportList_traff").remove();
-    // }else{
-    //     $("#reportList").remove();
-    // }
     //配置导航过滤
     var gateway = tool_nav_permission(permission.config.gateway, accept, def, deny);
     // var controller=tool_nav_permission(permission.config.controller,accept,def,deny);

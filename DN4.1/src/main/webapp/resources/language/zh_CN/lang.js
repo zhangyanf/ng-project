@@ -512,7 +512,8 @@ var lang = {
         "month": "月",
 
         "atm-report": "ATM报表",
-        
+        "atm_connection_static":"ATM连接统计",
+        "atm_fault_static":"ATM故障统计",
 
         "config": "配置",
  
