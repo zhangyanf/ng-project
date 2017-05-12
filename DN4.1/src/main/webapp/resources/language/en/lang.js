@@ -436,6 +436,7 @@ var lang = {
         "alarm": "Events",
         "alarm_total": "Total Events",
         "alarm_unconfirmed_total": "Total Unconfirmed Events",
+        "alarm_unclear_total": "Total Uncleared Events",
         "alarm_uncleared_total": "Total Uncleared Events",
         "alarm_info": "Event Info",
         "alarm_detail": "Event Detail",

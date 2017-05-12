@@ -903,7 +903,7 @@
                         $("#site_assets_total2").text(deviceNum);
                         $("#site_alarm_total2").text(alarmNum);
                         $("#site_alarm_unconfirmed_total2").text(unconfirmedAlarmNum);
-                        $("#site_alarm_unconfirmed_total").text(data.result.alarms.unconfirmed);
+                        // $("#site_alarm_unconfirmed_total").text(data.result.alarms.unconfirmed);
                         $("#notify_overview_site").text(parseInt(unconfirmedAlarmNum) === 0 ? locale.get("has_no_affirmed_alarm") : String.format(locale.get("has_not_affirmed_alarm"), data.result.alarms.unconfirmed));
                         $("#notify_total_site").text(parseInt(unconfirmedAlarmNum) === 0 ? "":unconfirmedAlarmNum);
                         var $notifyli = ""

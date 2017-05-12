@@ -308,7 +308,7 @@
                         $("#notify_overview").text(parseInt(alarmNum) === 0 ? locale.get("has_no_affirmed_alarm") : String.format(locale.get("has_not_affirmed_alarm"), alarmNum));
                         var $notifyli = ""
                         $("#notify_list").html("");
-                        $("#alarm_unconfirmed_total").text(alarmNum);
+                        // $("#alarm_unconfirmed_total").text(alarmNum);
                         if(parseInt(alarmNum)===0){
                             $("[name=notify_li]").hide();
                         }else{

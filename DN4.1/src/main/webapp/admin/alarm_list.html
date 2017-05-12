@@ -22,8 +22,8 @@
                 <!--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
                 <h4>
                     <i class="icon fa fa-info"></i>
-                    <span lang="text:alarm_unconfirmed_total"> 未确认告警 </span>
-                    <span id="alarm_unconfirmed_total" class="pull-right"></span>
+                    <span lang="text:alarm_unclear_total"> </span>
+                    <span id="alarm_uncleared_total" class="pull-right"></span>
                 </h4>
             </div>
         </div>
@@ -760,10 +760,10 @@
         getOverview(null, true, function (data) {
             if (data.result && data.result.alarms) {
                 $("#alarm_total").text(data.result.alarms.total);
-                $("#alarm_unconfirmed_total").text(data.result.alarms.unconfirmed);
+                $("#alarm_uncleared_total").text(data.result.alarms.unclear);
             } else {
                 $("#alarm_total").text(0);
-                $("#alarm_unconfirmed_total").text(0);
+                $("#alarm_uncleared_total").text(0);
             }
         }, this);
     }

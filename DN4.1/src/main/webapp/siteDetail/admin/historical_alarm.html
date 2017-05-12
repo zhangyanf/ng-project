@@ -33,8 +33,8 @@
                     <div class="alert alert-danger alert-dismissible">
                         <h4>
                             <i class="icon fa fa-info"></i>
-                            <span lang="text:alarm_unconfirmed_total">  </span>
-                            <span id="site_alarm_unconfirmed_total" class="pull-right"></span>
+                            <span lang="text:alarm_unclear_total">  </span>
+                            <span id="site_alarm_uncleared_total" class="pull-right"></span>
                         </h4>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="form-group " style="padding: 5px 0px;"> 
                                     <select id="level" class="form-control input-sm">
-                                        <option value="" selected="selected" lang="text:---+alarm_level+---">
+                                        <option value="" selected="selected" lang="text:---+all+---">
                                         </option>
                                         <option value="5" lang="text:severe_alarm"> 
                                         </option>
@@ -98,7 +98,7 @@
                                 </div>
                                 <div class="form-group" style="padding: 5px 0px;"> 
                                     <select id="alarm_state" class="form-control input-sm">
-                                        <option value="" lang="text:---+alarm_state+---">
+                                        <option value="" lang="text:---+all+---">
                                         </option>
                                         <option value="1" selected="selected" class="unconfirmed" lang="text:alarm_occur">
                                         </option>
@@ -109,7 +109,7 @@
                                 </div>
                                 <div class="form-group" style="padding: 5px 0px;"> 
                                     <select id="confirm_states" class="form-control input-sm">
-                                        <option value="" selected="selected" lang="text:---+sure_state+---">
+                                        <option value="" selected="selected" lang="text:---+all+---">
                                         </option>
                                         <option value="1" class="unconfirmed" lang="text:unconfirmed"> 
                                         </option>
@@ -805,10 +805,10 @@
         getSiteOverview(_id, null, true, function (data) {
             if (data.result && data.result.alarms) {
                 $("#site_alarm_total").text(data.result.alarms.total);
-                $("#site_alarm_unconfirmed_total").text(data.result.alarms.unconfirmed);
+                $("#site_alarm_uncleared_total").text(data.result.alarms.unclear);
             } else {
                 $("#site_alarm_total").text(0);
-                $("#site_alarm_unconfirmed_total").text(0);
+                $("#site_alarm_uncleared_total").text(0);
             }
         }, this);
     }

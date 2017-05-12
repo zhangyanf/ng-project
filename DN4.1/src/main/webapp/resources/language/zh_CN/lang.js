@@ -436,6 +436,7 @@ var lang = {
         "alarm": "事件",
         "alarm_total": "事件总数",
         "alarm_unconfirmed_total": "未确认事件",
+        "alarm_unclear_total": "未消除事件",
         "alerm_uncleared_total": "未消除的事件",
         "alarm_info": "事件信息",
         "alarm_detail": "事件详情",
