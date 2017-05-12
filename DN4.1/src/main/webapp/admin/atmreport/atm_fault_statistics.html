@@ -1,7 +1,7 @@
 
 <div class="row">
     <div class="col-sm-12" style="padding-bottom: 10px;">
-        <form class="form-inline" id="performanceSearchForm">
+        <form class="form-inline" id="atmSearchForm">
             <!--左侧-->
             <div class="form-group has-feedback">
                 <input type="text" class="form-control form-control-left input-sm" id="statisticsDate" style="background-color: white;cursor: pointer;" readonly="readonly">
@@ -25,6 +25,9 @@
 </div>
 <div id="faultCauseReport" class="row no-margin">
     <div class="box">
+        <div class="overlay" style="display: none;">
+            <i class="fa icon-refresh icon-spin"></i>
+        </div>
         <div class="box-header with-border">
             <h3 class="box-title" lang="text:"></h3>
             <div class="box-tools pull-right">
@@ -35,7 +38,7 @@
         </div>
         <div class="box-body">
             <div class="chart" style="height:400px;width:100%;" id="causeChart">
-                
+
             </div>
         </div><!-- /.box-body -->
     </div><!-- /.box -->
@@ -43,19 +46,23 @@
 
 <script>
     function loadReportData() {
-        var sitename=$.trim($("#statisticsSite").val());
-        var statisticsDate=($("#statisticsDate").val()).split("-");
-        //获取atm故障统计
-        var params={};
-        params.start = new Date(statisticsDate[0] + " 00:00:00").getTime();
-        params.end = new Date(statisticsDate[1] + " 23:59:59").getTime();
-        if (sitename !== "") {
-            sitename = sitename.match(pattern);
-            params.site_name = sitename;
+        if ($('#atmSearchForm').validationEngine('validate')) {
+            loading();
+            var sitename=$.trim($("#statisticsSite").val());
+            var statisticsDate=($("#statisticsDate").val()).split("-");
+            //获取atm故障统计
+            var params={};
+            params.start = new Date(statisticsDate[0] + " 00:00:00").getTime();
+            params.end = new Date(statisticsDate[1] + " 23:59:59").getTime();
+            if (sitename !== "") {
+                sitename = sitename.match(pattern);
+                params.site_name = sitename;
+            }
+            getDeviceFailureData(params,true, function (data) {
+                draw_getDeviceFailureData(data);
+                unload();
+            },this);
         }
-        getDeviceFailureData(params,true, function (data) {
-            draw_getDeviceFailureData(data);
-        },this);
     }
 
     function draw_getDeviceFailureData(data) {
@@ -123,6 +130,12 @@
     }
 
     function init_start() {
+        validator.render("#atmSearchForm", {
+            //  promptPosition: "inline",
+            scroll: false,
+            // showOneMessage:true, // 只显示一条提示信息
+            showPrompts:false //不显示提示信息
+        });
         //初始化日期
         $('#statisticsDate').daterangepicker(
             {

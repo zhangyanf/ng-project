@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-sm-12" style="padding-bottom: 10px;">
-        <form class="form-inline" id="performanceSearchForm">
+        <form class="form-inline" id="atmSearchForm">
             <!--左侧-->
             <div class="form-group has-feedback">
                 <input type="text" class="form-control form-control-left input-sm" id="statisticsDate" style="background-color: white;cursor: pointer;" readonly="readonly">
@@ -24,6 +24,9 @@
 </div>
 <div id="faultCauseReport" class="row no-margin">
     <div class="box">
+        <div class="overlay" style="display: none;">
+            <i class="fa icon-refresh icon-spin"></i>
+        </div>
         <div class="box-header with-border">
             <h3 class="box-title" lang="text:"></h3>
             <div class="box-tools pull-right">
@@ -34,7 +37,7 @@
         </div>
         <div class="box-body">
             <div class="chart" style="height:400px;width:100%;" id="causeChart">
-                无数据
+
             </div>
         </div><!-- /.box-body -->
     </div><!-- /.box -->
@@ -42,22 +45,169 @@
 
 <script>
     function loadReportData() {
-        var sitename=$.trim($("#statisticsSite").val());
-        var statisticsDate=($("#statisticsDate").val()).split("-");
-        //获取atm故障统计
-        var params={};
-        params.start = new Date(statisticsDate[0] + " 00:00:00").getTime();
-        params.end = new Date(statisticsDate[1] + " 23:59:59").getTime();
-        if (sitename !== "") {
-            sitename = sitename.match(pattern);
-            params.site_name = sitename;
+        if($('#atmSearchForm').validationEngine('validate')){
+            loading();
+            var sitename=$.trim($("#statisticsSite").val());
+            var statisticsDate=($("#statisticsDate").val()).split("-");
+            //获取atm故障统计
+            var params={};
+            params.start = new Date(statisticsDate[0] + " 00:00:00").getTime();
+            params.end = new Date(statisticsDate[1] + " 23:59:59").getTime();
+            if (sitename !== "") {
+                sitename = sitename.match(pattern);
+                params.site_name = sitename;
+            }
+
+            //模拟显示,调api获取数据data后并执行回调函数
+            draw_getConnectionData({});
+            setTimeout("unload()",1000);
+        }
+    }
+
+    function draw_getConnectionData(data) {
+        var onlineData=data;
+        var online_state = locale.get("online_state");
+        var offline = locale.get("offline");
+        var onlinestr = locale.get("online");
+        var data2 = [];
+
+        var timestamp=(new Date()).getTime();
+        for(var ii=6;ii>0;ii--){
+            data2.push([new Date(timestamp-ii*43200000), 30]);
+            data2.push([new Date(timestamp-ii*43200000+21600000), 5]);
         }
 
-        //模拟显示
+        var option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: function (params) {
+                    var date = new Date(params.data[0]);
+                    var dat = date.getFullYear() + '-'
+                        + (date.getMonth() + 1) + '-'
+                        + date.getDate() + ' '
+                        + date.getHours() + ':'
+                        + date.getMinutes() + ':'
+                        + date.getSeconds();
+                    var vals = parseInt(params.data[1]);
+                    if (parseInt(vals) == 5) {
+                        return params.seriesName + '<br/>' + dat + '  (' + offline + ')';
+                    } else {
+                        return params.seriesName + '<br/>' + dat + '  (' + onlinestr + ')';
+                    }
+                }
+            },
+            legend: {
+                data: [online_state]
+            },
+            grid: {
+                left: '2%',
+                right: '5%',
+                top: 30,
+                bottom: 40,
+                containLabel: true
+            },
+            dataZoom: [
+                {
+                    type: 'slider',
+                    start: 0,
+                    end: 100,
+                    filterMode: 'empty'
+                },
+                {
+                    type: 'inside',
+                    start: 0,
+                    end: 100,
+                    filterMode: 'empty'
+                }
+            ],
+            xAxis: {
+                type: 'time',
+                splitNumber: 5
+            },
+            yAxis: {
+                type: 'value',
+                max: 40
+            },
+            series: [
+                {
+                    name: online_state,
+                    type: 'line',
+                    step: 'end',
+                    connectNulls: true,
+                    animationDuration: 500,
+                    symbolSize: 8,
+                    markLine: {
+                        silent: true,
+                        animation: false,
+                        symbolSize: 0,
+                        data: [
+                            {
+                                yAxis: 5,
+                                label: {
+                                    normal: {
+                                        formatter: function () {
+                                            return offline;//离线
+                                        }
+                                    }
+                                },
+                                lineStyle: {
+                                    normal: {
+                                        color: '#8e8d8e',
+                                        type: 'solid'
+                                    }
+                                }
+                            },
+                            {
+                                yAxis: 30,
+                                label: {
+                                    normal: {
+                                        formatter: function () {
+                                            return onlinestr;//在线
+                                        }
+                                    }
+                                },
+                                lineStyle: {
+                                    normal: {
+                                        color: '#38af68',
+                                        opacity: 0,
+                                        type: 'solid'
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    lineStyle: {
+                        normal: {
+                            color: '#1d75b3'
+                        }
+                    },
+                    data: data2
+                }
+            ]
+        };
+        _drawChart("causeChart",option);
+    }
 
+    function _drawChart(id,chartOption){
+        require(
+            [
+                'echarts/chart/echarts_3'
+            ],
+            function (ec) {
+                var myChart = ec.init(document.getElementById(id));
+                myChart.setOption(chartOption);
+                locale.render({element: "#init_body"});
+            }
+        );
     }
 
    function init_start() {
+       validator.render("#atmSearchForm", {
+           //  promptPosition: "inline",
+           scroll: false,
+           // showOneMessage:true, // 只显示一条提示信息
+           showPrompts:false //不显示提示信息
+       });
        //初始化日期
        $('#statisticsDate').daterangepicker(
            {
