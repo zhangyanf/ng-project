@@ -554,6 +554,11 @@ var lang = {
         "keep_device": "Gateway config take precedence",
         "keep_platform": "Cloud config take precedence",
         "ignore": "Ignore",
+        "tooltip1": "The gateway does not exist",
+        "tooltip2": "The gateway has been binding site",
+        "add_gateway": "Add Gateway",
+        "update_gateway": "Edit Gateway",
+        "gateway_info": "Gateway Info",
 
         "json_comment":"********************************* 现场管理 ****************************************", 
         "site": "Site",
