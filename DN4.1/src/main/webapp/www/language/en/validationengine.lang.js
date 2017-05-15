@@ -109,7 +109,7 @@
             },
             "serialNumber2":{
                 "regex": /^[a-zA-Z]{2}[0-9]{13}$/,
-                "alertText": "* Please input the 15 letter serial number of the gateway"
+                "alertText": "* Please input the 15 charts serial number of the gateway"
             },
             "serialNumber":{
                 "regex": /^[a-zA-Z0-9]+$/,
