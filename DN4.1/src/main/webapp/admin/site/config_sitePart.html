@@ -819,16 +819,16 @@
                 message = "3." + locale.get("jump_device_config");
                 $("#message3_div").empty().append('<img src="images/skip.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
             }
-            if (partMessage == "A") {
-                message = "4." + locale.get("add_part_failed");
-                $("#message4_div").empty().append('<img src="images/failed.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
-            } else if (partMessage == "B") {
-                message = "4." + locale.get("add_part_success");
-                $("#message4_div").empty().append('<img src="images/ok.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
-            } else if (partMessage == "C") {
-                message = "4." + locale.get("jump_part_config");
-                $("#message4_div").empty().append('<img src="images/skip.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
-            }
+//            if (partMessage == "A") {
+//                message = "4." + locale.get("add_part_failed");
+//                $("#message4_div").empty().append('<img src="images/failed.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+//            } else if (partMessage == "B") {
+//                message = "4." + locale.get("add_part_success");
+//                $("#message4_div").empty().append('<img src="images/ok.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+//            } else if (partMessage == "C") {
+//                message = "4." + locale.get("jump_part_config");
+//                $("#message4_div").empty().append('<img src="images/skip.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+//            }
         } else { //编辑提示
             if (siteMessage == true) {
                 message = "1." + locale.get("update_site_success");
@@ -857,16 +857,16 @@
                 message = "3." + locale.get("jump_device_config");
                 $("#message3_div").empty().append('<img src="images/skip.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
             }
-            if (partMessage == "A") {
-                message = "4." + locale.get("update_part_failed");
-                $("#message4_div").empty().append('<img src="images/failed.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
-            } else if (partMessage == "B") {
-                message = "4." + locale.get("update_part_success");
-                $("#message4_div").empty().append('<img src="images/ok.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
-            } else if (partMessage == "C") {
-                message = "4." + locale.get("jump_part_config");
-                $("#message4_div").empty().append('<img src="images/skip.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
-            }
+//            if (partMessage == "A") {
+//                message = "4." + locale.get("update_part_failed");
+//                $("#message4_div").empty().append('<img src="images/failed.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+//            } else if (partMessage == "B") {
+//                message = "4." + locale.get("update_part_success");
+//                $("#message4_div").empty().append('<img src="images/ok.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+//            } else if (partMessage == "C") {
+//                message = "4." + locale.get("jump_part_config");
+//                $("#message4_div").empty().append('<img src="images/skip.png" style="width:30px;" calss="img-rounded"/><label>' + message + '</label>');
+//            }
         }
         locale.render({
             element: "#init_body"
