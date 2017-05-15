@@ -13,7 +13,7 @@
                 <label class="col-sm-4 control-label"><span  lang="text:serial_number"></span ><span class="text-red" id="serial_number_index">*</span></label>
                 <div class="col-sm-6" style="padding-left: 7px;padding-right: 1px;">
                     <!--validate[required,custom[stopSpecialCharacters],custom[serialNumber2],funcCall[cloudInput]]-->
-                    <input type="text" class="form-control" value="" id="info-serial-number">
+                    <input type="text" class="form-control" value="" id="info-serial-number" lang="placeholder:serial_number">
                     <div id="gatewaySerialtest" class="error_text" style="display:none;opacity: 0.87; position: relative; top: 0px; left: 0px; margin-top: 0px;border-radius: 3px;background: #ffebeb;color: #df1a08; border: 1px solid #df1a08;">
                         <span lang="text:the_gateway_has_been_binding"></span>
                         <br />
@@ -28,7 +28,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span lang="text:gateway_name"></span><span class="text-red">*</span></label>
                     <div class="col-sm-6" style="padding-left: 7px;padding-right: 1px;" id="gatewayNameDiv">
-                        <input type="text" class="form-control validate[required,minSize[0],custom[stopSpecialCharacters],maxSize[30],funcCall[cloudInput]]" value="" id="name" gId="" optionDataType="">
+                        <input type="text" class="form-control validate[required,minSize[0],custom[stopSpecialCharacters],maxSize[30],funcCall[cloudInput]]" value="" id="name" gId="" optionDataType="" lang="placeholder:gateway_name">
                         <div id="gatewayNametest" style="display:none;opacity: 0.87; position: relative; top: 0px; left: 0px; margin-top: 0px;border-radius: 3px;background: #ffebeb;color: #df1a08; border: 1px solid #df1a08;">
                             <span lang="text:gateway_already_exists"></span>
                             <br />
@@ -47,7 +47,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label" lang="text:mobile_number"></label>
                     <div class="col-sm-6" style="padding-left: 7px;padding-right: 1px;">
-                        <input type="text" class="form-control validate[custom[phone1],maxSize[20],minSize[8],funcCall[cloudInput]]" value="" id="info-mobilenumber">
+                        <input type="text" class="form-control validate[custom[phone1],maxSize[20],minSize[8],funcCall[cloudInput]]" value="" id="info-mobilenumber" lang="placeholder:mobile_number">
                     </div>
                 </div>
                 <div class="form-group" id="div_model">
@@ -216,7 +216,6 @@
     });
 
     //根据序列号触发是否回填网关信息
-
     $("#info-serial-number").blur(function() {
         $("#gatewaySerialtest").hide();
         $("#gatewaySerialtest_unill").hide();
@@ -228,6 +227,11 @@
         } else {
             $("#gatewaySerialtest_unill").show();
         }
+    });
+
+    //序列号错误提示信息点击时能够隐藏
+    $("#gatewaySerialtest_unill").off().on('click',function () {
+        $("#gatewaySerialtest_unill").hide();
     });
 
     //校验网关名是否存在
