@@ -681,7 +681,7 @@ var lang = {
         "please_input_captcha": "Please enter captcha",
         "deleteGatewayInfo": "Sure to delete?",
         "deleteUserInfo": "Delete the user？",
-        
+        "reset1": "Reset",
         "json_comment":"********************************* 角色 ****************************************",  
         "role": "Role",
         "role_info": "Role Info",
