@@ -200,7 +200,7 @@
                                 <!-- <th style="width: 30px;" id="tableHead_selectAll">
                                     <input type="checkbox" id="tableHead_checkbok" data-toggle='tooltip' data-placement="bottom" lang="title:check_all">
                                 </th> -->
-                                <th style="text-align: center;width:40px" lang="text:state"></th>
+                                <!--<th style="text-align: center;width:40px" lang="text:state"></th>-->
                                 <th lang="text:connection_status" style="width: 15%;"></th>
                                 <th lang="text:site" style="width: 15%;"></th>
                                 <th lang="text:atm_device" style="width: 15%;"></th>
@@ -305,10 +305,21 @@
                 }
             }
             var link = "<a href='javascript:void(0)' onclick='detail_popUp(\"" + result[i].site._id + "\")'>"+((typeof(result[i].site.name) == "undefined") ? "" : result[i].site.name) +"</a>";
+            var td_site='';
+            if(result[i].site.online == '1'){
+                td_site='<td style="word-break: break-all;">' +
+                    '<span style="text-align: center;"><i class="iconfont icon-guanji text-green"></i></span>' +
+                    '<span>'+link+'</span>' +
+                    '</td>';
+            }else{
+                td_site='<td style="word-break: break-all;">' +
+                    '<span style="text-align: center;"><i class="iconfont icon-guanji1 contacts-list-date"></i></span>' +
+                    '<span>'+link+'</span>' +
+                    '</td>';
+            }
             str = "<tr "+(result[i].site.online == '1' ? "class='text-green'":"")+">" +
-                    "<td style='text-align: center;'>" + (result[i].site.online == '1' ? "<i class='iconfont icon-guanji text-green'></i>" : "<i class='iconfont icon-guanji1 contacts-list-date'></i>") + "</td>" +
                     "<td></td>" +
-                    "<td>" + link + "</td>" +
+                     td_site +
                     "<td>"+atm_ids+"</td>" +
                     "<td>"+((typeof(result[i].device.serialNumber) == "undefined") ? "" : result[i].device.serialNumber)+"</td>" +
                     "<td>"+ ((typeof(result[i].device.model) == "undefined") ? "" : result[i].device.model) +"</td>" +
@@ -331,16 +342,6 @@
         });
         locale.render({element: "#init_body"});
     }
-
-
-    //每页显示条数切换
-//    function changePageNumber(limit) {
-//        research_site(0, limit);
-//    }
-//    //跳转到指定页  回调函数
-//    function jumpTopage(cursor) {
-//        research_site(cursor, $("#pageNumberSelect").val());
-//    }
 
     //数据转换
     function fuc_businessState(businessState) {

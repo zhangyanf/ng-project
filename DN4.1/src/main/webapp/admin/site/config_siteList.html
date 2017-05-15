@@ -226,8 +226,8 @@
                                                     <input type="checkbox" name="selectAll" id="selectAll" lang="text:check_all">
                                                 </div>
                                             </th>
-                                            <th style="width:5%;text-align:center;" lang="{text:state}"></th>
-                                            <th style="width:15%;" lang="text:site_name"></th>
+                                            <!--<th style="width:5%;text-align:center;" lang="{text:state}"></th>-->
+                                            <th style="width:15%;" lang="text:site"></th>
                                             <th lang="text:address"></th>
                                             <th style="width:140px" lang="{text:business_state}"></th>
                                             <th style="width:12%;" lang="text:contact_name"></th>
@@ -237,6 +237,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id='liveSite_tbody'>
+
                                     </tbody>
                                     <tfoot>
                                     </tfoot>
@@ -604,7 +605,7 @@
             } else {
                 clearPagination();
                 $('#liveSite_tbody').empty();
-                var $tr = '<tr><td colspan="9" align="center">' + locale.get("no_data") + '</td></tr>';
+                var $tr = '<tr><td colspan="8" align="center">' + locale.get("no_data") + '</td></tr>';
                 $('#liveSite_tbody').append($tr);
             }
             unload1();
@@ -623,20 +624,28 @@
 
                 if (clogs[i].online == 1) {
                     //在线
-                    $tr += '<td style="text-align: center" ><i class="iconfont icon-guanji text-green"></i> </td>';
+                    //$tr += '<td style="text-align: center" ><i class="iconfont icon-guanji text-green"></i> </td>';
+                    $tr += '<td style="word-break: break-all;">' +
+                        '<span style="text-align: center"><i class="iconfont icon-guanji text-green"></i></span>' +
+                        '<span id="infoName' + clogs[i]._id + '"></span>' +
+                        '</td>';
                 } else {
                     //离线
-                    $tr += '<td style="text-align: center" ><i class="iconfont icon-guanji1 contacts-list-date"></i></td>';
+                    //$tr += '<td style="text-align: center" ><i class="iconfont icon-guanji1 contacts-list-date"></i></td>';
+                    $tr += '<td style="word-break: break-all;">' +
+                        '<span style="text-align: center"><i class="iconfont icon-guanji1 contacts-list-date"></i></span>' +
+                        '<span id="infoName' + clogs[i]._id + '"></span>' +
+                        '</td>';
                 }
 
-                $tr += '<td style="word-break: break-all;" id="infoName' + clogs[i]._id + '" ></td>' +
+                $tr += '' +
                     '<td style="word-break: break-all;" id="infoAddress' + clogs[i]._id + '"></td>' +
                     '<td style="word-break: break-all;" id="infoState' + clogs[i]._id + '"></td>' +
                     '<td style="word-break: break-all;" id="infoConName' + clogs[i]._id + '"></td>' +
                     '<td style="word-break: break-all;" id="infoConPho' + clogs[i]._id + '"></td>' +
                     '<td style="word-break: break-all;" id="infoConEmail' + clogs[i]._id + '"></td>' +
-                    '<td data-permissionfilter="[30,91]" style="word-break: break-all;text-align:center;"><span class="glyphicon glyphicon-edit link-black" lang="title:edit" id="edit' + clogs[i]._id + '" data-permissionfilter="[30]" style="cursor:pointer"></span>' +
-                    '<span class="iconfont icon-scada link-black" data-permissionfilter="[91]" lang="title:web_scada" id="scada' + clogs[i]._id + '" style="margin-left:10px;cursor:pointer"></span>' +
+                    '<td data-permissionfilter="[30,91]" style="word-break: break-all;text-align:center;">' +
+                    '<span class="glyphicon glyphicon-edit link-black" lang="title:edit" id="edit' + clogs[i]._id + '" data-permissionfilter="[30]" style="cursor:pointer"></span>' +
                     '</td>';
 
                 $tr += '</tr>';
@@ -711,13 +720,13 @@
                         }
                 });
                 //点击 现场事件
-                $("#scada" + clogs[i]._id + "").on( "click", function() {
-                    var oldScadaId = $(this).attr("id");
-                    var targetScadaId = oldScadaId.substring(5);
-                    var current_site_name = $("#infoName" + targetScadaId + "").text();
-                    //转的scada页面
-                    goToScada(targetScadaId, current_site_name);
-                });
+                //$("#scada" + clogs[i]._id + "").on( "click", function() {
+                //    var oldScadaId = $(this).attr("id");
+                //    var targetScadaId = oldScadaId.substring(5);
+                //    var current_site_name = $("#infoName" + targetScadaId + "").text();
+                //    //转的scada页面
+                //    goToScada(targetScadaId, current_site_name);
+                //});
             }
         }
         $("#liveSite_tbody > tr > td > input").on("click", function() {
