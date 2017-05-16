@@ -299,17 +299,18 @@
                 getOverview(null, true, function(data) {
                     if (data.result) {
                         var alarmNum = data.result.alarms.unconfirmed;
+                        var alarm_unclear=data.result.alarms.unclear;
                         siteTotal = data.result.sites.total;
                         var deviceNum = data.result.assets.total;
                         $("#sites_total").text(parseInt(siteTotal) > 99 ? '99+' : (parseInt(siteTotal) === 0 ? "" : siteTotal));
                         $("#devices_total").text(parseInt(deviceNum) > 99 ? '99+' : (parseInt(deviceNum) === 0 ? "" : deviceNum));
-                        $("#alert_count").text(parseInt(alarmNum) > 99 ? '99+' : (parseInt(alarmNum) === 0 ? "" : alarmNum));
-                        $("#notify_total").text(parseInt(alarmNum) > 99 ? '99+' : (parseInt(alarmNum) === 0 ? "" : alarmNum));
-                        $("#notify_overview").text(parseInt(alarmNum) === 0 ? locale.get("has_no_affirmed_alarm") : String.format(locale.get("has_not_affirmed_alarm"), alarmNum));
+                        $("#alert_count").text(parseInt(alarm_unclear) > 99 ? '99+' : (parseInt(alarm_unclear) === 0 ? "" : alarm_unclear));
+                        $("#notify_total").text(parseInt(alarm_unclear) > 99 ? '99+' : (parseInt(alarm_unclear) === 0 ? "" : alarm_unclear));
+                        $("#notify_overview").text(parseInt(alarm_unclear) === 0 ? locale.get("has_no_affirmed_alarm") : String.format(locale.get("has_not_affirmed_alarm"), alarm_unclear));
                         var $notifyli = ""
                         $("#notify_list").html("");
                         // $("#alarm_unconfirmed_total").text(alarmNum);
-                        if(parseInt(alarmNum)===0){
+                        if(parseInt(alarm_unclear)===0){
                             $("[name=notify_li]").hide();
                         }else{
                             $.each(data.result.alarms.list, function(n, value) {
