@@ -1627,7 +1627,6 @@ var lang = {
 
         "json_comment26": "/********************************  用户管理 *********************************/",
         "modify_information": "资料修改",
-        "reset1": "重新填写",
         "deleteUserInfo": "要删除该用户吗？",
         "select_del": "请选择配置项！",
         "validation_userName": "用户名已存在",

@@ -259,7 +259,7 @@ var lang = {
         "modify_failed": "Modified successfully",
         "case_insensitive": "Case Insensitive",
         "case_sensitive": "Case Sensitive",
-        "smart_atm":"Smart ATM",
+        "smart_atm":"SmartATM",
         "languages": "Languages",
         "default": "Default",
         "no_data": "No Data",
