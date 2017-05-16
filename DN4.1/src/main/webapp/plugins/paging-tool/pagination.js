@@ -26,7 +26,7 @@
             '          <ul class="pagination pagination-sm no-margin  pull-right">' +
 
             '             <li class="pagination-jump-li" style="padding-left: 10px;">' +
-            '                  <label>' +
+            '                  <label style="display: none;">' +
             '                      <div class="input-group input-group-sm" style="width: 90px;">' +
             '                          <input type="text" class="form-control pull-right" style="text-align: center;" lang="placeholder:page">' +
             '                           <div class="input-group-btn">' +
@@ -150,6 +150,11 @@
                 obj.find(".col-sm-5 > .total_items").text(total_r);  //填充总条数
                 obj.find(".pagination-jump-li input").val("");
                 toolOption.fill_pageData(obj,pageTotal, pageNow);
+                if(pageTotal <=0){
+                    obj.find(".col-sm-7  ul > .pagination-jump-li > label").hide();
+                }else{
+                    obj.find(".col-sm-7  ul > .pagination-jump-li > label").show();
+                }
             })();
         },
         //绑定事件
@@ -228,6 +233,7 @@
                 obj.find(".col-sm-5 > .total_items").text("0");
                 obj.find(".col-sm-7 > ul > .pagination-jump-li").prevAll().remove();
                 obj.find(".pagination-jump-li input").val("");
+                obj.find(".col-sm-7  ul > .pagination-jump-li > label").hide();
             })();
         }
 

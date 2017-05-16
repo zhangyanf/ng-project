@@ -36,7 +36,7 @@ function research_atmData(siteId,cursor, limit) {
                 $("#atmdata_table").empty();
                 $("#tableHead_checkbok").prop("checked", false);
                 if (data.total > 0) {
-                    fill_atmdata_table(data.result)
+                    fill_atmdata_table(data.result);
                     //加载分页数据
                     //绘制分页栏数据page-footer
                     $("#atm-page-footer").pagination("data",data);
