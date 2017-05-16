@@ -673,7 +673,9 @@ var lang = {
 
         "json_comment":"********************************* 系统管理 ****************************************",    
         "system": "System",
-        
+        "add_success": "Add successfully",
+        "modify_successful": "Modify Successful",
+
         "json_comment":"********************************* 用户 ****************************************",
         "user": "User",
         "userList": "User List",

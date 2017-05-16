@@ -103,6 +103,40 @@
                 showTabContent(1);
             });
         });
+        //日期插件初始化
+        $("#info_activation_date").daterangepicker({
+            singleDatePicker:true,
+            showDropdowns: false,
+            showWeekNumbers: false,
+            multidate:false,
+            separator: '-',
+            timePicker: true,
+            timePicker24Hour: true,
+            drops:"down",
+            locale: {
+                format: 'YYYY-MM-DD HH:mm',
+                separator: '-',
+                applyLabel: locale.get("apply"),
+                cancelLabel: locale.get("cancel")
+            }
+        });
+        $("#info_deactivation_date").daterangepicker({
+            singleDatePicker:true,
+            showDropdowns: false,
+            showWeekNumbers: false,
+            multidate:false,
+            separator: '-',
+            timePicker: true,
+            timePicker24Hour: true,
+            drops:"down",
+            locale: {
+                format: 'YYYY-MM-DD HH:mm',
+                separator: '-',
+                applyLabel: locale.get("apply"),
+                cancelLabel: locale.get("cancel")
+            }
+        });
+
         locale.render({element: "#init_body"});
     }
 
@@ -361,7 +395,21 @@
                 str += "<td >" + result[i].info.swVersion + "</td>";
             }
 
-            str += "<td ></td><td ></td><td ></td>";
+            if(result[i].billingPlan){
+                str += "<td >" + result[i].billingPlan+ "</td>";
+            }else{
+                str += "<td></td>";
+            }
+            if(result[i].activationDate && result[i].activationDate!=""){
+                str +="<td >" + schneider.util.dateFormat(result[i].activationDate, "yyyy-MM-dd hh:mm:ss") + "</td>" ;
+            }else{
+                str +="<td></td>";
+            }
+            if(result[i].deActivationDate && result[i].deActivationDate!=""){
+                str +="<td >" + schneider.util.dateFormat(result[i].deActivationDate, "yyyy-MM-dd hh:mm:ss") + "</td>" ;
+            }else{
+                str +="<td></td>";
+            }
 
             str += "<td style='text-align:center;'>"+
                 " <span class='glyphicon glyphicon-edit link-black' lang='title:edit'  onclick='show_detailedData(\"" + result[i]._id + "\")' style=' cursor: pointer;' title='编辑'>"+
@@ -1431,6 +1479,26 @@
                                     <input type="text" class="form-control validate[custom[phone1],maxSize[20],minSize[8],funcCall[cloudInput]]" value="" id="info-mobilenumber" >
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 control-label"><span lang="text:billing_plan_name"></span></label>
+                                <div class="col-sm-6" style="padding-left: 7px;padding-right: 1px;">
+                                    <input type="text" class="form-control validate[custom[stopSpecialCharacters],funcCall[cloudInput]]" value="" id="info_billing_plan_name" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 control-label"><span lang="text:activation_date"></span></label>
+                                <div class="col-sm-6 has-feedback" style="padding-left: 7px;padding-right: 1px;">
+                                    <input type="text" class="form-control validate[funcCall[cloudInput]]" value="" id="info_activation_date" readonly="readonly" style="background-color: white;cursor: pointer;">
+                                    <span class="glyphicon glyphicon-calendar form-control-feedback" style="right: 0;"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 control-label"><span lang="text:deactivation_date"></span></label>
+                                <div class="col-sm-6 has-feedback" style="padding-left: 7px;padding-right: 1px;">
+                                    <input type="text" class="form-control validate[funcCall[cloudInput]]" value="" id="info_deactivation_date" readonly="readonly" style="background-color: white;cursor: pointer;">
+                                    <span class="glyphicon glyphicon-calendar form-control-feedback" style="right: 0;"></span>
+                                </div>
+                            </div>
                             <div class="form-group" id="div_model">
                                 <label class="col-sm-5 control-label" lang="text:model"></label>
                                 <div class="col-sm-6" style="padding-left: 7px;padding-right: 1px;">
@@ -1611,7 +1679,7 @@
                 </div>
                 <div class="modal-footer" >
                     <button type="button" class="btn btn-default pull-left"  id="modal_add_update_cancel" data-dismiss="modal" lang="text:close"></button>
-                    <button type="button" class="btn btn-primary" onclick="submitDate();" lang="text:submit" data-permissionFilter="[12]"></button>
+                    <button type="button" class="btn btn-primary" onclick="submitData();" lang="text:submit" data-permissionFilter="[12]"></button>
                 </div>
             </div>
         </div>
@@ -1732,7 +1800,7 @@
         }
 
         //提交网关数据
-        function submitDate() {
+        function submitData() {
             if ($('#add_edit_form').validationEngine('validate')) {
                 if(validate_warningnumber() < 0){
                     return;
@@ -1783,8 +1851,15 @@
                     "plcId": 0,
                     "serialNumber": serialNumber,
                     "siteId": siteId,
-                    "siteName": siteName
+                    "siteName": siteName,
+                    "billingPlan":$.trim($("#info_billing_plan_name").val())
                 };
+                if($.trim($("#info_activation_date").val()) !=""){
+                    requestData.activationDate=(new Date($.trim($("#info_activation_date").val()))).getTime()+"";
+                }
+                if($.trim($("#info_deactivation_date").val()) != ""){
+                    requestData.deActivationDate=(new Date($.trim($("#info_deactivation_date").val()))).getTime()+"";
+                }
                 var emailList = $("#reContent").val();
                 var hoursWarn = $("#info-device-hours").val();
                 var warning1 = $("#info-device-warning").val();
@@ -1945,6 +2020,15 @@
              var resendLogin = $("#info-device-advanced-resendlogin").val(data.deviceConfig.resendLogin);*/
             var mobileNumber = $("#info-mobilenumber").val(data.mobileNumber);
             var serialNumber = $("#info-serial-number").val(data.serialNumber);
+            if(data.billingPlan){
+                $("#info_billing_plan_name").val(data.billingPlan);
+            }
+            if(data.activationDate && data.activationDate!=""){
+                $("#info_activation_date").val(schneider.util.dateFormat(result[i].activationDate, "yyyy-MM-dd hh:mm:ss") + "");
+            }
+            if(data.deActivationDate && data.deActivationDate!=""){
+                $("#info_deactivation_date").val(schneider.util.dateFormat(result[i].deActivationDate, "yyyy-MM-dd hh:mm:ss") + "");
+            }
             // 如果有Ip 基站 信号强度信息，就显示出来
             var $div = "";
             if(typeof(data.pubIp)!="undefined") {
@@ -2029,6 +2113,7 @@
                 $("#info-warn-alarm").val(data2.warning2);
                 $("#info-device-serious").val(data2.warning3);
             }
+
             locale.render({element: "#init_body"});
         }
 
