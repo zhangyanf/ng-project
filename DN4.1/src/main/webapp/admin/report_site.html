@@ -201,7 +201,7 @@
                                     <input type="checkbox" id="tableHead_checkbok" data-toggle='tooltip' data-placement="bottom" lang="title:check_all">
                                 </th> -->
                                 <!--<th style="text-align: center;width:40px" lang="text:state"></th>-->
-                                <th lang="text:connection_status" style="width: 15%;"></th>
+                                <!--<th lang="text:connection_status" style="width: 15%;"></th>-->
                                 <th lang="text:site" style="width: 15%;"></th>
                                 <th lang="text:atm_device" style="width: 15%;"></th>
                                 <th lang="text:gateway_serial_number" style="width: 15%;"></th>
@@ -281,7 +281,7 @@
 //                    clearPagination();
                     $("#page-footer").pagination("clear");
                     $("#siteInfo_table").empty();
-                    $("#siteInfo_table").append('<tr><td colspan="9"  align="center" lang="text:no_data"></td></tr>');
+                    $("#siteInfo_table").append('<tr><td colspan="8"  align="center" lang="text:no_data"></td></tr>');
                     locale.render({element: "#init_body"});
                 }
             }
@@ -306,19 +306,17 @@
             }
             var link = "<a href='javascript:void(0)' onclick='detail_popUp(\"" + result[i].site._id + "\")'>"+((typeof(result[i].site.name) == "undefined") ? "" : result[i].site.name) +"</a>";
             var td_site='';
+
+            td_site='<td style="word-break: break-all;">';
             if(result[i].site.online == '1'){
-                td_site='<td style="word-break: break-all;">' +
-                    '<span style="text-align: center;"><i class="iconfont icon-guanji text-green"></i></span>' +
-                    '<span>'+link+'</span>' +
-                    '</td>';
+                td_site+='<span style="text-align: center;"><i class="iconfont icon-guanji text-green" style="font-size: 20px;"></i></span>&nbsp;';
             }else{
-                td_site='<td style="word-break: break-all;">' +
-                    '<span style="text-align: center;"><i class="iconfont icon-guanji1 contacts-list-date"></i></span>' +
-                    '<span>'+link+'</span>' +
-                    '</td>';
+                td_site+='<span style="text-align: center;"><i class="iconfont icon-guanji1 contacts-list-date" style="font-size: 20px;"></i></span>&nbsp;';
             }
+            td_site+='<span style="text-align: center;"><i class="iconfont icon-atm" style="font-size: 20px;"></i></span>&nbsp;';
+            td_site+= '<span>'+link+'</span></td>';
+
             str = "<tr "+(result[i].site.online == '1' ? "class='text-green'":"")+">" +
-                    "<td></td>" +
                      td_site +
                     "<td>"+atm_ids+"</td>" +
                     "<td>"+((typeof(result[i].device.serialNumber) == "undefined") ? "" : result[i].device.serialNumber)+"</td>" +
