@@ -559,6 +559,7 @@ var lang = {
         "add_gateway": "Add Gateway",
         "update_gateway": "Edit Gateway",
         "gateway_info": "Gateway Info",
+        "gatewary_info": "Gateway Info",
 
         "json_comment":"********************************* 现场管理 ****************************************", 
         "site": "Site",
@@ -889,6 +890,7 @@ var lang = {
         "repair_state": "repair state",
         "execute_time": "Execute time",
         "atm_id":"ATM Id",
-        "atm_name":"ATM name"
+        "atm_name":"ATM Name",
+        "atm_info":"ATM Info"
     }
 };

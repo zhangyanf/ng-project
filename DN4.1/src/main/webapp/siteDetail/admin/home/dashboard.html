@@ -41,108 +41,123 @@
                 <i class="fa icon-refresh icon-spin"></i>
             </div>
             <div class="box-header with-border">
+                <h3 class="box-title" lang="text:equipment_information"></h3>
                 <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                         <i class="icon-minus fa-minus"></i></button>
                 </div>
             </div>
-            <div class="box-body" style="display: -webkit-flex;display: flex;" id="info_atm_and_gateway">
-                <div style="margin: 0px 5px 0px 5px;-webkit-flex: 1;flex: 1;">
-                    <form class="form-horizontal">
-                        <div class="form-group no-margin">
-                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:gateway_name+:"></label>
-                            <div class="col-sm-8 no-padding">
-                                 <span style="word-wrap: break-word;" name="gateway_name">gateway_name</span>
-                            </div>
+            <div class="box-body">
+                <div style="width:100%;">
+                    <h4 lang="text:gatewary_info" style="text-align: center;color: deepskyblue;"></h4>
+                    <div style="width:100%;display: -webkit-flex;display: flex;" id="deviceinfo_gatewayinfo">
+                        <div style="margin: 0px 5px 0px 5px;-webkit-flex: 1;flex: 1;">
+                            <form class="form-horizontal">
+                                <div class="form-group no-margin">
+                                    <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:gateway_name+:"></label>
+                                    <div class="col-sm-8 no-padding">
+                                        <span style="word-wrap: break-word;" name="gateway_name"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group no-margin">
+                                    <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;">IMSI:</label>
+                                    <div class="col-sm-8 no-padding">
+                                        <span style="word-wrap: break-word;" name="IMSI"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group no-margin">
+                                    <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:ip_address+:"></label>
+                                    <div class="col-sm-8 no-padding">
+                                        <span style="word-wrap: break-word;" name="ip_address"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group no-margin">
+                                    <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:model_type+:"></label>
+                                    <div class="col-sm-8 no-padding">
+                                        <span style="word-wrap: break-word;" name="model_type"></span>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                        <div class="form-group no-margin">
-                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;">IMSI:</label>
-                            <div class="col-sm-8 no-padding">
-                                <span style="word-wrap: break-word;" name="IMSI">IMSI</span>
-                            </div>
+                        <div style="margin: 0px 5px 0px 5px;-webkit-flex: 1;flex: 1;">
+                            <form class="form-horizontal">
+                                <div class="form-group no-margin">
+                                    <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:installation_site+:"></label>
+                                    <div class="col-sm-8 no-padding">
+                                        <span style="word-wrap: break-word;" name="installation_site"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group no-margin">
+                                    <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:business_state+:"></label>
+                                    <div class="col-sm-8 no-padding">
+                                        <span style="word-wrap: break-word;" name="business_state"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group no-margin">
+                                    <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:configuration_state+:"></label>
+                                    <div class="col-sm-8 no-padding">
+                                        <span style="word-wrap: break-word;" name="configuration_state"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group no-margin">
+                                    <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:current_version+:"></label>
+                                    <div class="col-sm-8 no-padding">
+                                        <span style="word-wrap: break-word;" name="current_version"></span>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                        <div class="form-group no-margin">
-                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:ip_address+:"></label>
-                            <div class="col-sm-8 no-padding">
-                                <span style="word-wrap: break-word;" name="ip_address">ip_address</span>
-                            </div>
+                        <div style="margin: 0px 5px 0px 5px;-webkit-flex: 1;flex: 1;">
+                            <form class="form-horizontal">
+                                <div class="form-group no-margin">
+                                    <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:billing_plan_name+:"></label>
+                                    <div class="col-sm-8 no-padding">
+                                        <span style="word-wrap: break-word;" name="billing_plan_name"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group no-margin">
+                                    <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:activation_date+:"></label>
+                                    <div class="col-sm-8 no-padding">
+                                        <span style="word-wrap: break-word;" name="activation_date"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group no-margin">
+                                    <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:deactivation_date+:"></label>
+                                    <div class="col-sm-8 no-padding">
+                                        <span style="word-wrap: break-word;" name="deactivation_date"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group no-margin">
+                                    <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:signal_strength+:"></label>
+                                    <div class="col-sm-8 no-padding" id="atminfo_signal_strength">
+
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                        <div class="form-group no-margin">
-                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:model_type+:"></label>
-                            <div class="col-sm-8 no-padding">
-                                <span style="word-wrap: break-word;" name="model_type">model_type</span>
-                            </div>
-                        </div>
-                        <div class="form-group no-margin">
-                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:installation_site+:"></label>
-                            <div class="col-sm-8 no-padding">
-                                <span style="word-wrap: break-word;" name="installation_site">installation_site</span>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-                <div style="margin: 0px 5px 0px 5px;-webkit-flex: 1;flex: 1;">
-                    <form class="form-horizontal">
-                        <div class="form-group no-margin">
-                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:business_state+:"></label>
-                            <div class="col-sm-8 no-padding">
-                                <span style="word-wrap: break-word;" name="business_state">business_state</span>
-                            </div>
+                <div style="width: 100%;height: 1px;background-color: lightgrey;margin-top: 10px;"></div>
+                <div style="width:100%;">
+                    <h4 lang="text:atm_info" style="text-align: center;color: deepskyblue;"></h4>
+                    <div style="width:100%;">
+                        <table class="table table-bordered table-hover table-striped" style="margin-bottom: 5px;">
+                           <thead>
+                              <tr>
+                                  <th lang="text:atm_id" style="text-align: center;width: 50%"></th>
+                                  <th lang="text:atm_name" style="text-align: center;width: 50%"></th>
+                              </tr>
+                           </thead>
+                            <tbody id="deviceinfo_atminfo">
+
+                            </tbody>
+                        </table>
+                        <div id="atminfo_page_footer">
+
                         </div>
-                        <div class="form-group no-margin">
-                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:configuration_state+:"></label>
-                            <div class="col-sm-8 no-padding">
-                                <span style="word-wrap: break-word;" name="configuration_state">configuration_state</span>
-                            </div>
-                        </div>
-                        <div class="form-group no-margin">
-                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:current_version+:"></label>
-                            <div class="col-sm-8 no-padding">
-                                <span style="word-wrap: break-word;" name="current_version">current_version</span>
-                            </div>
-                        </div>
-                        <div class="form-group no-margin">
-                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:billing_plan_name+:"></label>
-                            <div class="col-sm-8 no-padding">
-                                <span style="word-wrap: break-word;" name="billing_plan_name">billing_plan_name</span>
-                            </div>
-                        </div>
-                        <div class="form-group no-margin">
-                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:activation_date+:"></label>
-                            <div class="col-sm-8 no-padding">
-                                <span style="word-wrap: break-word;" name="activation_date">activation_date</span>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-                <div style="margin: 0px 5px 0px 5px;-webkit-flex: 1;flex: 1;">
-                    <form class="form-horizontal">
-                        <div class="form-group no-margin">
-                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:deactivation_date+:"></label>
-                            <div class="col-sm-8 no-padding">
-                                <span style="word-wrap: break-word;" name="deactivation_date">deactivation_date</span>
-                            </div>
-                        </div>
-                        <div class="form-group no-margin">
-                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:signal_strength+:"></label>
-                            <div class="col-sm-8 no-padding">
-                                <span style="word-wrap: break-word;" name="signal_strength">signal_strength</span>
-                            </div>
-                        </div>
-                        <div class="form-group no-margin">
-                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:atm_id+:"></label>
-                            <div class="col-sm-8 no-padding">
-                                <span style="word-wrap: break-word;" name="atm_id">atm_id</span>
-                            </div>
-                        </div>
-                        <div class="form-group no-margin">
-                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:atm_name+:"></label>
-                            <div class="col-sm-8 no-padding">
-                                <span style="word-wrap: break-word;" name="atm_name">atm_name</span>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+
             </div>
         </div>
     </div>
@@ -219,16 +234,8 @@
 
             getAllSiteInfoBySiteid(siteId,{verbose:100},function (data) {
                 if(data.result){
-                    if(data.result.device){
-                        //网关信息
-
-                    }
-                    if(data.result.asset && data.result.asset.length>0){
-                        //atm信息
-
-                    }
+                    fillinfo_gatewayAndAtm(data);
                 }
-                //$("#info_atm_and_gateway form span[name='gateway_name']").text();
             },this);
 
             $("#more_alarm_info").off().on("click",function () {
@@ -268,6 +275,97 @@
             locale.render({ element: "#init_body" });
         });
 
+    }
+
+    /*
+    * 填写网关和atm信息
+    * */
+    function fillinfo_gatewayAndAtm(data) {
+        if(data.result.device){
+            //网关信息
+            $("#deviceinfo_gatewayinfo form span[name='gateway_name']").text((data.result.device.name)?data.result.device.name:"");
+            if (typeof(data.result.device.info) != "undefined" && typeof(data.result.device.info.imsi) != "undefined") {
+                $("#deviceinfo_gatewayinfo form span[name='IMSI']").text(data.result.device.info.imsi);
+            }
+            $("#deviceinfo_gatewayinfo form span[name='ip_address']").text((data.result.device.pubIp)?data.result.device.pubIp:"");
+            $("#deviceinfo_gatewayinfo form span[name='model_type']").text((data.result.device.model)?data.result.device.model:"");
+            $("#deviceinfo_gatewayinfo form span[name='installation_site']").text((data.result.device.siteName)?data.result.device.siteName:"");
+            if (typeof(data.result.device.businessState) != "undefined") {
+                if (data.result.device.businessState == 0) {
+                    $("#deviceinfo_gatewayinfo form span[name='business_state']").text(locale.get("construction"));
+                } else if (data.result.device.businessState == 1) {
+                    $("#deviceinfo_gatewayinfo form span[name='business_state']").text(locale.get("commissioning"));
+                } else if (data.result.device.businessState == 2) {
+                    $("#deviceinfo_gatewayinfo form span[name='business_state']").text(locale.get("fault"));
+                } else if (data.result.device.businessState == 3) {
+                    $("#deviceinfo_gatewayinfo form span[name='business_state']").text(locale.get("overhaul"));
+                }
+            }
+            if (typeof(data.result.device.syncState) != "undefined") {
+                if (data.result.device.syncState == 0) {
+                    $("#deviceinfo_gatewayinfo form span[name='configuration_state']").text(locale.get("not_sync"));
+                } else if (data.result.device.syncState == 1) {
+                    $("#deviceinfo_gatewayinfo form span[name='configuration_state']").text(locale.get("getting_config"));
+                } else if (data.result.device.syncState == 2) {
+                    $("#deviceinfo_gatewayinfo form span[name='configuration_state']").text(locale.get("applying_config"));
+                } else if (data.result.device.syncState == 3) {
+                    $("#deviceinfo_gatewayinfo form span[name='configuration_state']").text(locale.get("sync_succeed"));
+                } else if (data.result.device.syncState == 4) {
+                    $("#deviceinfo_gatewayinfo form span[name='configuration_state']").text(locale.get("sync_fail"));
+                }
+            }
+            if (typeof(data.result.device.info) != "undefined" && typeof(data.result.device.info.swVersion) != "undefined") {
+                $("#deviceinfo_gatewayinfo form span[name='current_version']").text(data.result.device.info.swVersion);
+            }
+            $("#deviceinfo_gatewayinfo form span[name='billing_plan_name']").text((data.result.device.billingPlan)?data.result.device.billingPlan:"");
+            if(data.result.device.activationDate && data.result.device.activationDate!=""){
+                $("#deviceinfo_gatewayinfo form span[name='activation_date']").text(schneider.util.dateFormat(data.result.device.activationDate));
+            }
+            if(data.result.device.deactivation_date && data.result.device.deactivation_date!=""){
+                $("#deviceinfo_gatewayinfo form span[name='deactivation_date']").text(schneider.util.dateFormat(data.result.device.deactivation_date));
+            }
+
+            if(data.result.device.info){
+                var rssi = (typeof(data.result.device.info.rssi)=="undefined" || data.result.device.info.rssi=="") ? 0 : data.result.device.info.rssi;
+                var signal =-113+2*parseInt(rssi);
+                var stri=' <span id="info-device-signal-num" style="width:90px" readonly="readonly">'+signal+' dBm</span>';
+                if(signal>-91) {//五格
+                    stri += '<span style="width: 19px;height: 16px;margin: 3px 0 0 2px;background-image: url(../images/signal-5.png);display: inline-block;"></span>';
+                }else if(signal>-101) {//四格
+                    stri += '<span style="width: 19px;height: 16px;margin: 3px 0 0 2px;background-image: url(../images/signal-4.png);display: inline-block;"></span>';
+                }else if(signal>-103) {//三格
+                    stri += '<span style="width: 19px;height: 16px;margin: 3px 0 0 2px;background-image: url(../images/signal-3.png);display: inline-block;"></span>';
+                }else if(signal>-107) {//两格
+                    stri += '<span style="width: 19px;height: 16px;margin: 3px 0 0 2px;background-image: url(../images/signal-2.png);display: inline-block;"></span>';
+                }else if(signal>-113) {//一格
+                    stri += '<span style="width: 19px;height: 16px;margin: 3px 0 0 2px;background-image: url(../images/signal-1.png);display: inline-block;"></span>';
+                }else {//无信号
+                    stri += '<span style="width: 19px;height: 16px;margin: 3px 0 0 2px;background-image: url(../images/signal-0.png);display: inline-block;"></span>';
+                }
+
+                $("#atminfo_signal_strength").append(stri);
+            }
+        }
+        if(data.result.asset && data.result.asset.length>0){
+            //atm信息
+            var atminfo="";
+            for(var i=0;i<data.result.asset.length;i++){
+                var device_parameter=data.result.asset[i].device_parameter;
+                if(device_parameter && device_parameter.type && $.inArray(device_parameter.type+"",["Ethernet","RS485","RS232"])>=0){
+                    atminfo +='<tr>' +
+                        '<td>'+data.result.asset[i]._id+'</td>' +
+                        '<td>'+data.result.asset[i].device_name ? data.result.asset[i].device_name:""+'</td>' +
+                        '</tr>';
+                }
+            }
+            if(atminfo != ""){
+                $("#deviceinfo_atminfo").append(atminfo);
+            }else{
+                $("#deviceinfo_atminfo").append('<tr><td colspan="2" align="center" lang="text:no_data"></td></tr>');
+            }
+        }else{
+            $("#deviceinfo_atminfo").append('<tr><td colspan="2" align="center" lang="text:no_data"></td></tr>');
+        }
     }
 
 </script>
