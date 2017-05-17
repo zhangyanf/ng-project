@@ -1961,6 +1961,8 @@ var lang = {
         "users": "用户",
         "logs": "日志",
         "upload": "上传",
-        "please_select_function_module": "请选择功能模块"
+        "please_select_function_module": "请选择功能模块",
+        "atm_id":"ATM Id",
+        "atm_name":"ATM 名称"
     }
-}
+};

@@ -673,3 +673,17 @@ function loadAllDevice(params, callback, context) {
     }
   });
 }
+
+/**
+ * 获取某个现场的所有信息
+ * */
+function getAllSiteInfoBySiteid(id,params, callback, context) {
+    schneider.Ajax.request({
+        url: "/api/sites/infoAll/"+id,
+        type: "GET",
+        parameters:params,
+        success: function(data) {
+            callback.call(context || this, data);
+        }
+    });
+}

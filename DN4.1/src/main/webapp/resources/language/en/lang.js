@@ -887,7 +887,8 @@ var lang = {
         "create_update_schedule": "create update schedule",
         "repair_processing": "repair processing",
         "repair_state": "repair state",
-        "execute_time": "Execute time"
-
+        "execute_time": "Execute time",
+        "atm_id":"ATM Id",
+        "atm_name":"ATM name"
     }
 };

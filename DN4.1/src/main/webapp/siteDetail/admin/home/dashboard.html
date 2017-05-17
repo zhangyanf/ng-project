@@ -33,6 +33,120 @@
 
                 </div>
     </div>
+
+    <div class="col-sm-12">
+        <div class="box">
+            <!--加载数据等待-->
+            <div class="overlay" style="display: none;">
+                <i class="fa icon-refresh icon-spin"></i>
+            </div>
+            <div class="box-header with-border">
+                <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                        <i class="icon-minus fa-minus"></i></button>
+                </div>
+            </div>
+            <div class="box-body" style="display: -webkit-flex;display: flex;" id="info_atm_and_gateway">
+                <div style="margin: 0px 5px 0px 5px;-webkit-flex: 1;flex: 1;">
+                    <form class="form-horizontal">
+                        <div class="form-group no-margin">
+                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:gateway_name+:"></label>
+                            <div class="col-sm-8 no-padding">
+                                 <span style="word-wrap: break-word;" name="gateway_name">gateway_name</span>
+                            </div>
+                        </div>
+                        <div class="form-group no-margin">
+                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;">IMSI:</label>
+                            <div class="col-sm-8 no-padding">
+                                <span style="word-wrap: break-word;" name="IMSI">IMSI</span>
+                            </div>
+                        </div>
+                        <div class="form-group no-margin">
+                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:ip_address+:"></label>
+                            <div class="col-sm-8 no-padding">
+                                <span style="word-wrap: break-word;" name="ip_address">ip_address</span>
+                            </div>
+                        </div>
+                        <div class="form-group no-margin">
+                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:model_type+:"></label>
+                            <div class="col-sm-8 no-padding">
+                                <span style="word-wrap: break-word;" name="model_type">model_type</span>
+                            </div>
+                        </div>
+                        <div class="form-group no-margin">
+                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:installation_site+:"></label>
+                            <div class="col-sm-8 no-padding">
+                                <span style="word-wrap: break-word;" name="installation_site">installation_site</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div style="margin: 0px 5px 0px 5px;-webkit-flex: 1;flex: 1;">
+                    <form class="form-horizontal">
+                        <div class="form-group no-margin">
+                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:business_state+:"></label>
+                            <div class="col-sm-8 no-padding">
+                                <span style="word-wrap: break-word;" name="business_state">business_state</span>
+                            </div>
+                        </div>
+                        <div class="form-group no-margin">
+                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:configuration_state+:"></label>
+                            <div class="col-sm-8 no-padding">
+                                <span style="word-wrap: break-word;" name="configuration_state">configuration_state</span>
+                            </div>
+                        </div>
+                        <div class="form-group no-margin">
+                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:current_version+:"></label>
+                            <div class="col-sm-8 no-padding">
+                                <span style="word-wrap: break-word;" name="current_version">current_version</span>
+                            </div>
+                        </div>
+                        <div class="form-group no-margin">
+                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:billing_plan_name+:"></label>
+                            <div class="col-sm-8 no-padding">
+                                <span style="word-wrap: break-word;" name="billing_plan_name">billing_plan_name</span>
+                            </div>
+                        </div>
+                        <div class="form-group no-margin">
+                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:activation_date+:"></label>
+                            <div class="col-sm-8 no-padding">
+                                <span style="word-wrap: break-word;" name="activation_date">activation_date</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div style="margin: 0px 5px 0px 5px;-webkit-flex: 1;flex: 1;">
+                    <form class="form-horizontal">
+                        <div class="form-group no-margin">
+                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:deactivation_date+:"></label>
+                            <div class="col-sm-8 no-padding">
+                                <span style="word-wrap: break-word;" name="deactivation_date">deactivation_date</span>
+                            </div>
+                        </div>
+                        <div class="form-group no-margin">
+                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:signal_strength+:"></label>
+                            <div class="col-sm-8 no-padding">
+                                <span style="word-wrap: break-word;" name="signal_strength">signal_strength</span>
+                            </div>
+                        </div>
+                        <div class="form-group no-margin">
+                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:atm_id+:"></label>
+                            <div class="col-sm-8 no-padding">
+                                <span style="word-wrap: break-word;" name="atm_id">atm_id</span>
+                            </div>
+                        </div>
+                        <div class="form-group no-margin">
+                            <label class="col-sm-4 control-label" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding: 0px 10px 0px 0px;" lang="text:atm_name+:"></label>
+                            <div class="col-sm-8 no-padding">
+                                <span style="word-wrap: break-word;" name="atm_name">atm_name</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="col-md-7 col-sm-12">
         <div class="box box-default">
             <div class="box-header">
@@ -86,7 +200,6 @@
         require(['siteService', 'warningService', 'orderService', 'dataService', 'echarts'], function () {
             //本页面功能权限过滤
             var siteId = sessionStorage.getItem("_id");
-            // console.log("siteId", siteId)
             permissionFilter_overview(siteId);
             var self = this;
             getAtmDataSummary({siteId:siteId},function (data) {
@@ -103,11 +216,25 @@
                 $("#traffic_statistics").text(count);
                 $("#communication_package").text(size);
             },self);
+
+            getAllSiteInfoBySiteid(siteId,{verbose:100},function (data) {
+                if(data.result){
+                    if(data.result.device){
+                        //网关信息
+
+                    }
+                    if(data.result.asset && data.result.asset.length>0){
+                        //atm信息
+
+                    }
+                }
+                //$("#info_atm_and_gateway form span[name='gateway_name']").text();
+            },this);
+
             $("#more_alarm_info").off().on("click",function () {
                 $("#p_alarm > a").click();
             });
 
-            
         });
     }
 
