@@ -37,7 +37,7 @@
     <div class="col-sm-12">
         <div class="box">
             <!--加载数据等待-->
-            <div class="overlay" style="display: none;">
+            <div id="deviceAtmInfo_overlay" class="overlay" style="display: none;">
                 <i class="fa icon-refresh icon-spin"></i>
             </div>
             <div class="box-header with-border">
@@ -232,10 +232,14 @@
                 $("#communication_package").text(size);
             },self);
 
+            $("#deviceAtmInfo_overlay").show();
             getAllSiteInfoBySiteid(siteId,{verbose:100},function (data) {
                 if(data.result){
                     fillinfo_gatewayAndAtm(data);
+                }else{
+                    $("#deviceinfo_atminfo").append('<tr><td colspan="2" align="center" lang="text:no_data"></td></tr>');
                 }
+                $("#deviceAtmInfo_overlay").hide();
             },this);
 
             $("#more_alarm_info").off().on("click",function () {
